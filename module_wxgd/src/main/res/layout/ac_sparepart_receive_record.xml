@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:id="@+id/searchTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitleBar"
+        app:title_background_color="@color/themeColor"
+        app:title_length="96dp"
+        app:title_right_btn_need="false"
+        app:title_text="备件领用记录" />
+
+    <include layout="@layout/ly_recyclerview" />
+</LinearLayout>

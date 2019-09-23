@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.supcon.common.view.view.CustomSwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemSwipeLayout"
+    android:tag="itemSwipeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:tag="main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp_5"
+        android:background="@drawable/sl_path_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9">
+
+                <RelativeLayout
+                    android:id="@+id/pathNameRelativeLayout"
+                    android:tag="pathNameRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/itemXJPathIndex"
+                        android:tag="itemXJPathIndex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/dp_5"
+                        android:textSize="18dp"
+                        android:textColor="#e89300"
+                        android:text="序号" />
+
+                    <TextView
+                        android:id="@+id/itemXJPath"
+                        android:tag="itemXJPath"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/itemXJPathIndex"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:paddingTop="@dimen/dp_8"
+                        android:textColor="#366CBC"
+                        android:text="巡检路线"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/taskStatus"
+                        android:tag="taskStatus"
+                        android:layout_width="50dp"
+                        android:layout_height="23dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:gravity="center"
+                        android:background="@drawable/sh_text_view_bg"
+                        android:textSize="@dimen/fontSize_12sp"
+                        android:textColor="#366CBC"
+                        android:text="待检" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/tableNoLinearLayout"
+                    android:tag="tableNoLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/pathNameRelativeLayout"
+                    android:layout_alignStart="@+id/pathNameRelativeLayout"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:padding="@dimen/dp_2"
+                    android:orientation="vertical">
+                    <!--<com.supcon.mes.mbap.view.CustomExpandableTextView
+                        android:id="@+id/taskTableNo"
+                        android:tag="taskTableNo"
+                        android:layout_width="310dp"
+                        android:layout_height="wrap_content"
+                        app:text="单据编号"
+                        app:expand_times="2"
+                        app:max_lines="2"
+                        app:text_size="12"
+                        app:text_color="@color/hintColor"
+                        />-->
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/taskStartEndTimeRelativeLayout"
+                    android:tag="taskStartEndTimeRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tableNoLinearLayout"
+                    android:layout_alignStart="@+id/pathNameRelativeLayout"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_2"
+                    android:padding="2dp">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_15"
+                        android:layout_height="@dimen/dp_15"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_time" />
+
+                    <TextView
+                        android:id="@+id/taskStartEndTime"
+                        android:tag="taskStartEndTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="起止时间"
+                        android:textSize="12sp"
+                        android:textColor="@color/textColorlightblack" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/taskStartEndTimeRelativeLayout"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:paddingTop="@dimen/dp_2"
+                    android:paddingLeft="@dimen/dp_2"
+                    android:paddingBottom="@dimen/dp_5">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_15"
+                        android:layout_height="@dimen/dp_15"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_responsible_person" />
+
+                    <TextView
+                        android:id="@+id/taskResponsiblePerson"
+                        android:tag="taskResponsiblePerson"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="@dimen/fontSize_14sp"
+                        android:textColor="@color/textColorlightblack" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <include
+                layout="@layout/ly_vertical_line"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.8"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_5">
+
+                <ImageView
+                    android:id="@+id/taskStartBtn"
+                    android:tag="taskStartBtn"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="fitStart"
+                    android:src="@drawable/ic_btn_start"
+                    android:layout_marginTop="@dimen/dp_3" />
+
+                <ImageView
+                    android:id="@+id/taskExpandBtn"
+                    android:tag="taskExpandBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_btn_zk" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/taskAreaListView"
+            android:tag="taskAreaListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/itemViewDelBtn"
+            android:tag="itemViewDelBtn"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@color/deleteBgColor"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_14sp" />
+
+    </LinearLayout>
+</com.supcon.common.view.view.CustomSwipeLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/themeColor"
+    android:orientation="horizontal"
+    android:paddingLeft="12dp"
+    android:paddingTop="@dimen/dp_5"
+    android:paddingBottom="@dimen/dp_5">
+
+    <TextView
+        style="@style/DetailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="筛选条件"
+        android:textSize="@dimen/dp_12"
+        android:visibility="gone" />
+
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:alpha="0.5"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_filter_white_stroke" />
+
+    <com.supcon.mes.mbap.view.CustomFilterView
+        android:id="@+id/listWorkSourceFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:tag="listWorkSourceFilter"
+        app:icon_res="@drawable/ic_choose_white2"
+        app:text="工单来源"
+        app:text_color="@color/white"
+        app:text_size="14" />
+
+    <com.supcon.mes.mbap.view.CustomFilterView
+        android:id="@+id/listRepairTypeFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_6"
+        android:layout_marginRight="@dimen/dp_2"
+        android:gravity="center"
+        android:tag="listRepairTypeFilter"
+        app:icon_res="@drawable/ic_choose_white2"
+        app:text="维修类型"
+        app:text_color="@color/white"
+        app:text_size="14" />
+
+    <com.supcon.mes.mbap.view.CustomFilterView
+        android:id="@+id/listPriorityFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_6"
+        android:gravity="center"
+        android:tag="listPriorityFilter"
+        app:icon_res="@drawable/ic_choose_white2"
+        app:text="优先级"
+        app:text_color="@color/white"
+        app:text_size="14" />
+
+    <com.supcon.mes.mbap.view.CustomFilterView
+        android:id="@+id/listWorkflowFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_6"
+        android:gravity="center"
+        android:tag="listWorkflowFilter"
+        app:icon_res="@drawable/ic_choose_white2"
+        app:text="单据状态"
+        app:text_color="@color/white"
+        app:text_size="14"
+        android:visibility="gone"/>
+</LinearLayout>

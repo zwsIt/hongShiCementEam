@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.supcon.common.view.view.CustomSwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemSwipeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:tag="itemSwipeLayout"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:tag="main">
+
+        <include layout="@layout/ly_yhgl_times_layout" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_10">
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/sparePartName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:tag="sparePartName"
+                    app:key="@string/name"
+                    app:key_width="@dimen/dp_40"
+                    app:text_size="15" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/sparePartSpecific"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:padding="@dimen/dp_10"
+                    android:tag="sparePartSpecific"
+                    app:gravity="center_vertical"
+                    app:key="规格:"
+                    app:key_width="@dimen/dp_40"
+                    app:text_size="15" />
+            </LinearLayout>
+
+            <include layout="@layout/ly_line_light" />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/attachEam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp_10"
+                android:tag="attachEam"
+                android:background="@color/white"
+                app:content_hint="--"
+                app:editable="false"
+                app:key="附属设备:"
+                app:necessary="false"
+                app:text_size="15" />
+
+            <include layout="@layout/ly_line_light" />
+
+            <com.supcon.mes.mbap.view.CustomNumView
+                android:id="@+id/sum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_5"
+                android:tag="sum"
+                app:editable="true"
+                app:max="99999999"
+                app:precision="2"
+                app:text="计划领用量:" />
+
+            <com.supcon.mes.mbap.view.CustomNumView
+                android:id="@+id/actualQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_5"
+                android:tag="actualQuantity"
+                app:editable="true"
+                app:max="99999999"
+                app:precision="2"
+                app:text="@string/actualQuantity" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/useQuantity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:padding="@dimen/dp_10"
+                    android:tag="useQuantity"
+                    app:key="@string/useQuantity"
+                    app:key_width="@dimen/dp_55"
+                    app:text_size="15" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/standingCrop"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:padding="@dimen/dp_10"
+                    android:tag="standingCrop"
+                    app:key="@string/standingCrop"
+                    app:key_width="@dimen/dp_55"
+                    app:text_size="15" />
+                <!--<com.supcon.mes.mbap.view.CustomTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:id="@+id/actualQuantity"
+                    android:tag="actualQuantity"
+                    app:key="@string/actualQuantity"
+                    app:key_width="@dimen/dp_60"
+                    app:text_size="15"
+                    android:padding="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_1"/>-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/useState"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:padding="@dimen/dp_10"
+                    android:tag="useState"
+                    app:text="@string/useState"
+                    app:text_size="15"
+                    app:text_width="@dimen/dp_70" />
+            </LinearLayout>
+
+            <com.supcon.mes.mbap.view.CustomVerticalEditText
+                android:id="@+id/remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingEnd="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_5"
+                android:tag="remark"
+                app:edit_hint="请输入备注信息"
+                app:edit_maxLine="4"
+                app:key="@string/remark"
+                app:text_size="15" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/itemViewDelBtn"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@color/deleteBgColor"
+            android:gravity="center"
+            android:tag="itemViewDelBtn"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_14sp" />
+
+    </LinearLayout>
+
+</com.supcon.common.view.view.CustomSwipeLayout>

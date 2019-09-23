@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@drawable/sl_press_no_stroke"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/firstLetter"
+        android:layout_width="@dimen/dp_18"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:tag="firstLetter"
+        android:text="A"
+        android:textColor="@color/hintColor"
+        android:textSize="@dimen/fontSize_20sp" />
+
+    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+    <!--android:id="@+id/circleImageView"-->
+    <!--android:layout_width="@dimen/dp_60"-->
+    <!--android:layout_height="@dimen/dp_60"-->
+    <!--android:layout_gravity="center_vertical"-->
+    <!--android:padding="@dimen/dp_10"-->
+    <!--android:src="@drawable/item_icon"-->
+    <!--android:tag="circleImageView"-->
+    <!--android:visibility="gone" />-->
+
+    <LinearLayout
+        android:layout_width="@dimen/dp_60"
+        android:layout_height="@dimen/dp_60"
+        android:padding="12dp">
+
+        <com.supcon.mes.mbap.view.CustomCircleTextImageView
+            android:id="@+id/customCircleTextImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/item_icon"
+            app:citv_border_radius="500dp"
+            app:citv_text_text="徐"
+            app:citv_text_color="@color/white"
+            app:citv_text_size="15sp"
+            android:tag="customCircleTextImageView" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_bottom"
+        android:padding="5dp"
+        android:paddingStart="@dimen/dp_10"
+        >
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_40"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="@dimen/dp_5"
+            android:longClickable="false"
+            android:tag="itemName"
+            android:textColor="@color/textColorlightblack"
+            android:textSize="@dimen/fontSize_18sp"
+            tools:ignore="RelativeOverlap" />
+
+        <TextView
+            android:id="@+id/itemId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/itemName"
+            android:layout_marginEnd="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:longClickable="false"
+            android:tag="itemId"
+            android:textColor="@color/hintColor"
+            android:textSize="@dimen/fontSize_14sp"
+            tools:ignore="UnknownIdInLayout" />
+
+        <com.supcon.mes.mbap.view.CustomCheckBox
+            android:id="@+id/itemCheckBox"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:tag="itemCheckBox"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+</LinearLayout>

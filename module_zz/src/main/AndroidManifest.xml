@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.supcon.mes.module_zz">
+
+    <application
+        android:supportsRtl="true">
+        <activity android:name="com.jdjz.coresdk14.MainActivity">
+        </activity>
+    </application>
+
+</manifest>

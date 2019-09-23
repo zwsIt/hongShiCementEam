@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar_local" />
+
+    <com.supcon.common.view.ptr.PtrFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:core_ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="refreshFrameLayout"
+        core_ptr:ptr_keep_header_when_refresh="true"
+        core_ptr:ptr_pull_to_fresh="false"
+        core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        core_ptr:ptr_resistance="1.7">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/dp_3">
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/eamCode"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="eamCode"
+                    app:content_hint="NFC刷卡获取设备"
+                    app:editable="true"
+                    app:key="设备编码:" />
+
+                <include layout="@layout/ly_vertical_line" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/eamName"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="eamName"
+                    app:content_hint="NFC刷卡获取设备"
+                    app:editable="true"
+                    app:text="设备名称:" />
+            </LinearLayout>
+
+            <include layout="@layout/ly_line_light" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/dp_3">
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/eamDept"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="eamDept"
+                    app:content_hint="--"
+                    app:key="所属车间:" />
+
+                <include layout="@layout/ly_vertical_line" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/eamScore"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="eamScore"
+                    app:content_value="100"
+                    app:text="设备得分:" />
+            </LinearLayout>
+
+            <include layout="@layout/ly_line_light" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/dp_3">
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/scoreStaff"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="scoreStaff"
+                    app:key="评分人:" />
+
+                <include layout="@layout/ly_vertical_line" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/scoreTime"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="scoreTime"
+                    app:text="评分时间:" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/contentView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:tag="contentView" />
+        </LinearLayout>
+    </com.supcon.common.view.ptr.PtrFrameLayout>
+</LinearLayout>

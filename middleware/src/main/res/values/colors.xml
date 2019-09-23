@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="themeColor">#dd4c52</color>
+    <color name="equipmentThemeColor">#dd4c52</color>
+    <!--<color name="themeColor">#356cbc</color>-->
+    <!--<color name="equipmentThemeColor">#356cbc</color>-->
+
+    <color name="customRed">#dd4c52</color>
+    <color name="deviceTitleColor">#3c5569</color>
+    <color name="deleteBgColor">#E05543</color>
+    <color name="textColor5251">#323232</color>
+
+    <color name="xjAreaBlue">#366CBC</color>
+    <color name="xjAreaLineBlue">#c5d3ef</color>
+    <color name="BgXjAreaBlue">#f0f4fc</color>
+    <color name="xjStateBg">#F0F4FC</color>
+    <color name="BgXjAreaDark">#50bcbcbc</color>
+
+    <color name="SBDAListGray">#BCBCBC</color>
+    <color name="SBDAListGreen">#8AD790</color>
+    <color name="SBDAListRed">#E0838E</color>
+    <color name="SBDAListYellow">#DEC76D</color>
+    <color name="SBDAListBlue">#2799C9</color>
+    <color name="faultInfoBg">#EF8742</color>
+    <color name="maintenaceBg">#2799C9</color>
+    <color name="lubricateBg">#9CBF3E</color>
+    <color name="bigRepairBg">#de7718</color>
+    <color name="checkRepairBg">#de7718</color>
+    <color name="workSource">#5b7b94</color>
+
+
+    <color name="random_1">#EF8742</color>
+    <color name="random_2">#2799C9</color>
+    <color name="random_3">#9CBF3E</color>
+
+    <color name="gradient_start">#377edf</color>
+    <color name="gradient_end">#2799c9</color>
+    <color name="yhfx_color">#EF8742</color>
+    <color name="yhpg_color">#9CBF3E</color>
+    <color name="yhzg_color">#2799c9</color>
+    <color name="yhfc_color">#e05543</color>
+    <color name="yh_item_bg">#f5f5f5</color>
+
+    <color name="normal_gray">#f5f5f5</color>
+    <color name="confuse">#2799C9</color>
+    <color name="operate">#E05543</color>
+    <color name="txl_view_title">#16B1E6</color>
+
+    <color name="gray">#a5a5a5</color>
+    <color name="yellow">#ffc000</color>
+    <color name="blue">#5b9bd5</color>
+    <color name="orange">#ed7d31</color>
+    <color name="green">#70ad57</color>
+    <color name="red">#dd4c52</color>
+    <color name="color_ffa000">#ffa000</color>
+    <color name="color_dddddd">#dddddd</color>
+</resources>

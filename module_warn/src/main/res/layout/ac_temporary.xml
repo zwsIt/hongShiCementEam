@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <include layout="@layout/ly_titlebar" />
+
+
+    <RelativeLayout
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/eamLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="@dimen/dp_5">
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/eamCode"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_50"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_10"
+                android:tag="eamCode"
+                app:content_hint="NFC刷卡获取设备"
+                app:editable="true"
+                app:key="设备编码:" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/eamName"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_50"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_10"
+                android:tag="eamName"
+                app:content_hint="NFC刷卡获取设备"
+                app:editable="true"
+                app:text="设备名称:" />
+        </LinearLayout>
+
+        <include
+            layout="@layout/ly_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/eamLayout"
+            android:layout_above="@+id/ensure"
+            android:layout_marginTop="@dimen/dp_5" />
+
+        <Button
+            android:id="@+id/ensure"
+            style="@style/RedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:tag="ensure"
+            android:text="确认"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</LinearLayout>

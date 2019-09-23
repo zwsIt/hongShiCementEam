@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_10"
+    android:background="@drawable/sl_area">
+
+    <TextView
+        android:id="@+id/itemAreaName"
+        android:tag="itemAreaName"
+        android:layout_width="235dp"
+        android:layout_height="30dp"
+        style="@style/DetailText"
+        android:layout_toRightOf="@+id/itemAreaDot"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_centerVertical="true"
+        android:textColor="@color/xjAreaBlue"
+        android:singleLine="true"
+        android:ellipsize="end"
+        />
+
+    <TextView
+        android:id="@+id/itemAreaProgress"
+        android:tag="itemAreaProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_centerVertical="true"
+        style="@style/DetailText"
+        android:textColor="@color/xjAreaBlue" />
+
+    <View
+        android:id="@+id/itemAreaLine"
+        android:tag="itemAreaLine"
+        android:layout_width="1dp"
+        android:layout_height="35dp"
+        android:background="@color/xjAreaLineBlue"
+        android:layout_marginLeft="15dp" />
+
+    <ImageView
+        android:id="@+id/itemAreaDot"
+        android:tag="itemAreaDot"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:src="@drawable/ic_dot"
+        android:layout_centerVertical="true"
+        android:scaleType="center"
+        android:layout_marginLeft="@dimen/dp_10" />
+</RelativeLayout>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray2"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+
+        <include layout="@layout/item_time" />
+
+        <LinearLayout
+            android:id="@+id/depotLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:background="@drawable/bg_time_stroke"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_5"
+            android:tag="depotLayout">
+
+            <TextView
+                android:id="@+id/depotTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:tag="depotTv"
+                android:text="集团"
+                android:textColor="#5f5f5f"
+                android:textSize="@dimen/fontSize_16sp" />
+
+            <ImageView
+                android:id="@+id/depotExpend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_expand_less_black_24dp"
+                android:tag="depotExpend" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/bgGray" />
+
+        <com.supcon.mes.middleware.ui.view.TrapezoidView
+            android:id="@+id/eamName"
+            android:layout_width="140dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:tag="eamName"
+            android:text="汇总数据"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.supcon.mes.middleware.ui.view.HsCircleProgress
+                android:id="@+id/statisticsCirPro1"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:tag="statisticsCirPro1"
+                custom:circle_finished_color="#e67333"
+                custom:circle_progress="30"
+                custom:circle_progress_show="false"
+                custom:circle_suffix_show="false"
+                custom:circle_text_color="#e67333"
+                custom:circle_text_size="@dimen/fontSize_16sp"
+                custom:circle_unfinished_color="#f0f5fa" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="巡检次数"
+                android:textColor="#e67333" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.supcon.mes.middleware.ui.view.HsCircleProgress
+                android:id="@+id/statisticsCirPro2"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:tag="statisticsCirPro2"
+                custom:circle_finished_color="#8e44ad"
+                custom:circle_progress="30"
+                custom:circle_progress_show="false"
+                custom:circle_suffix_show="false"
+                custom:circle_text_color="#8e44ad"
+                custom:circle_text_size="@dimen/fontSize_16sp"
+                custom:circle_unfinished_color="#f0f5fa" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="巡检用时"
+                android:textColor="#8e44ad" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.supcon.mes.middleware.ui.view.HsCircleProgress
+                android:id="@+id/statisticsCirPro3"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:tag="statisticsCirPro3"
+                custom:circle_finished_color="#1abc9c"
+                custom:circle_progress="30"
+                custom:circle_progress_show="false"
+                custom:circle_suffix_show="false"
+                custom:circle_text_color="#1abc9c"
+                custom:circle_text_size="@dimen/fontSize_16sp"
+                custom:circle_unfinished_color="#f0f5fa" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="手工签到率"
+                android:textColor="#1abc9c" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.supcon.mes.middleware.ui.view.HsCircleProgress
+                android:id="@+id/statisticsCirPro4"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:tag="statisticsCirPro4"
+                custom:circle_finished_color="#0097fe"
+                custom:circle_progress="30"
+                custom:circle_progress_show="false"
+                custom:circle_suffix_show="false"
+                custom:circle_text_color="#0097fe"
+                custom:circle_text_size="@dimen/fontSize_16sp"
+                custom:circle_unfinished_color="#f0f5fa" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="隐患数量"
+                android:textColor="#0097fe" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/bgGray" />
+
+    <include layout="@layout/ly_recyclerview_with_scrollbar" />
+</LinearLayout>

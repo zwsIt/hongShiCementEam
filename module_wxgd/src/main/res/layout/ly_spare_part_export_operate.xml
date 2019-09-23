@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/themeColor">
+    <include layout="@layout/ly_wxgd_horizontal_line"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/updateStandingCropBtn"
+            android:tag="updateStandingCropBtn"
+            android:text="更新现存量"
+            android:textColor="@color/white"
+            android:background="@drawable/sl_transparent_press_no_stroke"
+            android:drawableStart="@drawable/ic_update"
+            android:paddingStart="@dimen/dp_40"
+            android:paddingEnd="@dimen/dp_40"/>
+        <include layout="@layout/ly_wxgd_vertical_line"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/deliveryOutStorageBtn"
+            android:tag="deliveryOutStorageBtn"
+            android:text="生成领用出库单"
+            android:textColor="@color/white"
+            android:background="@drawable/sl_transparent_press_no_stroke"
+            android:drawableStart="@drawable/ic_delivery_out"
+            android:paddingEnd="@dimen/dp_25"
+            android:paddingStart="@dimen/dp_25"/>
+    </LinearLayout>
+
+</LinearLayout>

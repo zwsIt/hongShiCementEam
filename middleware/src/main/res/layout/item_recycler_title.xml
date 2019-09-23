@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/textColorlight"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/dividedViewIc"
+            android:layout_width="5dp"
+            android:layout_height="15dp"
+            android:background="@color/themeColor"
+            android:tag="dividedViewIc"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/itemRecyclerTitle"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:alpha="1"
+            android:drawableLeft="@drawable/ic_location_white"
+            android:drawablePadding="@dimen/dp_5"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingTop="@dimen/dp_3"
+            android:tag="itemRecyclerTitle"
+            android:text="设备名字"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/dp_2"
+        android:scrollbars="vertical"
+        android:tag="contentView" />
+
+</LinearLayout>

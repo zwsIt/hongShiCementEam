@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/titleLayout"
+    android:tag="titleLayout"
+    >
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:id="@+id/leftBtn"
+        android:tag="leftBtn"
+        android:src="@drawable/sl_top_back"
+        android:background="@null"
+        android:layout_marginLeft="0dp"
+        android:scaleType="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleText"
+        android:tag="titleText"
+        android:layout_centerInParent="true"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="@dimen/dp_50"
+        android:layout_marginRight="@dimen/dp_50"
+        android:gravity="center"
+        />
+
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:id="@+id/rightBtn"
+        android:tag="rightBtn"
+        android:visibility="invisible"
+        android:src="@drawable/sl_top_add"
+        android:background="@null"
+        android:scaleType="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+
+        />
+
+    <TextView
+        android:id="@+id/pendingNum"
+        android:tag="pendingNum"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/sh_tip"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:alpha="0.8"
+        />
+</RelativeLayout>

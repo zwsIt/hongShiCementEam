@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_login_hs"
+    android:id="@+id/loginBg"
+    android:tag="loginBg"
+    android:paddingTop="@dimen/dp_23"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="80dp"
+                android:id="@+id/loginLogo"
+                android:tag="loginLogo"
+                android:src="@drawable/ic_login_logo_hs"
+                />
+            <com.supcon.mes.mbap.view.CustomEditText
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:id="@+id/usernameInput"
+                android:tag="usernameInput"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="@dimen/dp_20"
+                android:background="@drawable/bg_login_name_dark"
+                app:text_size="16"
+                app:text_color="@color/textColorblack"
+                app:edit_hint="用户名"
+                app:edit_hint_color="@color/hintColor"
+                app:icon_visible="false"
+                />
+            <com.supcon.mes.mbap.view.CustomEditText
+                android:layout_width="280dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="@dimen/dp_20"
+                android:id="@+id/pwdInput"
+                android:tag="pwdInput"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_login_code_dark"
+                app:text_size="16"
+                app:text_color="@color/textColorblack"
+                app:edit_hint="密码"
+                app:edit_hint_color="@color/hintColor"
+                app:icon_visible="false"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="80dp"
+                android:id="@+id/loginBtn"
+                android:tag="loginBtn"
+                android:background="@drawable/sl_login_btn2"
+                />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:id="@+id/loginSettingLayout"
+                android:tag="loginSettingLayout"
+                android:text="设置"
+                android:drawableLeft="@drawable/ic_user_sz"
+                android:layout_marginTop="0dp"
+                android:background="@null"
+                android:paddingLeft="@dimen/dp_20"
+                android:paddingRight="@dimen/dp_10"
+                android:textColor="@color/textColorblack"
+                android:textSize="@dimen/fontSize_14sp"
+                android:drawablePadding="5dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:key_width="0dp"
+                app:text_size="10"
+                android:id="@+id/buildVersion"
+                android:tag="buildVersion"
+                app:content_color="@color/textColorblack"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_5"
+                app:gravity="center"
+                />
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+
+</RelativeLayout>

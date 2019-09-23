@@ -1,0 +1,185 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.alibaba.arouter'
+
+android {
+    compileSdkVersion       rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion       rootProject.ext.minSdkVersion
+        targetSdkVersion    rootProject.ext.targetSdkVersion
+        versionCode         rootProject.ext.versionCode
+        versionName         rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        flavorDimensions "versionCode"
+    }
+
+    //支持Java8
+    defaultConfig.javaCompileOptions {
+        annotationProcessorOptions {
+            includeCompileClasspath = true
+            arguments = [moduleName: project.getName()]
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+
+    /*repositories {
+        flatDir {
+            dirs '../libminappparty/libs', 'libs'
+        }
+    }*/
+//    repositories {
+//        flatDir {
+//            dirs './libs'
+//        }
+//    }
+
+   /* productFlavors {
+        Dev {
+            //applicationId versions.appIdDev
+            versionName versions.versionNameDev
+//            versionCode versions.versionCodeDev
+            //versionCode currentVersionCode
+            buildConfigField 'String', 'implementation_SERVER_URL', versions.implementationServerUrlDev
+            buildConfigField 'String', 'implementation_SERVER_UPLOAD', versions.implementationServerUploadDev
+            buildConfigField 'int', 'implementation_TIME_OUT', versions.implementationTimeOutRelease
+            buildConfigField 'boolean', 'IS_RELEASE', 'false'
+            manifestPlaceholders = [appName: versions.appNameDev, qqappid: "1105704078"]
+        }
+        Test {
+            //applicationId versions.appIdTest
+            versionName versions.versionNameTest
+//            versionCode versions.versionCodeTest
+            //versionCode currentVersionCode
+            buildConfigField 'String', 'implementation_SERVER_URL', versions.implementationServerUrlTest
+            buildConfigField 'String', 'implementation_SERVER_UPLOAD', versions.implementationServerUploadTest
+            buildConfigField 'int', 'implementation_TIME_OUT', versions.implementationTimeOutRelease
+            buildConfigField 'boolean', 'IS_RELEASE', 'false'
+            manifestPlaceholders = [appName: versions.appNameTest, qqappid: "1105704078"]
+        }
+        UAT {
+            //applicationId versions.appIdUAT
+            versionName versions.versionNameUAT
+//            versionCode versions.versionCodeUAT
+            //versionCode currentVersionCode
+            buildConfigField 'String', 'implementation_SERVER_URL', versions.implementationServerUrlUAT
+            buildConfigField 'String', 'implementation_SERVER_UPLOAD', versions.implementationServerUploadUAT
+            buildConfigField 'int', 'implementation_TIME_OUT', versions.implementationTimeOutRelease
+            buildConfigField 'boolean', 'IS_RELEASE', 'false'
+            manifestPlaceholders = [appName: versions.appNameUAT, qqappid: "1105704078"]
+        }
+        Prd {
+            //applicationId versions.appIdPrd
+            versionName versions.versionNamePrd
+            versionCode versions.versionCodePrd
+            buildConfigField 'String', 'implementation_SERVER_URL', versions.implementationServerUrlPrd
+            buildConfigField 'String', 'implementation_SERVER_UPLOAD', versions.implementationServerUploadPrd
+            buildConfigField 'int', 'implementation_TIME_OUT', versions.implementationTimeOutRelease
+            buildConfigField 'boolean', 'IS_RELEASE', 'true'
+            manifestPlaceholders = [appName: versions.appNamePrd, qqappid: "1105704078"]
+        }
+    }
+*/
+    buildTypes {
+        release {
+            postprocessing {
+                removeUnusedCode false
+                removeUnusedResources false
+                obfuscate false
+                optimizeCode false
+                proguardFile 'proguard-rules.pro'
+            }
+        }
+    }
+}
+
+
+//configurations.all {
+//    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//        def requested = details.requested
+//        if (requested.group == 'com.android.support') {
+//            if (!requested.name.startsWith("multidex")) {
+//                details.useVersion "${versions.supportLibrary}"
+//            }
+//        }
+//    }
+//}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation project(':middleware')
+
+//    implementation "com.github.vondear.RxTool:RxFeature:v2.0.1"
+    implementation 'com.google.dagger:dagger:2.16'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
+
+    implementation (name:'common-1.0', ext:'aar')
+    implementation (name:'PhotoPicker-1.0', ext:'aar')
+    implementation (name:'previewimage-1.0', ext:'aar')
+    api (name:'webviewjslib-1.0', ext:'aar')
+    implementation (name:'contact-1.0', ext:'aar')
+    implementation (name:'weexlib-1.0', ext:'aar')
+    implementation (name:'utils-1.0', ext:'aar')
+    implementation (name:'pickviewlib-1.0', ext:'aar')
+    implementation (name:'wheelviewlib-1.0', ext:'aar')
+    implementation (name:'floatwindow-release', ext:'aar')
+    implementation (name:'timeintervalpickviewlib-1.0', ext:'aar')
+
+    api (name:'domain-debug', ext:'aar')
+    api (name:'libbase-debug', ext:'aar')
+    implementation (name:'libminappparty-debug', ext:'aar')
+//    implementation (name:'libthirdparty-debug', ext:'aar'){
+//        execlude group 'SecurityEnvSDK-release-1.1.0.jar'
+//        execlude group 'umeng-analytics-7.5.4.jar'
+//        execlude group 'umeng-debug-1.0.0.jar'
+//        execlude group 'umeng-common-1.5.4.jar'
+//        execlude group 'umeng-push-4.2.0.jar'
+//    }
+    implementation (name:'libwidgets-debug', ext:'aar')
+    implementation (name:'projectlibs-debug', ext:'aar')
+    api (name:'rxretrohttp-debug', ext:'aar')
+    api (name:'zhizhiapp-Dev-debug2', ext:'aar')
+    implementation 'com.qmuiteam:qmui:1.0.6'
+    implementation 'com.zhihu.android:matisse:0.5.0-beta3'
+    implementation 'com.zhy:percent-support-extends:1.1.1'
+    implementation "com.android.support:cardview-v7:27.1.0"
+
+
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
+
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
+
+    implementation 'com.github.hss01248:NotifyUtil:1.0.1'
+
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+
+    implementation 'com.blankj:utilcode:1.15.1'
+    implementation "com.alibaba:fastjson:1.1.64.android"
+    implementation 'com.r0adkll:slidableactivity:2.0.6'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'frankiesardo:icepick:3.2.0'
+    implementation 'com.githang:status-bar-compat:0.7'
+    api "com.github.bumptech.glide:okhttp3-integration:4.7.1"
+//    implementation 'com.alibaba:arouter-implementation:1.3.1'
+    implementation 'com.alibaba:arouter-annotation:1.0.4'
+    implementation 'com.alibaba:arouter-api:1.4.1'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.1.0'
+
+    implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+    api 'org.apache.commons:commons-lang3:3.7'
+
+}

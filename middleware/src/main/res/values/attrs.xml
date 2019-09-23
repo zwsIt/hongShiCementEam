@@ -1,0 +1,42 @@
+<resources>
+
+    <declare-styleable name="FlowLayout">
+        <attr name="android:orientation" />
+        <attr name="layoutDirection" format="enum">
+            <enum name="ltr" value="0" />//左向右
+            <enum name="rtl" value="1" />//右向左
+        </attr>
+        <attr name="debugDraw" format="boolean" />
+        <attr name="maxLines" format="integer" />
+        <attr name="weightDefault" format="float" />
+        <attr name="android:gravity" />
+    </declare-styleable>
+
+    <declare-styleable name="FlowLayout_LayoutParams">
+        <attr name="layout_newLine" format="boolean" />
+        <attr name="layout_weight" format="float" />
+        <attr name="android:layout_gravity" />
+    </declare-styleable>
+
+    <declare-styleable name="PopwinBackView">
+        <attr name="direction" format="enum">
+            <enum name="top" value="0" />//向上
+            <enum name="bottom" value="1" />//向下
+            <enum name="left" value="2" />//向左
+            <enum name="right" value="3" />//向右
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="HsCircleProgress">
+        <attr name="circle_progress" format="integer" />
+        <attr name="circle_max" format="integer" />
+        <attr name="circle_unfinished_color" format="color" />
+        <attr name="circle_finished_color" format="color" />
+        <attr name="circle_text_size" format="dimension" />
+        <attr name="circle_text_color" format="color" />
+        <attr name="circle_prefix_text" format="string" />
+        <attr name="circle_suffix_text" format="string" />
+        <attr name="circle_suffix_show" format="boolean" />
+        <attr name="circle_progress_show" format="boolean" />
+    </declare-styleable>
+</resources>

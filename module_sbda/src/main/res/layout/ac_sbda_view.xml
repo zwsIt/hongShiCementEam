@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sl_press_no_stroke"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar_local" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/ly_sbda_detail_device_info"/>
+
+            <include layout="@layout/ly_sbda_detail_divider"/>
+
+            <include layout="@layout/ly_sbda_detail_doc_info" />
+
+            <include layout="@layout/ly_sbda_detail_divider"/>
+
+            <include layout="@layout/ly_sbda_detail_device_regu"/>
+
+            <include layout="@layout/ly_sbda_detail_divider"/>
+
+            <include layout="@layout/ly_sbda_detail_factory_info"/>
+
+            <include layout="@layout/ly_sbda_detail_divider"/>
+
+            <include layout="@layout/ly_sbda_detail_install_info"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_4"
+                android:background="@color/bgGray" />
+
+            <include layout="@layout/ly_sbda_detail_runtime_info"/>
+        </LinearLayout>
+
+
+    </ScrollView>
+</android.support.v7.widget.LinearLayoutCompat>

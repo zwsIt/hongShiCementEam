@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar" />
+
+    <RadioGroup
+        android:id="@+id/waitState"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_5"
+        android:tag="waitState">
+
+        <RadioButton
+            android:id="@+id/processedEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:button="@drawable/wait_dealt_state_gray"
+            android:drawablePadding="@dimen/dp_5"
+            android:paddingStart="@dimen/dp_5"
+            android:tag="processedEdit"
+            android:text="编辑"
+            android:textColor="@color/gray"
+            android:visibility="gone"
+            android:textSize="@dimen/fontSize_14sp" />
+
+        <RadioButton
+            android:id="@+id/processedDispatch"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:button="@drawable/wait_dealt_state_gray"
+            android:drawablePadding="@dimen/dp_5"
+            android:paddingStart="@dimen/dp_5"
+            android:tag="processedDispatch"
+            android:text="待派工"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/fontSize_14sp" />
+
+        <RadioButton
+            android:id="@+id/processedImplement"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:button="@drawable/wait_dealt_state_yellow"
+            android:drawablePadding="@dimen/dp_5"
+            android:paddingStart="@dimen/dp_5"
+            android:tag="processedImplement"
+            android:text="待执行"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/fontSize_14sp" />
+
+        <RadioButton
+            android:id="@+id/processedAcceptance"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:button="@drawable/wait_dealt_state_blue"
+            android:drawablePadding="@dimen/dp_5"
+            android:paddingStart="@dimen/dp_5"
+            android:tag="processedAcceptance"
+            android:text="待验收"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/fontSize_14sp" />
+
+        <RadioButton
+            android:id="@+id/processedTakeEffect"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:button="@drawable/wait_dealt_state_green"
+            android:drawablePadding="@dimen/dp_5"
+            android:paddingStart="@dimen/dp_5"
+            android:tag="processedTakeEffect"
+            android:text="已结束"
+            android:textColor="@color/green"
+            android:textSize="@dimen/fontSize_14sp" />
+
+        <RadioButton
+            android:id="@+id/processedToVoid"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:button="@drawable/wait_dealt_state_red"
+            android:drawablePadding="@dimen/dp_5"
+            android:paddingStart="@dimen/dp_5"
+            android:tag="processedToVoid"
+            android:text="作废"
+            android:textColor="@color/red"
+            android:textSize="@dimen/fontSize_14sp" />
+    </RadioGroup>
+
+    <include layout="@layout/ly_recyclerview" />
+</LinearLayout>

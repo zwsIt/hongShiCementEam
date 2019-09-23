@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_5">
+
+        <include
+            layout="@layout/ly_title_pic"
+            android:layout_width="5dp"
+            android:layout_height="13dp"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/contentTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="13dp"
+            android:tag="contentTitle"
+            android:text="设备运转率"
+            android:textColor="@color/textColorlightblack"
+            android:textSize="@dimen/fontSize_16sp" />
+
+        <TextView
+            android:id="@+id/fraction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:tag="fraction"
+            android:text="(30分)"
+            android:textColor="@color/themeColor"
+            android:textSize="@dimen/fontSize_16sp" />
+    </RelativeLayout>
+
+
+</LinearLayout>

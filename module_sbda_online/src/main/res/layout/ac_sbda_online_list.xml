@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray2"
+    android:orientation="vertical">
+
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:id="@+id/searchTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitleBar"
+        app:title_background_color="@color/themeColor"
+        app:title_text="设备档案" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/themeColor"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_5">
+
+        <include
+            layout="@layout/ly_filter_online_type"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+
+        <include
+            layout="@layout/ly_filter_online_area"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/dp_5" />
+
+        <include
+            layout="@layout/ly_filter_online_status"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/dp_5" />
+
+        <com.supcon.mes.mbap.view.CustomImageButton
+            android:id="@+id/btnClearParam"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:padding="@dimen/dp_10"
+            android:scaleType="fitCenter"
+            android:src="@drawable/pic_sbda_delete"
+            android:tag="btnClearParam"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <include layout="@layout/ly_recyclerview_with_scrollbar" />
+</android.support.v7.widget.LinearLayoutCompat>

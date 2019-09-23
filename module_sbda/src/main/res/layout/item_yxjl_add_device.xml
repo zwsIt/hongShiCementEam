@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/sl_press_no_stroke"
+    android:padding="5dp">
+    <com.supcon.mes.mbap.view.CustomExpandableTextView
+        android:id="@+id/multiItemAddDeviceName"
+        android:tag="multiItemAddDeviceName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        app:expand_times="2"
+        app:max_lines="2"
+        app:text_color="@color/textColorlightblack"
+        app:text_size="14" />
+    <com.supcon.mes.mbap.view.CustomExpandableTextView
+        android:id="@+id/multiItemAddDevicePlace"
+        android:tag="multiItemAddDevicePlace"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/multiItemAddDeviceName"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_5"
+        app:expand_times="2"
+        app:max_lines="2"
+        app:text_color="@color/hintColor"
+        app:text_size="12" />
+    <ImageView
+        android:id="@+id/multiItemAddDeviceCheckBox"
+        android:tag="multiItemAddDeviceCheckBox"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_back"
+        android:visibility="visible" />
+
+</RelativeLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingRight="@dimen/dp_15">
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemStopPoliceName"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:tag="itemStopPoliceName"
+        app:key="报警设备:"
+        app:key_size="14" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemStopPoliceStartTime"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:tag="itemStopPoliceStartTime"
+        app:key="开始时间:"
+        app:key_size="14" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemStopPoliceCloseTime"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:tag="itemStopPoliceCloseTime"
+        app:key="结束时间:"
+        app:key_size="14" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemStopPoliceTotalTime"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:tag="itemStopPoliceTotalTime"
+        app:key="持续时长:"
+        app:key_size="14" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemStopPoliceStopType"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:tag="itemStopPoliceStopType"
+        app:editable="false"
+        app:key_size="14"
+        app:text="停机类别:" />
+
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemStopPoliceStopReason"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        app:editable="false"
+        android:tag="itemStopPoliceStopReason"
+        app:key_size="14"
+        app:text="停机原因:" />
+
+    <com.supcon.mes.mbap.view.CustomEditText
+        android:id="@+id/itemStopPoliceStopExplain"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        app:editable="false"
+        android:tag="itemStopPoliceStopExplain"
+        app:key="停机说明:"
+        app:key_size="14" />
+
+</LinearLayout>

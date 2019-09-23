@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">设备档案模块</string>
+    <string name="device">%1$s [%2$s]</string>
+    <string name="device_new">%1$s [%2$s](新增)</string>
+    <string name="device_num_choose">已选%1$s个设备</string>
+</resources>

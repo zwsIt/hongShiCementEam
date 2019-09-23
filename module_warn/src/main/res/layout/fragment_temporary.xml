@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <com.supcon.common.view.ptr.PtrFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:core_ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="refreshFrameLayout"
+        core_ptr:ptr_keep_header_when_refresh="true"
+        core_ptr:ptr_pull_to_fresh="false"
+        core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        core_ptr:ptr_resistance="1.7">
+
+        <RelativeLayout
+            android:id="@+id/contentView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/eamLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/dp_3">
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/eamCode"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="eamCode"
+                    app:content_hint="NFC刷卡获取设备"
+                    app:editable="true"
+                    app:key="设备编码:" />
+
+                <include layout="@layout/ly_vertical_line" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/eamName"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="eamName"
+                    app:content_hint="NFC刷卡获取设备"
+                    app:editable="true"
+                    app:text="设备名称:" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/ensure"
+                android:layout_below="@+id/eamLayout"
+                android:tag="recyclerView" />
+
+            <Button
+                android:id="@+id/ensure"
+                style="@style/BlueButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:tag="ensure"
+                android:text="确认"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </com.supcon.common.view.ptr.PtrFrameLayout>
+</LinearLayout>

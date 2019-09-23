@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="deleteBgColor">#E05543</color>
+    <color name="color_424242">#424242</color>
+    <color name="xjStateBg">#F0F4FC</color>
+    <color name="xj_faultBtnBg">#80375e80</color>
+
+    <color name="xjAreaBlue">#366CBC</color>
+    <color name="xjAreaLineBlue">#c5d3ef</color>
+    <color name="BgXjAreaBlue">#f0f4fc</color>
+</resources>

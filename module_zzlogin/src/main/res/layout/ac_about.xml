@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray2"
+    >
+    <include layout="@layout/ly_titlebar_local"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        >
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/aboutIv"
+            android:tag="aboutIv"
+            android:scaleType="fitXY"
+            android:layout_gravity="center_horizontal"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            style="@style/TitleTextColor"
+            android:id="@+id/aboutName"
+            android:tag="aboutName"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/textColorblack"
+            android:textStyle="bold"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:id="@+id/buildVersion"
+            android:tag="buildVersion"
+            android:textColor="@color/textColorlightblack"
+            android:textSize="12sp"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

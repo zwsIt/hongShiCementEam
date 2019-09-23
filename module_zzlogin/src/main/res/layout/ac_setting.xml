@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar_local" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_3"
+                android:background="@drawable/sh_white"
+                android:padding="@dimen/dp_10">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="支持域名"
+                    android:textColor="@color/textColorlightblack"
+                    android:textSize="@dimen/fontSize_14sp" />
+
+                <com.supcon.common.view.view.SwitchButton
+                    android:id="@+id/urlSwitchBtn"
+                    android:tag="urlSwitchBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <com.supcon.mes.mbap.view.CustomEditText
+                android:id="@+id/urlInput"
+                android:tag="urlInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:visibility="gone"
+                android:background="@drawable/sh_white"
+                android:layout_marginTop="@dimen/dp_1"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                custom:edit_hint="输入域名地址"
+                custom:text="域名"
+                custom:text_width="120dp"
+                custom:gravity="center_vertical"
+                custom:icon_visible="false"
+                />
+
+            <com.supcon.mes.mbap.view.CustomEditText
+                android:id="@+id/ipInput"
+                android:tag="ipInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@drawable/sh_white"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                custom:edit_hint="输入IP地址"
+                custom:text="服务器IP"
+                custom:text_width="120dp"
+                custom:gravity="center_vertical"
+                custom:icon_visible="false"
+                />
+            <com.supcon.mes.mbap.view.CustomEditText
+                android:id="@+id/portInput"
+                android:tag="portInput"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/sh_white"
+                android:layout_marginTop="@dimen/dp_1"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                custom:edit_hint="输入端口"
+                custom:text="端口"
+                custom:text_width="120dp"
+                custom:gravity="center_vertical"
+                custom:icon_visible="false"
+                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_5"
+                android:background="@drawable/sh_white"
+                android:visibility="gone"
+                android:padding="@dimen/dp_10">
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="是否SupOS登陆"
+                    android:textColor="@color/textColorlightblack"
+                    android:textSize="@dimen/fontSize_14sp" />
+
+                <com.supcon.common.view.view.SwitchButton
+                    android:id="@+id/SupOSSwitchBtn"
+                    android:tag="SupOSSwitchBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    custom:sb_checked="true"
+                    />
+            </RelativeLayout>
+
+            <com.supcon.mes.mbap.view.CustomArrowView
+                android:id="@+id/pwdSettings"
+                android:tag="pwdSettings"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="@dimen/dp_5"
+                custom:arrow_icon="@drawable/ic_user_sz"
+                custom:arrow_text="设置密码"
+                android:layout_marginBottom="@dimen/dp_1"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_5"
+                android:background="@drawable/sh_white"
+                android:visibility="gone"
+                android:padding="@dimen/dp_10">
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="离线模式"
+                    android:textColor="@color/textColorlightblack"
+                    android:textSize="@dimen/fontSize_14sp" />
+
+                <com.supcon.common.view.view.SwitchButton
+                    android:id="@+id/offlineSwitchBtn"
+                    android:tag="offlineSwitchBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    custom:sb_checked="false" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

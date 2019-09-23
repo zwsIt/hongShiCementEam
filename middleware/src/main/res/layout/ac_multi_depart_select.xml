@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+    <include layout="@layout/ly_titlebar"/>
+    <com.supcon.mes.mbap.view.CustomSearchView
+        android:layout_width="match_parent"
+        android:id="@+id/customSearchView"
+        android:tag="customSearchView"
+        app:search_hint="请输入姓名/首字母/电话"
+        android:layout_height="@dimen/dp_40"/>
+    <com.supcon.mes.middleware.ui.view.CustomMultiStageView
+        android:id="@+id/customMultiStageView"
+        android:tag="customMultiStageView"
+        android:paddingStart="@dimen/dp_15"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

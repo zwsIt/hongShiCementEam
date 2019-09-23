@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.supcon.mes.mbap.view.CustomAdView
+        android:id="@+id/workCustomAd"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:tag="workCustomAd" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/workCustomAd"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:background="@drawable/name_bg"
+        android:gravity="right"
+        android:alpha="0.7"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/workName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_5"
+            android:drawableLeft="@drawable/name_icon"
+            android:drawablePadding="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_3"
+            android:tag="workName"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_12sp"
+            tools:text="曹阳飞" />
+
+        <TextView
+            android:id="@+id/workDepot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/workName"
+            android:layout_marginRight="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_3"
+            android:tag="workDepot"
+            android:textColor="#ebb2b4"
+            android:textSize="@dimen/fontSize_12sp"
+            tools:text="开发部" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/dp_20">
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:tag="titleText"
+            android:text="移动设备管理"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText,RtlHardcoded" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamTv"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/titleText"
+            android:background="@drawable/sh_search_black"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:tag="eamTv"
+            app:content_color="@color/white"
+            app:content_hint="请选择设备"
+            app:editable="true"
+            app:key_width="0dp" />
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:id="@+id/workScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/workCustomAd"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:tag="workScrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/hs_wait_title"
+                layout="@layout/hs_item_title" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/waitDealtRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:tag="waitDealtRecycler"
+                tools:ignore="UnusedAttribute" />
+
+            <LinearLayout
+                android:id="@+id/waitDealtLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_30"
+                android:tag="waitDealtLayout"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/emptyIcon"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_empty"
+                    android:tag="emptyIcon"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/emptyContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="center_horizontal"
+                    android:tag="emptyContent"
+                    android:text="暂无工作提醒"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <include
+                android:id="@+id/hs_work_title"
+                layout="@layout/hs_item_title" />
+
+            <RelativeLayout
+                android:id="@+id/scoreLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_15"
+                android:background="@drawable/score_bg"
+                android:gravity="center"
+                android:tag="scoreLayout">
+
+                <TextView
+                    android:id="@+id/rankTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="rankTitle"
+                    android:text="绩效排名"
+                    android:textColor="#849ea4"
+                    android:textSize="@dimen/fontSize_16sp" />
+
+                <TextView
+                    android:id="@+id/rank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_toRightOf="@id/rankTitle"
+                    android:tag="rank"
+                    android:text="--"
+                    android:textColor="#5b959e"
+                    android:textSize="@dimen/fontSize_18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/scoreTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_30"
+                    android:layout_toRightOf="@id/rank"
+                    android:tag="scoreTitle"
+                    android:text="个人绩效"
+                    android:textColor="#849ea4"
+                    android:textSize="@dimen/fontSize_16sp" />
+
+                <TextView
+                    android:id="@+id/score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_toRightOf="@id/scoreTitle"
+                    android:tag="score"
+                    android:text="--"
+                    android:textColor="#5b959e"
+                    android:textSize="@dimen/fontSize_18sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/workRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:tag="workRecycler"
+                    tools:ignore="UnusedAttribute" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_5"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_eaminfo_title" />
+
+    <RelativeLayout
+        android:id="@+id/itemEamLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_10"
+        android:tag="itemEamLayout">
+
+        <ImageView
+            android:id="@+id/eamIc"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginBottom="@dimen/dp_2"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_default_pic3" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_toRightOf="@+id/eamIc"
+            android:tag="eamName"
+            app:content_color="@color/themeColor"
+            app:key="设备名称："
+            app:key_width="0dp"
+            app:text_size="15" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/eamName"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_toRightOf="@+id/eamIc"
+            android:tag="eamCode"
+            app:key="设备编码："
+            app:key_width="0dp"
+            app:text_size="13" />
+
+        <ImageView
+            android:id="@+id/eamAreaIc"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_below="@+id/eamCode"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_toRightOf="@+id/eamIc"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_location"
+            android:tag="eamAreaIc" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/eamCode"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_toRightOf="@+id/eamAreaIc"
+            android:tag="eamArea"
+            app:key="区域位置："
+            app:key_width="0dp"
+            app:text_size="13" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/eamCode"
+            android:layout_toRightOf="@+id/eamAreaIc"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:tag="eamModel"
+            app:key="型号："
+            app:key_width="0dp"
+            app:text_size="13" />
+    </RelativeLayout>
+
+</LinearLayout>

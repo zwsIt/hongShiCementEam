@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/fragmentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tabRadioGroup"
+        android:tag="fragmentLayout" />
+
+    <RadioGroup
+        android:id="@+id/tabRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/tab_projection"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_3"
+        android:tag="tabRadioGroup">
+
+        <RadioButton
+            android:id="@+id/tabRadioBtn1"
+            style="@style/TabRadioButton"
+            android:checked="true"
+            android:drawableTop="@drawable/tab_home_selector"
+            android:tag="tabRadioBtn1"
+            android:text="首页" />
+
+        <RadioButton
+            android:id="@+id/tabRadioBtn2"
+            style="@style/TabRadioButton"
+            android:drawableTop="@drawable/tab_contact_selector"
+            android:tag="tabRadioBtn2"
+            android:text="通讯录" />
+
+        <View style="@style/TabRadioButton" />
+
+        <RadioButton
+            android:id="@+id/tabRadioBtn3"
+            style="@style/TabRadioButton"
+            android:drawableTop="@drawable/tab_eam_selector"
+            android:tag="tabRadioBtn3"
+            android:text="我的设备" />
+
+        <RadioButton
+            android:id="@+id/tabRadioBtn4"
+            style="@style/TabRadioButton"
+            android:drawableTop="@drawable/tab_me_selector"
+            android:tag="tabRadioBtn4"
+            android:text="我" />
+    </RadioGroup>
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp_9"
+        android:padding="@dimen/dp_10"
+        android:src="@drawable/tabbar_logo"
+        android:tag="logo" />
+</RelativeLayout>

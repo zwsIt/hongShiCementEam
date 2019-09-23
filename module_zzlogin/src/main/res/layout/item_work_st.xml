@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/sh_white"
+    android:padding="@dimen/dp_10"
+    >
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:tag="workIcon"
+        android:id="@+id/workIcon"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:padding="@dimen/dp_2"
+        />
+
+    <TextView
+        android:tag="workName"
+        android:id="@+id/workName"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:gravity="center"
+        />
+
+    <com.supcon.common.view.view.SwitchButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:tag="workSwitchBtn"
+        android:id="@+id/workSwitchBtn"
+        android:layout_alignParentRight="true"
+
+        />
+</RelativeLayout>

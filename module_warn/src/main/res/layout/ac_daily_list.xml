@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+
+    <include layout="@layout/ly_titlebar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/themeColor">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:tag="tablayout"
+            app:tabBackground="@drawable/tab_select"
+            app:tabIndicatorHeight="0dp"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/themeColor"
+            app:tabTextColor="@color/white" />
+    </LinearLayout>
+
+
+    <com.supcon.mes.mbap.view.NoScrollViewPager
+        android:id="@+id/sbdaViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="sbdaViewPager" />
+
+</LinearLayout>

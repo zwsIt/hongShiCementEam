@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:orientation="vertical">
+
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartNameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_60"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartNameTv"
+            app:content_hint="--"
+            app:key="备      件:"
+            app:max_lines="1" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartNumTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartNumTv"
+            app:content_hint="--"
+            app:key="数      量:"
+            app:max_lines="1" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartStandingCropTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartStandingCropTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:key="现   存   量:"
+            app:max_lines="1" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartModelSpecifTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartModelSpecifTv"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="规 格 型 号:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartAttachEamTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartAttachEamTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="附 属 设 备:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartLastDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartLastDateTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="上次更换日期:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartNextDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartNextDateTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="下次更换日期:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartLastDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartLastDurationTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="上次更换时长(天):"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartNextDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartNextDurationTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="下次更换时长(天):"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSparePartMemoTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSparePartMemoTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="备\t\t\t\t\t\t注\t:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/itemSparePartDeviceBtn"
+        android:layout_width="@dimen/dp_60"
+        android:layout_height="@dimen/dp_25"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/sbda_red_btn"
+        android:gravity="center"
+        android:tag="itemSparePartDeviceBtn"
+        android:text="查看设备"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+</RelativeLayout>

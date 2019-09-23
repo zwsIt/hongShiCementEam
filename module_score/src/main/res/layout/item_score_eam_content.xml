@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_line_light" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/itemIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:tag="itemIndex"
+            android:text="1."
+            android:textColor="#e89300"
+            android:textSize="@dimen/fontSize_14sp" />
+
+        <TextView
+            android:id="@+id/scoreEam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/itemIndex"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:tag="scoreEam"
+            android:text="主机设备运转率"
+            android:textColor="@color/textColorblack"
+            android:textSize="@dimen/fontSize_14sp" />
+
+        <TextView
+            android:id="@+id/scoreResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="@dimen/dp_20"
+            android:tag="scoreResult"
+            android:text="30"
+            android:textColor="@color/textColorlightblack"
+            android:textSize="@dimen/fontSize_14sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:id="@+id/searchTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitleBar"
+        app:end_color="@color/gradient_end"
+        app:start_color="@color/gradient_start"
+        app:title_background_color="@color/themeColor"
+        app:title_length="96dp"
+        app:title_right_btn_need="false"
+        app:title_text="安全隐患列表" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/pinyinSearchBar">
+
+            <include layout="@layout/ly_recyclerview" />
+        </LinearLayout>
+
+        <com.supcon.mes.middleware.ui.view.PinyinSearchBar
+            android:id="@+id/pinyinSearchBar"
+            android:layout_width="30dp"
+            android:layout_height="500dp"
+            android:background="@color/white"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:tag="pinyinSearchBar" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rightBtn_1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/operate"
+            android:gravity="center"
+            android:tag="rightBtn_1"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_15sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+</LinearLayout>

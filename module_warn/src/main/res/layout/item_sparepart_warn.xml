@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants"
+    tools:ignore="MissingDefaultResource">
+
+    <CheckBox
+        android:id="@+id/chkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:button="@drawable/sl_checkbox_selector"
+        android:clickable="false"
+        android:enabled="false"
+        android:tag="chkBox" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_toRightOf="@+id/chkBox"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_15">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareEquipmentNameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSpareEquipmentNameTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="设                备:"
+            app:key_width="110dp"
+            app:max_lines="2" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareProductNameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSpareProductNameTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="备                件:"
+            app:key_width="110dp"
+            app:max_lines="2" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareSpecifModelTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSpareSpecifModelTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="规   格   型   号:"
+            app:key_width="110dp"
+            app:max_lines="1" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareAttachEamTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSpareAttachEamTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="附   属   设   备:"
+            app:key_width="110dp"
+            app:max_lines="100" />
+
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareSpecifLastDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSpareSpecifLastDateTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="上次更换日期:"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareSpecifNextDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemSpareSpecifNextDateTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="下次更换日期:"
+            app:key_width="110dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareLastDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemSpareLastDurationTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="上次更换时长(h):"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemSpareNextDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemSpareNextDurationTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="下次更换时长(h):"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceMemoTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceMemoTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="备                注:"
+            app:key_width="110dp"
+            app:max_lines="100" />
+
+    </LinearLayout>
+
+</RelativeLayout>

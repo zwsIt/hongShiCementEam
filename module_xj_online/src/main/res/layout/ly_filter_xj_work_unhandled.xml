@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="@dimen/dp_10"
+    android:background="@color/themeColor"
+    android:id="@+id/filterLayout"
+    android:tag="filterLayout">
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_filter_white_stroke"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:alpha="0.8"
+        />
+    <com.supcon.mes.mbap.view.CustomFilterView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id="@+id/listDeviceFilter"
+        android:tag="listDeviceFilter"
+        android:layout_marginLeft="@dimen/dp_18"
+        app:text="设备"
+        app:text_color="@color/white"
+        app:item_text_color="@color/textColorlightblack"
+        app:text_size="14"
+        app:position="0"
+        app:icon_res="@drawable/ic_choose_white2" />
+
+    <TextView
+        android:id="@+id/faultListBtn"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/dp_3"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/sl_transparent_press"
+        android:tag="faultListBtn"
+        android:text="隐患列表"
+        android:textColor="@color/white"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/oneKeySubmitBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_3"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_5"
+        android:background="@drawable/sl_transparent_press"
+        android:tag="oneKeySubmitBtn"
+        android:text="一键完成"
+        android:textColor="@color/white"
+        android:visibility="visible" />
+</RelativeLayout>

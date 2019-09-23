@@ -1,0 +1,94 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+        classpath "com.alibaba:arouter-register:1.0.2"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        maven { url "https://jitpack.io" }
+        maven { url 'http://192.168.90.70:8888/nexus/content/groups/supcon_mes' }
+        mavenCentral()
+        jcenter()
+//        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        flatDir {
+            dirs '../module_zz_new/libs', '../vibLib/libs', 'libs'  //系统会搜索本身libs下和moduleM中libs下的依赖，使用逗号隔开。
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext{
+    compileSdkVersion = 28
+    buildToolsVersion = "28.0.3"
+    applicationId = "com.supcon.mes.cementEam"
+
+    minSdkVersion = 19
+    targetSdkVersion = 22
+    versionCode = 32
+    versionName = "8.10.05.32"
+
+    isAlone  = false
+
+//    commonVersion       = '1.3.5.3'
+//    bapkitVersion       = '1.3.5.3'
+//    mbapVersion         = '9.4.17.1debug21'
+//    vibrateVersion      = '8.5.911.38debug2'
+//    testoVersion        = '8.5.911.1'
+//    sb2Version          = '8.5.911.6debug10'
+//    nfcVersion          = '8.5.911.4'
+
+    aptVersion          = '9.7.29.2'
+    annotationVersion   = '9.7.29.2'
+    httpVersion         = '9.7.29.2'
+    viewVersion         = '9.7.29.3debug9'
+    routerVersion       = '9.7.29.2'
+    mbapVersion         = '9.7.29.3debug2'
+
+    vibVersion          = '9.7.29.1'
+    sb2Version          = '9.7.29.2debug3'
+    nfcVersion          = '9.7.29.1'
+
+//zz
+    common_versionName = "common 1.0"
+    utils_versionName = "utils 1.0"
+    qrversionName="qr 1.0"
+    contactversionName="contact 1.0"
+    weexlib_versionName="weexlib 1.0"
+    webviewjs_versionName="webviewjs 1.0"
+    fastjsonLibVersion="1.1.46.android"
+    glideLibVersion="4.7.1"
+    eventbusLibVersion="3.0.0"
+    lubanLibVersion="1.1.8"
+    googleGsonLibVersion="2.3.1"
+    butterKnifeLibVersion="8.5.1"
+    junitLibVersion="4.12"
+    constraintLibVersion="1.0.2"
+    tinypinyinLibVersion="2.0.3"
+    greenDaoLibVersion="3.2.0"
+    okhttpLibVersion="2.3.0"
+    okioLibVersion="1.0.1"
+    picassoLibVersion="2.5.2"
+    weexInspectorLibVersion="0.10.0.5"
+    weexSdkLibVersion="0.16.0"
+    findbugsLibVersion="2.0.1"
+    weexpluginLibVersion="1.3"
+    zxingLibVersion="3.2.1"
+}

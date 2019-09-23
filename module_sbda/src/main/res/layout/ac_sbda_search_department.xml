@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar_local"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewHead"
+        android:tag="recyclerViewHead"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40" />
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:background="@color/lightgray"-->
+        <!--android:layout_height="@dimen/dp_30">-->
+        <!--<TextView-->
+            <!--android:id="@+id/textViewDepart"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent" />-->
+    <!--</ScrollView>-->
+    <include layout="@layout/ly_recyclerview" />
+</LinearLayout>

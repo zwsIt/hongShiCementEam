@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray2"
+
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar" />
+
+    <LinearLayout
+        android:id="@+id/dateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10"
+        android:tag="dateLayout">
+
+        <include
+            android:id="@+id/statisticsStart"
+            layout="@layout/item_time" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="至" />
+
+        <include
+            android:id="@+id/statisticsEnd"
+            layout="@layout/item_time" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/bgGray" />
+
+        <com.supcon.mes.middleware.ui.view.TrapezoidView
+            android:id="@+id/eamName"
+            android:layout_width="140dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:tag="eamName"
+            android:text="汇总数据"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/statisticsWaitNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="statisticsWaitNum"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/fontSize_20sp"
+                android:textStyle="bold"
+                android:text="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="待处理"
+                android:textColor="@color/orange"
+                android:textSize="@dimen/fontSize_14sp" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_vertical_line" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/statisticsProcessingNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="statisticsProcessingNum"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/fontSize_20sp"
+                android:textStyle="bold"
+                android:text="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="处理中"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/fontSize_14sp" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_vertical_line" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/statisticsCompletedNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="statisticsCompletedNum"
+                android:textColor="@color/green"
+                android:textSize="@dimen/fontSize_20sp"
+                android:textStyle="bold"
+                android:text="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="已完成"
+                android:textColor="@color/green"
+                android:textSize="@dimen/fontSize_14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <include layout="@layout/ly_recyclerview_with_scrollbar" />
+</LinearLayout>

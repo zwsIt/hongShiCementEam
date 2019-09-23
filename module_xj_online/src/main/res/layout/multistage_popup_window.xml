@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.supcon.mes.module_olxj.ui.view.XJCustomMultiStageView
+        android:id="@+id/multiStageView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:paddingStart="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_15"
+        android:tag="customMultiStageView" />
+</RelativeLayout>

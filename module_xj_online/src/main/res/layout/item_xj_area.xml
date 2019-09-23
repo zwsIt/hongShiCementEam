@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:background="@drawable/sl_area"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_15">
+
+    <RelativeLayout
+        android:id="@+id/itemAreaDotLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:tag="itemAreaDotLayout">
+
+        <View
+            android:id="@+id/itemAreaLineTop"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/itemAreaDot"
+            android:layout_centerHorizontal="true"
+            android:background="@color/xjAreaLineBlue"
+            android:tag="itemAreaLineTop"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/itemAreaDot"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/dot_wait"
+            android:tag="itemAreaDot" />
+
+        <View
+            android:id="@+id/itemAreaLineBottom"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/itemAreaDot"
+            android:layout_centerHorizontal="true"
+            android:background="@color/xjAreaLineBlue"
+            android:tag="itemAreaLineBottom"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:layout_toRightOf="@+id/itemAreaDotLayout"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_toLeftOf="@+id/itemAreaFault"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/itemAreaName"
+                style="@style/textStyle"
+                android:tag="itemAreaName"
+                android:textColor="@color/xjAreaBlue"
+                android:textSize="@dimen/fontSize_15sp"
+                tools:text="7#辊压机" />
+
+            <TextView
+                android:id="@+id/itemAreaTime"
+                style="@style/textStyle"
+                android:drawableLeft="@drawable/icon_time"
+                android:drawablePadding="@dimen/dp_5"
+                android:tag="itemAreaTime"
+                android:text="未开始"
+                android:textColor="@color/textColorlightblack"
+                android:textSize="@dimen/fontSize_12sp" />
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/itemAreaFault"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toLeftOf="@+id/itemAreaProgress"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_yh"
+            android:tag="itemAreaFault"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/itemAreaProgress"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_5"
+            android:ellipsize="end"
+            android:tag="itemAreaProgress"
+            android:textColor="@color/xjAreaBlue"
+            android:textSize="@dimen/fontSize_14sp"
+            tools:text="1/12" />
+    </RelativeLayout>
+
+</RelativeLayout>

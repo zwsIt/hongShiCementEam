@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/titlebar_height"
+    android:background="@color/themeColor">
+
+    <ImageButton
+        android:id="@+id/leftBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:background="@null"
+        android:padding="@dimen/dp_15"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_top_back"
+        android:tag="leftBtn"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="120dp"
+        android:layout_toRightOf="@+id/leftBtn"
+        android:gravity="center_vertical"
+        android:tag="titleText"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/xjTitleMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:src="@drawable/sl_top_map"
+            android:tag="xjTitleMap" />
+
+        <ImageView
+            android:id="@+id/xjTitleAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/xjTitleMap"
+            android:src="@drawable/sl_top_add"
+            android:tag="xjTitleAdd" />
+    </RelativeLayout>
+
+</RelativeLayout>

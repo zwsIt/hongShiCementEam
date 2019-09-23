@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.supcon.mes.mbap.view.CustomCircleTextImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="35dp"
+        android:background="@color/title_bg"
+        android:layout_gravity="center_vertical"
+        android:paddingStart="@dimen/dp_15"
+        android:tag="icon"
+        android:text="A"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sl_press_no_stroke"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:longClickable="false"
+            android:tag="name" />
+
+        <TextView
+            android:id="@+id/depart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:tag="depart"
+            android:longClickable="false" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/dp_30"
+        android:src="@drawable/ic_right"
+        android:layout_gravity="center_vertical"
+        android:layout_height="@dimen/dp_30" />
+
+</LinearLayout>

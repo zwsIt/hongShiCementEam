@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.supcon.common.view.view.CustomSwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemSwipeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:tag="itemSwipeLayout">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:tag="main">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/sparePart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/dp_10"
+                android:tag="sparePart"
+                app:key="零部件"
+                app:text_size="15" />
+
+            <include layout="@layout/ly_line_light" />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/sparePartSpecificModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:padding="@dimen/dp_10"
+                android:tag="sparePartSpecificModel"
+                app:gravity="center_vertical"
+                app:key="规格型号:"
+                app:text_size="15" />
+
+            <include layout="@layout/ly_line_light" />
+
+            <com.supcon.mes.mbap.view.CustomNumView
+                android:id="@+id/sum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_5"
+                android:tag="sum"
+                app:editable="true"
+                app:max="99999999"
+                app:precision="2"
+                app:text="申请数量:" />
+
+            <com.supcon.mes.mbap.view.CustomVerticalEditText
+                android:id="@+id/remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingEnd="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_5"
+                android:tag="remark"
+                app:edit_hint="请输入备注信息"
+                app:edit_maxLine="4"
+                app:key="@string/remark"
+                app:text_size="15" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/itemViewDelBtn"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@color/deleteBgColor"
+            android:gravity="center"
+            android:tag="itemViewDelBtn"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_14sp" />
+
+    </LinearLayout>
+
+</com.supcon.common.view.view.CustomSwipeLayout>

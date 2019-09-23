@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <!--<include layout="@layout/ly_titlebar" />-->
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchTitleBar"
+        android:tag="searchTitleBar"
+        app:title_text="备件选择列表"
+        app:title_background_color="@color/themeColor"/>
+
+    <include layout="@layout/ly_recyclerview" />
+</LinearLayout>

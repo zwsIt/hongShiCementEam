@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rankingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15"
+        android:background="@drawable/ranking_stroke"
+        android:padding="@dimen/dp_5"
+        android:tag="rankingLayout">
+
+        <RelativeLayout
+            android:id="@+id/rankingScoreLayout"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_15">
+
+            <TextView
+                android:id="@+id/ranking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:tag="ranking"
+                android:textColor="@color/color_9f9f9f"
+                android:textSize="@dimen/fontSize_16sp"
+                android:textStyle="bold"
+                tools:text="1" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_toRightOf="@+id/rankingScoreLayout"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_3"
+                android:tag="name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fontSize_16sp"
+                tools:text="张文帅" />
+
+            <TextView
+                android:id="@+id/depot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_3"
+                android:tag="depot"
+                android:textColor="@color/color_a9a9a9"
+                android:textSize="@dimen/fontSize_14sp"
+                tools:text="--" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:tag="score"
+            android:textColor="@color/color_5b959e"
+            android:textSize="@dimen/fontSize_18sp"
+            tools:text="100" />
+    </RelativeLayout>
+
+</LinearLayout>

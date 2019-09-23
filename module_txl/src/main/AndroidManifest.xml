@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.supcon.mes.module_txl">
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
+        <activity android:name=".ui.TxlListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
+        <activity android:name=".ui.TxlViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <!--<activity android:name="com.supcon.mes.module_txl.ui.MultiDepartSelectActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/AppNoTitleBarTheme"-->
+            <!--android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>-->
+        <activity android:name="com.supcon.mes.module_txl.ui.TxlSearchContactWithHeaderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+    </application>
+
+</manifest>

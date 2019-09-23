@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/bgGray">
+    <include layout="@layout/ly_custom_titlebar_local"
+        android:id="@+id/titleBar"/>
+    <com.supcon.mes.mbap.view.CustomScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleBar"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_52"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <com.supcon.mes.mbap.view.CustomDownloadView
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:text="巡检基础数据下载"
+                app:loader_height="30dp"
+                android:id="@+id/itemXJBaseDownload"
+                android:tag="itemXJBaseDownload"
+                android:visibility="gone"
+                />
+            <com.supcon.mes.mbap.view.CustomDownloadView
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:text="巡检任务下载"
+                app:loader_height="30dp"
+                android:id="@+id/itemTaskDownload"
+                android:tag="itemTaskDownload"
+                android:layout_marginTop="@dimen/dp_1"
+                />
+            <com.supcon.mes.mbap.view.CustomDownloadView
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:text="设备基础下载"
+                app:loader_height="30dp"
+                android:id="@+id/itemEamBaseDownload"
+                android:tag="itemEamBaseDownload"
+                android:layout_marginTop="@dimen/dp_1"
+                android:visibility="gone"
+                />
+            <com.supcon.mes.mbap.view.CustomDownloadView
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:text="设备信息下载"
+                app:loader_height="30dp"
+                android:id="@+id/itemEamDeviceDownload"
+                android:tag="itemEamDeviceDownload"
+                android:layout_marginTop="@dimen/dp_1"
+                android:visibility="visible"
+                />
+
+        </LinearLayout>
+
+
+    </com.supcon.mes.mbap.view.CustomScrollView>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:id="@+id/downLoadBtn"
+        android:tag="downLoadBtn"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        style="@style/RedButton"
+        android:text="下  载"
+        android:textSize="16sp"
+        android:textColor="@color/white">
+
+    </Button>
+
+</RelativeLayout>

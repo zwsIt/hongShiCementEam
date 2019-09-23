@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray2"
+    android:orientation="vertical">
+
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:id="@+id/searchTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitleBar"
+        app:title_background_color="@color/themeColor"
+        app:title_length="96dp"
+        app:title_text="离线隐患" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_10"
+        android:background="@color/themeColor"
+        android:scrollbars="none">
+
+        <RadioGroup
+            android:id="@+id/radioGroup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dp_5"
+            android:tag="radioGroup1" />
+
+    </HorizontalScrollView>
+
+    <include layout="@layout/ly_yh_filter" />
+
+    <include layout="@layout/ly_recyclerview_with_scrollbar" />
+</LinearLayout>

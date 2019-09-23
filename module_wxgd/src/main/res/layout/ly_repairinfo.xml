@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_5"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_repairinfo_title" />
+
+    <LinearLayout
+        android:id="@+id/dispatcherLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:tag="dispatcherLayout">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/dispatcherStaff"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:paddingStart="@dimen/dp_10"
+            android:tag="dispatcherStaff"
+            app:key="派单人:" />
+
+        <include layout="@layout/ly_line_light_light" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_70"
+        android:layout_marginTop="@dimen/dp_1"
+        android:background="@color/white"
+        android:paddingStart="@dimen/dp_10">
+
+        <com.supcon.mes.mbap.view.CustomVerticalTextView
+            android:id="@+id/repairGroup"
+            style="@style/CustomStyle"
+            android:tag="repairGroup"
+            app:editable="true"
+            app:key="@string/repairGroup" />
+
+        <include layout="@layout/ly_vertical_line" />
+
+        <com.supcon.mes.mbap.view.CustomVerticalTextView
+            android:id="@+id/chargeStaff"
+            style="@style/CustomStyle"
+            android:paddingStart="@dimen/dp_10"
+            android:tag="chargeStaff"
+            app:editable="true"
+            app:key="@string/chargeStaff" />
+    </LinearLayout>
+
+    <include layout="@layout/ly_line_light_light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_70"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_10">
+
+        <com.supcon.mes.mbap.view.CustomVerticalTextView
+            android:id="@+id/wosource"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/dp_10"
+            android:tag="wosource"
+            app:key="工单来源："
+            app:text_size="15" />
+
+        <include layout="@layout/ly_vertical_line" />
+
+        <com.supcon.mes.mbap.view.CustomVerticalSpinner
+            android:id="@+id/repairType"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10"
+            android:tag="repairType"
+            app:editable="false"
+            app:key="维修类型："
+            app:text_size="15" />
+    </LinearLayout>
+
+    <include layout="@layout/ly_line_light_light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:background="@color/white"
+        android:paddingStart="@dimen/dp_10">
+
+        <com.supcon.mes.mbap.view.CustomVerticalDateView
+            android:id="@+id/planStartTime"
+            style="@style/CustomStyle"
+            android:tag="planStartTime"
+            app:editable="true"
+            app:text="@string/planStartTime" />
+
+        <include layout="@layout/ly_vertical_line" />
+
+        <com.supcon.mes.mbap.view.CustomVerticalDateView
+            android:id="@+id/planEndTime"
+            style="@style/CustomStyle"
+            android:paddingStart="@dimen/dp_10"
+            android:tag="planEndTime"
+            app:editable="true"
+            app:text="@string/planEndTime" />
+    </LinearLayout>
+
+    <include layout="@layout/ly_line_light_light" />
+
+    <com.supcon.mes.mbap.view.CustomVerticalDateView
+        android:id="@+id/realEndTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_10"
+        android:tag="realEndTime"
+        app:editable="true"
+        app:necessary="true"
+        app:text="实际结束时间：" />
+
+    <include layout="@layout/ly_line_light_light" />
+
+    <com.supcon.mes.mbap.view.CustomVerticalEditText
+        android:id="@+id/repairAdvise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        android:tag="repairAdvise"
+        app:edit_maxLine="10"
+        app:key="维修建议："
+        app:text_size="15" />
+
+    <include layout="@layout/ly_line_light_light" />
+
+    <com.supcon.mes.mbap.view.CustomVerticalTextView
+        android:id="@+id/workContext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        android:tag="workContext"
+        app:key="工单内容："
+        app:text_size="15" />
+</LinearLayout>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/noFaultInfo"
+    android:tag="noFaultInfo"
+    android:layout_marginBottom="@dimen/dp_5"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/noFaultInfoTitle"
+        layout="@layout/ly_nofaultinfo_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_10">
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:key="@string/content_workList"
+                app:key_width="@dimen/dp_40"
+                android:id="@+id/content"
+                android:tag="content" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:key="@string/claim_workList"
+                app:key_width="@dimen/dp_40"
+                android:id="@+id/claim"
+                android:tag="claim" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_10">
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:key="@string/period"
+                app:key_width="@dimen/dp_40"
+                android:id="@+id/period"
+                android:tag="period" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:key="@string/periodUnit"
+                app:key_width="75dp"
+                android:id="@+id/periodUnit"
+                android:tag="periodUnit" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line_light"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/white"
+            android:paddingStart="@dimen/dp_10">
+            <com.supcon.mes.mbap.view.CustomVerticalDateView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/lastExecuteTime"
+                android:tag="lastExecuteTime"
+                app:key="@string/lastExecuteTime"
+                app:editable="false"
+                />
+            <com.supcon.mes.mbap.view.CustomVerticalDateView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:key="@string/lastDuration"
+                android:id="@+id/lastDuration"
+                android:tag="lastDuration"
+                app:editable="false"
+                android:visibility="gone"/>
+            <include layout="@layout/ly_vertical_line"/>
+            <com.supcon.mes.mbap.view.CustomVerticalDateView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="@dimen/dp_10"
+                app:key="@string/actualEndTime"
+                app:necessary="false"
+                app:editable="false"
+                android:id="@+id/realEndDate"
+                android:tag="realEndDate"/>
+        </LinearLayout>
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_10">
+            <com.supcon.mes.mbap.view.CustomVerticalDateView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:text_key="@string/actualEndTime"
+                app:text_key_width="100dp"
+                app:necessary="true"
+                android:id="@+id/realEndDate"
+                android:tag="realEndDate"/>
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:text_key="@string/nextExecuteTime"
+                app:text_key_width="100dp"
+                android:id="@+id/nextExecuteTime"
+                android:tag="nextExecuteTime"
+                android:visibility="gone"/>
+        </LinearLayout>-->
+
+    </LinearLayout>
+
+</LinearLayout>

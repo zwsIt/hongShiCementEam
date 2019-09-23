@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/workSource"
+        android:layout_width="50dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="@dimen/dp_5"
+        android:background="@color/faultWarn"
+        android:gravity="center"
+        android:tag="workSource"
+        android:text="@string/workSource"
+        android:textColor="@color/white"
+        android:textSize="@dimen/fontSize_12sp"
+        android:ellipsize="end"
+        android:singleLine="true"/>
+    <TextView
+        android:id="@+id/tableStatus"
+        android:layout_width="60dp"
+        android:layout_height="23dp"
+        android:background="@drawable/sh_bg_worksource_tablestatus_faultinfo"
+        android:gravity="center"
+        android:tag="tableStatus"
+        android:text="@string/tableStatus"
+        android:textColor="@color/faultWarn"
+        android:textSize="@dimen/fontSize_12sp"
+        android:ellipsize="end"
+        android:singleLine="true"/>
+
+</LinearLayout>

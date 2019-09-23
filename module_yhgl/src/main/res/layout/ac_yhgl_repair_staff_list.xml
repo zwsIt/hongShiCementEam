@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray2"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bgGray2"
+        android:orientation="vertical">
+
+        <include layout="@layout/ly_titlebar_yhgl_datagrid" />
+
+        <include
+            android:id="@+id/includeSparePartLy"
+            layout="@layout/ly_spare_part_export_operate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50" />
+
+        <include
+            layout="@layout/ly_recyclerview_with_scrollbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_3" />
+    </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab"
+        android:tag="fab"
+        android:layout_gravity="bottom|end"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_refresh"
+        app:borderWidth="0dp"
+        app:rippleColor="@color/themeColor"
+        android:background="@drawable/sl_refresh_sparepart"
+        app:elevation="0dp"
+        app:pressedTranslationZ="16dp"
+        android:layout_margin="@dimen/dp_16"
+        android:visibility="gone"/>
+</RelativeLayout>

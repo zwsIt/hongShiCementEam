@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">移动巡检</string>
+
+    <string name="danger_level">隐患级别: %1$s</string>
+    <string name="inspect_company">检查单位: %1$s</string>
+    <string name="inspect_time">检查时间: %1$s</string>
+    <string name="danger_content">隐患内容: %1$s</string>
+    <string name="reorganizer">整改人员: %1$s</string>
+    <string name="rectify_time">整改时间: %1$s</string>
+    <string name="work_name">巡检区域: %1$s</string>
+
+    <string name="dcs_param">%1$s(%2$s)</string>
+</resources>

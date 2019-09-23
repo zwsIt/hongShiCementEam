@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center_vertical"
+        android:background="@color/white">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_transparent_press_no_stroke"
+            android:id="@+id/addRepairStaffItem"
+            android:tag="addRepairStaffItem"
+            android:text="@string/staff"
+            android:drawableStart="@drawable/ic_add"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_20"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@drawable/sl_transparent_press_no_stroke"
+            android:id="@+id/moreSparePart"
+            android:tag="moreSparePart"
+            android:text="@string/historySparePart"
+            android:drawableStart="@drawable/ic_history_sparepart"
+            android:padding="@dimen/dp_5"/>
+
+    </RelativeLayout>
+
+    <include layout="@layout/ly_line_light_light"/>
+
+    <include layout="@layout/ly_recyclerview"/>
+</LinearLayout>

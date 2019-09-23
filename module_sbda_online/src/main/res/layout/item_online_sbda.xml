@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sl_press_no_stroke"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/itemSBDADeviceIc"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_default_pic3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="65dp"
+        android:layout_toRightOf="@id/itemSBDADeviceIc"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/itemSBDADeviceTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_marginTop="@dimen/dp_5"
+            android:paddingLeft="3dp"
+            android:singleLine="true"
+            android:tag="itemSBDADeviceTitle"
+            android:textSize="16sp"
+            tools:ignore="RtlHardcoded"
+            tools:text="test" />
+
+        <TextView
+            android:id="@+id/itemSBDADeviceCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="3dp"
+            android:singleLine="true"
+            android:tag="itemSBDADeviceCode"
+            android:textColor="@color/hintColor"
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded"
+            tools:text="test" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="1dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_location" />
+
+            <TextView
+                android:id="@+id/itemSBDADeviceArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:paddingLeft="3dp"
+                android:tag="itemSBDADeviceArea"
+                android:textColor="@color/color_A"
+                android:textSize="12sp"
+                tools:ignore="RtlHardcoded"
+                tools:text="开发部" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/eamStatus"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="@dimen/dp_20"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_3"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/eam_status_use"
+        android:gravity="center"
+        android:tag="eamStatus"
+        android:text="在用"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/eamFraction"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_30"
+        android:layout_below="@+id/eamStatus"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/sbda_red_btn"
+        android:gravity="center"
+        android:tag="eamFraction"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</RelativeLayout>

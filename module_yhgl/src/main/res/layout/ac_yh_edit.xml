@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray">
+
+    <include layout="@layout/ly_yh_table" />
+
+
+    <LinearLayout
+        android:id="@+id/yhDealBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/sh_white_stroke"
+        android:orientation="vertical"
+        android:tag="yhDealBar">
+
+        <com.supcon.mes.mbap.view.CustomEditText
+            android:id="@+id/yhEditCommentInput"
+            style="@style/HintTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:paddingLeft="@dimen/dp_10"
+            android:tag="yhEditCommentInput"
+            app:edit_hint="填写意见"
+            app:text_color="@color/textColorlightblack"
+            app:text_size="16" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/xqBtn"
+                style="@style/BlueButtonRadius"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_weight="1"
+                android:tag="xqBtn"
+                android:text="直接消缺" />
+
+            <Button
+                android:id="@+id/gdBtn"
+                style="@style/OrangeButtonRadius"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_weight="1"
+                android:tag="gdBtn"
+                android:text="生成工单" />
+
+            <Button
+                android:id="@+id/ysBtn"
+                style="@style/OrangeButtonRadius"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_weight="1"
+                android:tag="ysBtn"
+                android:text="验收" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

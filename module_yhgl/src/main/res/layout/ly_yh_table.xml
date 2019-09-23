@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/ac_yh_edit">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/ly_titlebar_local" />
+
+    <com.supcon.common.view.ptr.PtrFrameLayout
+        android:id="@+id/refreshFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginBottom="90dp"
+        android:tag="refreshFrameLayout"
+        app:ptr_keep_header_when_refresh="true"
+        app:ptr_pull_to_fresh="false"
+        app:ptr_ratio_of_header_height_to_refresh="1.2"
+        app:ptr_resistance="1.7">
+
+        <ScrollView
+            android:id="@+id/contentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="contentView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/yhEditFindStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditFindStaff"
+                    app:editable="true"
+                    app:key="发现人"
+                    app:necessary="true"
+                    app:text_size="16" />
+                <com.supcon.mes.mbap.view.CustomDateView
+                    android:id="@+id/yhEditFindTime"
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditFindTime"
+                    app:necessary="true"
+                    app:text="发现时间"
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/yhEditEamCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditEamCode"
+                    app:editable="true"
+                    app:key="设备编码"
+                    app:necessary="true"
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/yhEditEamName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditEamName"
+                    app:key="设备名称"
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomSpinner
+                    android:id="@+id/yhEditArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditArea"
+                    app:editable="true"
+                    app:text="区域位置"
+                    app:text_size="16" />
+                <com.supcon.mes.mbap.view.CustomSpinner
+                    android:id="@+id/yhEditPriority"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditPriority"
+                    app:necessary="true"
+                    app:text="优先级    "
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/yhEditEamModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_15"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_15"
+                    android:tag="yhEditEamModel"
+                    android:visibility="gone"
+                    app:key="规格型号"
+                    app:key_width="100dp"
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomSpinner
+                    android:id="@+id/yhEditType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditType"
+                    app:gravity="center"
+                    app:necessary="true"
+                    app:text="隐患类型"
+                    app:text_size="16"
+                    app:text_width="100dp" />
+
+                <include layout="@layout/ly_line_light" />
+
+                <com.supcon.mes.mbap.view.CustomGalleryView
+                    android:id="@+id/yhGalleryView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:minHeight="@dimen/dp_30"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhGalleryView"
+                    app:columns="3"
+                    app:editable="true"
+                    app:icon_visible="true"
+                    app:text="隐患照片"
+                    app:text_size="16" />
+
+                <include layout="@layout/ly_line_light" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalEditText
+                    android:id="@+id/yhEditDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditDescription"
+                    app:edit_hint="请填写隐患现象(必填)"
+                    app:edit_maxLine="5"
+                    app:necessary="true"
+                    app:text="隐患现象"
+                    app:text_height="@dimen/dp_30"
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomSpinner
+                    android:id="@+id/yhEditWXType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditWXType"
+                    app:gravity="center"
+                    app:necessary="true"
+                    app:text="维修类型"
+                    app:text_size="16" />
+
+                <include layout="@layout/ly_line_light" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_70"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10">
+
+                    <com.supcon.mes.mbap.view.CustomVerticalTextView
+                        android:id="@+id/yhEditWXChargeGroup"
+                        style="@style/CustomStyle"
+                        android:tag="yhEditWXChargeGroup"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingEnd="@dimen/dp_10"
+                        app:editable="true"
+                        app:key="维修组" />
+
+                    <include layout="@layout/ly_vertical_line" />
+
+                    <com.supcon.mes.mbap.view.CustomVerticalTextView
+                        android:id="@+id/yhEditWXChargeStaff"
+                        style="@style/CustomStyle"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingEnd="@dimen/dp_10"
+                        android:tag="yhEditWXChargeStaff"
+                        app:editable="true"
+                        app:key="负责人" />
+                </LinearLayout>
+
+                <com.supcon.mes.mbap.view.CustomVerticalEditText
+                    android:id="@+id/yhEditMemo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_marginBottom="@dimen/dp_5"
+                    android:background="@drawable/sh_white"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="yhEditMemo"
+                    app:edit_hint="填写备注"
+                    app:edit_maxLine="5"
+                    app:text="备注"
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:id="@+id/sparePartListWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:tag="sparePartListWidget"
+                    app:icon_res="@drawable/ic_bj"
+                    app:text_size="14"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="备件" />
+
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:id="@+id/repairStaffListWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:tag="repairStaffListWidget"
+                    app:icon_res="@drawable/ic_wxry"
+                    app:is_addable="false"
+                    app:is_editable="false"
+                    app:text_size="14"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="维修人员" />
+
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:id="@+id/lubricateOilsListWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:tag="lubricateOilsListWidget"
+                    app:icon_res="@drawable/ic_rhy"
+                    app:is_addable="false"
+                    app:is_editable="false"
+                    app:text_size="14"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="润滑" />
+
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:id="@+id/maintenanceListWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:tag="maintenanceListWidget"
+                    app:icon_res="@drawable/ic_maintain"
+                    app:is_addable="false"
+                    app:is_editable="false"
+                    app:text_size="14"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="维保" />
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:id="@+id/acceptanceCheckListWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="acceptanceCheckListWidget"
+                    app:icon_res="@drawable/ic_ys"
+                    app:text_size="14"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="验收"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_70"
+                        android:background="@color/white"
+                        android:paddingStart="@dimen/dp_10">
+
+                        <com.supcon.mes.mbap.view.CustomVerticalTextView
+                            android:id="@+id/acceptChkStaff"
+                            style="@style/CustomStyle"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingEnd="10dp"
+                            android:tag="acceptChkStaff"
+                            app:editable="true"
+                            app:key="@string/acceptChkStaff"
+                            app:text_size="15" />
+
+                        <include layout="@layout/ly_vertical_line" />
+
+                        <com.supcon.mes.mbap.view.CustomVerticalTextView
+                            android:id="@+id/acceptChkStaffCode"
+                            style="@style/CustomStyle"
+                            android:paddingStart="@dimen/dp_10"
+                            android:paddingEnd="10dp"
+                            android:tag="acceptChkStaffCode"
+                            app:editable="false"
+                            app:key="@string/acceptChkStaffCode"
+                            app:text_size="15" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="@dimen/dp_1"
+                        android:background="@color/white"
+                        android:paddingStart="@dimen/dp_10">
+
+                        <com.supcon.mes.mbap.view.CustomVerticalDateView
+                            android:id="@+id/acceptChkTime"
+                            style="@style/CustomStyle"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:tag="acceptChkTime"
+                            app:editable="true"
+                            app:text="@string/acceptChkTime"
+                            app:text_size="15" />
+
+                        <include layout="@layout/ly_vertical_line" />
+
+                        <com.supcon.mes.mbap.view.CustomVerticalSpinner
+                            android:id="@+id/acceptChkResult"
+                            style="@style/CustomStyle"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            android:tag="acceptChkResult"
+                            app:editable="true"
+                            app:necessary="true"
+                            app:text="@string/acceptChkConclusion"
+                            app:text_size="15" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.supcon.common.view.ptr.PtrFrameLayout>
+</merge>

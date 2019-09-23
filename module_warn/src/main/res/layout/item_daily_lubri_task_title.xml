@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_15"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:id="@+id/itemIndex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_5"
+        android:tag="itemIndex"
+        android:text="序号"
+        android:textColor="#e89300"
+        android:textSize="18dp" />
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_toRightOf="@+id/itemIndex"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dutyStaff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:tag="dutyStaff"
+            android:text="润滑责任人" />
+
+        <TextView
+            android:id="@+id/eamNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:tag="eamNum"
+            android:text="设备数量" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/receive"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/sh_table_status_check"
+        android:tag="receive"
+        android:text="领取"
+        android:textColor="@color/table_check"
+        android:textSize="@dimen/fontSize_14sp" />
+
+    <ImageView
+        android:id="@+id/expend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_chevron_right_black_24dp"
+        android:tag="expend" />
+
+</RelativeLayout>

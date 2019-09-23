@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15">
+
+        <RelativeLayout
+            android:id="@+id/anomalyTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:tag="anomalyTableLayout">
+
+            <TextView
+                android:id="@+id/anomalyTableNo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="@dimen/dp_5"
+                android:tag="anomalyTableNo"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/fontSize_16sp"
+                tools:text="workList_20190827_005" />
+
+            <TextView
+                android:id="@+id/anomalyState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:tag="anomalyState"
+                tools:text="待验收" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/anomalyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/anomalyTableLayout"
+            android:orientation="horizontal"
+            android:tag="anomalyLayout">
+
+            <TextView
+                android:id="@+id/anomalyStaff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/anomalyTime"
+                android:padding="@dimen/dp_3"
+                android:tag="anomalyStaff"
+                android:textColor="#757575"
+                android:textSize="@dimen/fontSize_14sp"
+                tools:text="待办人" />
+
+            <TextView
+                android:id="@+id/anomalyTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:padding="@dimen/dp_3"
+                android:tag="anomalyTime"
+                android:textColor="#757575"
+                android:textSize="@dimen/fontSize_14sp"
+                tools:text="2019-07-24" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/anomalyContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/anomalyLayout"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toLeftOf="@+id/anomalySoucretype"
+            android:padding="@dimen/dp_3"
+            android:tag="anomalyContent"
+            android:textColor="#757575"
+            android:textSize="@dimen/fontSize_14sp"
+            tools:text="内容" />
+
+        <TextView
+            android:id="@+id/anomalySoucretype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/anomalyContent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:tag="anomalySoucretype"
+            tools:text="来源" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_below="@+id/anomalyContent"
+            android:layout_marginTop="@dimen/dp_5"
+            android:background="#d9d9d9" />
+    </RelativeLayout>
+
+</LinearLayout>

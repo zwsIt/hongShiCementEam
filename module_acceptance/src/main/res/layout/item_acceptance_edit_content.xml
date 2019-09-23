@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_line_light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/itemIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:tag="itemIndex"
+            android:text="1."
+            android:textColor="#e89300"
+            android:textSize="@dimen/fontSize_14sp" />
+
+        <com.supcon.mes.middleware.ui.view.FlowLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_15"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/acceptanceItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:tag="acceptanceItem"
+                android:text="修复后磨盘整体高度差＜5mm"
+                android:textColor="@color/textColorlightblack"
+                android:textSize="@dimen/fontSize_14sp" />
+
+            <RadioGroup
+                android:id="@+id/acceptanceRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_8"
+                android:tag="acceptanceRadioGroup">
+
+                <RadioButton
+                    android:id="@+id/acceptanceRadioBtn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:button="@drawable/sl_checkbox_selector_small"
+                    android:checked="true"
+                    android:tag="acceptanceRadioBtn1"
+                    android:text="符合"
+                    android:textColor="@drawable/tvbg_tag_item"
+                    android:textSize="@dimen/fontSize_14sp" />
+
+                <RadioButton
+                    android:id="@+id/acceptanceRadioBtn2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:button="@drawable/sl_checkbox_selector_small"
+                    android:tag="acceptanceRadioBtn2"
+                    android:text="不符合"
+                    android:textColor="@drawable/tvbg_tag_item"
+                    android:textSize="@dimen/fontSize_14sp" />
+            </RadioGroup>
+
+        </com.supcon.mes.middleware.ui.view.FlowLayout>
+    </LinearLayout>
+
+    <com.supcon.mes.mbap.view.CustomEditText
+        android:id="@+id/acceptanceConclusion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_25"
+        android:paddingRight="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_5"
+        android:tag="acceptanceConclusion"
+        app:edit_hint="请输入结论"
+        app:editable="true" />
+
+    <com.supcon.mes.middleware.ui.view.FlowLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_25"
+        android:layout_marginRight="@dimen/dp_15"
+        android:orientation="horizontal">
+
+        <com.supcon.mes.middleware.ui.view.FlowLayout
+            android:id="@+id/acceptanceCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:tag="acceptanceCategory" />
+
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/acceptanceTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:padding="@dimen/dp_5"
+            android:tag="acceptanceTotal"
+            app:content_hint="--"
+            app:editable="false"
+            app:key="合计:" />
+    </com.supcon.mes.middleware.ui.view.FlowLayout>
+
+
+</LinearLayout>

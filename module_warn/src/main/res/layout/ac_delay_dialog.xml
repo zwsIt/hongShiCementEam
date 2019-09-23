@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_10">
+
+    <com.supcon.mes.mbap.view.CustomVerticalDateView
+        android:id="@+id/delayDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:tag="delayDate"
+        app:content_value="--"
+        app:editable="true"
+        app:key="延期日期:"
+        app:necessary="true" />
+
+    <com.supcon.mes.mbap.view.CustomVerticalEditText
+        android:id="@+id/delayDuration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:tag="delayDuration"
+        app:edit_hint="请输入延时时长"
+        app:editable="true"
+        app:key="延期时长(H):"
+        app:necessary="true" />
+
+    <com.supcon.mes.mbap.view.CustomVerticalEditText
+        android:id="@+id/delayReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:padding="@dimen/dp_10"
+        android:tag="delayReason"
+        app:edit_hint="请输入延期原因"
+        app:edit_maxLine="10"
+        app:key="延期原因："
+        app:necessary="true"
+        app:text_size="15" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:orientation="horizontal"
+        tools:ignore="RtlHardcoded">
+
+        <Button
+            android:id="@+id/blueBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_common"
+            android:tag="blueBtn"
+            android:text="确定"
+            android:textColor="@color/customBlue4"
+            android:textSize="@dimen/fontSize_16sp" />
+
+        <Button
+            android:id="@+id/grayBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_common"
+            android:tag="grayBtn"
+            android:text="取消"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/fontSize_16sp" />
+    </LinearLayout>
+</LinearLayout>

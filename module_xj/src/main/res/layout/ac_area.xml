@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar_local" />
+
+    <com.supcon.mes.mbap.view.CustomTab
+        android:id="@+id/xjAreaTab"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        app:indicator_visible="false"
+        app:select_text_color="@color/themeColor"
+        app:unselect_text_color="@color/white"
+        android:tag="xjAreaTab" />
+
+    <com.supcon.mes.mbap.view.NoScrollViewPager
+        android:id="@+id/xjAreaVP"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="xjAreaVP" />
+</LinearLayout>

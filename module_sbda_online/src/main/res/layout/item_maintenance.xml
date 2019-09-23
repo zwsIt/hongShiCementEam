@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:orientation="vertical">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceLastDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceLastDateTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="上次维保日期:"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceNextDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceNextDateTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="下次维保日期:"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceLastDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemMaintenanceLastDurationTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="上次维保时长(h):"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceNextDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemMaintenanceNextDurationTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="下次维保时长(h):"
+            app:key_width="140dp" />
+
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceAttachEamTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceAttachEamTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="附 属 设 备:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceSparePartIdTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceSparePartIdTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="备 件 编 码:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceClaimTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemMaintenanceClaimTv"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="要      求:"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceContentTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceContentTv"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="内      容:"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemMaintenanceMemoTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemMaintenanceMemoTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="center"
+            app:key="备      注:"
+            app:key_width="140dp"
+            app:max_lines="100" />
+    </LinearLayout>
+
+</RelativeLayout>

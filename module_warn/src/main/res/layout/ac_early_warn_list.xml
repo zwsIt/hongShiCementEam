@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnLayout"
+        android:orientation="vertical">
+
+        <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+            android:id="@+id/searchTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="searchTitleBar"
+            app:title_background_color="@color/themeColor"
+            app:title_text="预警" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/themeColor">
+
+            <RadioGroup
+                android:id="@+id/warnRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/dp_5"
+                android:tag="warnRadioGroup">
+
+                <RadioButton
+                    android:id="@+id/warnRadioBtn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/sh_filter_gray"
+                    android:button="@null"
+                    android:checked="true"
+                    android:padding="@dimen/dp_5"
+                    android:text="时间频率"
+                    android:textColor="@drawable/tvbg_tag_item"
+                    android:textSize="@dimen/fontSize_14sp" />
+
+                <RadioButton
+                    android:id="@+id/warnRadioBtn2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:background="@drawable/sh_filter_gray"
+                    android:button="@null"
+                    android:padding="@dimen/dp_5"
+                    android:text="运行时长"
+                    android:textColor="@drawable/tvbg_tag_item"
+                    android:textSize="@dimen/fontSize_14sp" />
+            </RadioGroup>
+
+        </RelativeLayout>
+
+        <include layout="@layout/ly_recyclerview" />
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/ly_btn_warn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

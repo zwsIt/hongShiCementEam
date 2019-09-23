@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/dp_1"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants"
+    tools:ignore="MissingDefaultResource">
+
+    <CheckBox
+        android:id="@+id/chkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:button="@drawable/sl_checkbox_selector"
+        android:clickable="false"
+        android:enabled="false"
+        android:tag="chkBox" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_toRightOf="@+id/chkBox"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_15">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriEquipmentNameTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubriEquipmentNameTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="设                备:"
+            app:key_width="110dp"
+            app:max_lines="1" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriOilTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubriOilTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="润      滑      油:"
+            app:key_width="110dp"
+            app:max_lines="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/itemLubriChangeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="itemLubriChangeTv"
+                android:textColor="@color/editableTextColor"
+                android:textSize="@dimen/fontSize_12sp"
+                tools:text="@string/device_style1" />
+
+            <TextView
+                android:id="@+id/itemLubriNumTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:tag="itemLubriNumTv"
+                android:textColor="@color/editableTextColor"
+                android:textSize="@dimen/fontSize_12sp"
+                tools:text="@string/device_style1" />
+        </LinearLayout>
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriPartTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubriPartTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="润   滑   部   位:"
+            app:key_width="110dp"
+            app:max_lines="1" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriAttachEamTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubriAttachEamTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="附   属   设   备:"
+            app:key_width="110dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriSparePartIdTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubriSparePartIdTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="零      部      件:"
+            app:key_width="110dp"
+            app:max_lines="100" />
+
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriLastDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubriLastDateTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="上次润滑日期:"
+            app:key_width="110dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriNextDateTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubriNextDateTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="下次润滑日期:"
+            app:key_width="110dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriLastDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemLubriLastDurationTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="上次运行时长(h):"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriNextDurationTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemLubriNextDurationTv"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="下次运行时长(h):"
+            app:key_width="140dp" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriClaimTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemLubriClaimTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="要                求:"
+            app:key_width="110dp"
+            app:max_lines="100" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemLubriContentTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="itemLubriContentTv"
+            android:visibility="gone"
+            app:content_hint="--"
+            app:gravity="right"
+            app:key="内                容:"
+            app:key_width="110dp"
+            app:max_lines="100" />
+
+    </LinearLayout>
+
+</RelativeLayout>

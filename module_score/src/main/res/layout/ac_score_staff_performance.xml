@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar_local" />
+
+    <com.supcon.common.view.ptr.PtrFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:core_ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/refreshFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="refreshFrameLayout"
+        core_ptr:ptr_keep_header_when_refresh="true"
+        core_ptr:ptr_pull_to_fresh="false"
+        core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        core_ptr:ptr_resistance="1.7">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/dp_3">
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/scoreStaff"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="scoreStaff"
+                    app:content_hint="请选择人员"
+                    app:editable="true"
+                    app:key="巡检工:" />
+
+                <include layout="@layout/ly_vertical_line" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:id="@+id/staffScore"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:tag="staffScore"
+                    app:content_value="100"
+                    app:text="得分:" />
+            </LinearLayout>
+
+            <include layout="@layout/ly_line_light" />
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/scoreTime"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_15"
+                android:tag="scoreTime"
+                app:gravity="center"
+                app:text="评分日期:" />
+
+            <include layout="@layout/ly_line_light" />
+
+            <ScrollView
+                android:id="@+id/contentView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                android:tag="contentView">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerViewEam"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:tag="recyclerViewEam" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:tag="recyclerView" />
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+    </com.supcon.common.view.ptr.PtrFrameLayout>
+</LinearLayout>

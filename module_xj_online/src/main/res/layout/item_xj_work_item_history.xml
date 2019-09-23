@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bgGray"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dp_2">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/dp_5">
+
+        <TextView
+            android:id="@+id/historyItemIndex"
+            android:tag="historyItemIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:text="序号"
+            android:textColor="#e89300"
+            android:textSize="@dimen/fontSize_24sp" />
+
+        <com.supcon.mes.mbap.view.CustomExpandableTextView
+            android:id="@+id/historyEamName"
+            android:tag="historyEamName"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_toRightOf="@+id/historyItemIndex"
+            app:expand_times="2"
+            app:max_lines="2"
+            app:text_size="14" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:id="@+id/historyExemption"
+            android:tag="historyExemption"
+            android:text="免检"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/fontSize_14sp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:background="@drawable/sh_xj_exemption_bg" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:id="@+id/historySkip"
+            android:tag="historySkip"
+            android:text="跳检"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/fontSize_14sp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:background="@drawable/sh_xj_exemption_bg" />
+
+    </RelativeLayout>
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/historyItemContent"
+        android:tag="historyItemContent"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        android:paddingLeft="@dimen/dp_20"
+        app:key="内容："
+        app:text_size="14"
+        app:key_width="@dimen/dp_60"
+        app:max_lines="10"
+        app:editable="false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingLeft="@dimen/dp_20"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_1"
+        >
+
+
+        <com.supcon.mes.mbap.view.CustomVerticalEditText
+            android:id="@+id/historyItemResult"
+            android:tag="historyItemResult"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:text="结果"
+            app:text_size="14"
+            app:editable="false" />
+
+        <include layout="@layout/ly_vertical_line"/>
+
+        <com.supcon.mes.mbap.view.CustomVerticalEditText
+            android:id="@+id/historyItemConclusion"
+            android:tag="historyItemConclusion"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/dp_5"
+            app:text="结论"
+            app:text_size="14"
+            app:editable="false" />
+
+    </LinearLayout>
+
+
+    <com.supcon.mes.mbap.view.CustomDateView
+        android:id="@+id/historyItemDate"
+        android:tag="historyItemDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_1"
+        android:background="@color/white"
+        app:text="时间"
+        app:text_size="14"
+        app:text_color="@color/textColorlightblack"
+        app:editable="false"
+        android:paddingBottom="@dimen/dp_5"
+        android:paddingLeft="@dimen/dp_20" />
+
+
+
+    
+</LinearLayout>

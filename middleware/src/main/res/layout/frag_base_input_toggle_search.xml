@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/ly_titlebar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:id="@+id/fitInStatusBar"
+        android:tag="fitInStatusBar"
+        android:background="@color/transparent"
+        android:layout_height="@dimen/dp_25"/>
+    <com.supcon.mes.mbap.view.CustomSearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:tag="searchView"
+        app:search_hint="请输入姓名/首字母/电话" />
+
+    <com.supcon.mes.mbap.view.NoScrollViewPager
+        android:id="@+id/noScrollViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="noScrollViewPager" />
+
+    <LinearLayout
+        android:id="@+id/contentFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:tag="contentFragment"
+        android:visibility="gone" />
+</LinearLayout>

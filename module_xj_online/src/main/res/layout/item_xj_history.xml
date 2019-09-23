@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/sl_press_no_stroke"
+    android:orientation="horizontal">
+
+    <!--<TextView
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        android:id="@+id/historyItemResult"
+        android:tag="historyItemResult"
+        style="@style/DetailText"
+        android:padding="@dimen/dp_3"
+        android:gravity="center"
+        android:maxLines="3"
+        />-->
+    <com.supcon.mes.mbap.view.CustomVerticalEditText
+        android:id="@+id/historyItemResult"
+        android:tag="historyItemResult"
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        app:edit_maxLine="5"
+        app:text_size="14"
+        app:editable="false"
+        app:text_height="1dp"
+        app:padding="@dimen/dp_1"
+        android:layout_marginLeft="@dimen/dp_1"
+        android:layout_marginTop="@dimen/dp_4"
+        android:gravity="center" />
+    <include layout="@layout/ly_vertical_line"/>
+
+    <TextView
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        android:id="@+id/historyItemConclusion"
+        android:tag="historyItemConclusion"
+        style="@style/DetailText"
+        android:padding="@dimen/dp_5"
+        android:gravity="center" />
+    <include layout="@layout/ly_vertical_line"/>
+
+    <TextView
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+        android:id="@+id/historyItemDate"
+        android:tag="historyItemDate"
+        style="@style/DetailText"
+        android:padding="@dimen/dp_5"
+        android:gravity="center"
+        android:maxLines="2" />
+
+</LinearLayout>

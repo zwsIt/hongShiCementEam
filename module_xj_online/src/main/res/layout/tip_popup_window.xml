@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/tipLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/pv_triangle"
+        android:background="@drawable/shap_fillet_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_5">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp_5"
+            android:text="隐患现象"
+            android:textColor="@color/red"
+            android:textSize="@dimen/fontSize_16sp" />
+
+        <include layout="@layout/ly_line" />
+
+        <TextView
+            android:id="@+id/tipContent"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:padding="@dimen/dp_10"
+            android:scrollbars="vertical"
+            android:textColor="@color/textColorlight"
+            tools:text="隐患现象啊" />
+    </LinearLayout>
+
+    <com.supcon.mes.middleware.ui.view.PopwinBackView
+        android:id="@+id/pv_triangle"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:tag="pv_triangle"
+        app:direction="right" />
+</RelativeLayout>

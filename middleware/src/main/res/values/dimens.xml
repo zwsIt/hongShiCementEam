@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dp_100">100dp</dimen>
+    <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_147">147dp</dimen>
+    <dimen name="dp_120">120dp</dimen>
+
+    <dimen name="boxing_activity_horizontal_margin">16dp</dimen>
+    <dimen name="boxing_activity_vertical_margin">16dp</dimen>
+
+    <dimen name="boxing_text_size_xlarge">16sp</dimen>
+    <dimen name="boxing_text_size_large">14sp</dimen>
+    <dimen name="boxing_text_size_medium">12sp</dimen>
+    <dimen name="boxing_text_size_small">10sp</dimen>
+
+    <dimen name="boxing_item_spacing">8dp</dimen>
+    <dimen name="boxing_item_half_spacing">4dp</dimen>
+    <dimen name="boxing_media_margin">2dp</dimen>
+    <dimen name="boxing_corner_radius">2dp</dimen>
+</resources>

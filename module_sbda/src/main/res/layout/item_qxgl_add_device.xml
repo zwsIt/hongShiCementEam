@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/sl_press_no_stroke"
+    android:padding="5dp">
+    <com.supcon.mes.mbap.view.CustomExpandableTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/singleItemAddDeviceName"
+        android:tag="singleItemAddDeviceName"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="@dimen/dp_10"
+        app:text_size="14"
+        app:text_color="@color/textColorlightblack"
+        app:max_lines="2"
+        app:expand_times="2"
+        />
+    <com.supcon.mes.mbap.view.CustomExpandableTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/singleItemAddDevicePlace"
+        android:tag="singleItemAddDevicePlace"
+        android:layout_below="@+id/singleItemAddDeviceName"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        app:text_size="12"
+        app:text_color="@color/hintColor"
+        app:max_lines="2"
+        app:expand_times="2"
+        />
+</RelativeLayout>

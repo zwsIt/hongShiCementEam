@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/btnLayout"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:orientation="horizontal"
+    android:tag="btnLayout">
+
+    <Button
+        android:id="@+id/dispatch"
+        style="@style/RedButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tag="dispatch"
+        android:text="生成工单" />
+
+    <Button
+        android:id="@+id/delay"
+        style="@style/RedButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_1"
+        android:layout_weight="1"
+        android:tag="delay"
+        android:text="延期" />
+
+    <Button
+        android:id="@+id/overdue"
+        style="@style/RedButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_1"
+        android:layout_weight="1"
+        android:tag="overdue"
+        android:text="延期记录" />
+</LinearLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/dp_5"
+    android:paddingBottom="@dimen/dp_5"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/DetailText"
+        android:layout_gravity="center_vertical"
+        android:text="筛选条件"
+        android:textSize="@dimen/dp_12"
+        android:visibility="gone"
+        />
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_filter_white_stroke"
+        android:scaleType="centerInside"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        />
+    <com.supcon.mes.mbap.view.CustomFilterView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/listStatusFilter"
+        android:tag="listStatusFilter"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        app:text="状态不限"
+        app:text_size="14"
+        app:text_color="@color/white"
+        app:icon_res="@drawable/ic_choose_white2"
+        />
+
+</LinearLayout>

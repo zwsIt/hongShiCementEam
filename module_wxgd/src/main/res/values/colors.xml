@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="receiveOrder">#3C5569</color>
+    <color name="receiveOrderBg">#F5F5F5</color>
+    <color name="textGrayColor">#f7c6c1c1</color>
+    <color name="repairOrange">#EF8742</color>
+    <color name="faultWarn">#E05543</color>
+    <color name="lubricateGreen">#9CBF3E</color>
+    <color name="sparePartBlue">#2799C9</color>
+</resources>

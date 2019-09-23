@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.supcon.mes.module_main.ui.view.HeadZoomScrollView
+        android:id="@+id/eamScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:tag="eamScrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/eamPic"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop" />
+
+            <com.supcon.mes.middleware.ui.view.TrapezoidView
+                android:id="@+id/eamName"
+                android:layout_width="140dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:tag="eamName"
+                android:text="ces"
+                android:textColor="@color/black" />
+
+            <include
+                android:id="@+id/hs_anomaly_title"
+                layout="@layout/hs_item_title" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/anomalyRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:tag="anomalyRecycler"
+                tools:ignore="UnusedAttribute" />
+
+            <LinearLayout
+                android:id="@+id/anomalyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/dp_30"
+                android:tag="anomalyLayout"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/emptyIcon"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_empty"
+                    android:tag="emptyIcon"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/emptyContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="center_horizontal"
+                    android:tag="emptyContent"
+                    android:text="暂无工作提醒"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <include
+                android:id="@+id/hs_eam_work_title"
+                layout="@layout/hs_item_title" />
+
+            <RelativeLayout
+                android:id="@+id/eamLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_15"
+                android:background="@drawable/score_bg"
+                android:gravity="center_horizontal"
+                android:tag="eamLayout">
+
+                <TextView
+                    android:id="@+id/eamStarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:tag="eamStarTitle"
+                    android:text="设备星级"
+                    android:textColor="#849ea4"
+                    android:textSize="@dimen/fontSize_16sp" />
+
+                <com.supcon.mes.module_main.ui.view.SimpleRatingBar
+                    android:id="@+id/starLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_toRightOf="@id/eamStarTitle"
+                    android:tag="starLevel"
+                    app:srb_borderColor="@color/transparent"
+                    app:srb_fillColor="@color/color_ffa000"
+                    app:srb_isIndicator="true"
+                    app:srb_numberOfStars="5"
+                    app:srb_starBackgroundColor="@color/color_dddddd"
+                    app:srb_starSize="15dp"
+                    app:srb_starsSeparation="3dp"
+                    app:srb_stepSize="0.1" />
+
+
+                <TextView
+                    android:id="@+id/eamScoreTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_toRightOf="@id/starLevel"
+                    android:tag="eamScoreTitle"
+                    android:text="设备评分"
+                    android:textColor="#849ea4"
+                    android:textSize="@dimen/fontSize_16sp" />
+
+                <TextView
+                    android:id="@+id/eamScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_toRightOf="@id/eamScoreTitle"
+                    android:tag="eamScore"
+                    android:textColor="#5b959e"
+                    android:textSize="@dimen/fontSize_18sp"
+                    android:textStyle="bold"
+                    tools:text="100" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/eamWorkRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:tag="eamWorkRecycler"
+                    tools:ignore="UnusedAttribute" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </com.supcon.mes.module_main.ui.view.HeadZoomScrollView>
+
+    <ImageButton
+        android:id="@+id/leftBtn"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@null"
+        android:scaleType="center"
+        android:src="@drawable/sl_top_back"
+        android:tag="leftBtn" />
+</RelativeLayout>

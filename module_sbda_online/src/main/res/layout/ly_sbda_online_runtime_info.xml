@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical">
+
+        <include
+            layout="@layout/ly_title_pic"
+            android:layout_width="5dp"
+            android:layout_height="13dp" />
+
+        <TextView
+            style="@style/TitleTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="13dp"
+            android:text="运行信息"
+            android:textSize="@dimen/fontSize_16sp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:src="@drawable/ic_user_sz"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/ly_line_light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginTop="@dimen/dp_5" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/cumulativeRunTime"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:tag="cumulativeRunTime"
+        app:gravity="right"
+        app:key="累计运行时间"
+        app:key_width="100dp"
+        app:necessary="false" />
+
+    <View
+        android:layout_width="345dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#EDEDF0" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/cumulativeDownTime"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:tag="cumulativeDownTime"
+        app:gravity="right"
+        app:key="累计停机时间"
+        app:key_width="100dp" />
+
+    <View
+        android:layout_width="345dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#EDEDF0" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/cumulativeDownNum"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:tag="cumulativeDownNum"
+        app:gravity="right"
+        app:key="停机次数"
+        app:key_width="100dp"
+        app:necessary="false" />
+
+    <!--<View-->
+    <!--android:layout_width="345dp"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:background="#EDEDF0" />-->
+
+    <!--<com.supcon.mes.mbap.view.CustomTextView-->
+    <!--android:id="@+id/specialty"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/dp_30"-->
+    <!--android:layout_marginStart="@dimen/dp_12"-->
+    <!--android:layout_marginTop="7dp"-->
+    <!--android:layout_marginEnd="@dimen/dp_12"-->
+    <!--android:tag="specialty"-->
+    <!--app:key="专业"-->
+    <!--app:necessary="false" />-->
+</LinearLayout>

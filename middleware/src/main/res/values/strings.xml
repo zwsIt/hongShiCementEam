@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">middleware</string>
+
+    <string name="device_style1">%1$s (%2$s)</string>
+    <string name="device_style2">%1$s\t\t\t\t\t\t\t%2$s</string>
+    <string name="device_style3">%1$s \n[%2$s]</string>
+    <string name="device_style4">%1$s [%2$s]</string>
+    <string name="device_style5">%1$s (%2$s) [%3$s]</string>
+    <string name="device_style6">%1$s\t\t%2$s</string>
+    <string name="device_style7"><![CDATA[<font color="#FFFFFF" size="15"><b>%1$s</b></font><font color="#FFFFFF" size="12">%2$s</font>]]></string>
+    <string name="device_style8"><![CDATA[<font color="#000000" size="16">%1$s</font><font color="#222222" size="16"> %2$s</font><font color="#2f22f1" size="12"> (%3$s)</font>]]></string>
+    <string name="device_style10"><![CDATA[<font color="#222222" size="16">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font>]]></string>
+    <string name="device_style11"><![CDATA[<font color="#222222" size="16">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font><font color="#2f22f1" size="12"> (%3$s)</font>]]></string>
+    <string name="device_style12"><![CDATA[<font color="#222222" size="14">%1$s</font><font color="#2f22f1" size="12"> (%2$s)</font>]]></string>
+    <string name="device_style13"><![CDATA[<font color="#000000" size="16"><b>%1$s</b></font><font color="#222222" size="16"> %2$s</font>]]></string>
+
+    <string name="device_style15"><![CDATA[<font color="#a2a2a2" size="14"><b>%1$s</b></font><font color="#c82529" size="12"> (%2$d)</font>]]></string>
+
+    <string name="device_style14"><![CDATA[<font color="#000000" size="16"><b>%1$s</b></font><font color="#222222" size="14"> 【 %2$s 】</font>]]></string>
+
+    <string name="device_style16"><![CDATA[<font color="#222222" size="14"><b>%1$s</b></font><font color="#626262" size="13"> %2$s</font>]]></string>
+
+    <string name="content">内容:</string>
+    <string name="claim">要求:</string>
+    <string name="staff">人员:</string>
+    <string name="oils">润滑油:</string>
+    <string name="name">名称:</string>
+    <string name="sum">数量:</string>
+    <string name="type">规格:</string>
+    <string name="model">型号:</string>
+    <string name="workHour">工时(H):</string>
+    <string name="actualStartTime">实际开始时间:</string>
+    <string name="actualEndTime">实际结束时间:</string>
+    <string name="oilCode">润滑油编码:</string>
+    <string name="OilType">加换油:</string>
+    <string name="useQuantity">领用量:</string>
+    <string name="actualQuantity">实际用量:</string>
+    <string name="standingCrop">现存量:</string>
+    <string name="useState">领用状态:</string>
+    <string name="remark">备注</string>
+    <string name="sparePartName">备件名称:</string>
+    <string name="periodType">周期类型:</string>
+    <string name="period">周期:</string>
+    <string name="periodUnit">周期单位:</string>
+    <string name="lastTime">上次执行时间:</string>
+    <string name="nextTime">下次执行时间:</string>
+
+    <string name="lastDuration">上次执行时长(H):</string>
+    <string name="nextDuration">下次执行时长(H):</string>
+    <string name="acceptChkStaff">验收人</string>
+    <string name="acceptChkStaffCode">验收人编码</string>
+    <string name="acceptChkTime">验收时间</string>
+    <string name="acceptChkConclusion">验收结论</string>
+
+</resources>

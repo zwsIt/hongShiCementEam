@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/dp_5"
+    android:paddingLeft="20dp"
+    android:background="@drawable/sh_xj_filter_bg"
+    >
+
+    <com.supcon.mes.mbap.view.CustomFilterView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/listDateFilter"
+        android:tag="listDateFilter"
+        app:text="日期"
+        app:text_color="@color/white"
+        app:item_text_color="@color/textColorlightblack"
+        app:text_size="13"
+        app:position="0"
+        app:icon_res="@drawable/ic_choose_white2" />
+
+    <com.supcon.mes.mbap.view.CustomFilterView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/listStateFilter"
+        android:tag="listStateFilter"
+        android:layout_marginLeft="@dimen/dp_10"
+        app:text="状态"
+        app:text_color="@color/white"
+        app:item_text_color="@color/textColorlightblack"
+        app:text_size="13"
+        app:position="0"
+        app:icon_res="@drawable/ic_choose_white2" />
+</LinearLayout>

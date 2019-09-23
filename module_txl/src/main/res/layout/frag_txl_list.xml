@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.TxlListActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/themeColor"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:text="通讯录"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_20sp" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:src="@drawable/ic_back"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <com.supcon.mes.mbap.view.CustomSearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:tag="searchView"
+        app:search_hint="请输入姓名/首字母/电话" />
+    <include layout="@layout/ly_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout style="@style/xl_select_linear">
+
+            <ImageView
+                style="@style/txl_select_icon"
+                android:id="@+id/ivSameDepart"
+                android:tag="ivSameDepart"
+                android:src="@drawable/ic_txl_same_depart" />
+
+            <TextView
+                android:id="@+id/sameDepart"
+                android:tag="sameDepart"
+
+                style="@style/txl_select_text"
+                android:text="同部门" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <ImageView
+                android:id="@+id/ivDepartInfos"
+                android:tag="ivDepartInfos"
+                style="@style/txl_select_icon"
+                android:src="@drawable/ic_txl_depart_struct" />
+
+            <TextView
+                android:id="@+id/departInfos"
+                android:tag="departInfos"
+                style="@style/txl_select_text"
+                android:text="组织" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line" />
+
+        <LinearLayout style="@style/xl_select_linear">
+
+            <ImageView
+                style="@style/txl_select_icon"
+                android:id="@+id/ivMyBelongStaff"
+                android:tag="ivMyBelongStaff"
+                android:src="@drawable/ic_txl_sub_staff" />
+
+            <TextView
+                style="@style/txl_select_text"
+                android:id="@+id/myBelongStaff"
+                android:tag="myBelongStaff"
+                android:text="我的下属" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <ImageView
+                style="@style/txl_select_icon"
+                android:id="@+id/ivAllStaff"
+                android:tag="ivAllStaff"
+                android:src="@drawable/ic_txl_all_staff" />
+
+            <TextView
+                style="@style/txl_select_text"
+                android:id="@+id/allStaff"
+                android:tag="allStaff"
+                android:text="所有人" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:background="@color/line_gray"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_10"
+        android:text="最近"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/fontSize_16sp" />
+
+    <include layout="@layout/ly_recyclerview_with_scrollbar" />
+</LinearLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical">
+
+        <include
+            layout="@layout/ly_title_pic"
+            android:layout_width="5dp"
+            android:layout_height="13dp" />
+
+        <TextView
+            style="@style/TitleTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="13dp"
+            android:textSize="@dimen/fontSize_16sp"
+            android:text="安装信息" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:src="@drawable/ic_user_sz"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/ly_line_light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginTop="@dimen/dp_5" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/specialType"
+        android:tag="specialType"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:visibility="gone"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="7dp"
+        app:necessary="false"
+        app:key="特种设备类型"
+        app:key_width="100dp" />
+
+    <!--<View
+        android:layout_width="345dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#EDEDF0" />-->
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/installPlace"
+        android:tag="installPlace"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="7dp"
+        app:necessary="false"
+        app:key="区域位置" />
+
+    <View
+        android:layout_width="345dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#EDEDF0" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/installFirm"
+        android:tag="installFirm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="7dp"
+        app:necessary="false"
+        app:key="安装单位" />
+
+    <View
+        android:layout_width="345dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#EDEDF0" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/areaNum"
+        android:tag="areaNum"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="7dp"
+        app:necessary="false"
+        app:key="设备位号"/>
+</LinearLayout>

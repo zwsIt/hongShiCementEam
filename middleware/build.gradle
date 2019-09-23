@@ -1,0 +1,76 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.greenrobot.greendao'
+android {
+    compileSdkVersion       rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion       rootProject.ext.minSdkVersion
+        targetSdkVersion    rootProject.ext.targetSdkVersion
+        versionCode         rootProject.ext.versionCode
+        versionName         rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        greendao {
+            schemaVersion 8//2019/08/22
+        }
+    }
+
+    //支持Java8
+    defaultConfig.javaCompileOptions {
+        annotationProcessorOptions {
+            includeCompileClasspath = true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    /*测温添加so库*/
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            multiDexEnabled true
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    api "com.supcon.mes.common:annotation:$rootProject.ext.annotationVersion"
+    api "com.supcon.mes.common:com_router:$rootProject.ext.routerVersion"
+    api "com.supcon.mes.common:com_http:$rootProject.ext.httpVersion"
+    api "com.supcon.mes.common:com_view:$rootProject.ext.viewVersion"
+
+    api "com.supcon.mes.mbap:mbap:$rootProject.ext.mbapVersion"
+    api "com.supcon.mes.drive:mogu_viber:$rootProject.ext.vibVersion"
+    api "com.supcon.mes.drive:nfc:$rootProject.ext.nfcVersion"
+    api "com.supcon.mes.drive:sb2:$rootProject.ext.sb2Version"
+
+    api 'com.google.auto.service:auto-service:1.0-rc5'
+    api 'com.squareup:javapoet:1.11.1'
+    api 'com.github.lzyzsd:circleprogress:1.1.0'
+    api 'com.github.SilenceDut:jpinyin:v1.0'
+    api 'org.greenrobot:eventbus:3.1.1'
+
+
+    annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
+//    implementation project(':upush')
+
+}
+
+//apply from: '../library.gradle'

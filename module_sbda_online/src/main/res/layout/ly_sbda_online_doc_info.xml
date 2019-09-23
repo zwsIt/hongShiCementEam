@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical">
+
+        <include
+            layout="@layout/ly_title_pic"
+            android:layout_width="5dp"
+            android:layout_height="13dp" />
+
+        <TextView
+            style="@style/TitleTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="13dp"
+            android:text="使用信息"
+            android:textSize="@dimen/fontSize_16sp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:src="@drawable/ic_user_sz"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/ly_line_light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginTop="@dimen/dp_5" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="@dimen/dp_7"
+        android:orientation="horizontal">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_weight="1"
+            android:tag="eamState"
+            app:key="设备状态"
+            app:necessary="false" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#EDEDF0" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/areaNum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_weight="1"
+            android:tag="areaNum"
+            app:key="设备位号"
+            app:necessary="false" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="345dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#EDEDF0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="@dimen/dp_7"
+        android:orientation="horizontal">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/installPlace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_weight="1"
+            android:tag="installPlace"
+            app:key="区域位置"
+            app:necessary="false" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#EDEDF0" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamUseDept"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_weight="1"
+            android:tag="eamUseDept"
+            app:key="使用部门"
+            app:necessary="false" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="345dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#EDEDF0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="@dimen/dp_7"
+        android:orientation="horizontal">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamAbc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_weight="1"
+            android:tag="eamAbc"
+            app:key="资产ABC"
+            app:necessary="false" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#EDEDF0" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/electricStaff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_weight="1"
+            android:tag="electricStaff"
+            app:key="电气责任人"
+            app:necessary="false" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="345dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#EDEDF0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="@dimen/dp_7"
+        android:orientation="horizontal">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/inspectionStaff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_weight="1"
+            android:tag="inspectionStaff"
+            app:key="巡检责任人"
+            app:necessary="false" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#EDEDF0" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/repairStaff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_weight="1"
+            android:tag="repairStaff"
+            app:key="机修责任人"
+            app:necessary="false" />
+
+    </LinearLayout>
+</LinearLayout>

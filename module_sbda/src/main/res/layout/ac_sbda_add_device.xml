@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/searchTitleBar"
+        app:title_background_color="@color/themeColor"
+        android:tag="searchTitleBar"
+        />
+    <FrameLayout
+        android:id="@+id/frameLayoutContent"
+        android:tag="frameLayoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/dp_50"
+        android:layout_marginTop="50dp"
+        android:visibility="visible"
+        />
+
+    <LinearLayout
+        android:id="@+id/bottomEnsureBar"
+        android:tag="bottomEnsureBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        android:background="@color/bgGray"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/addDeviceChooseNum"
+            android:tag="addDeviceChooseNum"
+            style="@style/HintTextColor"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="已选0个设备" />
+
+        <Button
+            android:id="@+id/addDeviceSureBtn"
+            style="@style/RedButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="20dp"
+            android:text="确定" />
+    </LinearLayout>
+</RelativeLayout>

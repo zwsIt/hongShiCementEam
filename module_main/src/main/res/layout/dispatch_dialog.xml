@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shap_fillet_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="工单派单"
+        android:textSize="@dimen/fontSize_20sp" />
+
+    <include layout="@layout/ly_line" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/dispatchGroup"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingLeft="@dimen/dp_15"
+        android:paddingRight="@dimen/dp_15"
+        android:tag="repairGroup"
+        app:content_hint="请选择维修组"
+        app:editable="true"
+        app:key="维修组" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/dispatchPerson"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingLeft="@dimen/dp_15"
+        android:paddingRight="@dimen/dp_15"
+        android:tag="dispatchPerson"
+        app:content_hint="请选择负责人"
+        app:editable="true"
+        app:key="负责人：" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/blueBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_common"
+            android:text="确定"
+            android:textColor="@color/customBlue4"
+            android:textSize="@dimen/fontSize_16sp" />
+
+        <Button
+            android:id="@+id/grayBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_common"
+            android:text="取消"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/fontSize_16sp" />
+
+    </LinearLayout>
+</LinearLayout>

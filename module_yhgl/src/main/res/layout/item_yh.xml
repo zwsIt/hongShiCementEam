@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sl_press_no_stroke"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <RelativeLayout
+        android:id="@+id/itemTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_15"
+        android:background="@color/transparent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="@dimen/dp_5"
+        android:tag="itemTableLayout">
+
+        <TextView
+            android:id="@+id/itemTablePriority"
+            style="@style/StatusTextSolid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:background="@drawable/sh_status_no_solid"
+            android:tag="itemTablePriority" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemTableNoTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_70"
+            android:layout_toEndOf="@+id/itemTablePriority"
+            android:tag="itemTableNoTv"
+            app:content_color="@color/customBlue4"
+            app:key_width="0dp"
+            app:text_size="18" />
+
+        <TextView
+            android:id="@+id/itemTableStatus"
+            style="@style/StatusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginEnd="25dp"
+            android:tag="itemTableStatus"
+            android:textSize="12sp"
+            tools:ignore="RelativeOverlap" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/itemTableNoTv"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginRight="@dimen/dp_15"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/itemYHType"
+                style="@style/DetailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_15"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingBottom="@dimen/dp_3"
+                android:tag="itemYHType"
+                android:textColor="@color/hintColor"
+                android:textSize="@dimen/fontSize_12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/itemWXType"
+                style="@style/DetailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingBottom="@dimen/dp_3"
+                android:tag="itemWXType"
+                android:textColor="@color/hintColor"
+                android:textSize="@dimen/fontSize_12sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/itemYHPosition"
+                style="@style/DetailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_location"
+                android:drawablePadding="@dimen/dp_3"
+                android:paddingTop="@dimen/dp_3"
+                android:paddingBottom="@dimen/dp_3"
+                android:tag="itemYHPosition"
+                android:textColor="@color/hintColor"
+                android:textSize="@dimen/fontSize_12sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <include
+        layout="@layout/ly_line_light_light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_below="@id/itemTableLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <RelativeLayout
+        android:id="@+id/itemEamLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemTableLayout"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:background="@color/transparent"
+        android:gravity="center_vertical"
+        android:tag="itemEamLayout">
+
+        <ImageView
+            android:id="@+id/itemYHDeviceIc"
+            android:layout_width="90dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginBottom="@dimen/dp_2"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_default_pic3" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemYHDeviceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_toRightOf="@+id/itemYHDeviceIc"
+            android:tag="itemYHDeviceName"
+            app:content_color="@color/deviceTitleColor"
+            app:key_color="@color/hintColor"
+            app:key_width="0dp"
+            app:text_size="16" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemYHDeviceCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/itemYHDeviceName"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_toRightOf="@+id/itemYHDeviceIc"
+            android:tag="itemYHDeviceCode"
+            app:content_color="@color/hintColor"
+            app:key_color="@color/hintColor"
+            app:key_width="0dp"
+            app:text_size="14" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/ly_line_light_light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_below="@id/itemEamLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <LinearLayout
+        android:id="@+id/itemYHInfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemEamLayout"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/dp_2"
+        android:background="@color/transparent"
+        android:tag="itemYHInfoLayout">
+
+        <TextView
+            style="@style/DetailText"
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:text="隐患现象"
+            android:visibility="gone" />
+
+        <com.supcon.mes.mbap.view.CustomVerticalTextView
+            android:id="@+id/itemYHDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_5"
+            android:tag="itemYHDescription"
+            app:content_color="@color/textColorlightblack"
+            app:editable="false"
+            app:text_size="14" />
+    </LinearLayout>
+
+
+    <com.supcon.mes.mbap.view.CustomGalleryView
+        android:id="@+id/itemGalleryView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemYHInfoLayout"
+        android:layout_marginLeft="@dimen/dp_13"
+        android:layout_marginTop="@dimen/dp_2"
+        android:layout_marginRight="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_2"
+        android:paddingBottom="@dimen/dp_2"
+        android:tag="itemGalleryView"
+        android:visibility="visible"
+        app:columns="3"
+        app:editable="false"
+        app:text_height="0dp"
+        app:text_size="14" />
+
+    <LinearLayout
+        android:id="@+id/itemPersonLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemGalleryView"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/dp_2"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_2"
+        android:paddingBottom="@dimen/dp_2"
+        android:tag="itemPersonLayout">
+
+        <TextView
+            android:id="@+id/itemYHPersonTv"
+            style="@style/TitleTextColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="itemYHPersonTv"
+            android:textColor="@color/textColorlightblack"
+            android:textSize="@dimen/fontSize_12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/itemDateLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemGalleryView"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/dp_2"
+        android:layout_marginRight="@dimen/dp_15"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_2"
+        android:paddingBottom="@dimen/dp_2"
+        android:tag="itemDateLayout">
+
+
+        <TextView
+            android:id="@+id/itemYHDateTv"
+            style="@style/DetailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="itemYHDateTv"
+            android:textColor="@color/textColorlightblack"
+            android:textSize="@dimen/fontSize_12sp" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/itemInfo"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/sl_transparent_press_no_stroke"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_into"
+        android:tag="itemInfo" />
+</RelativeLayout>

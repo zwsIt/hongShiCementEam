@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:orientation="vertical">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemRepairTableNoTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:tag="itemRepairTableNoTv"
+            app:content_color="@color/blue"
+            app:content_hint="--"
+            app:key="单据编号:" />
+
+        <include layout="@layout/ly_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5">
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/itemRepairDescribeTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="itemRepairDescribeTv"
+                app:content_hint="--"
+                app:key="隐患现象:" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/itemRepairPriorityTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_10"
+                android:tag="itemRepairPriorityTv"
+                app:content_hint="--"
+                app:key="优先级:" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5">
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/itemRepairFindStaffTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="itemRepairFindStaffTv"
+                app:content_hint="--"
+                app:key="发现人:" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/itemRepairFindTimeTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_10"
+                android:tag="itemRepairFindTimeTv"
+                app:content_hint="--"
+                app:key="发现时间:" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5">
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/itemRepairRepairTypeTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:tag="itemRepairRepairTypeTv"
+                app:content_hint="--"
+                app:key="维修类型:" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/itemRepairSourceTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_10"
+                android:tag="itemRepairSourceTv"
+                app:content_hint="--"
+                app:key="工单来源:" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/eamStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/eam_status_use"
+        android:gravity="center"
+        android:padding="@dimen/dp_5"
+        android:tag="eamStatus"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+</RelativeLayout>

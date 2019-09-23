@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnLayout"
+        android:orientation="vertical">
+
+        <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+            android:id="@+id/searchTitleBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="searchTitleBar"
+            app:title_background_color="@color/themeColor"
+            app:title_text="延期记录" />
+
+        <include layout="@layout/ly_recyclerview" />
+
+    </LinearLayout>
+
+</RelativeLayout>

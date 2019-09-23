@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sl_press_no_stroke"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/itemSBDADeviceIc"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_default_pic3"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:scaleType="centerCrop"
+        />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="65dp"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_toRightOf="@id/itemSBDADeviceIc"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:orientation="horizontal">
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/itemSBDADeviceType"
+                android:tag="itemSBDADeviceType"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:visibility="gone"
+                android:layout_gravity="left|top"
+                android:text="特"
+                android:gravity="center"
+                android:background="@drawable/eam_type_blue"
+                android:textColor="@color/SBDAListBlue"
+                android:singleLine="true"
+                android:textSize="10sp"
+                tools:ignore="RtlHardcoded" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/itemSBDADeviceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:paddingLeft="3dp"
+                android:singleLine="true"
+                android:tag="itemSBDADeviceTitle"
+                android:textSize="16sp"
+                tools:ignore="RtlHardcoded" />
+        </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/itemSBDADeviceCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingLeft="3dp"
+            android:singleLine="true"
+            android:tag="itemSBDADeviceCode"
+            android:textSize="14sp"
+            android:textColor="@color/hintColor"
+            tools:ignore="RtlHardcoded" />
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_20"
+            >
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="1dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_location" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/itemSBDADeviceArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:paddingLeft="3dp"
+                android:tag="itemSBDADeviceArea"
+                android:textColor="@color/color_A"
+                android:textSize="12sp"
+                tools:ignore="RtlHardcoded" />
+        </android.support.v7.widget.LinearLayoutCompat>
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/eamStatus"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="@dimen/dp_20"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_3"
+        android:layout_gravity="center"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/eam_status_use"
+        android:gravity="center"
+        android:tag="eamStatus"
+        android:text="在用"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+</RelativeLayout>

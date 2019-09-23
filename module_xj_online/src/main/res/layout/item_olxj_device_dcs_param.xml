@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="@color/BgXjAreaBlue"
+    android:paddingLeft="@dimen/dp_10">
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemDCSParam"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:tag="itemDCSParam"
+        app:content_color="@color/customGreen"
+        app:content_size="14"
+        app:key_color="@color/textColorlightblack"
+        app:key_size="12"
+        app:key_width="150dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/itemDCSParam"
+        android:orientation="horizontal">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemDCSParamMin"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:tag="itemDCSParamMin"
+            app:content_size="14"
+            app:content_value=" -- "
+            app:gravity="center_vertical|right"
+            app:key_color="@color/textColorlightblack"
+            app:key_size="10"
+            app:key_width="0dp" />
+
+        <TextView
+            android:id="@+id/itemDCSParamMark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="itemDCSParamMark"
+            android:text="  ~  " />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/itemDCSParamMax"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:tag="itemDCSParamMax"
+            app:content_size="14"
+            app:content_value=" -- "
+            app:gravity="center_vertical"
+            app:key_color="@color/textColorlightblack"
+            app:key_size="10"
+            app:key_width="0dp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/itemAreaDot"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:scaleType="center"
+        android:src="@drawable/ic_dot"
+        android:tag="itemAreaDot"
+        android:visibility="gone" />
+</RelativeLayout>

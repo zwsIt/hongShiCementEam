@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/ly_search_titlebar" />
+
+    <RelativeLayout
+        android:id="@+id/rlContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_50">
+
+        <com.supcon.mes.mbap.view.CustomTab
+            android:id="@+id/yxjlTab"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            app:indicator_visible="false"
+            app:select_text_color="@color/themeColor"
+            app:unselect_text_color="@color/white" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/yxjlVP"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/yxjlTab" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/yxjlSearchContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_50"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bgGray"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/addDeviceChooseNum"
+            style="@style/HintTextColor"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="已选0个设备" />
+
+        <Button
+            android:id="@+id/addDeviceSureBtn"
+            style="@style/RedButton"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="20dp"
+            android:text="确定" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,228 @@
+{
+  "aew": [
+    {
+      "name": "计划巡检",
+      "viewType": 1,
+      "tag": "PlANTASKQTY",
+      "num": 0,
+      "type": 1,
+      "isPower": true,
+      "menuOperateCodes": "mobileEAM_1.0.0_potrolTaskNew_potrolTaskList_self"
+    },
+    {
+      "name": "临时巡检",
+      "viewType": 0,
+      "tag": "TEMPTASKQTY",
+      "num": 0,
+      "type": 2,
+      "isPower": false
+    },
+    {
+      "name": "隐患清单",
+      "viewType": 0,
+      "tag": "INSPANDSPFLTQTY",
+      "num": 0,
+      "type": 3,
+      "isPower": false
+    },
+    {
+      "name": "巡检手册",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 4,
+      "isPower": false,
+      "menuOperateCodes": ""
+    }
+  ],
+  "lubricate": [
+    {
+      "name": "计划润滑",
+      "viewType": 1,
+      "tag": "PLANLUBQTY",
+      "num": 0,
+      "type": 5,
+      "isPower": true,
+      "menuOperateCodes": "BEAM_1.0.0_baseInfo_dailyLubricateForM_self"
+    },
+    {
+      "name": "临时润滑",
+      "viewType": 0,
+      "num": 0,
+      "type": 6,
+      "isPower": true,
+      "menuOperateCodes": ""
+    },
+    {
+      "name": "润滑预警",
+      "viewType": 0,
+      "tag": "LUBWARNINGQTY",
+      "num": 0,
+      "type": 7,
+      "isPower": true,
+      "menuOperateCodes": "BEAM_1.0.0_baseInfo_lubricateWarnList_self"
+    },
+    {
+      "name": "润滑记录",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 8,
+      "isPower": false,
+      "menuOperateCodes": ""
+    },
+    {
+      "name": "润滑手册",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 9,
+      "isPower": false,
+      "menuOperateCodes": ""
+    }
+  ],
+  "repair": [
+    {
+      "name": "日常维修",
+      "viewType": 1,
+      "tag": "DAILYWORKQTY",
+      "num": 0,
+      "type": 10,
+      "isPower": true,
+      "menuOperateCodes": "BEAM2_1.0.0_workList_workList_self"
+    },
+    {
+      "name": "周期维修",
+      "viewType": 0,
+      "tag": "REPAIRWORKQTY",
+      "num": 0,
+      "type": 11,
+      "isPower": true,
+      "menuOperateCodes": "BEAM2_1.0.0_workList_workList_self"
+    },
+    {
+      "name": "年底大修",
+      "viewType": 0,
+      "tag": "OHAULWORKQTY",
+      "num": 0,
+      "type": 12,
+      "isPower": true,
+      "menuOperateCodes": "BEAM2_1.0.0_workList_workList_self"
+    },
+    {
+      "name": "零部件预警",
+      "viewType": 0,
+      "tag": "SPWARNINGQRY",
+      "num": 0,
+      "type": 13,
+      "isPower": true,
+      "menuOperateCodes": "BEAM_1.0.0_baseInfo_sparePartWarnList_self"
+    },
+    {
+      "name": "运维预警",
+      "viewType": 0,
+      "tag": "MAINTAINWARNING",
+      "num": 0,
+      "type": 14,
+      "isPower": true,
+      "menuOperateCodes": "BEAM_1.0.0_baseInfo_maintenanceWarnList_self"
+    },
+    {
+      "name": "备件申领",
+      "viewType": 0,
+      "num": 0,
+      "type": 15,
+      "isPower": false
+    },
+    {
+      "name": "停电",
+      "viewType": 0,
+      "num": 0,
+      "type": 16,
+      "isPower": true,
+      "menuOperateCodes": "BEAMEle_1.0.0_onOrOff_eleOffList_self"
+    },
+    {
+      "name": "送电",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 17,
+      "isPower": true,
+      "menuOperateCodes": "BEAMEle_1.0.0_onOrOff_eleOnList_self"
+    },
+    {
+      "name": "关联表单",
+      "viewType": 0,
+      "num": 0,
+      "type": 18,
+      "isPower": false,
+      "menuOperateCodes": ""
+    },
+    {
+      "name": "维修手册",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 19,
+      "isPower": false,
+      "menuOperateCodes": ""
+    }
+  ],
+  "form": [
+    {
+      "name": "巡检统计",
+      "viewType": 1,
+      "tag": "",
+      "num": 0,
+      "type": 20,
+      "isPower": true,
+      "menuOperateCodes": ""
+    },
+    {
+      "name": "隐患统计",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 21,
+      "isPower": true,
+      "menuOperateCodes": "BEAM2_1.0.0_faultInfo_faultInfoList_self"
+    },
+    {
+      "name": "工单统计",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 22,
+      "isPower": true,
+      "menuOperateCodes": "BEAM2_1.0.0_workList_workList_self"
+    },
+    {
+      "name": "停机统计",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 23,
+      "isPower": true,
+      "menuOperateCodes": ""
+    },
+    {
+      "name": "备件消耗台账",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 24,
+      "isPower": true,
+      "menuOperateCodes": "BEAM2_1.0.0_workList_productConsumeList_self"
+    },
+    {
+      "name": "备件领用记录",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 25,
+      "isPower": true,
+      "menuOperateCodes": "BEAM2_1.0.0_workList_sparePartList_self"
+    }
+  ]
+}

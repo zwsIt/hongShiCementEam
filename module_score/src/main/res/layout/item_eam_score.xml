@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingRight="@dimen/dp_15">
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemScoreEam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_5"
+        android:tag="itemScoreEam"
+        app:content_hint="--"
+        app:gravity="center"
+        app:key="设      备:"
+        app:max_lines="1" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemScoreNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_5"
+        android:tag="itemScoreNum"
+        app:content_hint="--"
+        app:gravity="center"
+        app:key="设备得分:"
+        app:max_lines="1" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemScoreTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_5"
+        android:tag="itemScoreTime"
+        app:content_hint="--"
+        app:gravity="center"
+        app:key="评分时间:"
+        app:max_lines="100" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemScoreStaff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_5"
+        android:tag="itemScoreStaff"
+        app:content_hint="--"
+        app:gravity="center"
+        app:key="评分人:"
+        app:max_lines="100" />
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/itemScoreDept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_5"
+        android:tag="itemScoreDept"
+        app:content_hint="--"
+        app:gravity="center"
+        app:key="所属车间:"
+        app:max_lines="100" />
+</LinearLayout>

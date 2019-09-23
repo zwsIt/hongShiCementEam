@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_refproduct"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10"
+    android:tag="layout_refproduct">
+
+    <ImageView
+        android:id="@+id/eamIc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        android:src="@drawable/icon_maintain" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/eamIc"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5">
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/sparePartName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingRight="5dp"
+                android:tag="sparePartName"
+                app:editable="false"
+                app:key="零部件："
+                app:necessary="false"
+                app:text_size="15" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/attachEam"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="@dimen/dp_5"
+                android:tag="attachEam"
+                app:editable="false"
+                app:text="附属设备:"
+                app:text_size="15" />
+
+        </LinearLayout>
+        <!--<include layout="@layout/ly_line" />-->
+        <!--<com.supcon.mes.mbap.view.CustomTextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/lastExeTime"-->
+            <!--android:tag="lastExeTime"-->
+            <!--app:key="上次执行时间:"-->
+            <!--app:key_width="@dimen/dp_100"-->
+            <!--app:key_size="14"/>-->
+        <!--<com.supcon.mes.mbap.view.CustomTextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/nextExeTime"-->
+            <!--android:tag="nextExeTime"-->
+            <!--app:key="下次执行时间:"-->
+            <!--app:key_width="@dimen/dp_100"-->
+            <!--app:key_size="14"/>-->
+
+        <include layout="@layout/ly_line" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/claim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@color/white"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:tag="claim"
+            app:edit_maxLine="4"
+            app:key="@string/claim"
+            app:text_size="15"
+            app:key_width="@dimen/dp_50"/>
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@color/white"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:tag="content"
+            app:edit_maxLine="4"
+            app:key="@string/content"
+            app:text_size="15"
+            app:key_width="@dimen/dp_50"/>
+    </LinearLayout>
+
+</RelativeLayout>

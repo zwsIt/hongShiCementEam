@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.supcon.common.view.view.CustomSwipeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemSwipeLayout"
+    android:tag="itemSwipeLayout"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/main"
+        android:tag="main"
+        android:orientation="horizontal">
+
+        <include layout="@layout/ly_yhgl_times_layout"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
+                >
+                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingRight="5dp"
+                    app:key="@string/staff"
+                    app:text_size="15"
+                    android:id="@+id/repairStaffName"
+                    android:tag="repairStaffName"
+                    app:editable="false"
+                    app:necessary="false"/>
+                <include layout="@layout/ly_vertical_line"/>
+                <com.supcon.mes.mbap.view.CustomVerticalEditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingStart="@dimen/dp_5"
+                    app:text="@string/workHour"
+                    app:text_size="15"
+                    android:id="@+id/workHour"
+                    android:tag="workHour"
+                    app:editable="true"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/dp_5"
+                >
+                <com.supcon.mes.mbap.view.CustomVerticalDateView
+                    style="@style/CustomStyle"
+                    android:id="@+id/actualStartTime"
+                    android:tag="actualStartTime"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="5dp"
+                    app:text="@string/actualStartTime"
+                    app:text_size="15"
+                    app:editable="true"/>
+                <include layout="@layout/ly_vertical_line"/>
+                <com.supcon.mes.mbap.view.CustomVerticalDateView
+                    style="@style/CustomStyle"
+                    android:paddingStart="@dimen/dp_5"
+                    android:paddingEnd="5dp"
+                    android:id="@+id/actualEndTime"
+                    android:tag="actualEndTime"
+                    app:text="@string/actualEndTime"
+                    app:text_size="15"
+                    app:editable="true"/>
+            </LinearLayout>
+            <com.supcon.mes.mbap.view.CustomVerticalEditText
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:id="@+id/remark"
+                android:tag="remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:edit_hint="请输入备注信息"
+                app:key="@string/remark"
+                app:edit_maxLine="4"
+                app:text_size="15"
+                android:paddingBottom="@dimen/dp_5"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingLeft="@dimen/dp_10"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/itemViewDelBtn"
+            android:tag="itemViewDelBtn"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@color/deleteBgColor"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_14sp" />
+
+    </LinearLayout>
+
+</com.supcon.common.view.view.CustomSwipeLayout>

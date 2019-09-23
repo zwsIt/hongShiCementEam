@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/themeColor"
+        android:orientation="horizontal">
+
+        <com.supcon.mes.mbap.view.CustomSearchView
+            android:id="@+id/filterSearchView"
+            android:tag="filterSearchView"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/rightBtnCancel"
+            android:tag="rightBtnCancel"
+            android:layout_width="@dimen/dp_50"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_height="match_parent" />
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <com.supcon.mes.mbap.view.NoScrollViewPager
+        android:id="@+id/searchContentVp"
+        android:tag="searchContentVp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</android.support.v7.widget.LinearLayoutCompat>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/faultInfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_5"
+    android:orientation="vertical"
+    android:tag="faultInfo">
+
+    <include
+        android:id="@+id/faultInfoTitle"
+        layout="@layout/ly_faultinfo_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/discoverer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:tag="discoverer"
+                app:key="发现人："
+                app:text_size="15" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/faultInfoType"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:tag="faultInfoType"
+                app:key="隐患类型："
+                app:text_size="15" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@color/white"
+            android:orientation="vertical"
+
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
+
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/priority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:tag="priority"
+                app:key="优先级:"
+                app:key_width="@dimen/dp_55"
+                app:text_size="15" />
+
+            <include layout="@layout/ly_line_light" />
+
+            <com.supcon.mes.mbap.view.CustomVerticalTextView
+                android:id="@+id/faultInfoDescribe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:tag="faultInfoDescribe"
+                app:key="隐患现象："
+                app:text_size="15" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

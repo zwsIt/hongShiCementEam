@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:id="@+id/searchTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitleBar"
+        app:title_background_color="@color/themeColor"
+        app:title_length="96dp"
+        app:title_text="评分" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingRight="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_5">
+
+        <com.supcon.mes.mbap.view.CustomVerticalDateView
+            android:id="@+id/startTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/dp_5"
+            android:tag="startTime"
+            app:editable="true"
+            app:key="评分开始时间:" />
+
+        <include layout="@layout/ly_vertical_line" />
+
+        <com.supcon.mes.mbap.view.CustomVerticalDateView
+            android:id="@+id/stopTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/dp_5"
+            android:tag="stopTime"
+            app:editable="true"
+            app:key="评分结束时间:" />
+    </LinearLayout>
+
+    <include layout="@layout/ly_recyclerview" />
+</LinearLayout>

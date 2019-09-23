@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/themeColor"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_25"
+            android:gravity="center"
+            android:text="我的设备"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_18sp" />
+
+        <TextView
+            android:id="@+id/more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/dp_25"
+            android:drawableRight="@drawable/ic_right"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center"
+            android:tag="more"
+            android:text="全部设备"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_14sp" />
+    </RelativeLayout>
+
+    <include layout="@layout/ly_recyclerview" />
+</LinearLayout>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_refproduct"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10"
+    android:tag="layout_refproduct">
+
+    <ImageView
+        android:id="@+id/eamIc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        android:src="@drawable/ic_lubricate_oil" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/eamIc"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_10">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/oilName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="oilName"
+            app:editable="false"
+            app:text="@string/oils"
+            app:text_size="15" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/sum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="sum"
+            app:editable="false"
+            app:text="用量:" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/oilType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="oilType"
+            app:editable="false"
+            app:text="@string/OilType"
+            app:text_size="15" />
+    </LinearLayout>
+
+</RelativeLayout>

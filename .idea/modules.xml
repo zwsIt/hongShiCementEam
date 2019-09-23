@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/hongShiCementEam.iml" filepath="$PROJECT_DIR$/hongShiCementEam.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hsShell/hsShell.iml" filepath="$PROJECT_DIR$/hsShell/hsShell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/middleware/middleware.iml" filepath="$PROJECT_DIR$/middleware/middleware.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_acceptance/module_acceptance.iml" filepath="$PROJECT_DIR$/module_acceptance/module_acceptance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_data_manage/module_data_manage.iml" filepath="$PROJECT_DIR$/module_data_manage/module_data_manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_main/module_main.iml" filepath="$PROJECT_DIR$/module_main/module_main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_sbda/module_sbda.iml" filepath="$PROJECT_DIR$/module_sbda/module_sbda.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_sbda_online/module_sbda_online.iml" filepath="$PROJECT_DIR$/module_sbda_online/module_sbda_online.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_score/module_score.iml" filepath="$PROJECT_DIR$/module_score/module_score.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_tsd/module_tsd.iml" filepath="$PROJECT_DIR$/module_tsd/module_tsd.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_txl/module_txl.iml" filepath="$PROJECT_DIR$/module_txl/module_txl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_warn/module_warn.iml" filepath="$PROJECT_DIR$/module_warn/module_warn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_wxgd/module_wxgd.iml" filepath="$PROJECT_DIR$/module_wxgd/module_wxgd.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_xj_online/module_xj_online.iml" filepath="$PROJECT_DIR$/module_xj_online/module_xj_online.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_yhgl/module_yhgl.iml" filepath="$PROJECT_DIR$/module_yhgl/module_yhgl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_zz_new/module_zz_new.iml" filepath="$PROJECT_DIR$/module_zz_new/module_zz_new.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_zzlogin/module_zzlogin.iml" filepath="$PROJECT_DIR$/module_zzlogin/module_zzlogin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/upush/upush.iml" filepath="$PROJECT_DIR$/upush/upush.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vibLib/vibLib.iml" filepath="$PROJECT_DIR$/vibLib/vibLib.iml" />
+    </modules>
+  </component>
+</project>

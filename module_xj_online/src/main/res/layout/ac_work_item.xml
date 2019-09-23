@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/ly_xj_item_titlebar"
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:tag="scrollView"
+        android:layout_below="@+id/titleBar"
+        android:layout_above="@+id/buttonBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_zwtp"
+                android:id="@+id/xjGuideImage"
+                android:tag="xjGuideImage" />
+
+            <com.supcon.mes.mbap.view.CustomTab
+                android:id="@+id/xjItemTab"
+                android:tag="xjItemTab"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingEnd="@dimen/dp_10"
+                app:indicator_color="@color/themeColor"
+                app:indicator_visible="true"
+                app:select_bg_color="@color/transparent"
+                app:select_text_color="@color/themeColor"
+                app:unselect_bg_color="@color/transparent"
+                app:unselect_text_color="@color/notEditableTextColor"/>
+
+            <com.supcon.mes.mbap.view.NoScrollViewPager
+                android:id="@+id/xjItemVP"
+                android:tag="xjItemVP"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/red"
+        android:id="@+id/buttonBar"
+        android:tag="buttonBar"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/oneKeyDoBtn"
+            android:tag="oneKeyDoBtn"
+            android:gravity="center"
+            android:drawableStart="@drawable/ic_bottom_ok"
+            android:text="一键完成"
+            android:background="@drawable/sl_transparent_press_no_stroke"
+            android:textColor="@color/white"
+            android:paddingStart="135dp"
+            android:paddingEnd="125dp"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/oneKeyRerecordBtn"
+            android:tag="oneKeyRerecordBtn"
+            android:gravity="center"
+            android:drawableStart="@drawable/ic_onekey_rerecord"
+            android:text="一键重录"
+            android:background="@drawable/sl_transparent_press_no_stroke"
+            android:textColor="@color/white"
+            android:paddingStart="135dp"
+            android:paddingEnd="125dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</RelativeLayout>

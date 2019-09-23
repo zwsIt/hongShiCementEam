@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_refproduct"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_10"
+    android:tag="layout_refproduct">
+
+    <ImageView
+        android:id="@+id/eamIc"
+        android:tag="eamIc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        android:src="@drawable/ic_sparepart"
+        />
+
+    <TextView
+        android:id="@+id/productName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/eamIc"
+        android:tag="productName"
+        android:text="物品名称"
+        android:textSize="@dimen/dp_16"/>
+
+    <TextView
+        android:id="@+id/productSpecif"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/eamIc"
+        android:layout_below="@+id/productName"
+        android:layout_marginTop="@dimen/dp_5"
+        android:tag="productSpecif"
+        android:text="规格"
+        android:textSize="@dimen/dp_14"
+        android:textColor="@color/gray"/>
+
+    <TextView
+        android:id="@+id/productCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/productName"
+        android:layout_toEndOf="@+id/productSpecif"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_5"
+        android:tag="productCode"
+        android:text="编码"
+        android:textSize="@dimen/dp_14"
+        android:textColor="@color/gray"/>
+</RelativeLayout>
