@@ -104,9 +104,9 @@ public class DealInfoController extends BasePresenterController implements DealI
             }
         }
 
-        //删除存在和当前活动状态相同者
+        //删除存在和当前活动状态相同者，通知状态删除执行只显示通知
         for (FlowProcessEntity flowProEntity :flowProcessEntityList){
-            if (flowProEntity.flowProcess.equals(processedEntity.prostatus)){
+            if (flowProEntity.flowProcess.equals(processedEntity.prostatus) || (Constant.TableStatus_CH.EXECUTE.equals(flowProEntity.flowProcess) && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus))){
                 flowProcessEntityList.remove(flowProEntity);
                 break;
             }

@@ -20,7 +20,6 @@
       <module fileurl="file://$PROJECT_DIR$/module_zz_new/module_zz_new.iml" filepath="$PROJECT_DIR$/module_zz_new/module_zz_new.iml" />
       <module fileurl="file://$PROJECT_DIR$/module_zzlogin/module_zzlogin.iml" filepath="$PROJECT_DIR$/module_zzlogin/module_zzlogin.iml" />
       <module fileurl="file://$PROJECT_DIR$/upush/upush.iml" filepath="$PROJECT_DIR$/upush/upush.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vibLib/vibLib.iml" filepath="$PROJECT_DIR$/vibLib/vibLib.iml" />
     </modules>
   </component>
 </project>

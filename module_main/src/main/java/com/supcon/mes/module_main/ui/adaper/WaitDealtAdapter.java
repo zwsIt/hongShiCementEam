@@ -208,6 +208,11 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                 waitDealtTime.setText(data.excutetime != null ? DateUtil.dateFormat(data.excutetime, "yyyy-MM-dd HH:mm:ss") : "--");
             }
             waitDealtEamSource.setText(Util.strFormat(data.soucretype));
+            if (TextUtils.isEmpty(data.content)){
+                waitDealtContent.setVisibility(View.GONE);
+            }else {
+                waitDealtContent.setVisibility(View.VISIBLE);
+            }
             waitDealtContent.setText(String.format(context.getString(R.string.device_style6), "内容:", Util.strFormat(data.content)));
 
             if (data.overdateflag.equals("1")) {

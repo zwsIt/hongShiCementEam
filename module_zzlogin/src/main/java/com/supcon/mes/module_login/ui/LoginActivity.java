@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -83,6 +84,8 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
 
     @BindByTag("buildVersion")
     CustomTextView buildVersion;
+    @BindByTag("loginBtn")
+    Button loginBtn;
 
     private boolean isFirstIn = false;
     private boolean loginInvalid;
@@ -127,7 +130,7 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
     @Override
     protected void initListener() {
         super.initListener();
-        RxView.clicks(findViewById(R.id.loginBtn))
+        RxView.clicks(loginBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)   //两秒钟之内只取一个点击事件，防抖操作
                 .subscribe(o -> {
                     //如果返回结果为false说明存在格式上的错误
@@ -146,10 +149,9 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
 
                     boolean hasSupOS = SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, BuildConfig.HAS_SUPOS);
 
-                    if(hasSupOS) {
+                    if (hasSupOS) {
                         presenterRouter.create(LoginAPI.class).dologinWithSuposPW(usernameInput.getContent(), pwdInput.getContent());
-                    }
-                    else{
+                    } else {
                         presenterRouter.create(LoginAPI.class).dologin(usernameInput.getContent(), pwdInput.getContent());
                     }
                 });
@@ -187,6 +189,13 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
         versionName.append(BuildConfig.DEBUG ? "(debug)" : "");
 
         buildVersion.setValue(versionName.toString());
+
+        if (EamApplication.isHongshi()) {
+            loginBtn.setBackgroundResource(R.drawable.bg_btn_hongshi_login2);
+        } else {
+            loginBtn.setBackgroundResource(R.drawable.bg_btn_login2);
+        }
+
     }
 
 
@@ -214,10 +223,9 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
 
         HeartBeatService.stopLoginLoop(this);
 
-        if(SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, BuildConfig.HAS_SUPOS)){
+        if (SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, BuildConfig.HAS_SUPOS)) {
             pwdInput.setHint("输入SupOS密码");
-        }
-        else{
+        } else {
             pwdInput.setHint("输入密码");
         }
 
@@ -379,12 +387,12 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
 
             //跳转到主页
 //            if (isFirstIn) {
-                if (EamApplication.isHongshi()) {
-                    IntentRouter.go(context, Constant.Router.MAIN_REDLION);
-                } else {
-                    IntentRouter.go(context, Constant.Router.MAIN_REDLION);
-                }
-                isFirstIn = false;
+            if (EamApplication.isHongshi()) {
+                IntentRouter.go(context, Constant.Router.MAIN_REDLION);
+            } else {
+                IntentRouter.go(context, Constant.Router.MAIN_REDLION);
+            }
+            isFirstIn = false;
 //            }
             LoginActivity.this.finish();
         });

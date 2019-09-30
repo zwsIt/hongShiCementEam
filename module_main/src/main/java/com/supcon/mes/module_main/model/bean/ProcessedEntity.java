@@ -13,7 +13,7 @@ public class ProcessedEntity extends BaseEntity {
     public String tableno; // 单据编号
     public EamType eamid; // 设备ID
     public String content; // 内容
-    public String newstate; // 单据状态
+    public String newstate; // 单据状态  ：待派工、待执行、待通知、待验收、已结束、作废
     public String modelcode; // 模型编码
     public Long deploymentid; // 部署ID
     public Long tableid;
@@ -21,6 +21,7 @@ public class ProcessedEntity extends BaseEntity {
     public String openurl; // 打开URl
     public Long workcreatetime; // 创建时间，（注：最终统一使用）
     public String worktableno; // 单据编号，（注：最终统一使用）
+    public String newUrl;
 
     public EamType getEamid() {
         if (eamid == null) {
