@@ -62,7 +62,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.functions.Consumer;
 
 /**
- * 备件领用申请
+ * 备件领用申请：添加
  */
 @Router(Constant.Router.SPARE_PART_RECEIVE)
 @Presenter(value = {SparePartReceiveSubmitPresenter.class})

@@ -18,6 +18,7 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomNumView;
+import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
@@ -75,7 +76,7 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
         @BindByTag("sum")
         CustomNumView sum;
         @BindByTag("oilType")
-        CustomVerticalSpinner oilType;  //加换油
+        CustomSpinner oilType;  //加换油
         @BindByTag("remark")
         CustomVerticalEditText remark;
         @BindByTag("itemViewDelBtn")

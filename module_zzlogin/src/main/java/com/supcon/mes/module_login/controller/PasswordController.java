@@ -76,7 +76,7 @@ public class PasswordController extends BaseViewController implements PasswordCo
             }
             mDialog.setCancelable(true);
             mDialog.setCanceledOnTouchOutside(true);
-//            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialog.setContentView(rootView);
         }
 

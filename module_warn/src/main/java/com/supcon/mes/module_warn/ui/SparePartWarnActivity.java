@@ -149,7 +149,7 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
         contentView.addItemDecoration(new SpaceItemDecoration(15));
         //设置搜索框默认提示语
         titleSearchView.setHint("请输入设备编码");
-        searchTitleBar.setTitleText("备件更换预警");
+        searchTitleBar.setTitleText("零部件预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
 

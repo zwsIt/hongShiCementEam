@@ -3,7 +3,7 @@ package com.supcon.mes.middleware.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 
 /**
- * 备件领用申请记录
+ * 备件领用申请明细
  */
 public class SparePartReceiveEntity extends BaseEntity {
 
@@ -12,6 +12,9 @@ public class SparePartReceiveEntity extends BaseEntity {
     public Float currDemandQuity;//领用量
     public String remark;//备注
     public SparePartId sparePartId;//备件编码
+    public Double price; // 单价
+    public Double total; // 总价
+
 
     public SparePartId getSparePartId() {
         if (sparePartId == null) {

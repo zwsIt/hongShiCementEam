@@ -176,7 +176,11 @@ public class ScoreStaffDailyPerformanceAdapter extends BaseListDataRecyclerViewA
                     layoutParams2.setMargins(0, 0, Util.dpToPx(context, 15), 10);
                     layoutParams2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                     textView2.setLayoutParams(layoutParams2);
-                    textView2.setText(value + "分");
+                    if (key.contains("设备运转率")) {
+                        textView2.setText(Util.big2(Float.valueOf(value)));
+                    } else {
+                        textView2.setText(value + "分");
+                    }
                     textView2.setTextSize(14);
                     textView2.setTextColor(context.getResources().getColor(R.color.textColorlightblack));
                     layout.addView(relativeLayout);

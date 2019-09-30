@@ -138,6 +138,7 @@
                 custom:arrow_icon="@drawable/ic_user_sz"
                 custom:arrow_text="设置密码"
                 android:layout_marginBottom="@dimen/dp_1"
+                android:visibility="gone"
                 />
 
             <RelativeLayout

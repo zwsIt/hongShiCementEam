@@ -59,7 +59,7 @@ public class YHGLStatisticsAdapter extends BaseListDataRecyclerViewAdapter<YHEnt
             statisticsEam.setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
             statisticsContent.setText(Util.strFormat2(data.describe));
             statisticsStaff.setText(data.findStaffID != null ? data.findStaffID.name : "");
-            statisticsTime.setText(data.findTime != 0 ? DateUtil.dateFormat(data.findTime, "yyyy-MM-dd") : "");
+            statisticsTime.setText(data.findTime != 0 ? DateUtil.dateFormat(data.findTime, "yyyy-MM-dd HH:mm:ss") : "");
         }
 
     }

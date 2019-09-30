@@ -280,7 +280,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/9/1
      */
     private void initLink() {
-        mLinkController.setCancelShow(mWXGDEntity.workSource != null ? mWXGDEntity.faultInfo != null && TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo) ? true : false : false);
+        mLinkController.setCancelShow(mWXGDEntity.faultInfo == null || TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo));
         mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
     }
 
@@ -304,6 +304,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         }
         realEndTime.setVisibility(View.GONE);
         dispatcherLayout.setVisibility(View.GONE);
+        chargeStaff.setNecessary(true);
     }
 
     @Override
@@ -600,6 +601,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         } else if (Constant.YHWXType.JX_SYSCODE.equals(str)) {
             map.put("workRecord.repairType.id", Constant.YHWXType.JX_SYSCODE);
         }
+        map.put("workRecord.chargeStaff.id", Util.strFormat2(mWXGDEntity.getChargeStaff().id)); // 负责人
 
         map.put("operateType", Constant.Transition.SAVE);
 
@@ -960,10 +962,14 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/10/23
      */
     private boolean checkTableBlank() {
-        if (TextUtils.isEmpty(repairGroup.getValue()) && TextUtils.isEmpty(chargeStaff.getValue())) {
-            SnackbarHelper.showError(rootView, "维修组和负责人不允许同时为空！");
+        if (TextUtils.isEmpty(chargeStaff.getValue())) {
+            SnackbarHelper.showError(rootView, "负责人不允许为空！");
             return true;
         }
+//        if (TextUtils.isEmpty(repairGroup.getValue()) && TextUtils.isEmpty(chargeStaff.getValue())) {
+//            SnackbarHelper.showError(rootView, "维修组和负责人不允许同时为空！");
+//            return true;
+//        }
         return false;
     }
 

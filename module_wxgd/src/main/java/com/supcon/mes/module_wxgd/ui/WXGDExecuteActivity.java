@@ -162,6 +162,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
     @BindByTag("workContext")
     CustomVerticalTextView workContext;
+    @BindByTag("workFlowBar")
+    LinearLayout workFlowBar;
+    @BindByTag("repairLl")
+    LinearLayout repairLl;
 
     private RepairStaffController mRepairStaffController;
     private SparePartController mSparePartController;
@@ -195,6 +199,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     private CustomDialog customDialog;
     private Map<String, SystemCodeEntity> wxTypes;
     private String tableNo;
+    private boolean isEdit = true;//是否查看页面，默认可以编辑
 
 
     @Override
@@ -224,6 +229,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
+        isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, true);
         mWXGDEntity = (WXGDEntity) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
         tableNo = getIntent().getStringExtra(Constant.IntentKey.TABLENO);
 
@@ -233,13 +239,13 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         mDatePickController.setDividerVisible(true);
 
         mSparePartController = getController(SparePartController.class);
-        mSparePartController.setEditable(true);
+        mSparePartController.setEditable(isEdit);
         mRepairStaffController = getController(RepairStaffController.class);
-        mRepairStaffController.setEditable(true);
+        mRepairStaffController.setEditable(isEdit);
         mLubricateOilsController = getController(LubricateOilsController.class);
-        mLubricateOilsController.setEditable(true);
+        mLubricateOilsController.setEditable(isEdit);
         maintenanceController = getController(MaintenanceController.class);
-        maintenanceController.setEditable(true);
+        maintenanceController.setEditable(isEdit);
         mSinglePickController = new SinglePickController<String>(this);
         mSinglePickController.textSize(18);
         mSinglePickController.setCanceledOnTouchOutside(true);
@@ -256,7 +262,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
     public void updateInitView() {
         if (mWXGDEntity != null) {
-            titleText.setText(mWXGDEntity.pending == null ? "" : mWXGDEntity.pending.taskDescription);
+            titleText.setText((mWXGDEntity.pending != null && isEdit) ? mWXGDEntity.pending.taskDescription : "通知");
             initTableHeadView();
         }
 
@@ -304,9 +310,13 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         planStartTime.setEditable(false);
         planEndTime.setEditable(false);
         repairType.setEditable(false);
-        realEndTime.setEditable(true);
-        realEndTime.setNecessary(true);
+        realEndTime.setEditable(isEdit);
+        realEndTime.setNecessary(isEdit);
         repairAdvise.setEditable(false);
+        if (!isEdit) {
+            workFlowBar.setVisibility(View.GONE);
+            repairLl.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -814,24 +824,28 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
     @Override
     public void onBackPressed() {
-        if (doCheckChange()) {
-            new CustomDialog(context)
-                    .twoButtonAlertDialog("单据数据已经被修改，是否要保存?")
-                    .bindView(R.id.redBtn, "保存")
-                    .bindView(R.id.grayBtn, "离开")
-                    .bindClickListener(R.id.redBtn, v1 -> {
-                        onLoading("正在保存中...");
-                        doSave();
-                    }, true)
-                    .bindClickListener(R.id.grayBtn, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v3) {
-                            EventBus.getDefault().post(new RefreshEvent());
-                            finish();
-                        }
-                    }, true).show();
+        if (isEdit) {
+            if (doCheckChange()) {
+                new CustomDialog(context)
+                        .twoButtonAlertDialog("单据数据已经被修改，是否要保存?")
+                        .bindView(R.id.redBtn, "保存")
+                        .bindView(R.id.grayBtn, "离开")
+                        .bindClickListener(R.id.redBtn, v1 -> {
+                            onLoading("正在保存中...");
+                            doSave();
+                        }, true)
+                        .bindClickListener(R.id.grayBtn, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v3) {
+                                EventBus.getDefault().post(new RefreshEvent());
+                                finish();
+                            }
+                        }, true).show();
+            } else {
+                EventBus.getDefault().post(new RefreshEvent());
+                super.onBackPressed();
+            }
         } else {
-            EventBus.getDefault().post(new RefreshEvent());
             super.onBackPressed();
         }
 

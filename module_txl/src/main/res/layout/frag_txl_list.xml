@@ -57,7 +57,6 @@
             <TextView
                 android:id="@+id/sameDepart"
                 android:tag="sameDepart"
-
                 style="@style/txl_select_text"
                 android:text="同部门" />
 
@@ -78,37 +77,6 @@
 
         <include layout="@layout/ly_line" />
 
-        <LinearLayout style="@style/xl_select_linear">
-
-            <ImageView
-                style="@style/txl_select_icon"
-                android:id="@+id/ivMyBelongStaff"
-                android:tag="ivMyBelongStaff"
-                android:src="@drawable/ic_txl_sub_staff" />
-
-            <TextView
-                style="@style/txl_select_text"
-                android:id="@+id/myBelongStaff"
-                android:tag="myBelongStaff"
-                android:text="我的下属" />
-
-            <include layout="@layout/ly_vertical_line" />
-
-            <ImageView
-                style="@style/txl_select_icon"
-                android:id="@+id/ivAllStaff"
-                android:tag="ivAllStaff"
-                android:src="@drawable/ic_txl_all_staff" />
-
-            <TextView
-                style="@style/txl_select_text"
-                android:id="@+id/allStaff"
-                android:tag="allStaff"
-                android:text="所有人" />
-        </LinearLayout>
-
-        <include layout="@layout/ly_line" />
-
     </LinearLayout>
 
     <TextView
@@ -117,7 +85,7 @@
         android:background="@color/line_gray"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/dp_10"
-        android:text="最近"
+        android:text="全部"
         android:textColor="@color/gray"
         android:textSize="@dimen/fontSize_16sp" />
 

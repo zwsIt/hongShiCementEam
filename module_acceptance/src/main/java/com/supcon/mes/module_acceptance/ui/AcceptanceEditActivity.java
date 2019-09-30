@@ -184,14 +184,14 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         rightBtn.setImageResource(R.drawable.sl_top_submit);
         rightBtn.setVisibility(View.VISIBLE);
 
-        eamCode.setEnabled(isEdit);
-        eamName.setEnabled(isEdit);
+        eamCode.setEditable(isEdit);
+        eamName.setEditable(isEdit);
 
 //        initLink();
     }
 
     private void initLink() {
-        mLinkController.setCancelShow(acceptanceEntity.faultID != null && TextUtils.isEmpty(acceptanceEntity.faultID.tableNo));
+        mLinkController.setCancelShow(acceptanceEntity.faultID == null || TextUtils.isEmpty(acceptanceEntity.faultID.tableNo));
         mLinkController.initPendingTransition(transition, acceptanceEntity.pending.id);
     }
 

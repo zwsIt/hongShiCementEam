@@ -3,6 +3,8 @@ package com.supcon.mes.module_main.ui.adaper;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
@@ -19,7 +21,13 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
+import com.supcon.mes.module_main.controller.DealInfoController;
+import com.supcon.mes.module_main.model.bean.FlowProcessEntity;
+import com.supcon.mes.module_main.model.bean.ProcessedEntity;
 import com.supcon.mes.module_main.model.bean.WaitDealtEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yangfei.cao
@@ -55,16 +63,29 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
         TextView waitDealtEamSource;
         @BindByTag("waitDealtEamState")
         TextView waitDealtEamState;
+        @BindByTag("waitDealtContent")
+        TextView waitDealtContent;
 
         @BindByTag("waitDealtEntrust")
         ImageView waitDealtEntrust;
         @BindByTag("chkBox")
         CheckBox chkBox;
 
+        @BindByTag("flowProcessView")
+        RecyclerView flowProcessView;
+        private DealInfoController dealInfoController;
+
         public ContentViewHolder(Context context) {
             super(context);
         }
 
+        @Override
+        protected void initView() {
+            super.initView();
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            flowProcessView.setLayoutManager(linearLayoutManager); // 水平线性布局
+        }
 
         @Override
         protected void initListener() {
@@ -89,7 +110,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                 public void onClick(View view) {
                     WaitDealtEntity item = getItem(getAdapterPosition());
                     if (isEdit) {
-                        if (!TextUtils.isEmpty(item.state) && (item.state.equals("派工") || item.state.equals("编辑"))) {
+                        if (!TextUtils.isEmpty(item.state) && (item.state.equals("派工"))) {
                             chkBox.performClick();
                         } else {
                             ToastUtils.show(context, "请先取消派单进去再进入详情操作！");
@@ -125,9 +146,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                         }
 
                     } else {
-                        if (!TextUtils.isEmpty(item.tableno)) {
+                        if (!TextUtils.isEmpty(item.workTableno) || !TextUtils.isEmpty(item.tableno)) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(Constant.IntentKey.TABLENO, item.tableno);
+                            bundle.putString(Constant.IntentKey.TABLENO, TextUtils.isEmpty(item.workTableno) ? item.tableno : item.workTableno);
+                            // 工单、巡检可跳转
                             if (item.processkey.equals("work")) {
                                 if (!TextUtils.isEmpty(item.openurl)) {
                                     switch (item.openurl) {
@@ -137,6 +159,8 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                         case Constant.WxgdView.DISPATCH_OPEN_URL:
                                             IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
                                             break;
+                                        case Constant.WxgdView.VIEW_OPEN_URL:
+                                            bundle.putBoolean(Constant.IntentKey.isEdit, false);
                                         case Constant.WxgdView.EXECUTE_OPEN_URL:
                                             IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
                                             break;
@@ -171,7 +195,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
         @SuppressLint("SetTextI18n")
         @Override
         protected void update(WaitDealtEntity data) {
-            if (isEdit && !TextUtils.isEmpty(data.state) && (data.state.equals("派工") || data.state.equals("编辑"))) {
+            if (isEdit && !TextUtils.isEmpty(data.state) && (data.state.equals("派工"))) {
                 chkBox.setVisibility(View.VISIBLE);
                 chkBox.setChecked(data.isCheck);
             } else {
@@ -184,6 +208,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                 waitDealtTime.setText(data.excutetime != null ? DateUtil.dateFormat(data.excutetime, "yyyy-MM-dd HH:mm:ss") : "--");
             }
             waitDealtEamSource.setText(Util.strFormat(data.soucretype));
+            waitDealtContent.setText(String.format(context.getString(R.string.device_style6), "内容:", Util.strFormat(data.content)));
 
             if (data.overdateflag.equals("1")) {
                 waitDealtEamSource.setTextColor(context.getResources().getColor(R.color.orange));
@@ -213,6 +238,74 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
             } else {
                 waitDealtEntrust.setImageDrawable(context.getResources().getDrawable(R.drawable.btn_entrusted));
             }
+
+            if (!"MainActivity".equals(context.getClass().getSimpleName())){
+                // 只处理工单、隐患单、验收单、运行记录、备件领用申请
+                if((Constant.ProcessKey.WORK.equals(data.processkey) || Constant.ProcessKey.FAULT_INFO.equals(data.processkey))
+                        || Constant.ProcessKey.CHECK_APPLY_FW.equals(data.processkey) || Constant.ProcessKey.RUN_STATE_WF.equals(data.processkey)
+                        || Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey) && !TextUtils.isEmpty(data.openurl)){
+                    ProcessedEntity processedEntity = new ProcessedEntity();
+                    processedEntity.prostatus = data.state;
+                    processedEntity.openurl = data.openurl;
+                    processedEntity.staffname = data.getStaffid().name;
+                    processedEntity.tableid = data.tableid;
+                    dealInfoController = new DealInfoController(context,flowProcessView,processedEntity);
+                    dealInfoController.getDealInfoList();
+                }
+//                flowProcessShow(data);
+            }
         }
+
+        /**
+         * 工作流程展示
+         *
+         * @param data
+         */
+        private void flowProcessShow(WaitDealtEntity data) {
+            List<FlowProcessEntity> list = new ArrayList<>();
+            FlowProcessEntity flowProcessEntity;
+            if (!TextUtils.isEmpty(data.processkey)) {
+                if (Constant.TableStatus_CH.EDIT.equals(data.state) || Constant.TableStatus_CH.DISPATCH.equals(data.state)) {
+//                    this.flowProcessView.setVisibility(View.VISIBLE);
+                    flowProcessEntity = new FlowProcessEntity();
+                    flowProcessEntity.flowProcess = data.state;
+                    flowProcessEntity.time = data.endtimeactual != null ? DateUtil.dateTimeFormat(data.endtimeactual) : null;
+                    flowProcessEntity.isFinish = false;
+                    list.add(flowProcessEntity);
+                } else if (Constant.TableStatus_CH.EXECUTE.equals(data.state) || Constant.TableStatus_CH.NOTIFY.equals(data.state)) {
+//                    this.flowProcessView.setVisibility(View.VISIBLE);
+                    flowProcessEntity = new FlowProcessEntity();
+                    flowProcessEntity.flowProcess = "派工";
+                    flowProcessEntity.time = data.endtimeactual != null ? DateUtil.dateTimeFormat(data.endtimeactual) : null;
+                    flowProcessEntity.isFinish = true;
+                    list.add(flowProcessEntity);
+                    flowProcessEntity = new FlowProcessEntity();
+                    flowProcessEntity.flowProcess = data.state;
+                    flowProcessEntity.time = data.endtimeactual != null ? DateUtil.dateTimeFormat(data.endtimeactual) : null;
+                    list.add(flowProcessEntity);
+                } else if (Constant.TableStatus_CH.ACCEPT.equals(data.state)) {
+//                    this.flowProcessView.setVisibility(View.VISIBLE);
+                    flowProcessEntity = new FlowProcessEntity();
+                    flowProcessEntity.flowProcess = "派工";
+                    flowProcessEntity.time = data.endtimeactual != null ? DateUtil.dateTimeFormat(data.endtimeactual) : null;
+                    flowProcessEntity.isFinish = true;
+                    list.add(flowProcessEntity);
+                    flowProcessEntity = new FlowProcessEntity();
+                    flowProcessEntity.flowProcess = "执行";
+                    flowProcessEntity.time = data.endtimeactual != null ? DateUtil.dateTimeFormat(data.endtimeactual) : null;
+                    flowProcessEntity.isFinish = true;
+                    list.add(flowProcessEntity);
+                    flowProcessEntity = new FlowProcessEntity();
+                    flowProcessEntity.flowProcess = data.state;
+                    flowProcessEntity.time = data.endtimeactual != null ? DateUtil.dateTimeFormat(data.endtimeactual) : null;
+                    list.add(flowProcessEntity);
+                } else {
+//                    this.flowProcessView.setVisibility(View.GONE);
+                }
+            }
+            this.flowProcessView.setAdapter(new FlowProcessAdapter(context, list)); // 设置数据item
+        }
+
+
     }
 }

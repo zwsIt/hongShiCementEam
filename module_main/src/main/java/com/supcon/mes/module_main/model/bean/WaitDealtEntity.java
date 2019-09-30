@@ -39,11 +39,19 @@ public class WaitDealtEntity extends BaseEntity {
 
     public String tableno;
 
+    public String workTableno; // 海螺使用
+
     public String openurl;
 
     public String entrflag;
 
+    public String content;//内容
+
     public boolean isCheck;
+
+    public Long endtime;
+    public Long endtimeactual;
+    public Long tableid;
 
     public Staff getStaffid() {
         if (staffid == null) {

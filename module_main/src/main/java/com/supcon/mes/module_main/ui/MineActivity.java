@@ -12,6 +12,7 @@ import com.supcon.mes.mbap.view.CustomCircleTextImageView;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.R;
 
 /**
@@ -45,6 +46,8 @@ public class MineActivity extends BasePresenterActivity {
     CustomTextView mineUserWork;
     @BindByTag("mineUserMail")
     CustomTextView mineUserMail;
+   @BindByTag("mineUserPhone")
+    CustomTextView mineUserPhone;
 
     @Override
     protected int getLayoutID() {
@@ -64,6 +67,9 @@ public class MineActivity extends BasePresenterActivity {
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("个人信息");
         mineUserName.setContent(EamApplication.getAccountInfo().getStaffName());
+        mineUserCode.setContent(EamApplication.getAccountInfo().getStaffCode());
         mineUserDepart.setContent(EamApplication.getAccountInfo().getDepartmentName());
+        mineUserWork.setContent(Util.strFormat(EamApplication.getAccountInfo().getPositionName()));
+        mineUserPhone.setContent(Util.strFormat(EamApplication.getAccountInfo().getMobile()));
     }
 }

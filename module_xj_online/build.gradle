@@ -60,7 +60,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation project(':middleware')
-    implementation project(':vibLib')
+//    implementation project(':vibLib')
     implementation project(':module_sbda')
     annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
 }

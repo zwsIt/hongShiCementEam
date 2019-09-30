@@ -59,7 +59,7 @@ public class WXGDStatisticsAdapter extends BaseListDataRecyclerViewAdapter<WXGDE
             statisticsEam.setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
             statisticsContent.setText(Util.strFormat2(data.workOrderContext));
             statisticsStaff.setText(Util.strFormat(data.getChargeStaff().name) );
-            statisticsTime.setText(data.createTime != null ? DateUtil.dateFormat(data.createTime, "yyyy-MM-dd") : "");
+            statisticsTime.setText(data.createTime != null ? DateUtil.dateFormat(data.createTime, "yyyy-MM-dd HH:mm:ss") : "");
         }
 
     }

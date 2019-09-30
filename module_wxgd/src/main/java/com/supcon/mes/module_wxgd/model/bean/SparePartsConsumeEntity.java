@@ -7,6 +7,9 @@ import com.supcon.mes.middleware.model.bean.Good;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 
+/**
+ * 备件领用记录Entity(工单模块里)
+ */
 public class SparePartsConsumeEntity extends BaseEntity {
 
     public Good productID;//备件

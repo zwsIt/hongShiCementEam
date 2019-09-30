@@ -34,10 +34,10 @@ import java.io.Serializable;
  */
 @Presenter(value = StaffPicPresenter.class)
 public class TxlListItemViewController extends BaseViewController implements ILayoutProvider, IDataInjector<ITxlEntity>, StaffPicDownloadContract.View {
-    @BindByTag("userName")
-    TextView userName;
-    @BindByTag("userJob")
-    TextView userJob;
+    @BindByTag("staffName")
+    TextView staffName;
+    @BindByTag("phone")
+    TextView phone;
     @BindByTag("company")
     TextView company;
     @BindByTag("department")
@@ -45,41 +45,41 @@ public class TxlListItemViewController extends BaseViewController implements ILa
     //    @BindByTag("userIcon")
     CustomCircleTextImageView userIcon;
     private View rootView;
-    
+
     private ITxlEntity mData;
-    
+
     public TxlListItemViewController(View rootView) {
         super(rootView);
         this.rootView = rootView;
     }
-    
+
     public TxlListItemViewController newInstance() {
         View view = (new View(context));
         return new TxlListItemViewController(view);
     }
-    
+
     @Override
     public void attachView(View rootView) {
         super.attachView(rootView);
         this.rootView = rootView;
     }
-    
+
     @Override
     public int layout() {
         return R.layout.item_txl_list;
     }
-    
+
     @Override
     public void initListener() {
         super.initListener();
-        rootView.setOnClickListener(v-> {
-            Bundle bundle  =new Bundle();
+        rootView.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
             bundle.putSerializable(Constant.IntentKey.TXL_ENTITY, (Serializable) mData);
-            IntentRouter.go(context, Constant.Router.TXL_VIEW,bundle);
-            
+            IntentRouter.go(context, Constant.Router.TXL_VIEW, bundle);
+
         });
     }
-    
+
     @Override
     public void inject(ITxlEntity data) {
         mData = data;
@@ -87,19 +87,19 @@ public class TxlListItemViewController extends BaseViewController implements ILa
         initListener();
         userIcon.setImageDrawable(null);
         presenterRouter.create(StaffPicDownloadAPI.class).getStaffPic(data.getStaffId());
-        userName.setText(data.getStaffName());
-        userJob.setText(data.getStaffWork());
+        staffName.setText(data.getStaffName());
+        phone.setText(data.getMOBILE());
         company.setText(data.getCompanyName());
         department.setText(data.getDepartmentName());
     }
-    
+
     @Override
     public void getStaffPicSuccess(File entity) {
         Glide.with(userIcon.getContext()).load(entity).apply(RequestOptionUtil.getEamRequestOptions(userIcon.getContext())).into(userIcon);
     }
-    
+
     @Override
     public void getStaffPicFailed(String errorMsg) {
-    
+
     }
 }

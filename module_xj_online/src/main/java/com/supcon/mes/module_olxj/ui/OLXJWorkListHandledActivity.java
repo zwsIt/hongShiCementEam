@@ -45,7 +45,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -61,7 +64,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Router(Constant.Router.OLXJ_WORK_LIST_HANDLED)
 @Controller(value = OLXJCameraController.class)
-public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLXJWorkItemEntity>{
+public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLXJWorkItemEntity> {
 
     @BindByTag("leftBtn")
     CustomImageButton leftBtn;
@@ -128,7 +131,7 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
         initEmptyView();
 
 //        initFilterView();
-        if(isXJFinished){
+        if (isXJFinished) {
             oneKeySubmitBtn.setVisibility(View.GONE);
         }
     }
@@ -149,7 +152,7 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
                 .subscribe(new Consumer<OLXJWorkItemEntity>() {
                     @Override
                     public void accept(OLXJWorkItemEntity workItemEntity) throws Exception {
-                        if (mFilterDeviceName == null &&workItemEntity.eamID!=null && !TextUtils.isEmpty(workItemEntity.eamID.name) || mFilterDeviceName != null
+                        if (mFilterDeviceName == null && workItemEntity.eamID != null && !TextUtils.isEmpty(workItemEntity.eamID.name) || mFilterDeviceName != null
                                 && !TextUtils.isEmpty(workItemEntity.eamID.name) && !mFilterDeviceName.equals(workItemEntity.eamID.name)) {
                             mFilterDeviceName = workItemEntity.eamID.name;
                             FilterBean filterBean = new FilterBean();
@@ -325,10 +328,10 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
                 .filter(new Predicate<OLXJWorkItemEntity>() {
                     @Override
                     public boolean test(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
-                        if(!TextUtils.isEmpty(deviceName) && olxjWorkItemEntity.eamID!=null){
+                        if (!TextUtils.isEmpty(deviceName) && !deviceName.equals("不限") && olxjWorkItemEntity.eamID != null) {
                             return olxjWorkItemEntity.isFinished && deviceName.equals(olxjWorkItemEntity.eamID.name);
                         }
-                        return olxjWorkItemEntity.isFinished ;
+                        return olxjWorkItemEntity.isFinished;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -353,21 +356,28 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
 
     @SuppressLint("CheckResult")
     private void initFilterView(List<OLXJWorkItemEntity> itemEntities) {
-        List<FilterBean> filterBeans = new ArrayList<>();
+//        List<FilterBean> filterBeans = new ArrayList<>();
+        Map<String, FilterBean> filterBeans = new HashMap<>();
+        FilterBean filterBean = new FilterBean();
+        filterBean.name = "不限";
+        filterBeans.put(filterBean.name, filterBean);
         Flowable.fromIterable(itemEntities)
                 .subscribe(new Consumer<OLXJWorkItemEntity>() {
                     @Override
                     public void accept(OLXJWorkItemEntity workItemEntity) throws Exception {
-                        if(workItemEntity.eamID!=null && !TextUtils.isEmpty(workItemEntity.eamID.name))
-                        if (mFilterDeviceName == null ||  !mFilterDeviceName.equals(workItemEntity.eamID.name)) {
-                            mFilterDeviceName = workItemEntity.eamID.name;
-                            FilterBean filterBean = new FilterBean();
-                            filterBean.name = workItemEntity.eamID.name;
-                            filterBeans.add(filterBean);
-                        }
+                        if (workItemEntity.eamID != null && !TextUtils.isEmpty(workItemEntity.eamID.name))
+                            if (!filterBeans.containsKey(workItemEntity.eamID.name)) {
+                                FilterBean filterBean = new FilterBean();
+                                filterBean.name = workItemEntity.eamID.name;
+                                filterBeans.put(workItemEntity.eamID.name, filterBean);
+                            }
                     }
                 }, throwable -> {
-                }, () -> listDeviceFilter.setData(filterBeans));
+                }, () -> {
+                    List<FilterBean> filters = new ArrayList<>(filterBeans.values());
+                    Collections.reverse(filters);
+                    listDeviceFilter.setData(filters);
+                });
     }
 
     @Override
@@ -375,7 +385,6 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)

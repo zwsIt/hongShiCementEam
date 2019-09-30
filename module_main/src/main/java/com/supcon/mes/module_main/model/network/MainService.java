@@ -13,10 +13,13 @@ import com.supcon.mes.module_main.model.bean.ScoreEntity;
 import com.supcon.mes.module_main.model.bean.WaitDealtEntity;
 import com.supcon.mes.module_main.model.bean.WorkNumEntity;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -33,6 +36,16 @@ public interface MainService {
      */
     @GET("/BEAM2/personWork/personworkinfo/personWorkInfoList-query.action")
     Flowable<CommonBAPListEntity<WaitDealtEntity>> getWaitDealt(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     * 海螺:工作提醒
+     * @param fastQueryCondEntity
+     * @param pageQueryMap
+     * @return
+     */
+    @GET("/BEAM2/personWork/allPersonWorkInfo/allPsWorkInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_personWork_allPsWorkInfoList")
+    Flowable<CommonBAPListEntity<WaitDealtEntity>> getWaitDealtByHaiLuo(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
 
     /**
      * 委托
@@ -66,7 +79,17 @@ public interface MainService {
 
     //已处理的
     @GET("/BEAM2/personWork/processFlowInfo/processFlowInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_personWork_processFlowInfoList")
-    Flowable<CommonBAPListEntity<ProcessedEntity>> workflowHandleList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @Query("page.pageNo") int pageNo, @Query("page.pageSize") int pageSize);
+    Flowable<CommonBAPListEntity<ProcessedEntity>> workflowHandleList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     * 海螺：获取我的流程(已处理的)
+     * @param fastQueryCondEntity
+     * @return
+     */
+    @POST("/BEAM2/personWork/allProcessInfo/allProFlowInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_personWork_allProFlowInfoList")
+    Flowable<CommonBAPListEntity<ProcessedEntity>> workflowHandleListByHaiLuo(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+
 
     //批量派单
     @GET("/BEAM2/workList/workRecord/bulkSubmitWorkAndFault.action ")
@@ -76,4 +99,13 @@ public interface MainService {
     @GET("/BEAM2/personWork/abnormalinfoofeam/abnormalInfoList-query.action")
     Flowable<CommonBAPListEntity<AnomalyEntity>> getAnomalyList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
+    /**
+     * 获取隐患处理意见
+     *
+     * @param module 实体编码
+     * @param table 模型即表名
+     * @param tableInfoId 表单id
+     */
+    @GET("/BEAM2/{module}/{table}/dealInfo-list.action")
+    Flowable<List> getDealInfoList(@Path("module") String moduleName, @Path("table") String tableName, @Query("tableInfoId") Long tableInfoId);
 }

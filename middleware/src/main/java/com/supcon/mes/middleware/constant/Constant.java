@@ -194,6 +194,10 @@ public interface Constant {
         String TXL_VIEW = "TXL_VIEW";
         String MINE = "MIME";
         String PROCESSED_FLOW = "PROCESSED_FLOW";//流程图
+        String SPARE_PART_APPLY_LIST = "SPARE_PART_APPLY_LIST"; // 备件领用申请list
+        String SPARE_PART_APPLY_EDIT = "SPARE_PART_APPLY_EDIT"; // 备件领用申请编辑
+        String SPARE_PART_APPLY_SUBMIT_EDIT = "SPARE_PART_APPLY_SUBMIT_EDIT"; // 备件领用申请审批编辑
+        String SPARE_PART_APPLY_VIEW = "SPARE_PART_APPLY_VIEW"; // 备件领用申请查看
     }
 
 
@@ -314,6 +318,8 @@ public interface Constant {
 
         String TASKID = "TASKID";//设备巡检任务id
         String TITLE_CONTENT = "TITLE_CONTENT";
+        String TABLE_ID = "TABLE_ID";
+        String PENDING_ID = "PENDING_ID";
     }
 
     interface FilterSearchParam {
@@ -478,6 +484,7 @@ public interface Constant {
     interface TimeString {
         String START_TIME = " 00:00:00";
         String END_TIME = " 23:59:59";
+        String YEAR_MONTH_DAY_HOUR_MIN_SEC = "yyyy-MM-dd HH:mm:ss";
     }
 
     interface PicType {
@@ -590,6 +597,11 @@ public interface Constant {
         String SCORE_DATA_START = "SCORE_DATA_START";//时间
         String SCORE_DATA_STOP = "SCORE_DATA_STOP";//时间
         String SCORE_DATA = "SCORE_DATA";//时间
+
+        String SCORE_DAILY_START = "SCORE_DAILY_START";//时间
+        String SCORE_DAILY_STOP = "SCORE_DAILY_STOP";//时间
+        String TIME = "TIME";//时间
+
 
         String SCORE_TABLE_NO = "SCORE_TABLE_NO";//单据编号
 
@@ -741,6 +753,7 @@ public interface Constant {
         String EXECUTE_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";//执行
         String STOP_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";
         String ACCEPTANCE_OPEN_URL = "/BEAM2/workList/workRecord/workCheckEdit.action";//验收
+        String VIEW_OPEN_URL = "/BEAM2/workList/workRecord/workView.action";//通知
     }
 
     /**
@@ -793,4 +806,47 @@ public interface Constant {
         String SCORE_FRACTION = "BEAM_1_0_0_scoreStandard_itemDetailList_LISTPT_ASSO_8395ad9a_dea0_4fb2_aad1_78cb7ef73cea";
         String SCORE_ITEM = "BEAM_1_0_0_scoreStandard_itemDetailList_LISTPT_ASSO_3e07e500_557f_4b41_9c6b_1396785b8113";
     }
+
+    /**
+     * 我的流程(处理过的)单据状态
+     */
+    interface TableStatus_CH {
+        String PRE_DISPATCH = "待派工";
+        String PRE_EXECUTE = "待执行";
+        String PRE_ACCEPT = "待验收";
+        String PRE_NOTIFY = "待通知";
+        String END = "已结束";
+        String CANCEL = "作废";
+
+        String EDIT = "编辑";
+        String DISPATCH = "派工";
+        String EXECUTE = "执行";
+        String NOTIFY = "通知";
+        String ACCEPT = "验收";
+        String RECALL = "撤回";
+        String REVIEW = "审核";
+        String CONFIRM = "接单(确认)";
+
+    }
+
+    /**
+     * 我的流程(处理过的)单据类型
+     */
+    interface ProcessKey {
+        String WORK = "work"; // 工单
+        String FAULT_INFO = "faultInfoFW"; // 隐患登录
+        String EAM_INFO_EDIT = "eaminfoEdit"; // 设备档案新增申请
+        String EAM_INFO = "eaminfo"; // 设备档案申请修改
+        String CHANGE_WF = "changeWF"; // 设备状态变更
+        String CHECK_APPLY_FW = "checkApplyFW"; // 验收申请
+        String ENTRUST_REPAIR = "entrustRepair"; // 委外维修单
+        String INSTALL_NEW_WF = "installNewWF"; // 安装验收移交
+        String RUN_STATE_WF = "RunningStateWF"; // 运行记录处理
+        String SPARE_PART_APPLY = "sparePartApply"; // 备件领用申请
+        String WORK_ALLOT_NEW_WF = "workAllotNewWF"; // 设备调拨
+        String TEMP_WF = "tempWF"; // 临时任务
+        String POTROL_TASK_WF = "potrolTaskWF"; // 点巡检任务
+
+    }
+
 }

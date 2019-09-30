@@ -42,22 +42,17 @@ public class TxlViewActivity extends BasePresenterActivity {
     LinearLayout usrInfo;
     @BindByTag("tvTelephone")
     CustomTextView tvTelephone;
-    @BindByTag("phone")
-    CustomTextView phone;
-    @BindByTag("otherPhone")
-    CustomTextView otherPhone;
     @BindByTag("email")
     CustomTextView email;
     @BindByTag("master")
     CustomTextView master;
     @BindByTag("department")
     CustomTextView department;
-    @BindByTag("flow")
-    CustomTextView flow;
-    @BindByTag("userName")
-    TextView userName;
-    @BindByTag("userWork")
-    TextView userWork;
+
+    @BindByTag("staffName")
+    TextView staffName;
+    @BindByTag("positionName")
+    TextView positionName;
     @BindByTag("ivTelphone")
     ImageView ivTelphone;
     @BindByTag("ivSms")
@@ -115,15 +110,12 @@ public class TxlViewActivity extends BasePresenterActivity {
     protected void initData() {
         super.initData();
 //        tvTelephone.setContent(mData.getClass());
-        userName.setText(mData.getStaffName());
-        userWork.setText(mData.getStaffWork());
+        staffName.setText(mData.getStaffName());
+        positionName.setText(mData.getPositionName());
         tvTelephone.setContent((String) mData.getMOBILE());
-        phone.setContent((String) mData.getMOBILE());
-        otherPhone.setContent((String) mData.getMOBILE());
         email.setContent((String) mData.getEMAIL());
         master.setContent((String) mData.getRZSJ());
         department.setContent(mData.getDepartmentName());
-        flow.setContent("0");
         
         File file = new File(Constant.IMAGE_SAVE_PATH + "TXL_" + String.valueOf(mData.getStaffId()) + ".jpg");
         if (file.exists()) {

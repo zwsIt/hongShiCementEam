@@ -7,24 +7,26 @@
     android:orientation="vertical">
 
     <include layout="@layout/ly_wxgd_titlebar" />
+
     <com.supcon.common.view.ptr.PtrFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:core_ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/refreshFrameLayout"
-        android:tag="refreshFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/workFlowBar"
+        android:layout_marginTop="@dimen/dp_50"
+        android:tag="refreshFrameLayout"
         core_ptr:ptr_keep_header_when_refresh="true"
         core_ptr:ptr_pull_to_fresh="false"
         core_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
-        core_ptr:ptr_resistance="1.7"
-        android:layout_marginTop="@dimen/dp_50"
-        android:layout_marginBottom="100dp">
+        core_ptr:ptr_resistance="1.7">
+
         <ScrollView
+            android:id="@+id/contentView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/contentView"
-            android:tag="contentView"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            android:tag="contentView">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,6 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/themeColor">
+
                     <include layout="@layout/ly_wxgd_horizontal_line" />
                 </LinearLayout>
 
@@ -70,8 +73,8 @@
                         android:layout_weight="1"
                         android:background="@drawable/sl_transparent_press_no_stroke"
                         android:drawableStart="@drawable/ic_start"
-                        android:paddingEnd="45dp"
                         android:paddingStart="45dp"
+                        android:paddingEnd="45dp"
                         android:tag="activate"
                         android:text="激活"
                         android:textColor="@color/white" />
@@ -138,8 +141,8 @@
         android:id="@+id/workFlowBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/sh_white_stroke"
         android:orientation="vertical"
         android:tag="workFlowBar">
@@ -149,13 +152,13 @@
             style="@style/HintTextColor"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:paddingBottom="@dimen/dp_3"
             android:paddingLeft="20dp"
             android:paddingTop="@dimen/dp_3"
+            android:paddingBottom="@dimen/dp_3"
             android:tag="commentInput"
             app:edit_hint="填写意见"
             app:text_color="@color/textColorlightblack"
-            app:text_size="14"/>
+            app:text_size="14" />
 
         <!--<com.supcon.mes.mbap.view.CustomPopTransation
             android:id="@+id/transition"
@@ -163,10 +166,10 @@
             android:layout_height="wrap_content"
             android:tag="transition" />-->
         <com.supcon.mes.mbap.view.CustomWorkFlowView
+            android:id="@+id/transition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/transition"
             android:tag="transition"
-            app:commentable="false"/>
+            app:commentable="false" />
     </LinearLayout>
 </RelativeLayout>

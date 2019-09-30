@@ -52,30 +52,28 @@ public class PendingController extends BaseDataController implements PendingQuer
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPushOpenEvent(PushOpenEvent pushOpenEvent){
+    public void onPushOpenEvent(PushOpenEvent pushOpenEvent) {
         PushEntity pushEntity = GsonUtil.gsonToBean(pushOpenEvent.getContent(), PushEntity.class);
-        LogUtil.d("pushEntity :"+pushEntity);
+        LogUtil.d("pushEntity :" + pushEntity);
 
-        if(pushEntity.extra!=null){
+        if (pushEntity.extra != null) {
             queryEntieyAndGo(pushEntity.extra);
         }
 
     }
 
-    public void queryEntieyAndGo(PendingPushEntity pendingEntity){
+    public void queryEntieyAndGo(PendingPushEntity pendingEntity) {
 
-        if(TextUtils.isEmpty(pendingEntity.deploymentName)){
+        if (TextUtils.isEmpty(pendingEntity.deploymentName)) {
             return;
         }
 
         mPendingEntity = pendingEntity;
-        if(pendingEntity.deploymentName.contains("隐患管理")){
+        if (pendingEntity.deploymentName.contains("隐患管理")) {
             presenterRouter.create(PendingQueryAPI.class).queryYH(pendingEntity.tableNo);
-        }
-        else if(pendingEntity.deploymentName.contains("工单")){
+        } else if (pendingEntity.deploymentName.contains("工单")) {
             presenterRouter.create(PendingQueryAPI.class).queryWXGD(pendingEntity.tableNo);
-        }
-        else if(pendingEntity.deploymentName.contains("停电")){
+        } else if (pendingEntity.deploymentName.contains("停电")) {
 
             String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
                     + Constant.WebUrl.TD_LIST;
@@ -87,8 +85,7 @@ public class PendingController extends BaseDataController implements PendingQuer
             bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
             bundle.putString(BaseConstant.WEB_URL, url);
             IntentRouter.go(context, Constant.Router.TD, bundle);
-        }
-        else if(pendingEntity.deploymentName.contains("送电")){
+        } else if (pendingEntity.deploymentName.contains("送电")) {
 
             String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
                     + Constant.WebUrl.SD_LIST;
@@ -106,14 +103,13 @@ public class PendingController extends BaseDataController implements PendingQuer
 
     @Override
     public void queryYHSuccess(CommonBAPListEntity entity) {
-        if(entity.result.size()!=0){
-            Bundle bundle =  new Bundle();
-            if(mPendingEntity.deploymentName.contains("隐患管理")){
-                bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, (YHEntity)entity.result.get(0));
-                if(mPendingEntity.nowStatus.equals("编辑")){
+        if (entity.result.size() != 0) {
+            Bundle bundle = new Bundle();
+            if (mPendingEntity.deploymentName.contains("隐患管理")) {
+                bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, (YHEntity) entity.result.get(0));
+                if (mPendingEntity.nowStatus.equals("编辑")) {
                     IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
-                }
-                else if(mPendingEntity.nowStatus.equals("审核")){
+                } else if (mPendingEntity.nowStatus.equals("审核")) {
                     IntentRouter.go(context, Constant.Router.YH_VIEW, bundle);
                 }
             }
@@ -122,14 +118,14 @@ public class PendingController extends BaseDataController implements PendingQuer
 
     @Override
     public void queryYHFailed(String errorMsg) {
-        LogUtil.e("PendingController:"+errorMsg);
+        LogUtil.e("PendingController:" + errorMsg);
     }
 
     @Override
     public void queryWXGDSuccess(CommonBAPListEntity entity) {
-        if(entity.result.size()!=0){
-            Bundle bundle =  new Bundle();
-            if(mPendingEntity.deploymentName.contains("工单")){
+        if (entity.result.size() != 0) {
+            Bundle bundle = new Bundle();
+            if (mPendingEntity.deploymentName.contains("工单")) {
                 WXGDEntity wxgdEntity = (WXGDEntity) entity.result.get(0);
                 bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
 
@@ -141,7 +137,8 @@ public class PendingController extends BaseDataController implements PendingQuer
                     case "派工":
                         IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
                         break;
-
+                    case "通知":
+                        bundle.putBoolean(Constant.IntentKey.isEdit, false);
                     case "执行":
                         IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
                         break;
@@ -155,6 +152,6 @@ public class PendingController extends BaseDataController implements PendingQuer
 
     @Override
     public void queryWXGDFailed(String errorMsg) {
-        LogUtil.e("PendingController:"+errorMsg);
+        LogUtil.e("PendingController:" + errorMsg);
     }
 }

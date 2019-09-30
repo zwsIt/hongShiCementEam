@@ -31,34 +31,33 @@ import io.reactivex.functions.Predicate;
  * Email:wangshizhan@supcom.com
  */
 @Presenter(LinkPresenter.class)
-public class LinkController extends BasePresenterController implements LinkQueryContract.View{
+public class LinkController extends BasePresenterController implements LinkQueryContract.View {
 
     private CustomPopTransation mCustomPopTransation;
     private CustomWorkFlowView mCustomWorkFlowView;
     private List<LinkEntity> mLinkEntities;
     private List<Transition> mTransitions;
     private Long pendingId;
-    private boolean cancelShow;
+    private boolean isCancel;//是否显示作废
 
     @SuppressLint("CheckResult")
     @Override
     public void queryCurrentLinkSuccess(LinkListEntity entity) {
-        if(entity.result!=null && entity.result.size()!=0){
-            if (Constant.Transition.CANCEL_CN.equals(entity.result.get(0).description) || Constant.Transition.REJECT_CN.equals(entity.result.get(0).description)){
+        if (entity.result != null && entity.result.size() != 0) {
+            if (Constant.Transition.CANCEL_CN.equals(entity.result.get(0).description) || Constant.Transition.REJECT_CN.equals(entity.result.get(0).description)) {
                 Collections.reverse(entity.result);
             }
             mLinkEntities = entity.result;
         }
-        if(mCustomPopTransation!=null)
+        if (mCustomPopTransation != null)
             mCustomPopTransation.setTransitions(LinkHelper.convertToTransition(entity.result));
 
-        if(mCustomWorkFlowView!=null){
-            if (cancelShow){
-
+        if (mCustomWorkFlowView != null) {
+            if (!isCancel) {
                 List<LinkEntity> linkEntities = new ArrayList<>();
                 linkEntities.addAll(entity.result);
-                for (LinkEntity linkEntity : linkEntities){
-                    if (Constant.Transition.CANCEL_CN.equals(linkEntity.description)){
+                for (LinkEntity linkEntity : linkEntities) {
+                    if (Constant.Transition.CANCEL_CN.equals(linkEntity.description)) {
                         linkEntities.remove(linkEntity);
                         break;
                     }
@@ -89,7 +88,7 @@ public class LinkController extends BasePresenterController implements LinkQuery
 //                            }
 //                        });
 
-            }else {
+            } else {
                 mCustomWorkFlowView.setLinks(entity.result.toString());
             }
         }
@@ -97,7 +96,7 @@ public class LinkController extends BasePresenterController implements LinkQuery
 
     @Override
     public void queryCurrentLinkFailed(String errorMsg) {
-        LogUtil.e("LinkController queryCurrentLinkFailed:"+errorMsg);
+        LogUtil.e("LinkController queryCurrentLinkFailed:" + errorMsg);
     }
 
     @SuppressLint("CheckResult")
@@ -126,11 +125,11 @@ public class LinkController extends BasePresenterController implements LinkQuery
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
-                        if(mCustomPopTransation!=null){
+                        if (mCustomPopTransation != null) {
                             mCustomPopTransation.setTransitions(LinkHelper.convertToTransition(mLinkEntities));
                         }
 
-                        if(mCustomWorkFlowView!=null){
+                        if (mCustomWorkFlowView != null) {
                             mCustomWorkFlowView.setLinks(mLinkEntities.toString());
                         }
 
@@ -141,29 +140,29 @@ public class LinkController extends BasePresenterController implements LinkQuery
 
     @Override
     public void queryStartLinkFailed(String errorMsg) {
-        LogUtil.e("LinkController queryStartLinkFailed:"+errorMsg);
+        LogUtil.e("LinkController queryStartLinkFailed:" + errorMsg);
     }
 
 
-    public void initStartTransition(CustomWorkFlowView customWorkFlowView, String flowKey){
+    public void initStartTransition(CustomWorkFlowView customWorkFlowView, String flowKey) {
         this.mCustomWorkFlowView = customWorkFlowView;
         this.pendingId = null;
         presenterRouter.create(LinkQueryAPI.class).queryStartLink(flowKey);
     }
 
-    public void initPendingTransition(CustomWorkFlowView customWorkFlowView, long pendingId){
+    public void initPendingTransition(CustomWorkFlowView customWorkFlowView, long pendingId) {
         this.mCustomWorkFlowView = customWorkFlowView;
         this.pendingId = pendingId;
         presenterRouter.create(LinkQueryAPI.class).queryCurrentLink(pendingId);
     }
 
-    public void initStartTransitionOld(CustomPopTransation transationView, String flowKey){
+    public void initStartTransitionOld(CustomPopTransation transationView, String flowKey) {
         this.mCustomPopTransation = transationView;
         this.pendingId = null;
         presenterRouter.create(LinkQueryAPI.class).queryStartLink(flowKey);
     }
 
-    public void initPendingTransitionOld(CustomPopTransation transationView, long pendingId){
+    public void initPendingTransitionOld(CustomPopTransation transationView, long pendingId) {
         this.mCustomPopTransation = transationView;
         this.pendingId = pendingId;
         presenterRouter.create(LinkQueryAPI.class).queryCurrentLink(pendingId);
@@ -178,13 +177,12 @@ public class LinkController extends BasePresenterController implements LinkQuery
     }
 
     /**
-     * @description 设置派单环节作废是否显示：工单来源于隐患单需要隐藏
-     * @param show
+     * @param isCancel
      * @return
+     * @description 设置派单环节作废是否显示：工单来源于隐患单需要隐藏
      * @author zhangwenshuai1 2019/2/15
-     *
      */
-    public void setCancelShow(boolean show) {
-        this.cancelShow = show;
+    public void setCancelShow(boolean isCancel) {
+        this.isCancel = isCancel;
     }
 }

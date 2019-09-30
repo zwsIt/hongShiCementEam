@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
  * @ClassName hongShiCementEam
  * @date 2019/4/3
  * ------------- Description -------------
- * 备件领用记录
+ * 备件领用记录Activity
  */
 @Router(Constant.Router.SPARE_PART_RECEIVE_RECORD)
 @Presenter(value = {SparePartReceiveRecordPresenter.class})

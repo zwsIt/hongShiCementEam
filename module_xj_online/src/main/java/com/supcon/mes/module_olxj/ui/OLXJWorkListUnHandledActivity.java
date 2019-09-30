@@ -555,7 +555,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                         if (isDcs) {
                             ToastUtils.show(OLXJWorkListUnHandledActivity.this, "当前设备已关机,无巡检设备!");
                         } else {
-                            ToastUtils.show(OLXJWorkListUnHandledActivity.this, "当前设备已提交完毕!");
+                            ToastUtils.show(OLXJWorkListUnHandledActivity.this, "当前设备已巡检完毕!");
                         }
                         back();
                         Flowable.timer(300, TimeUnit.MILLISECONDS)

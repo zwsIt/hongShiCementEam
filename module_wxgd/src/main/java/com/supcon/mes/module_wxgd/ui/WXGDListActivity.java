@@ -165,7 +165,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
 
         customSearchView.setHint("搜索");
         rightBtn.setImageResource(R.drawable.add);
-
+        searchTitleBar.disableRightBtn();
         initFilter();
         initEmpty();
     }

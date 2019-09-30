@@ -11,20 +11,19 @@
         layout="@layout/ly_recyclerview_with_scrollbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:layout_above="@+id/btnLayout"
-        />
+        android:layout_marginTop="50dp" />
+
     <LinearLayout
         android:id="@+id/mapLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bgGray2"
-        android:layout_marginTop="150dp"
         android:layout_above="@+id/btnLayout"
+        android:layout_marginTop="150dp"
+        android:background="@color/bgGray2"
         android:orientation="vertical"
         android:tag="mapLayout"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -50,29 +49,31 @@
         android:id="@+id/btnLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/sh_white_stroke"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
         android:tag="btnLayout">
+
         <Button
+            android:id="@+id/olxjFinishBtn"
+            style="@style/BlueButtonRadius"
             android:layout_width="120dp"
             android:layout_height="35dp"
             android:background="@drawable/sl_blue_radius_btn"
+            android:tag="olxjFinishBtn"
             android:text="结束任务"
-            style="@style/BlueButtonRadius"
-            android:textSize="@dimen/fontSize_16sp"
-            android:id="@+id/olxjFinishBtn"
-            android:tag="olxjFinishBtn" />
+            android:textSize="@dimen/fontSize_16sp" />
+
         <Button
+            android:id="@+id/olxjAbortBtn"
+            style="@style/OrangeButtonRadius"
             android:layout_width="120dp"
             android:layout_height="35dp"
-            android:text="终止任务"
-            style="@style/OrangeButtonRadius"
             android:layout_marginLeft="@dimen/dp_20"
-            android:textSize="@dimen/fontSize_16sp"
-            android:id="@+id/olxjAbortBtn"
-            android:tag="olxjAbortBtn" />
+            android:tag="olxjAbortBtn"
+            android:text="终止任务"
+            android:textSize="@dimen/fontSize_16sp" />
 
     </LinearLayout>
 </RelativeLayout>

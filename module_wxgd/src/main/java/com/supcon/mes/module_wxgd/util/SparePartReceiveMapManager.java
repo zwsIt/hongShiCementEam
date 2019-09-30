@@ -68,12 +68,15 @@ public class SparePartReceiveMapManager {
         LinkedList<SparePartReceiveDto> sparePartReceiveDtos = new LinkedList<>();
         for (SparePartReceiveEntity sparePartReceiveEntity : sparePartReceiveEntities) {
             SparePartReceiveDto sparePartReceiveDto = new SparePartReceiveDto();
+            sparePartReceiveDto.id = Util.strFormat2(sparePartReceiveEntity.id);
             sparePartReceiveDto.currDemandQuity = Util.strFormat2(sparePartReceiveEntity.currDemandQuity);
             sparePartReceiveDto.origDemandQuity = Util.strFormat2(sparePartReceiveEntity.origDemandQuity);
             sparePartReceiveDto.remark = Util.strFormat2(sparePartReceiveEntity.remark);
             IdDto idDto = new IdDto();
             idDto.id = Util.strFormat2(sparePartReceiveEntity.getSparePartId().id);
             sparePartReceiveDto.sparePartId = idDto;
+            sparePartReceiveDto.price = Util.strFormat2(sparePartReceiveEntity.price);
+            sparePartReceiveDto.total = Util.strFormat2(sparePartReceiveEntity.total);
             sparePartReceiveDtos.add(sparePartReceiveDto);
         }
         return sparePartReceiveDtos;

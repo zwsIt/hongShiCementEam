@@ -23,7 +23,9 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.MBapConstant;
 import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.listener.OnTextListener;
@@ -88,6 +90,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import cn.bluetron.coresdk.contract.CoreSdkContract;
+import cn.bluetron.coresdk.main.SLCoreSdk;
+import cn.bluetron.coresdk.model.bean.response.OwnMinAppItem;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -124,9 +129,9 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     TextView score;
 
     @BindByTag("workName")
-    TextView workName;
+    TextView workName;  // 登录人员
     @BindByTag("workDepot")
-    TextView workDepot;
+    TextView workDepot; // 部门
 
     private boolean hidden;
     private WorkAdapter workAdapter;
@@ -144,9 +149,10 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     private String reason;
     private MarqueeTextView marqueeTextView;
     private boolean isRefreshing;
-    private TextView waitMore;
+    private TextView waitMore;  // 工作提醒：更多
     private AtomicBoolean atomicBoolean = new AtomicBoolean(false);
     private UserPowerCheckController userPowerCheckController;
+    private List<WorkInfo> zzApps;
 
     @Override
     protected int getLayoutID() {
@@ -237,6 +243,10 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         workAdapter.setList(workInfos);
         workAdapter.notifyDataSetChanged();
 
+        if (EamApplication.isHailuo()) {
+            doZhiZhiLogin();
+        }
+
         aewMenu = MenuHelper.getAewMenu();
         lubricateMenu = MenuHelper.getLubricateMenu();
         repairMenu = MenuHelper.getRepairMenu();
@@ -246,6 +256,66 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         powerCheck(userPowerCheckController, aewMenu, lubricateMenu, repairMenu, formMenu);
     }
 
+    public void doZhiZhiLogin() {
+        String suposTicket = SharedPreferencesUtils.getParam(context, MBapConstant.SPKey.SUPOS_TICKET, "");
+        LogUtil.d("suposTicket:" + suposTicket);
+
+        String zzUrl = EamApplication.getZzUrl();
+        if (TextUtils.isEmpty(zzUrl)) {
+            String zzIp = SharedPreferencesUtils.getParam(context, Constant.ZZ.IP, "");
+            String zzPort = SharedPreferencesUtils.getParam(context, Constant.ZZ.PORT, "");
+
+            if (!TextUtils.isEmpty(zzIp) && !TextUtils.isEmpty(zzPort)) {
+                zzUrl = "http://" + zzIp + ":" + zzPort;
+            }
+        }
+
+        SLCoreSdk.initialize(EamApplication.getAppContext(), TextUtils.isEmpty(zzUrl) ? "http://10.30.55.50:8042" : zzUrl, suposTicket, EamApplication.getUserName());
+        SLCoreSdk.client().getMinAppList(new CoreSdkContract.GetMinAppListCallBack() {
+            @Override
+            public void onGetMinAppList(List<OwnMinAppItem> list) {
+                //System.out.println(list);
+                LogUtil.d("zz list size:" + list.size());
+                initZhiZhiApps(list);
+            }
+
+            @Override
+            public void onError(String msg) {
+                //Toast.makeText(MainActivity.this,"getMinAppList error:"+msg,Toast.LENGTH_LONG).show();
+                LogUtil.e("zz getMinAppList error:" + msg);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtils.show(context, msg);
+                    }
+                });
+            }
+        });
+    }
+
+    private void initZhiZhiApps(List<OwnMinAppItem> list) {
+        if (zzApps == null) {
+            zzApps = new ArrayList<>();
+        } else {
+            if (zzApps.size() != 0) {
+                zzApps.clear();
+            }
+        }
+        for (int i = 0; i < list.size(); i++) {
+            OwnMinAppItem appItem = list.get(i);
+            WorkInfo workInfo = new WorkInfo();
+            workInfo.iconUrl = appItem.getAppiconurl();
+            workInfo.name = appItem.getAppname();
+            workInfo.pendingUrl = appItem.getAppurl();
+            workInfo.appItem = appItem;
+            workInfo.isOpen = true;
+            workInfo.router = appItem.getAppurl();
+            zzApps.add(workInfo);
+        }
+        workInfos.addAll(zzApps);
+        workAdapter.setList(workInfos);
+        workAdapter.notifyDataSetChanged();
+    }
 
     private void initAd() {
         List<GalleryBean> ads = new ArrayList<>();
@@ -265,6 +335,19 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     @Override
     protected void initListener() {
         super.initListener();
+
+        if (EamApplication.isHailuo()){
+            workName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(Constant.IntentKey.TABLE_ID,1008);
+                    bundle.putLong(Constant.IntentKey.PENDING_ID,24517);
+                    IntentRouter.go(context,Constant.Router.SPARE_PART_APPLY_EDIT,bundle);
+                }
+            });
+        }
+
         workAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
@@ -339,7 +422,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                             break;
                         case Constant.HSWorkType.TD:
                             String tdurl = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                                    + Constant.WebUrl.TD_LIST+"&date="+System.currentTimeMillis();
+                                    + Constant.WebUrl.TD_LIST + "&date=" + System.currentTimeMillis();
                             bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
                             bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
                             bundle.putString(BaseConstant.WEB_URL, tdurl);
@@ -348,7 +431,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                             break;
                         case Constant.HSWorkType.SD:
                             String sdurl = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                                    + Constant.WebUrl.SD_LIST+"&date="+System.currentTimeMillis();
+                                    + Constant.WebUrl.SD_LIST + "&date=" + System.currentTimeMillis();
                             bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
                             bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
                             bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
@@ -551,7 +634,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     }
 
     private void getWorkData() {
-        presenterRouter.create(WaitDealtAPI.class).getWaitDealt(1, 3, new HashMap<>());
+        presenterRouter.create(WaitDealtAPI.class).getWaitDealt(1, 2, new HashMap<>());
         presenterRouter.create(EamAnomalyAPI.class).getMainWorkCount(String.valueOf(EamApplication.getAccountInfo().getStaffId()));
         isRefreshing = true;
     }
@@ -590,7 +673,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     @Override
     public void proxyPendingSuccess(BapResultEntity entity) {
         onLoadSuccess("待办委托成功");
-        presenterRouter.create(WaitDealtAPI.class).getWaitDealt(1, 3, new HashMap<>());
+        presenterRouter.create(WaitDealtAPI.class).getWaitDealt(1, 2, new HashMap<>());
     }
 
     @Override
@@ -744,7 +827,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                                                     menuPopwindowBean.setPower(result.get(menuPopwindowBean.getMenuOperateCodes()));
                                                 }
                                             }, throwable -> {
-                                            }, () -> getWorkData());
+                                            }, () -> WorkFragment.this.getWorkData());
 
                                 });
                     } else {

@@ -17,6 +17,7 @@ import com.supcon.mes.module_main.model.network.MainClient;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -29,7 +30,22 @@ public class ProcessedPresenter extends ProcessedContract.Presenter {
         paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,BEAM2_PROCESSFLOWINFO,STAFF");
         fastQueryCond.subconds.add(joinSubcondEntity);
-        mCompositeSubscription.add(MainClient.workflowHandleList(fastQueryCond, page, 20)
+
+        Map<String, Object> pageQueryParams = new HashMap<>();
+        pageQueryParams.put("page.pageNo",page);
+        pageQueryParams.put("page.pageSize",10);
+        pageQueryParams.put("page.maxPageSize",100);
+
+        Flowable<CommonBAPListEntity<ProcessedEntity>> mainClient;
+        if (EamApplication.isHailuo()){
+            fastQueryCond.modelAlias = "allProcessInfo";
+            mainClient = MainClient.workflowHandleListByHaiLuo(fastQueryCond, pageQueryParams);
+        }else {
+            fastQueryCond.modelAlias = "processFlowInfo";
+            mainClient =MainClient.workflowHandleList(fastQueryCond, pageQueryParams);
+        }
+
+        mCompositeSubscription.add(mainClient
                 .onErrorReturn(new Function<Throwable, CommonBAPListEntity<ProcessedEntity>>() {
                     @Override
                     public CommonBAPListEntity<ProcessedEntity> apply(Throwable throwable) throws Exception {

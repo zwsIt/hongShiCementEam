@@ -146,8 +146,8 @@ public class TxlEntity extends BaseEntity implements ITxlEntity {
     }
     
     @Override
-    public String getStaffWork() {
-        return POSITIONWORKID+"";
+    public String getPositionName() {
+        return POSITIONNAME;
     }
     
     @Override

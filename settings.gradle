@@ -5,4 +5,4 @@ include ':middleware', ':module_score',
         ':module_wxgd', ':module_warn'/*, ':module_xj'*/,
         ':module_yhgl', 'module_tsd', ':module_xj_online',
         /*':module_zz',*/ ':module_sbda_online'/*, ':mogu_viber',':hlShell'*/,
-        ':upush', ':module_acceptance', ':module_txl', ':module_zz_new', ':vibLib'
+        ':upush', ':module_acceptance', ':module_txl', ':module_zz_new'/*, ':vibLib'*/

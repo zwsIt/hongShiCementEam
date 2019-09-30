@@ -354,7 +354,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         currentAcceptChkEntity.checkStaff.id = EamApplication.getAccountInfo().staffId;
         currentAcceptChkEntity.checkStaff.code = EamApplication.getAccountInfo().staffCode;
         currentAcceptChkEntity.checkStaff.name = EamApplication.getAccountInfo().staffName;
-        currentAcceptChkEntity.checkTime = DateUtil.dateFormat(currentAcceptChkDateTime,"yyyy-MM-dd HH:mm:ss");
+        currentAcceptChkEntity.checkTime = DateUtil.dateFormat(currentAcceptChkDateTime, "yyyy-MM-dd HH:mm:ss");
     }
 
     @Override
@@ -711,16 +711,16 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     }
 
     private boolean checkResult() {
-        if (currentAcceptChkEntity.checkStaff == null){
-            ToastUtils.show(context,"请填写验收人员");
+        if (currentAcceptChkEntity.checkStaff == null) {
+            ToastUtils.show(context, "请填写验收人员");
             return false;
         }
-        if (currentAcceptChkEntity.checkTime == null){
-            ToastUtils.show(context,"请填写验收时间");
+        if (currentAcceptChkEntity.checkTime == null) {
+            ToastUtils.show(context, "请填写验收时间");
             return false;
         }
-        if (currentAcceptChkEntity.checkResult == null){
-            ToastUtils.show(context,"请填写验收结论");
+        if (currentAcceptChkEntity.checkResult == null) {
+            ToastUtils.show(context, "请填写验收结论");
             return false;
         }
         return true;
@@ -787,7 +787,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             mYHEntity.chargeStaff.id = searchStaff.id;
             mYHEntity.chargeStaff.code = searchStaff.code;
             mYHEntity.chargeStaff.name = searchStaff.name;
-        }else if (CHECK_STAFF.equals(staffType)){
+        } else if (CHECK_STAFF.equals(staffType)) {
             acceptChkStaff.setValue(searchStaff.name);
             acceptChkStaffCode.setValue(searchStaff.code);
             currentAcceptChkEntity.checkStaff = new Staff();
@@ -1120,13 +1120,16 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("dg1557457043896ListJson", maintainDtos);
         map.put("dgLists['dg1557457043896']", maintainDtos);
 
-        if (!TextUtils.isEmpty(currentAcceptChkEntity.getCheckResult().id)){
+        if (!TextUtils.isEmpty(currentAcceptChkEntity.getCheckResult().id)) {
             List<AcceptanceCheckEntity> list = new ArrayList();
             list.add(currentAcceptChkEntity);
-            LinkedList<AcceptanceCheckEntityDto> acceptanceCheckEntityDtos =  YHGLMapManager.translateCheckResultDto(list);
-            map.put("dg1568882818859ModelCode", "BEAM2_1.0.0_faultInfo_FaultCheck");
-            map.put("dg1568882818859ListJson", acceptanceCheckEntityDtos);
-            map.put("dgLists['dg1568882818859']", acceptanceCheckEntityDtos);
+            LinkedList<AcceptanceCheckEntityDto> acceptanceCheckEntityDtos = YHGLMapManager.translateCheckResultDto(list);
+//            map.put("dg1568882818859ModelCode", "BEAM2_1.0.0_faultInfo_FaultCheck");
+//            map.put("dg1568882818859ListJson", acceptanceCheckEntityDtos);
+//            map.put("dgLists['dg1568882818859']", acceptanceCheckEntityDtos);
+            map.put("dg1568817060483ModelCode", "BEAM2_1.0.0_faultInfo_FaultCheck");
+            map.put("dg1568817060483ListJson", acceptanceCheckEntityDtos);
+            map.put("dgLists['dg1568817060483']", acceptanceCheckEntityDtos);
         }
 
 

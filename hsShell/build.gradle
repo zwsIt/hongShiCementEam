@@ -100,7 +100,7 @@ android {
             signingConfig signingConfigs.keystore
             applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "SN-VxEAM-Mobile V${defaultConfig.versionName}-${releaseTime()}-C.apk"
+                    outputFileName = "SN-VxEAM-Mobile V${rootProject.ext.ProductCode}.${rootProject.ext.MobileCode}-${releaseTime()}-C.apk"
                 }
             }
             multiDexEnabled true
@@ -153,7 +153,7 @@ dependencies {
         implementation project(':module_sbda_online')
         implementation project(':module_zz_new')
         implementation project(':module_score')
-        implementation project(':vibLib')
+//        implementation project(':vibLib')
         implementation project(':module_warn')
         implementation project(':module_acceptance')
     }

@@ -98,11 +98,11 @@
                 android:padding="@dimen/dp_5"
                 android:tag="sum"
                 app:editable="true"
-                app:text="数量:" />
+                app:text="用量:" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
+                android:layout_height="50dp"
                 android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:gravity="center_vertical"
@@ -110,7 +110,7 @@
                 android:paddingLeft="@dimen/dp_10"
                 android:paddingEnd="@dimen/dp_5">
 
-                <com.supcon.mes.mbap.view.CustomVerticalSpinner
+                <com.supcon.mes.mbap.view.CustomSpinner
                     android:id="@+id/oilType"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

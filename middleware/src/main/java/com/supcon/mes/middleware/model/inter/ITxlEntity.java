@@ -18,12 +18,13 @@ public interface ITxlEntity{
     String getSex();
     String getDepartmentName();
     String getDepartmentFullPath();
-    String getStaffWork();
+    String getPositionName();
     String getStaffBirthday();
     String getDeploymentTime();
     String getCompanyName();
     Long getStaffId();
-    
+
+    String getMOBILE();
     /**
      * 详情中显示的数据信息
      */

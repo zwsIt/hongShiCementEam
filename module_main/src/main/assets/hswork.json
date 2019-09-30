@@ -135,7 +135,7 @@
       "isPower": false
     },
     {
-      "name": "停电",
+      "name": "停电申请",
       "viewType": 0,
       "num": 0,
       "type": 16,
@@ -143,7 +143,7 @@
       "menuOperateCodes": "BEAMEle_1.0.0_onOrOff_eleOffList_self"
     },
     {
-      "name": "送电",
+      "name": "送电申请",
       "viewType": 0,
       "tag": "",
       "num": 0,

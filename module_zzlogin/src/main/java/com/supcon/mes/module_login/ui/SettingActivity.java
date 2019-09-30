@@ -44,7 +44,7 @@ import static com.supcon.mes.mbap.utils.PatternUtil.URL_PATTERN;
  */
 @Router(Constant.Router.SETTING)
 @Presenter(value = {MinePresenter.class})
-public class SettingActivity extends BasePresenterActivity implements MineContract.View{
+public class SettingActivity extends BasePresenterActivity implements MineContract.View {
     @BindByTag("titleText")
     TextView titleText;
     @BindByTag("rightBtn")
@@ -111,15 +111,15 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
         initHost(isUrlEnabled);
 
 
-        if(BuildConfig.HAS_SUPOS /*|| BuildConfig.DEBUG*/) {
-            ((ViewGroup)SupOSSwitchBtn.getParent()).setVisibility(View.VISIBLE);
+        if (BuildConfig.HAS_SUPOS /*|| BuildConfig.DEBUG*/) {
+            ((ViewGroup) SupOSSwitchBtn.getParent()).setVisibility(View.VISIBLE);
             SupOSSwitchBtn.setChecked(SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, BuildConfig.HAS_SUPOS));
         }
 
     }
 
     private void initHost(boolean isUrlEnabled) {
-        if(isUrlEnabled){
+        if (isUrlEnabled) {
             urlInput.setVisibility(View.VISIBLE);
             ipInput.setVisibility(View.GONE);
             portInput.setVisibility(View.GONE);
@@ -128,15 +128,14 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
             urlInput.setInput(SharedPreferencesUtils.getParam(this, MBapConstant.SPKey.URL, ""));
 
-        }
-        else{
+        } else {
             urlInput.setVisibility(View.GONE);
             urlInput.setInput("");
 
             ipInput.setVisibility(View.VISIBLE);
             portInput.setVisibility(View.VISIBLE);
 
-            ipInput.setInputType(InputType.TYPE_CLASS_PHONE );
+            ipInput.setInputType(InputType.TYPE_CLASS_PHONE);
             ipInput.setInput(SharedPreferencesUtils.getParam(this, MBapConstant.SPKey.IP, ""));
 
             portInput.setInputType(InputType.TYPE_CLASS_PHONE);
@@ -152,6 +151,10 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
                 .append(portInput.getInput())
                 .append(urlInput.getInput());
 
+        if (EamApplication.isIsLogin()) {
+            pwdSettings.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -160,12 +163,11 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
         rightBtn.setOnClickListener(v -> {
 
-            if(checkIsModified()) {
-                if(doCheck()){
+            if (checkIsModified()) {
+                if (doCheck()) {
                     doSave();
                 }
-            }
-            else{
+            } else {
                 finish();
                 executeBackwardAnim();
             }
@@ -199,12 +201,12 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
     private void showPwdDialog() {
 
-        if(!EamApplication.isIsLogin()){
+        if (!EamApplication.isIsLogin()) {
             ToastUtils.show(context, "请先登录！");
             return;
         }
 
-        if(mPasswordController == null){
+        if (mPasswordController == null) {
             mPasswordController = new PasswordController(PasswordController.getView(context), true);
             mPasswordController.init();
         }
@@ -234,11 +236,11 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
                     .bindView(R.id.redBtn, "保存")
                     .bindView(R.id.grayBtn, "离开")
                     .bindClickListener(R.id.redBtn, v1 -> {
-                        if(doCheck()){
+                        if (doCheck()) {
                             doSave();
                         }
                     }, true)
-                    .bindClickListener(R.id.grayBtn, v3-> super.onBackPressed(),true)
+                    .bindClickListener(R.id.grayBtn, v3 -> super.onBackPressed(), true)
                     .show();
 
 
@@ -316,14 +318,13 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
     private void save() {
 
-        if(isUrlEnabled){
+        if (isUrlEnabled) {
             MBapApp.setUrl(urlInput.getInput().trim());
-            LogUtil.d("url:"+ MBapApp.getUrl());
+            LogUtil.d("url:" + MBapApp.getUrl());
 
             MBapApp.setIp("");
             MBapApp.setPort("");
-        }
-        else {
+        } else {
             MBapApp.setIp(ipInput.getInput().trim());
             LogUtil.d("ip:" + MBapApp.getIp());
 
@@ -341,7 +342,7 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
     private boolean doCheck() {
 
-        if(!isUrlEnabled) {
+        if (!isUrlEnabled) {
             if (TextUtils.isEmpty(ipInput.getInput())) {
                 ToastUtils.show(this, "请设置服务器IP地址");
                 return false;
@@ -361,14 +362,13 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
                 ToastUtils.show(this, "请输入正确的端口");
                 return false;
             }
-        }
-        else{
-            if(TextUtils.isEmpty(urlInput.getInput())){
+        } else {
+            if (TextUtils.isEmpty(urlInput.getInput())) {
                 ToastUtils.show(this, "必须设置服务器地址！");
                 return false;
             }
 
-            if(!PatternUtil.checkInput(urlInput.getInput(), URL_PATTERN)){
+            if (!PatternUtil.checkInput(urlInput.getInput(), URL_PATTERN)) {
                 ToastUtils.show(this, "请输入正确的服务器地址！");
                 return false;
             }
@@ -380,7 +380,7 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
     private void doSave() {
 
-        if(MBapApp.isIsLogin()){
+        if (MBapApp.isIsLogin()) {
             new CustomDialog(context)
                     .twoButtonAlertDialog("网络设置已被修改，是否要重新登陆?")
                     .bindView(R.id.redBtn, "重新登陆")
@@ -389,10 +389,9 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
                         onLoading("正在登出...");
                         presenterRouter.create(MineAPI.class).logout();
                     }, true)
-                    .bindClickListener(R.id.grayBtn, null,true)
+                    .bindClickListener(R.id.grayBtn, null, true)
                     .show();
-        }
-        else{
+        } else {
 
             DeviceManager.getInstance().release();
             save();
@@ -426,9 +425,9 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 //        DeviceManager.getInstance().release();
         save();
         onLoadSuccessAndExit("登出成功！", () -> {
-            Bundle bundle  = new Bundle();
+            Bundle bundle = new Bundle();
             bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);
-            if(!EamApplication.isHongshi()) {
+            if (!EamApplication.isHongshi()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
             }
@@ -439,7 +438,7 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
     @Override
     public void logoutFailed(String errorMsg) {
-        LogUtil.w("logoutFailed:"+errorMsg);
+        LogUtil.w("logoutFailed:" + errorMsg);
         onLoadFailed("登出失败！");
     }
 }

@@ -118,34 +118,40 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         EventBus.getDefault().register(this);
     }
 
-    public void doZhiZhiLogin(){
+    public void doZhiZhiLogin() {
         String suposTicket = SharedPreferencesUtils.getParam(context, MBapConstant.SPKey.SUPOS_TICKET, "");
-        LogUtil.d("suposTicket:"+suposTicket);
+        LogUtil.d("suposTicket:" + suposTicket);
 
         String zzUrl = EamApplication.getZzUrl();
-        if(TextUtils.isEmpty(zzUrl)){
+        if (TextUtils.isEmpty(zzUrl)) {
             String zzIp = SharedPreferencesUtils.getParam(context, Constant.ZZ.IP, "");
             String zzPort = SharedPreferencesUtils.getParam(context, Constant.ZZ.PORT, "");
 
-            if(!TextUtils.isEmpty(zzIp) && !TextUtils.isEmpty(zzPort)){
-                zzUrl = "http://"+zzIp+":"+zzPort;
+            if (!TextUtils.isEmpty(zzIp) && !TextUtils.isEmpty(zzPort)) {
+                zzUrl = "http://" + zzIp + ":" + zzPort;
             }
         }
 
-        SLCoreSdk.initialize(EamApplication.getAppContext(),TextUtils.isEmpty(zzUrl)?"http://10.30.55.50:8042":zzUrl, suposTicket, EamApplication.getUserName());
+        SLCoreSdk.initialize(EamApplication.getAppContext(), TextUtils.isEmpty(zzUrl) ? "http://10.30.55.50:8042" : zzUrl, suposTicket, EamApplication.getUserName());
         SLCoreSdk.client().getMinAppList(new CoreSdkContract.GetMinAppListCallBack() {
             @Override
             public void onGetMinAppList(List<OwnMinAppItem> list) {
                 //System.out.println(list);
-                LogUtil.d("zz list size:"+list.size());
+                LogUtil.d("zz list size:" + list.size());
                 initZhiZhiApps(list);
             }
 
             @Override
             public void onError(String msg) {
                 //Toast.makeText(MainActivity.this,"getMinAppList error:"+msg,Toast.LENGTH_LONG).show();
-                LogUtil.e("zz getMinAppList error:"+msg);
-                ToastUtils.show(context, msg);
+                LogUtil.e("zz getMinAppList error:" + msg);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtils.show(context, msg);
+                    }
+                });
+
             }
         });
     }
@@ -215,8 +221,6 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
         leftBtn.setImageResource(R.drawable.sl_top_menu);
 //        rightBtn.setImageResource(R.drawable.sl_top_pending);
 //        rightBtn.setVisibility(View.VISIBLE);
-
-
 
 
         Flowable.timer(20, TimeUnit.MILLISECONDS)
@@ -339,7 +343,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
                 if (Constant.Router.SD.equals(workInfo.router)) {
                     String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                            + Constant.WebUrl.SD_LIST+"&date="+System.currentTimeMillis();
+                            + Constant.WebUrl.SD_LIST + "&date=" + System.currentTimeMillis();
                     /*if(EamApplication.isHailuo()){
                         url+=  "&mobileMacAddr=" + *//*PhoneUtil.getMacAddressFromIp(context)*//*PhoneUtil.getDeviceSN();
                     }*/
@@ -354,7 +358,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                     IntentRouter.go(context, workInfo.router, bundle);
                 } else if (Constant.Router.TD.equals(workInfo.router)) {
                     String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                            + Constant.WebUrl.TD_LIST+"&date="+System.currentTimeMillis();
+                            + Constant.WebUrl.TD_LIST + "&date=" + System.currentTimeMillis();
                     /*if(EamApplication.isHailuo()){
                         url+=  "&mobileMacAddr=" + *//*PhoneUtil.getMacAddressFromIp(context)*//*PhoneUtil.getDeviceSN();
                     }*/
@@ -366,10 +370,9 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                     bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
                     bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
                     IntentRouter.go(context, workInfo.router, bundle);
-                }
-                else if(Constant.Router.TSD_RECORD.equals(workInfo.router)){
+                } else if (Constant.Router.TSD_RECORD.equals(workInfo.router)) {
                     String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                            + Constant.WebUrl.TSD_RECORD+"&date="+System.currentTimeMillis();
+                            + Constant.WebUrl.TSD_RECORD + "&date=" + System.currentTimeMillis();
                     Bundle bundle = new Bundle();
                     bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
                     bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
@@ -377,8 +380,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                     bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
                     bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
                     IntentRouter.go(context, workInfo.router, bundle);
-                }
-                else if (workInfo.appItem != null) {
+                } else if (workInfo.appItem != null) {
                     goZZApp(workInfo);
                 } else
                     IntentRouter.go(getContext(), workInfo.router);
@@ -421,12 +423,11 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
             pendingQueryParams.add(workInfo.pendingUrl);
         }
 
-        if(EamApplication.isHailuo()){
+        if (EamApplication.isHailuo()) {
             doZhiZhiLogin();
         }
         refreshList();
     }
-
 
 
     @SuppressLint("CheckResult")

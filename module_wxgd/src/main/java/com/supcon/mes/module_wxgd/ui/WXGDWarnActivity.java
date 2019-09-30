@@ -242,7 +242,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
      * @author zhangwenshuai1 2018/9/1
      */
     private void initLink() {
-        mLinkController.setCancelShow(mWXGDEntity.workSource != null && (mWXGDEntity.faultInfo != null && TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo)));
+        mLinkController.setCancelShow(false);
         mLinkController.initStartTransition(transition, "work");
     }
 

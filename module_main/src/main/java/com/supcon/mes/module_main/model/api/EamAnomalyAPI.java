@@ -14,5 +14,8 @@ import com.supcon.mes.middleware.model.bean.CommonEntity;
 public interface EamAnomalyAPI {
     void getMainWorkCount(String staffID);
 
+    /**
+     * 获取提示问候语
+     */
     void getSloganInfo();
 }

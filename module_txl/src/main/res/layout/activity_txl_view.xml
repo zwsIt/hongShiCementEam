@@ -10,12 +10,12 @@
 
     <LinearLayout
         android:id="@+id/usrInfo"
-        android:tag="usrInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="#16B1E6"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:tag="usrInfo">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,19 +24,19 @@
 
             <ImageView
                 android:id="@+id/ivBack"
-                android:tag="ivBack"
                 android:layout_width="@dimen/dp_30"
                 android:layout_height="@dimen/dp_30"
                 android:padding="@dimen/dp_6"
-                android:src="@drawable/ic_back" />
+                android:src="@drawable/ic_back"
+                android:tag="ivBack" />
 
             <TextView
                 android:id="@+id/tvBack"
-                android:tag="tvBack"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="top"
                 android:paddingTop="@dimen/dp_5"
+                android:tag="tvBack"
                 android:text="返回"
                 android:textColor="@color/white"
                 android:textSize="@dimen/fontSize_16sp" />
@@ -50,41 +50,34 @@
                 android:padding="@dimen/dp_10">
 
                 <com.supcon.mes.mbap.view.CustomCircleTextImageView
-                    android:layout_width="match_parent"
                     android:id="@+id/userIcon"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_100"
                     android:padding="@dimen/dp_10"
                     android:src="@drawable/icon_icon" />
 
                 <TextView
+                    android:id="@+id/staffName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:id="@+id/userName"
-                    android:tag="userName"
                     android:gravity="center"
-                    android:text="赵梦蕾"
+                    android:tag="staffName"
+                    android:text="人员"
                     android:textColor="@color/white"
                     android:textSize="@dimen/fontSize_18sp" />
 
                 <TextView
+                    android:id="@+id/positionName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/userWork"
-                    android:tag="userWork"
                     android:gravity="center"
-                    android:text="开发工程师"
+                    android:tag="positionName"
+                    android:text="岗位"
                     android:textColor="@color/white"
                     android:textSize="@dimen/dp_12" />
             </LinearLayout>
 
-
-            <ImageView
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="@dimen/dp_30"
-                android:layout_marginRight="@dimen/dp_5"
-                android:padding="@dimen/dp_5"
-                android:src="@drawable/more_fun" />
 
         </LinearLayout>
     </LinearLayout>
@@ -105,12 +98,12 @@
 
             <ImageView
                 android:id="@+id/ivTelphone"
-                android:tag="ivTelphone"
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
-                android:src="@drawable/txl_view_phone" />
+                android:src="@drawable/txl_view_phone"
+                android:tag="ivTelphone" />
         </LinearLayout>
 
         <include
@@ -128,13 +121,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
                 android:id="@+id/ivSms"
-                android:tag="ivSms"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
-                android:src="@drawable/txl_view_message" />
+                android:src="@drawable/txl_view_message"
+                android:tag="ivSms" />
         </LinearLayout>
 
         <include
@@ -152,13 +145,13 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/ivEmail"
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
-                android:id="@+id/ivEmail"
-                android:tag="ivEmail"
-                android:src="@drawable/txl_view_mail" />
+                android:src="@drawable/txl_view_mail"
+                android:tag="ivEmail" />
         </LinearLayout>
     </LinearLayout>
 
@@ -172,11 +165,11 @@
 
 
         <com.supcon.mes.mbap.view.CustomTextView
-            style="@style/txl_view_text"
             android:id="@+id/tvTelephone"
+            style="@style/txl_view_text"
             android:tag="tvTelephone"
             app:content_value="18667936846"
-            app:key="手机" />
+            app:key="联系方式" />
 
         <include
             layout="@layout/ly_line_light"
@@ -184,35 +177,10 @@
             android:layout_height="@dimen/dp_1"
             android:layout_marginLeft="@dimen/dp_20" />
 
-        <com.supcon.mes.mbap.view.CustomTextView
-            style="@style/txl_view_text"
-            app:content_value="未设置"
-            android:id="@+id/phone"
-            android:tag="phone"
-            app:key="电话" />
-
-        <include
-            layout="@layout/ly_line_light"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:layout_marginLeft="@dimen/dp_20" />
 
         <com.supcon.mes.mbap.view.CustomTextView
-            style="@style/txl_view_text"
-            app:content_value="未设置"
-            android:id="@+id/otherPhone"
-            android:tag="otherPhone"
-            app:key="其他电话" />
-
-        <include
-            layout="@layout/ly_line_light"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:layout_marginLeft="@dimen/dp_20" />
-
-        <com.supcon.mes.mbap.view.CustomTextView
-            style="@style/txl_view_text"
             android:id="@+id/email"
+            style="@style/txl_view_text"
             android:tag="email"
             app:content_value="zhaomenglei@supcon.com"
             app:key="邮箱" />
@@ -225,8 +193,8 @@
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/master"
-            android:tag="master"
             style="@style/txl_view_text"
+            android:tag="master"
             app:content_value="夏群峰"
             app:key="上级" />
 
@@ -237,47 +205,35 @@
             android:layout_marginLeft="@dimen/dp_20" />
 
         <com.supcon.mes.mbap.view.CustomTextView
-            style="@style/txl_view_text"
-            app:content_value="MES开发二部"
             android:id="@+id/department"
+            style="@style/txl_view_text"
             android:tag="department"
+            app:content_value="MES开发二部"
             app:key="部门" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <com.supcon.mes.mbap.view.CustomTextView
-            style="@style/txl_view_text"
-            app:content_value="12"
-            android:id="@+id/flow"
-            android:tag="flow"
-            app:key="流程" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:visibility="gone"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:layout_height="wrap_content">
+        android:gravity="center"
+        android:visibility="gone">
+
         <ImageView
             android:layout_width="wrap_content"
-            android:src="@drawable/txl_view_send_mes"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:src="@drawable/txl_view_send_mes" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             android:layout_gravity="bottom"
-            android:gravity="center"
             android:background="@color/white"
-            android:textColor="#44BEEA"
-            android:text="发消息" />
+            android:gravity="center"
+            android:text="发消息"
+            android:textColor="#44BEEA" />
     </LinearLayout>
 
 </LinearLayout>

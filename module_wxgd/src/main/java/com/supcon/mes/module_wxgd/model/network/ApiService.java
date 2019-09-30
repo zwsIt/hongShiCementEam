@@ -6,12 +6,14 @@ import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.middleware.model.bean.SparePartReceiveListEntity;
 import com.supcon.mes.middleware.model.bean.StandingCropEntity;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckListEntity;
 import com.supcon.mes.module_wxgd.model.bean.GenerateAcceptanceEntity;
 import com.supcon.mes.module_wxgd.model.bean.LubricateOilsListEntity;
 import com.supcon.mes.module_wxgd.model.bean.MaintenanceListEntity;
 import com.supcon.mes.module_wxgd.model.bean.RepairStaffListEntity;
+import com.supcon.mes.module_wxgd.model.bean.SparePartApplyHeaderInfoEntity;
 import com.supcon.mes.module_wxgd.model.bean.SparePartListEntity;
 import com.supcon.mes.module_wxgd.model.bean.SparePartRefListEntity;
 import com.supcon.mes.module_wxgd.model.bean.SparePartsConsumeEntity;
@@ -230,4 +232,33 @@ public interface ApiService {
      */
     @GET("/BEAM2/workList/sparePart/sparePartList-query.action?1=1&permissionCode=BEAM2_1.0.0_workList_sparePartList")
     Flowable<CommonBAPListEntity<SparePartsConsumeEntity>> sparePartList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     * 获取备件领用申请单表头信息
+     * @param id
+     * @param includes
+     * @return
+     */
+    @POST("/BEAM2/sparePart/apply/get.action")
+    @Multipart
+    Flowable<SparePartApplyHeaderInfoEntity> get(@Query("id") Long id, @Part("includes") String includes );
+
+    /**
+     * @param
+     * @return
+     * @description 备件领用申请PT明细
+     * @author zws 2018/8/28
+     */
+    @POST("/BEAM2/sparePart/apply/data-dg1535960092493.action")
+    Flowable<SparePartReceiveListEntity> listSparePartApplyDetail(@Query("apply.id") long id);
+
+    /**
+     * @param 
+     * @return 备件领用申请：领用人申请（海螺）
+     * @description 
+     * @author zws 2019/9/28
+     */
+    @POST("/BEAM2/sparePart/apply/sparePartEdit/submit.action?__pc__=dGFzazM0MHxzcGFyZVBhcnRBcHBseQ__&_bapFieldPermissonModelCode_=BEAM2_1.0.0_sparePart_Apply&_bapFieldPermissonModelName_=Apply&superEdit=false")
+    @Multipart
+    Flowable<BapResultEntity> sparePartApplyDoSubmit(@PartMap Map<String, RequestBody> paramMap,@Part List<MultipartBody.Part> partList);
 }

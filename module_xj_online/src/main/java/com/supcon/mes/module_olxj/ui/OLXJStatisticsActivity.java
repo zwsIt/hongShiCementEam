@@ -7,14 +7,11 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
-import com.github.lzyzsd.circleprogress.CircleProgress;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
@@ -30,9 +27,6 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.DatePickController;
 import com.supcon.mes.middleware.model.bean.AreaMultiStageEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
-import com.supcon.mes.middleware.model.bean.Department;
-import com.supcon.mes.middleware.model.bean.DepartmentInfo;
-import com.supcon.mes.middleware.model.contract.MultiDepartSelectContract;
 import com.supcon.mes.middleware.ui.view.HsCircleProgress;
 import com.supcon.mes.middleware.util.AnimatorUtil;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -142,7 +136,7 @@ public class OLXJStatisticsActivity extends BaseRefreshRecyclerActivity implemen
             @Override
             public void onDismiss() {
                 super.onDismiss();
-                AnimatorUtil.rotationExpandIcon(depotExpend, 180, 0);
+                AnimatorUtil.rotationExpandIcon(depotExpend, 0, 180);
             }
         };
     }

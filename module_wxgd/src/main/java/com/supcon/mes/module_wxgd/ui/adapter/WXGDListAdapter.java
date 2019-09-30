@@ -38,7 +38,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
 
     public WXGDListAdapter(Context context) {
         super(context);
-      
+
     }
 
     @Override
@@ -147,7 +147,8 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                             case Constant.WxgdView.DISPATCH_OPEN_URL:
                                 IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
                                 break;
-
+                            case Constant.WxgdView.VIEW_OPEN_URL:
+                                bundle.putBoolean(Constant.IntentKey.isEdit, false);
                             case Constant.WxgdView.EXECUTE_OPEN_URL:
                                 IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
                                 break;
@@ -316,9 +317,9 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
 
     }
 
-    public void onDestroy(){
+    public void onDestroy() {
 
-        if(mDownloadController!=null){
+        if (mDownloadController != null) {
             mDownloadController.dispose();
         }
 

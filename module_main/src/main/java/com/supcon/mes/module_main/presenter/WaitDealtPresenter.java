@@ -16,6 +16,7 @@ import com.supcon.mes.module_main.model.network.MainClient;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -36,14 +37,22 @@ public class WaitDealtPresenter extends WaitDealtContract.Presenter {
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,BEAM2_PERSONWORKINFO,STAFFID");
         fastQueryCond.subconds.add(joinSubcondEntity);
 
-        fastQueryCond.modelAlias = "personworkinfo";
-
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.pageSize", pageSize);
         pageQueryParams.put("page.maxPageSize", 500);
 
-        mCompositeSubscription.add(MainClient.getWaitDealt(fastQueryCond, pageQueryParams)
+        Flowable<CommonBAPListEntity<WaitDealtEntity>> mainClient;
+        if (EamApplication.isHailuo()){
+            fastQueryCond.modelAlias = "allPersonWorkInfo";
+            mainClient = MainClient.getWaitDealtByHaiLuo(fastQueryCond, pageQueryParams);
+        }else {
+            fastQueryCond.modelAlias = "personworkinfo";
+            mainClient =MainClient.getWaitDealt(fastQueryCond, pageQueryParams);
+        }
+
+        mCompositeSubscription.add(
+                mainClient
                 .onErrorReturn(new Function<Throwable, CommonBAPListEntity<WaitDealtEntity>>() {
                     @Override
                     public CommonBAPListEntity<WaitDealtEntity> apply(Throwable throwable) throws Exception {

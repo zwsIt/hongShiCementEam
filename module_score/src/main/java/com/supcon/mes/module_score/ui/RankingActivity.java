@@ -34,6 +34,8 @@ import com.supcon.mes.module_score.model.contract.ScoreStaffListContract;
 import com.supcon.mes.module_score.presenter.ScoreStaffListPresenter;
 import com.supcon.mes.module_score.ui.adapter.RankingAdapter;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -114,15 +116,9 @@ public class RankingActivity extends BaseRefreshRecyclerActivity implements Scor
         datePickController.setSecondVisible(false);
         datePickController.textSize(18);
 
-        dateTv.setText(DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd"));
-        queryParam.put(Constant.BAPQuery.SCORE_DATA_START, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd 00:00:00"));
-        queryParam.put(Constant.BAPQuery.SCORE_DATA_STOP, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd 23:59:59"));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AnimatorUtil.rotationExpandIcon(expend, 180, 0);
+        dateTv.setText(DateUtil.dateFormat(getYesterday(), "yyyy-MM-dd"));
+        queryParam.put(Constant.BAPQuery.SCORE_DAILY_START, DateUtil.dateFormat(getYesterday(), "yyyy-MM-dd 00:00:00"));
+        queryParam.put(Constant.BAPQuery.SCORE_DAILY_STOP, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd 23:59:59"));
     }
 
     @SuppressLint("CheckResult")
@@ -145,8 +141,8 @@ public class RankingActivity extends BaseRefreshRecyclerActivity implements Scor
                 AnimatorUtil.rotationExpandIcon(expend, 0, 180);
                 datePickController.listener((year, month, day, hour, minute, second) -> {
                     dateTv.setText(year + "-" + month + "-" + day);
-                    queryParam.put(Constant.BAPQuery.SCORE_DATA_START, year + "-" + month + "-" + day + " 00:00:00");
-                    queryParam.put(Constant.BAPQuery.SCORE_DATA_STOP, year + "-" + month + "-" + day + " 23:59:59");
+                    queryParam.put(Constant.BAPQuery.SCORE_DAILY_START, year + "-" + month + "-" + day + " 00:00:00");
+                    queryParam.put(Constant.BAPQuery.SCORE_DAILY_STOP, year + "-" + month + "-" + day + " 23:59:59");
                     refreshListController.refreshBegin();
                 }).show(DateUtil.dateFormat(dateTv.getText().toString()), expend);
             }
@@ -185,5 +181,12 @@ public class RankingActivity extends BaseRefreshRecyclerActivity implements Scor
     public void patrolScoreFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
+    }
+
+    public long getYesterday() {
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(new Date());
+        ca.add(Calendar.DAY_OF_MONTH, -1);
+        return ca.getTimeInMillis();
     }
 }

@@ -174,7 +174,16 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
         protected void initListener() {
             super.initListener();
 
-            ufItemSelectResult.setOnChildViewClickListener(this);
+            ufItemSelectResult.setOnChildViewClickListener(new OnChildViewClickListener() {
+                @Override
+                public void onChildViewClick(View childView, int action, Object obj) {
+                    if (action == -1) {
+                        ufItemSelectResult.setContent("");
+                    }
+                    OLXJWorkItemEntity workItemEntity = getItem(getAdapterPosition());
+                    onItemChildViewClick(childView, action, workItemEntity);
+                }
+            });
 
             ufItemEndBtn.setOnClickListener(v -> {
                 OLXJWorkItemEntity xjWorkItemEntity = getItem(getAdapterPosition());

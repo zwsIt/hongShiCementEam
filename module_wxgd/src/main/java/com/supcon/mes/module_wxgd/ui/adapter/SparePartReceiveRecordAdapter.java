@@ -21,6 +21,7 @@ import com.supcon.mes.module_wxgd.model.bean.SparePartsConsumeEntity;
  * @ClassName hongShiCementEam
  * @date 2019/4/3
  * ------------- Description -------------
+ * 备件领用记录Adapter
  */
 public class SparePartReceiveRecordAdapter extends BaseListDataRecyclerViewAdapter<SparePartsConsumeEntity> {
     public SparePartReceiveRecordAdapter(Context context) {

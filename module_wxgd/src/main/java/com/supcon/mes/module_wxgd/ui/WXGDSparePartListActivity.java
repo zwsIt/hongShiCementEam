@@ -166,7 +166,7 @@ public class WXGDSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
             refBtn.setVisibility(View.VISIBLE);
         }
         //接单、验收环节隐藏更新现存量及生成领用出库单按钮行
-        if (Constant.WxgdView.RECEIVE_OPEN_URL.equals(tableAction) || Constant.WxgdView.ACCEPTANCE_OPEN_URL.equals(tableAction)) {
+        if (Constant.WxgdView.RECEIVE_OPEN_URL.equals(tableAction) || Constant.WxgdView.ACCEPTANCE_OPEN_URL.equals(tableAction) || !editable) {
             findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
         }
 

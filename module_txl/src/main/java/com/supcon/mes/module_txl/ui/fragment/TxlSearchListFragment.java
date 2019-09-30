@@ -14,7 +14,6 @@ import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
-import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.TxlEntity;
@@ -44,23 +43,16 @@ public class TxlSearchListFragment extends BaseRefreshRecyclerFragment<TxlEntity
     @BindByTag("searchView")
     CustomSearchView searchView;
     @BindByTag("departInfos")
-    TextView departInfos;
+    TextView departInfos; // 组织
     @BindByTag("refreshFrameLayout")
     PtrFrameLayout refreshFrameLayout;
     @BindByTag("sameDepart")
-    TextView sameDepart;
-    @BindByTag("allStaff")
-    TextView allStaff;
-    @BindByTag("myBelongStaff")
-    TextView myBelongStaff;
+    TextView sameDepart; // 同部门
     @BindByTag("ivSameDepart")
-    ImageView ivSameDepart;
+    ImageView ivSameDepart; // 同部门Iv
     @BindByTag("ivDepartInfos")
-    ImageView ivDepartInfos;
-    @BindByTag("ivMyBelongStaff")
-    ImageView ivMyBelongStaff;
-    @BindByTag("ivAllStaff")
-    ImageView ivAllStaff;
+    ImageView ivDepartInfos; // 组织Iv
+
     
     private TxlListAdapter mTxlListAdapter;
     
@@ -92,29 +84,14 @@ public class TxlSearchListFragment extends BaseRefreshRecyclerFragment<TxlEntity
         super.initListener();
         Bundle bundle = new Bundle();
         departInfos.setOnClickListener(v -> IntentRouter.go(context, Constant.Router.MULTI_DEPART_SELECT));
-        departInfos.setOnClickListener(v -> IntentRouter.go(context, Constant.Router.MULTI_DEPART_SELECT));
+        ivDepartInfos.setOnClickListener(v -> IntentRouter.go(context, Constant.Router.MULTI_DEPART_SELECT));
         ivSameDepart.setOnClickListener(v -> {
             bundle.putString(Constant.IntentKey.TITLE_CONTENT,"同部门" );
             IntentRouter.go(context, Constant.Router.TXL_SEARCH_CONTACT_WITH_HEADER,bundle);
         });
-        ivAllStaff.setOnClickListener(v -> {
-            bundle.putString(Constant.IntentKey.TITLE_CONTENT, "所有人");
-            IntentRouter.go(context, Constant.Router.TXL_SEARCH_CONTACT_WITH_HEADER,bundle);
-        });
-        ivMyBelongStaff.setOnClickListener(v -> {
-            bundle.putString(Constant.IntentKey.TITLE_CONTENT, "我的下属");
-            IntentRouter.go(context, Constant.Router.TXL_SEARCH_CONTACT_WITH_HEADER,bundle);
-        });
+
         sameDepart.setOnClickListener(v -> {
             bundle.putString(Constant.IntentKey.TITLE_CONTENT,"同部门" );
-            IntentRouter.go(context, Constant.Router.TXL_SEARCH_CONTACT_WITH_HEADER,bundle);
-        });
-        allStaff.setOnClickListener(v -> {
-            bundle.putString(Constant.IntentKey.TITLE_CONTENT, "所有人");
-            IntentRouter.go(context, Constant.Router.TXL_SEARCH_CONTACT_WITH_HEADER,bundle);
-        });
-        myBelongStaff.setOnClickListener(v -> {
-            bundle.putString(Constant.IntentKey.TITLE_CONTENT, "我的下属");
             IntentRouter.go(context, Constant.Router.TXL_SEARCH_CONTACT_WITH_HEADER,bundle);
         });
     }
