@@ -56,9 +56,10 @@ public class AboutActivity extends BaseActivity {
         titleText.setText("关于我们");
         if(EamApplication.isHongshi()) {
             aboutIv.setImageResource(R.drawable.ic_app_launcher_hongshi);
-        }
-        else{
+        }else if(EamApplication.isHailuo()){
             aboutIv.setImageResource(R.drawable.ic_app_launcher_hailuo);
+        }else {
+            aboutIv.setImageResource(R.drawable.ic_app_launcher);
         }
         aboutName.setText(ChannelUtil.getAppName());
         StringBuilder versionName = new StringBuilder();

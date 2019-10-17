@@ -51,7 +51,13 @@ public class RefProductAdapter extends BaseListDataRecyclerViewAdapter<SparePart
         @Override
         protected void initListener() {
             super.initListener();
-            layout_refproduct.setOnClickListener(v -> onItemChildViewClick(v, 0));
+            layout_refproduct.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RefProductViewHolder.this.onItemChildViewClick(v, 0);
+//                    onItemChildViewClick(v,0,getItem(getAdapterPosition()));
+                }
+            });
         }
 
         @Override

@@ -7,6 +7,8 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
 
+import org.greenrobot.greendao.query.Query;
+
 import java.util.List;
 
 /**
@@ -63,9 +65,14 @@ public class SystemCodeManager extends BaseController {
     public String getSystemCodeEntityId(String entityCode, String entityName) {
 //        final List<SystemCodeEntity> list = EamApplication.dao().getSystemCodeEntityDao().queryBuilder().where(SystemCodeEntityDao.Properties.EntityCode.eq(entityCode),SystemCodeEntityDao.Properties.Value.eq(entityName)).orderAsc(SystemCodeEntityDao.Properties.Id).list();
 //        return list.size()==0?null:list.get(0).id;
-        return EamApplication.dao().getSystemCodeEntityDao().queryBuilder()
-                .where(SystemCodeEntityDao.Properties.EntityCode.eq(entityCode),SystemCodeEntityDao.Properties.Value.eq(entityName), SystemCodeEntityDao.Properties.Ip.eq(EamApplication.getIp()))
-                .unique().id;
+        try {
+            return EamApplication.dao().getSystemCodeEntityDao().queryBuilder()
+                    .where(SystemCodeEntityDao.Properties.EntityCode.eq(entityCode), SystemCodeEntityDao.Properties.Value.eq(entityName), SystemCodeEntityDao.Properties.Ip.eq(EamApplication.getIp()))
+                    .unique().id;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

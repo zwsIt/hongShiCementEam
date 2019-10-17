@@ -54,7 +54,6 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="cumulativeRunTime"
-        app:gravity="right"
         app:key="累计运行时间"
         app:key_width="100dp"
         app:necessary="false" />
@@ -73,7 +72,6 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="cumulativeDownTime"
-        app:gravity="right"
         app:key="累计停机时间"
         app:key_width="100dp" />
 
@@ -91,7 +89,6 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="cumulativeDownNum"
-        app:gravity="right"
         app:key="停机次数"
         app:key_width="100dp"
         app:necessary="false" />

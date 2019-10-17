@@ -2,6 +2,7 @@ package com.supcon.mes.module_wxgd.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -18,12 +19,14 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LinkEntity;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
+import com.supcon.mes.mbap.listener.OnTextListener;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
@@ -91,6 +94,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * WXGDDispatcherActivity
@@ -280,7 +286,11 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/9/1
      */
     private void initLink() {
-        mLinkController.setCancelShow(mWXGDEntity.faultInfo == null || TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo));
+        if (mWXGDEntity.workSource != null && (Constant.WxgdWorkSource.patrolcheck.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.other.equals(mWXGDEntity.workSource.id))) {
+            mLinkController.setCancelShow(true);
+        } else {
+            mLinkController.setCancelShow(false);
+        }
         mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
     }
 
@@ -501,7 +511,9 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                         break;
                     case 1:
                         isCancel = true;
-                        doSubmit(workFlowVar);
+                        // 填写关闭原因
+                        showCancelDialog(workFlowVar);
+//                        doSubmit(workFlowVar);
                         break;
                     case 2:
                         doSubmit(workFlowVar);
@@ -517,7 +529,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                 .debounce(1, TimeUnit.MILLISECONDS)
                 .subscribe(charSequence -> {
                     if (TextUtils.isEmpty(charSequence.toString())) {
-                        mWXGDEntity.repairAdvise = "";
+                        mWXGDEntity.repairAdvise = null;
                     } else {
                         mWXGDEntity.repairAdvise = charSequence.toString();
                     }
@@ -541,6 +553,31 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         eamName.getCustomValue().setOnClickListener(v -> goSBDA());
         eamIc.setOnClickListener(v -> goSBDA());
         eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
+    }
+
+    String closeReason; // 关闭原因
+    private void showCancelDialog(WorkFlowVar workFlowVar) {
+        CustomDialog customDialog = new CustomDialog(context);
+        customDialog.layout(R.layout.ac_cancel_dialog, DisplayUtil.getScreenWidth(context)*4/5,WRAP_CONTENT);
+        customDialog.bindTextChangeListener(R.id.closeReason, new OnTextListener() {
+            @Override
+            public void onText(String text) {
+                closeReason = text.trim();
+            }
+        })
+                .bindClickListener(R.id.okBtn, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (TextUtils.isEmpty(closeReason)) {
+                            ToastUtils.show(context, "请输入关闭原因");
+                            return;
+                        }
+                        customDialog.dismiss();
+                        doSubmit(workFlowVar);
+                    }
+                }, false)
+                .bindClickListener(R.id.cancelBtn, null, true)
+                .show();
     }
 
     private void goSBDA() {
@@ -897,10 +934,12 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @Override
     public void submitSuccess(BapResultEntity bapResultEntity) {
         if (isCancel) {
-            yhCloseController.closeWorkAndSaveReason(mWXGDEntity.faultInfo.id, "作废", result -> onLoadSuccessAndExit("处理成功", () -> {
-                EventBus.getDefault().post(new RefreshEvent());
-                finish();
-            }), errorMsg -> onLoadFailed(ErrorMsgHelper.msgParse(errorMsg)));
+            if (mWXGDEntity.faultInfo.id != null) {
+                yhCloseController.closeWorkAndSaveReason((mWXGDEntity.faultInfo.id), closeReason, result -> onLoadSuccessAndExit("处理成功", () -> {
+                    EventBus.getDefault().post(new RefreshEvent());
+                    finish();
+                }), errorMsg -> onLoadFailed(ErrorMsgHelper.msgParse(errorMsg)));
+            }
         } else {
             onLoadSuccessAndExit("处理成功", new OnLoaderFinishListener() {
                 @Override
@@ -963,7 +1002,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      */
     private boolean checkTableBlank() {
         if (TextUtils.isEmpty(chargeStaff.getValue())) {
-            SnackbarHelper.showError(rootView, "负责人不允许为空！");
+            ToastUtils.show(context, "负责人不允许为空！");
             return true;
         }
 //        if (TextUtils.isEmpty(repairGroup.getValue()) && TextUtils.isEmpty(chargeStaff.getValue())) {

@@ -41,6 +41,7 @@ import com.supcon.mes.middleware.model.api.DeviceDCSParamQueryAPI;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
@@ -109,7 +110,7 @@ import io.reactivex.functions.Predicate;
 /**
  * Created by wangshizhan on 2019/1/16
  * Email:wangshizhan@supcom.com
- * 巡检到设备
+ * 巡检到设备（临时巡检）
  */
 @Router(Constant.Router.OLXJ_EAM_UNHANDLED)
 @Controller(value = {OLXJTitleController.class, OLXJCameraController.class})
@@ -168,7 +169,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
     public Map<String, Boolean> isColse = new LinkedHashMap<>();
     private OLXJTitleController titleController;
     private OLXJAreaEntity mXJAreaEntity;
-    private EamType eamType;
+    private EamEntity mEamEntity;
     private EamXJEntity eamXJEntity;
     private boolean isOneSubmit;
     private OLXJAreaEntity olxjAreaEntity;//拼的一条巡检项
@@ -189,7 +190,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
     @Override
     protected void onInit() {
         super.onInit();
-        eamType = (EamType) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
         EventBus.getDefault().register(this);
         mSinglePickController = new SinglePickController<>(this);
         mSinglePickController.textSize(18);
@@ -209,7 +210,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
     @Override
     protected void initView() {
         super.initView();
-        titleText.setText(eamType.name);
+        titleText.setText(mEamEntity.name);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(1, context)));
 //        finishedBottomBtn.setVisibility(View.INVISIBLE);
@@ -302,7 +303,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
                 Map<String, Object> map = new HashMap<>();
                 map.put("tempStartTime", DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
                 map.put("tempEndTime", DateUtil.dateFormat(System.currentTimeMillis() + 1000 * 60 * 60 * 24, "yyyy-MM-dd HH:mm:ss"));
-                map.put("tempEamID", eamType.id);
+                map.put("tempEamID", mEamEntity.id);
                 map.put("tempStaffId", EamApplication.getAccountInfo().staffId);
                 presenterRouter.create(OLXJEamTaskAPI.class).createTempPotrolTaskByEam(map);
             }
@@ -361,6 +362,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
                     showPartFinishDialog(xjWorkItemEntity);
                     break;
                 case "ufItemEndBtn":
+                case "ufItemDirectDealBtn":
                     submitOneAreaData(xjWorkItemEntity);
                     break;
                 default:
@@ -588,7 +590,8 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
      */
     private boolean doFinish(OLXJWorkItemEntity xjWorkItemEntity) {
         if (/*!OLXJConstant.MobileWiLinkState.EXEMPTION_STATE.equals(xjWorkItemEntity.linkState) && */!xjWorkItemEntity.isFinished) { //免检项过滤掉，因为在后续的循环中被免检的项没有从当前列表中移除
-            if (xjWorkItemEntity.isphone && !xjWorkItemEntity.isPhonere) {
+            if (xjWorkItemEntity.conclusionID != null && xjWorkItemEntity.conclusionID.equals("realValue/02")
+                    && xjWorkItemEntity.isphone && !xjWorkItemEntity.isPhonere) {
                 SnackbarHelper.showError(rootView, "该巡检项要求拍照");
                 return false;
             }

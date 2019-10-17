@@ -16,7 +16,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
-import com.supcon.mes.module_main.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 
 /**
  * Environment: hongruijun

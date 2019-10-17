@@ -151,11 +151,9 @@
                     android:paddingRight="@dimen/dp_20"
                     android:paddingBottom="@dimen/dp_10"
                     android:tag="yhEditType"
-                    app:gravity="center"
                     app:necessary="true"
                     app:text="隐患类型"
-                    app:text_size="16"
-                    app:text_width="100dp" />
+                    app:text_size="16" />
 
                 <include layout="@layout/ly_line_light" />
 
@@ -207,7 +205,6 @@
                     android:paddingRight="@dimen/dp_20"
                     android:paddingBottom="@dimen/dp_10"
                     android:tag="yhEditWXType"
-                    app:gravity="center"
                     app:necessary="true"
                     app:text="维修类型"
                     app:text_size="16" />

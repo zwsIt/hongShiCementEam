@@ -8,98 +8,61 @@
     android:orientation="vertical"
     tools:context=".ui.TxlListActivity">
 
+    <include layout="@layout/ly_titlebar" />
+
     <LinearLayout
-        android:id="@+id/usrInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="#16B1E6"
-        android:orientation="vertical"
-        android:tag="usrInfo">
+        android:background="@color/themeColor"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.supcon.mes.mbap.view.CustomCircleTextImageView
+            android:id="@+id/userIcon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="@dimen/dp_10"
+            android:src="@drawable/mine_icon_default" />
+
+        <TextView
+            android:id="@+id/staffName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/dp_10"
+            android:tag="staffName"
+            android:text="人员"
+            android:textColor="@color/white"
+            android:textSize="@dimen/fontSize_18sp" />
 
-            <ImageView
-                android:id="@+id/ivBack"
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="@dimen/dp_30"
-                android:padding="@dimen/dp_6"
-                android:src="@drawable/ic_back"
-                android:tag="ivBack" />
-
-            <TextView
-                android:id="@+id/tvBack"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="top"
-                android:paddingTop="@dimen/dp_5"
-                android:tag="tvBack"
-                android:text="返回"
-                android:textColor="@color/white"
-                android:textSize="@dimen/fontSize_16sp" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="@dimen/dp_10">
-
-                <com.supcon.mes.mbap.view.CustomCircleTextImageView
-                    android:id="@+id/userIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_100"
-                    android:padding="@dimen/dp_10"
-                    android:src="@drawable/icon_icon" />
-
-                <TextView
-                    android:id="@+id/staffName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:gravity="center"
-                    android:tag="staffName"
-                    android:text="人员"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/fontSize_18sp" />
-
-                <TextView
-                    android:id="@+id/positionName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:tag="positionName"
-                    android:text="岗位"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/dp_12" />
-            </LinearLayout>
-
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/positionName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="positionName"
+            android:text="岗位"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_12" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/usrInfo"
-        android:background="#12a7db"
-        android:orientation="horizontal">
+        android:background="@color/themeColor"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/ivTelphone"
-                android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
                 android:src="@drawable/txl_view_phone"
@@ -115,19 +78,19 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/ivSms"
-                android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5"
-                android:layout_marginBottom="@dimen/dp_5"
                 android:src="@drawable/txl_view_message"
                 android:tag="ivSms" />
+
         </LinearLayout>
 
         <include
@@ -146,8 +109,8 @@
 
             <ImageView
                 android:id="@+id/ivEmail"
-                android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
                 android:src="@drawable/txl_view_mail"
@@ -157,7 +120,6 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white"

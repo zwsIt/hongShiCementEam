@@ -22,7 +22,7 @@ import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.model.bean.EamType;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
@@ -78,7 +78,7 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
     private final Map<String, Object> queryParam = new HashMap<>();
     private String selecStr;
     private String tableNo;
-    private EamType eamType;
+    private EamEntity mEamEntity;
 
     @Override
     protected IListAdapter createAdapter() {
@@ -96,9 +96,9 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
         super.onInit();
         EventBus.getDefault().register(this);
         tableNo = getIntent().getStringExtra(Constant.IntentKey.TABLENO);
-        eamType = (EamType) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
-        if (eamType != null) {
-            selecStr = eamType.name;
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        if (mEamEntity != null) {
+            selecStr = mEamEntity.name;
         }
     }
 
@@ -138,7 +138,7 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
-                    bundle.putSerializable(Constant.IntentKey.EAM, eamType);
+                    bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
                     IntentRouter.go(AcceptanceListActivity.this, Constant.Router.ACCEPTANCE_EDIT, bundle);
                 });
 

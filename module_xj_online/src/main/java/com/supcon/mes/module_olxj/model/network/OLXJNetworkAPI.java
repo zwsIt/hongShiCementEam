@@ -173,7 +173,7 @@ public interface OLXJNetworkAPI {
     Flowable<CommonEntity<EamXJEntity>> createTempPotrolTaskByEam(@QueryMap Map<String, Object> paramMap);
 
 
-    //生成任务
+    //修改任务状态
     @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/updateTaskById.action")
     Flowable<ResultEntity> updateTaskById(@Query("taskID") long taskID);
 }

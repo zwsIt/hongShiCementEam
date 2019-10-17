@@ -84,8 +84,8 @@ public interface ApiService {
     @GET("/BEAM2/runningState/runningState/setRunningRecord.action")
     Flowable<ResultEntity> setRunningRecord(@QueryMap Map<String, String> pageQueryMap);
 
-    //查看设备
-    @POST("/BEAM2/runningGather/runningGathers/gatherMobileList-query.action?")
+    // 运行记录汇总
+    @POST("/BEAM2/runningGather/runningGathers/gatherMobileList-query.action")
     Flowable<StopPoliceListEntity> gatherMobileList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 

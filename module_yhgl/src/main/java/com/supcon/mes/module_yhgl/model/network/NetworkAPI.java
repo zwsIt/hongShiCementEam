@@ -37,7 +37,7 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @GET("/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW")
+    @POST("/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW")
     Flowable<YHListEntity> faultInfoListPending(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
     /**
@@ -45,7 +45,7 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @GET("/BEAM2/faultInfo/faultInfo/faultInfoList-query.action?processKey=faultInfoFW")
+    @POST("/BEAM2/faultInfo/faultInfo/faultInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_faultInfo_faultInfoList")
     Flowable<YHListEntity> faultInfoList(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
 

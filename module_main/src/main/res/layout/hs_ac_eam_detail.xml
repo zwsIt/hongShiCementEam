@@ -24,9 +24,11 @@
 
             <ImageView
                 android:id="@+id/eamPic"
+                android:src="@drawable/ic_zwtp"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                />
 
             <com.supcon.mes.middleware.ui.view.TrapezoidView
                 android:id="@+id/eamName"
@@ -76,7 +78,7 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:gravity="center_horizontal"
                     android:tag="emptyContent"
-                    android:text="暂无工作提醒"
+                    android:text="暂无异常记录"
                     android:visibility="visible" />
             </LinearLayout>
 

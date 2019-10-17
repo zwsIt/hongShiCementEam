@@ -18,7 +18,6 @@ import com.supcon.mes.mbap.view.CustomArrowView;
 import com.supcon.mes.mbap.view.CustomCacheView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomPotraitView;
-import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.StaffPicController;
@@ -28,7 +27,6 @@ import com.supcon.mes.middleware.util.PhoneUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_login.IntentRouter;
 import com.supcon.mes.module_login.R;
-import com.supcon.mes.module_login.controller.PasswordController;
 import com.supcon.mes.module_login.model.api.MineAPI;
 import com.supcon.mes.module_login.model.contract.MineContract;
 import com.supcon.mes.module_login.presenter.MinePresenter;
@@ -68,6 +66,11 @@ public class MineFragment extends BaseControllerFragment implements MineContract
 
     @BindByTag("infoContent")
     TextView infoContent;
+
+    @BindByTag("mineUserName")
+    TextView mineUserName;
+    @BindByTag("mingUserDepart")
+    TextView mingUserDepart;
 
     private Uri uri;
 
@@ -128,14 +131,13 @@ public class MineFragment extends BaseControllerFragment implements MineContract
         super.onResume();
 
         updateCacheSize();
-
+        mineUserName.setText(EamApplication.getAccountInfo().getStaffName());
+        mingUserDepart.setText(EamApplication.getAccountInfo().getDepartmentName());
     }
 
     public void onClick(View view) {
 
-        if (view.getId() == R.id.minePotrait) {
-            LogUtil.d("minePotrait");
-        } else if (view.getId() == R.id.mineClear) {
+        if (view.getId() == R.id.mineClear) {
             LogUtil.d("mineClear");
             //点击清理缓存按钮后,进行相应的缓存清理工作
             new CustomDialog(context)
@@ -200,9 +202,17 @@ public class MineFragment extends BaseControllerFragment implements MineContract
         onLoadSuccessAndExit("登出成功！", () -> {
             Bundle bundle = new Bundle();
             bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);
-            if (!EamApplication.isHongshi()) {
+            if (EamApplication.isHailuo()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
                 bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
+            }
+            else if(EamApplication.isYNSW()){
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_ynsw);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo);
+            }
+            else if(EamApplication.isHongshi()){
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hs);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hs);
             }
             IntentRouter.go(getContext(), Constant.Router.LOGIN, bundle);
             ((MainActivity) getActivity()).toggleDrawer();

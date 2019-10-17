@@ -22,8 +22,7 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSparePartReceiveTv"
             app:content_hint="--"
-            app:gravity="center"
-            app:key="零部件:"
+            app:key="备件:"
             app:max_lines="1" />
 
 
@@ -34,7 +33,6 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSpareReceiveModelTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="规格型号:"
             app:max_lines="100" />
 
@@ -45,7 +43,6 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSpareReceiveEamTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="所属设备:"
             app:max_lines="100" />
 
@@ -62,7 +59,6 @@
                 android:paddingLeft="@dimen/dp_5"
                 android:tag="itemSpareReceiveStaffTv"
                 app:content_hint="--"
-                app:gravity="center"
                 app:key="领用人:"
                 app:max_lines="100" />
 
@@ -74,7 +70,6 @@
                 android:paddingLeft="@dimen/dp_5"
                 android:tag="itemSpareReceiveUsageTv"
                 app:content_hint="--"
-                app:gravity="center"
                 app:key="领用量:" />
 
         </LinearLayout>

@@ -61,6 +61,12 @@ public class StopPoliceAdapter extends BaseListDataRecyclerViewAdapter<StopPolic
             return R.layout.item_stop_police;
         }
 
+        @Override
+        protected void initListener() {
+            super.initListener();
+            itemView.setOnClickListener(v -> onItemChildViewClickListener.onItemChildViewClick(itemView, getAdapterPosition(), 0, getItem(getAdapterPosition())));
+        }
+
         @SuppressLint("StringFormatInvalid")
         @Override
         protected void update(StopPoliceEntity stopPoliceEntity) {
@@ -69,7 +75,6 @@ public class StopPoliceAdapter extends BaseListDataRecyclerViewAdapter<StopPolic
             itemStopPoliceCloseTime.setContent(stopPoliceEntity.closedTime != null ? dateFormat.format(stopPoliceEntity.closedTime) : "--");
             itemStopPoliceTotalTime.setContent(Util.big2(stopPoliceEntity.totalHour));
             
-            itemView.setOnClickListener(v -> onItemChildViewClickListener.onItemChildViewClick(itemView, getAdapterPosition(), 0, stopPoliceEntity));
             if (stopPoliceEntity.recordId != null && stopPoliceEntity.recordId.closedType != null) {
                 itemStopPoliceStopType.setContent(stopPoliceEntity.recordId.closedType.value);
             } else {

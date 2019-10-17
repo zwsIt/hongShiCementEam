@@ -31,8 +31,7 @@ import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
-import com.supcon.mes.middleware.controller.ModulePowerController;
+import com.supcon.mes.middleware.controller.UserPowerCheckController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
@@ -41,6 +40,7 @@ import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -104,7 +104,8 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
     private CommonSearchStaff searchStaff;
     private String reason;
     private Map<String, Object> queryParam = new HashMap<>();
-    private String powerCode;
+    private static final String BATCH_DIPATCH_CODE = "workTabsList_batchDispatch_add_BEAM2_1.0.0_workList_workTabsList";
+    private boolean hasBatchDiapatchPermission = false;
 
     private List<RepairGroupEntity> mRepairGroups;
     private List<String> repairGroupList = new ArrayList<>();
@@ -138,7 +139,7 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
         contentView.setLayoutManager(new LinearLayoutManager(context));
         titleText.setText("工作提醒");
         rightBtn.setVisibility(View.VISIBLE);
-        rightBtn.setImageResource(R.drawable.icon_processed);
+        rightBtn.setImageResource(R.drawable.ic_processed);
 
         mSinglePickController = new SinglePickController(this);
         mSinglePickController.setDividerVisible(false);
@@ -149,12 +150,19 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
     @Override
     protected void initData() {
         super.initData();
-        ModulePermissonCheckController mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "work",
-                result -> {
-                    ModulePowerController modulePowerController = new ModulePowerController();
-                    modulePowerController.checkModulePermission(result, result1 -> powerCode = result1.powerCode);
-                }, null);
+        UserPowerCheckController userPowerCheckController = new UserPowerCheckController();
+        userPowerCheckController.checkModulePermission(EamApplication.getAccountInfo().cid, BATCH_DIPATCH_CODE, new OnSuccessListener<Map<String, Boolean>>() {
+            @Override
+            public void onSuccess(Map<String, Boolean> result) {
+                if(result.containsKey(BATCH_DIPATCH_CODE)){
+                    Object hasPermission = result.get(BATCH_DIPATCH_CODE);
+                    if(hasPermission != null){
+                       hasBatchDiapatchPermission = (boolean) hasPermission;
+                    }
+                }
+            }
+        });
+
         initRepairGroup();
     }
 
@@ -226,7 +234,7 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
         dispatchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (TextUtils.isEmpty(powerCode)) {
+                if (!hasBatchDiapatchPermission) {
                     ToastUtils.show(context, "当前用户没有派单权限");
                     return;
                 }
@@ -243,34 +251,35 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
             List<WaitDealtEntity> list = waitDealtAdapter.getList();
             StringBuffer workPendingIds = new StringBuffer();
             StringBuffer workIds = new StringBuffer();
-            StringBuffer faultIds = new StringBuffer();
-            StringBuffer faultPendingIds = new StringBuffer();
+//            StringBuffer faultIds = new StringBuffer();
+//            StringBuffer faultPendingIds = new StringBuffer();
             Flowable.fromIterable(list)
                     .filter(waitDealtEntity -> waitDealtEntity.isCheck)
                     .subscribe(waitDealtEntity -> {
-                        if (waitDealtEntity.state.equals("编辑")) {
+                        // 只有工单派工环节可派单
+                        /*if (waitDealtEntity.state.equals("编辑")) {
                             faultPendingIds.append(waitDealtEntity.pendingid).append(",");
                             faultIds.append(waitDealtEntity.dataid).append(",");
-                        } else if (waitDealtEntity.state.equals("派工")) {
+                        } else */if (waitDealtEntity.state.equals("派工")) {
                             workPendingIds.append(waitDealtEntity.pendingid).append(",");
                             workIds.append(waitDealtEntity.dataid).append(",");
                         }
                     }, throwable -> {
                     }, () -> {
                         Map<String, Object> queryMap = new HashMap<>();
-                        if (!TextUtils.isEmpty(workPendingIds.toString()) || !TextUtils.isEmpty(faultPendingIds.toString())) {
+                        if (!TextUtils.isEmpty(workPendingIds.toString())/* || !TextUtils.isEmpty(faultPendingIds.toString())*/) {
                             if (!TextUtils.isEmpty(workPendingIds.toString())) {
                                 workPendingIds.deleteCharAt(workPendingIds.length() - 1);
                                 workIds.deleteCharAt(workIds.length() - 1);
                                 queryMap.put("workIds", workIds);
                                 queryMap.put("workPendingIds", workPendingIds.toString());
                             }
-                            if (!TextUtils.isEmpty(faultPendingIds.toString())) {
-                                faultPendingIds.deleteCharAt(faultPendingIds.length() - 1);
-                                faultIds.deleteCharAt(faultIds.length() - 1);
-                                queryMap.put("faultIds", faultIds);
-                                queryMap.put("faultPendingIds", faultPendingIds.toString());
-                            }
+//                            if (!TextUtils.isEmpty(faultPendingIds.toString())) {
+//                                faultPendingIds.deleteCharAt(faultPendingIds.length() - 1);
+//                                faultIds.deleteCharAt(faultIds.length() - 1);
+//                                queryMap.put("faultIds", faultIds);
+//                                queryMap.put("faultPendingIds", faultPendingIds.toString());
+//                            }
                             queryMap.put("batchType", "plpg");
                             dispatchDialog(queryMap);
                         } else {
@@ -324,8 +333,8 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
                         if (searchStaff != null) {
                             queryMap.put("staffBatchId", searchStaff.id);
                         }
-                        if (!queryMap.containsKey("repairGroupBatchId") && !queryMap.containsKey("staffBatchId")) {
-                            ToastUtils.show(WaitDealtActivity.this, "维修组和负责人不能同时为空!");
+                        if (/*!queryMap.containsKey("repairGroupBatchId") && */!queryMap.containsKey("staffBatchId")) {
+                            ToastUtils.show(WaitDealtActivity.this, "负责人必填!");
                             return;
                         }
                         onLoading("正在派单...");
@@ -341,7 +350,7 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
                     }
                 }, true);
         dispatchGroup = dispatchDialog.getDialog().findViewById(R.id.dispatchGroup);
-        dispatchDialog.getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dispatchDialog.getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);  // 设置圆角后出现的黑背景
         dispatchDialog.show();
     }
 
@@ -421,18 +430,14 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
 
     @Override
     public void getWaitDealtSuccess(CommonBAPListEntity entity) {
-        if (entity.result.size() > 0) {
-            refreshListController.refreshComplete(entity.result);
-        } else {
-            refreshListController.refreshComplete(null);
-        }
+        refreshListController.refreshComplete(entity.result);
         setRadioEnable(true);
     }
 
     @Override
     public void getWaitDealtFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
-        refreshListController.refreshComplete(null);
+        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
+        refreshListController.refreshComplete();
         setRadioEnable(true);
     }
 

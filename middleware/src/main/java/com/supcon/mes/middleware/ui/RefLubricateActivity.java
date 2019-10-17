@@ -16,6 +16,7 @@ import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.listener.OnTitleSearchExpandListener;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
@@ -37,6 +38,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,6 +73,7 @@ public class RefLubricateActivity extends BaseRefreshRecyclerActivity<RefLubrica
     private Map<String, Object> queryParam = new HashMap<>();
     private Long eamID;
     private boolean isSparePartRef;
+    private ArrayList<String> addedLOList; // 已添加数据
 
     @Override
     protected IListAdapter createAdapter() {
@@ -88,12 +91,13 @@ public class RefLubricateActivity extends BaseRefreshRecyclerActivity<RefLubrica
         super.onInit();
         eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
         isSparePartRef = getIntent().getBooleanExtra(Constant.IntentKey.IS_SPARE_PART_REF, false);
+        addedLOList = getIntent().getStringArrayListExtra(Constant.IntentKey.ADD_DATA_LIST);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        searchTitleBar.setTitleText(isSparePartRef?"润滑油业务参照":"润滑油参照");
+        searchTitleBar.setTitleText(isSparePartRef?"润滑业务参照":"润滑油参照");
         searchTitleBar.disableRightBtn();
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setLoadMoreEnable(true);
@@ -126,6 +130,10 @@ public class RefLubricateActivity extends BaseRefreshRecyclerActivity<RefLubrica
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 RefLubricateEntity refLubricateEntity = lubricateAdapter.getItem(position);
+                if (refLubricateEntity.id != null && addedLOList.contains(refLubricateEntity.id.toString())){
+                    ToastUtils.show(context, "请勿重复添加润滑油!");
+                    return;
+                }
                 EventBus.getDefault().post(refLubricateEntity);
                 RefLubricateActivity.this.finish();
             }

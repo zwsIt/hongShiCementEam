@@ -8,9 +8,7 @@ import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
-import com.supcon.mes.module_main.model.bean.EamEntity;
 import com.supcon.mes.module_main.model.bean.ProcessedEntity;
-import com.supcon.mes.module_main.model.contract.EamContract;
 import com.supcon.mes.module_main.model.contract.ProcessedContract;
 import com.supcon.mes.module_main.model.network.MainClient;
 
@@ -28,7 +26,8 @@ public class ProcessedPresenter extends ProcessedContract.Presenter {
         FastQueryCondEntity fastQueryCond = BAPQueryParamsHelper.createSingleFastQueryCond(queryParam);
         Map<String, Object> paramsName = new HashMap<>();
         paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,BEAM2_PROCESSFLOWINFO,STAFF");
+        paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,ALL_PROCESS_INFO,STAFF");
         fastQueryCond.subconds.add(joinSubcondEntity);
 
         Map<String, Object> pageQueryParams = new HashMap<>();
@@ -37,13 +36,13 @@ public class ProcessedPresenter extends ProcessedContract.Presenter {
         pageQueryParams.put("page.maxPageSize",100);
 
         Flowable<CommonBAPListEntity<ProcessedEntity>> mainClient;
-        if (EamApplication.isHailuo()){
+//        if (EamApplication.isHailuo()){
             fastQueryCond.modelAlias = "allProcessInfo";
-            mainClient = MainClient.workflowHandleListByHaiLuo(fastQueryCond, pageQueryParams);
-        }else {
-            fastQueryCond.modelAlias = "processFlowInfo";
-            mainClient =MainClient.workflowHandleList(fastQueryCond, pageQueryParams);
-        }
+            mainClient = MainClient.workflowHandleListNew(fastQueryCond, pageQueryParams);
+//        }else {
+//            fastQueryCond.modelAlias = "processFlowInfo";
+//            mainClient =MainClient.workflowHandleList(fastQueryCond, pageQueryParams);
+//        }
 
         mCompositeSubscription.add(mainClient
                 .onErrorReturn(new Function<Throwable, CommonBAPListEntity<ProcessedEntity>>() {

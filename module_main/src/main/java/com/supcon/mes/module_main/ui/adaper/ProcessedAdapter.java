@@ -104,7 +104,7 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
         @Override
         protected void update(ProcessedEntity data) {
 
-            // 只处理工单、隐患单、验收单、运行记录、备件领用申请
+            // 只处理工单、隐患单、设备验收单、运行记录、备件领用申请
             if((Constant.ProcessKey.WORK.equals(data.processkey) || Constant.ProcessKey.FAULT_INFO.equals(data.processkey)
                     || Constant.ProcessKey.CHECK_APPLY_FW.equals(data.processkey) || Constant.ProcessKey.RUN_STATE_WF.equals(data.processkey)
                     || Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey)) && !TextUtils.isEmpty(data.openurl)){
@@ -114,13 +114,13 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
             }else {
                 flowProcessView.setVisibility(View.GONE);
             }
-            if (EamApplication.isHailuo()){
+//            if (EamApplication.isHailuo()){
                 processTableNo.setText(Util.strFormat2(data.worktableno));
                 processTime.setContent(data.workcreatetime != null ? DateUtil.dateFormat(data.workcreatetime, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC) : "");
-            }else {
-                processTableNo.setText(Util.strFormat2(data.tableno));
-                processTime.setContent(data.createTime != null ? DateUtil.dateFormat(data.createTime, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC) : "");
-            }
+//            }else {
+//                processTableNo.setText(Util.strFormat2(data.tableno));
+//                processTime.setContent(data.createTime != null ? DateUtil.dateFormat(data.createTime, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC) : "");
+//            }
 
             processState.setText(Util.strFormat2(data.prostatus));
             if (!TextUtils.isEmpty(data.getEamid().name) || !TextUtils.isEmpty(data.getEamid().code)) {
@@ -128,12 +128,18 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
                         , data.getEamid().code);
                 processEam.setContent(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()).toString());
             }
-            processStaff.setContent(Util.strFormat(data.staffname));
-            if (!TextUtils.isEmpty(data.content)) {
-                processContent.setContent(data.content);
-                processContent.setVisibility(View.VISIBLE);
-            } else {
+            if (TextUtils.isEmpty(data.staffname)){
+                processStaff.setVisibility(View.GONE);
+            }else {
+                processStaff.setVisibility(View.VISIBLE);
+                processStaff.setContent(data.staffname);
+            }
+
+            if (TextUtils.isEmpty(data.content)) {
                 processContent.setVisibility(View.GONE);
+            } else {
+                processContent.setVisibility(View.VISIBLE);
+                processContent.setContent(data.content);
             }
             if (!TextUtils.isEmpty(data.newstate)) {
                 if (Constant.TableStatus_CH.PRE_DISPATCH.equals(data.newstate)) {
@@ -169,56 +175,56 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
                     this.flowProcessView.setVisibility(View.VISIBLE);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = data.newstate;
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     flowProcessEntity.isFinish = false;
                     list.add(flowProcessEntity);
                 } else if (Constant.TableStatus_CH.PRE_EXECUTE.equals(data.newstate) || Constant.TableStatus_CH.PRE_NOTIFY.equals(data.newstate)) {
                     this.flowProcessView.setVisibility(View.VISIBLE);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = "待派工";
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     flowProcessEntity.isFinish = true;
                     list.add(flowProcessEntity);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = data.newstate;
-                    flowProcessEntity.time = DateUtil.dateTimeFormat(data.createTime);
+                    flowProcessEntity.time = DateUtil.dateTimeFormat(data.workcreatetime);
                     list.add(flowProcessEntity);
                 } else if (Constant.TableStatus_CH.PRE_ACCEPT.equals(data.newstate)) {
                     this.flowProcessView.setVisibility(View.VISIBLE);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = "待派工";
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     flowProcessEntity.isFinish = true;
                     list.add(flowProcessEntity);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = "待执行";
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     flowProcessEntity.isFinish = true;
                     list.add(flowProcessEntity);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = data.newstate;
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     list.add(flowProcessEntity);
                 } else if (Constant.TableStatus_CH.END.equals(data.newstate)) {
                     this.flowProcessView.setVisibility(View.VISIBLE);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = "待派工";
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     flowProcessEntity.isFinish = true;
                     list.add(flowProcessEntity);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = "待执行";
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     flowProcessEntity.isFinish = true;
                     list.add(flowProcessEntity);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = "待验收";
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     flowProcessEntity.isFinish = true;
                     list.add(flowProcessEntity);
                     flowProcessEntity = new FlowProcessEntity();
                     flowProcessEntity.flowProcess = data.newstate;
-                    flowProcessEntity.time = data.createTime != null ? DateUtil.dateTimeFormat(data.createTime) : null;
+                    flowProcessEntity.time = data.workcreatetime != null ? DateUtil.dateTimeFormat(data.workcreatetime) : null;
                     list.add(flowProcessEntity);
                 } else if (Constant.TableStatus_CH.CANCEL.equals(data.newstate)) {
                     this.flowProcessView.setVisibility(View.GONE);

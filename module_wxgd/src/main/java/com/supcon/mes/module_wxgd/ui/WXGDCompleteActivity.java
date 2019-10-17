@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * WXGDDispatcherActivity 验收Activity
+ * WXGDCompleteActivity 完成Activity
  * created by zhangwenshuai1 2018/8/15
  * 已完成
  */
@@ -107,6 +107,7 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
     private DatePickController mDatePickController;
     private List<SystemCodeEntity> checkResultList = new ArrayList<>();
     private List<String> checkResultListStr = new ArrayList<>();
+    private boolean mStatisticSource; // 是否来自报表统计跳转
 
     @Override
     protected int getLayoutID() {
@@ -120,6 +121,7 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
         refreshController.setPullDownRefreshEnabled(false);
         refreshController.setAutoPullDownRefresh(false);
         mWXGDEntity = (WXGDEntity) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
+        mStatisticSource = getIntent().getBooleanExtra(Constant.IntentKey.STATISTIC_SORCE,false);
 
         SparePartController mSparePartController = getController(SparePartController.class);
         mSparePartController.setEditable(false);
@@ -151,7 +153,11 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-        titleText.setText("完成");
+        if (mStatisticSource){
+            titleText.setText("工单查看");
+        }else {
+            titleText.setText("生效");
+        }
         initTableHeadView();
     }
 

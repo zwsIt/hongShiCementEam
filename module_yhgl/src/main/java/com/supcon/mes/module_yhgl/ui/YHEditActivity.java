@@ -50,6 +50,7 @@ import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.AreaDao;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
@@ -743,19 +744,19 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addDeviceEvent(CommonSearchEvent commonSearchEvent) {
-        if (!(commonSearchEvent.commonSearchEntity instanceof EamType)) {
+        if (!(commonSearchEvent.commonSearchEntity instanceof EamEntity)) {
             return;
         }
-        EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
-        if (eamType != null) {
-            yhEditEamName.setValue(eamType.name);
-            yhEditEamCode.setValue(eamType.code);
+        EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+        if (eamEntity != null) {
+            yhEditEamName.setValue(eamEntity.name);
+            yhEditEamCode.setValue(eamEntity.code);
 //            yhEditEamModel.setValue(eamType.model);
             WXGDEam wxgdEam = new WXGDEam();
-            wxgdEam.name = eamType.name;
-            wxgdEam.code = eamType.code;
-            wxgdEam.model = eamType.model;
-            wxgdEam.id = eamType.id;
+            wxgdEam.name = eamEntity.name;
+            wxgdEam.code = eamEntity.code;
+            wxgdEam.model = eamEntity.model;
+            wxgdEam.id = eamEntity.id;
             mYHEntity.eamID = wxgdEam;
             mSparePartController.upEam(wxgdEam);
             mLubricateOilsController.upEam(wxgdEam);
@@ -763,8 +764,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
             //处理区域位置
             yhEditArea.setEditable(false);
-            yhEditArea.setSpinner(eamType.getInstallPlace().name);
-            mYHEntity.areaInstall = eamType.getInstallPlace();
+            yhEditArea.setSpinner(eamEntity.getInstallPlace().name);
+            mYHEntity.areaInstall = eamEntity.getInstallPlace();
         }
 
     }
@@ -814,11 +815,11 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         } else if ("maintenance".equals(listEvent.getFlag())) {
             maintenanceListStr = listEvent.getList().toString();
         }
-        if (listEvent.getList().size() > 0) {
-            if (!"repairStaff".equals(listEvent.getFlag())) {
-                yhEditEamCode.setEditable(false);
-            }
-        }
+//        if (listEvent.getList().size() > 0) {
+//            if (!"repairStaff".equals(listEvent.getFlag())) {
+//                yhEditEamCode.setEditable(false);
+//            }
+//        }
     }
 
     //更新备件

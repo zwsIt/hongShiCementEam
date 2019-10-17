@@ -21,6 +21,7 @@ public interface Constant {
     String IMAGE_SAVE_PATH = FILE_PATH + "pics" + File.separator;   //在线单据下载的缺陷图片存放位置
     String IMAGE_SAVE_YHPATH = YH_PATH + "pics" + File.separator;   //缺陷拍摄的图片位置
     String IMAGE_SAVE_XJPATH = XJ_PATH + "pics" + File.separator;   //巡检拍摄的图片路径
+    String IMAGE_SAVE_GDPATH = FILE_PATH + "gd" + File.separator + "pics" + File.separator;   //工单拍摄的图片路径
     String CID = "cid";
     String CNAME = "cname";
     String XJ_GUIDE_IMGPATH = FILE_PATH + "eamInspectionGuideImage" + File.separator; //设备巡检指导图片路径
@@ -96,7 +97,7 @@ public interface Constant {
         String WXGD_LUBRICATE_OIL_LIST = "WXGD_LUBRICATE_OIL_LIST";//维修工单润滑油
         String WXGD_MAINTENANCE_STAFF_LIST = "WXGD_MAINTENANCE_STAFF_LIST";//维修工单润维保
         String SPARE_PART_RECEIVE = "SPARE_PART_RECEIVE";//备件领用
-        String SPARE_PART_CONSUME_LEDGER = "SPARE_PART_CONSUME_LEDGER";     //备件消耗台账
+        String SPARE_PART_CONSUME_LEDGER = "SPARE_PART_CONSUME_LEDGER";     //零部件消耗台账
         String SPARE_PART_RECEIVE_RECORD = "SPARE_PART_RECEIVE_RECORD";     //备件领用记录
 
         String YHGL_SPARE_PART_LIST = "WXGD_SPARE_PART_LIST";//隐患管理备件
@@ -140,6 +141,7 @@ public interface Constant {
         String YH_EDIT = "YH_EDIT";
         String OFFLINE_YH_EDIT = "OFFLINE_YH_EDIT";
         String YH_VIEW = "YH_VIEW";
+        String YH_LOOK = "YH_LOOK";
 
         String SEARCH_DEPARTMENT = "SEARCH_DEPARTMENT";
 
@@ -283,7 +285,7 @@ public interface Constant {
         String IS_XJ_FINISHED = "IS_XJ_FINISHED";
 
         String IS_FROM_PENDING = "IS_FROM_PENDING";
-        String PENDING_ENTITY = "";
+        String PENDING_ENTITY = "PENDING_ENTITY";
 
         String WARN_NEXT_TIME = "WARN_NEXT_TIME";//下次运行时间
         String WARN_SOURCE_TYPE = "WARN_SOURCE_TYPE";//延期来源  润滑BEAM062/01,备件BEAM062/03,维保BEAM062/02
@@ -320,6 +322,8 @@ public interface Constant {
         String TITLE_CONTENT = "TITLE_CONTENT";
         String TABLE_ID = "TABLE_ID";
         String PENDING_ID = "PENDING_ID";
+        String STATISTIC_SORCE = "STATISTIC_SORCE"; // 报表统计跳转
+        String ADD_DATA_LIST = "ADD_DATA_LIST"; // 已添加数据：备件、润滑、维保
     }
 
     interface FilterSearchParam {
@@ -390,7 +394,7 @@ public interface Constant {
         int YH_STATISTICS = 21;  //隐患统计
         int WXGD_STATISTICS = 22;  //工单统计
         int STOP_POLICE = 23;  //停机报警
-        int SPARE_PART_CONSUME_LEDGER = 24;  //备件消耗台账
+        int SPARE_PART_CONSUME_LEDGER = 24;  //零部件消耗台账
         int SPARE_PART_RECEIVE_RECORD = 25;  //备件领用记录
     }
 
@@ -492,6 +496,7 @@ public interface Constant {
         String YHFC_PIC = "reviewRecord";
         String XJ_PIC = "xjRecord";
         String YH_PIC = "yhRecord";
+        String GD_PIC = "workRecord";
     }
 
     interface RefreshAction {
@@ -603,7 +608,7 @@ public interface Constant {
         String TIME = "TIME";//时间
 
 
-        String SCORE_TABLE_NO = "SCORE_TABLE_NO";//单据编号
+        String SCORE_TABLE_NO = "SCORE_TABLE_NO";//设备评分绩效单据编号
 
         String SOURCE_TYPE = "SOURCE_TYPE";//隐患来源
 
@@ -666,7 +671,7 @@ public interface Constant {
     interface YHStatus {
         String WAIT = "BEAM2004/01";//待处理
         String IMPLEMENT = "BEAM2004/02";//处理中
-        String COMPLETE = "BEAM2004/04";//以处理
+        String COMPLETE = "BEAM2004/04";//已处理
     }
 
     /**
@@ -770,7 +775,7 @@ public interface Constant {
     interface SparePartUseStatus {
         String NO_USE = "BEAM2011/01"; // 未领用
         String USEING = "BEAM2011/02"; // 领用中
-        String UESED = "BEAM2011/03"; // 已领用f
+        String UESED = "BEAM2011/03"; // 已领用
         String PRE_USE = "BEAM2011/04"; // 预领用
     }
 
@@ -821,11 +826,14 @@ public interface Constant {
         String EDIT = "编辑";
         String DISPATCH = "派工";
         String EXECUTE = "执行";
+        String EXECUTE_NOTIFY = "执行,通知";
         String NOTIFY = "通知";
         String ACCEPT = "验收";
         String RECALL = "撤回";
         String REVIEW = "审核";
         String CONFIRM = "接单(确认)";
+        String OVER = "结束";
+        String TAKE_EFFECT = "生效";
 
     }
 
@@ -834,7 +842,7 @@ public interface Constant {
      */
     interface ProcessKey {
         String WORK = "work"; // 工单
-        String FAULT_INFO = "faultInfoFW"; // 隐患登录
+        String FAULT_INFO = "faultInfoFW"; // 隐患登记
         String EAM_INFO_EDIT = "eaminfoEdit"; // 设备档案新增申请
         String EAM_INFO = "eaminfo"; // 设备档案申请修改
         String CHANGE_WF = "changeWF"; // 设备状态变更
@@ -846,7 +854,29 @@ public interface Constant {
         String WORK_ALLOT_NEW_WF = "workAllotNewWF"; // 设备调拨
         String TEMP_WF = "tempWF"; // 临时任务
         String POTROL_TASK_WF = "potrolTaskWF"; // 点巡检任务
+    }
 
+    /**
+     * 隐患状态
+     */
+    interface FaultState_ENG {
+        String WAIT_DEAL = "BEAM2004/01"; // 待处理
+        String DEALING = "BEAM2004/02"; // 处理中
+        String DEALED = "BEAM2004/04"; // 已处理
+        String CLOED = "BEAM2004/05"; // 已关闭
+        String DEAL_FAULT = "BEAM2004/06"; // 直接消缺
+
+    }
+    /**
+     * 工单工作流状态
+     */
+    interface WorkState_ENG {
+        String DISPATCH = "BEAM049/01"; // 派工
+        String CONFIRM = "BEAM049/02"; // 接单(确认)
+        String EXECUTE = "BEAM049/03"; // 执行
+        String ACCEPT = "BEAM049/04"; // 验收
+        String TAKE_EFFECT = "BEAM049/05"; // 生效
+        String CANCEL = "BEAM049/06"; // 作废
     }
 
 }

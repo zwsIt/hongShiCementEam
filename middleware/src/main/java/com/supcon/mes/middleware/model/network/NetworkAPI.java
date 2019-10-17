@@ -10,7 +10,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.ContractListEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
 import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
-import com.supcon.mes.middleware.model.bean.EamType;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.LinkListEntity;
 import com.supcon.mes.middleware.model.bean.LongResultEntity;
@@ -32,8 +32,6 @@ import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.WorkCountEntity;
 import com.supcon.mes.middleware.model.bean.WorkFlowListEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
-
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -115,6 +113,14 @@ public interface NetworkAPI {
      */
     @GET("/foundation/staff/image-staff.action")
     Flowable<ResponseBody> downloadStaffPic(@Query("id") long id);
+
+    /**
+     * 获取人员图片id
+     *
+     * @return
+     */
+    @GET("/mobile/mobileCommon/foundation/getDocIds.action?type=com.supcon.orchid.foundation.entities.Staff.image")
+    Flowable<CommonEntity<String>> getDocIds(@Query("linkId") long linkId);
 
     /**
      * 上传附件
@@ -341,9 +347,14 @@ public interface NetworkAPI {
      * 获取设备
      */
     @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action")
-    Flowable<CommonListEntity<EamType>> getEam(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    Flowable<CommonListEntity<EamEntity>> getEam(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 
+    /**
+     * 通过SupOS获取现存量
+     * @param sparePartCodes
+     * @return
+     */
     @GET("/BEAM/baseInfo/baseInfo/getSupOSStandingCrop.action")
     Flowable<CommonListEntity<StandingCropEntity>> updateStandingCrop(@Query("sparePartCodes") String sparePartCodes);
 

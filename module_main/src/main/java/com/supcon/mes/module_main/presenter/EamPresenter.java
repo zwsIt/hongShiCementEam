@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
-import com.supcon.mes.module_main.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.module_main.model.contract.EamContract;
 import com.supcon.mes.module_main.model.network.MainClient;
 
@@ -21,6 +21,7 @@ public class EamPresenter extends EamContract.Presenter {
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.pageSize", 20);
         pageQueryParams.put("page.maxPageSize", 500);
+        // 查询电气责任人or巡检责任人or机修责任人为当前登录人的设备
         mCompositeSubscription.add(MainClient.getEams(String.valueOf(EamApplication.getAccountInfo().staffId), "1", pageQueryParams)
                 .onErrorReturn(new Function<Throwable, CommonBAPListEntity<EamEntity>>() {
                     @Override

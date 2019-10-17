@@ -128,11 +128,11 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefresh(RefreshEvent event) {
         refreshListController.refreshBegin();
+        maintenanceWarnAdapter.setCheckPosition(-1); // 还原选中状态
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
         refreshListController.refreshBegin();
     }
 
@@ -147,7 +147,7 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
         contentView.addItemDecoration(new SpaceItemDecoration(15));
         //设置搜索框默认提示语
         titleSearchView.setHint("请输入设备编码");
-        searchTitleBar.setTitleText("维保预警");
+        searchTitleBar.setTitleText("运维预警");
         searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
 

@@ -34,6 +34,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.api.EamAPI;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.contract.EamContract;
@@ -139,6 +140,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         scoreTableNo = getIntent().getStringExtra(Constant.IntentKey.SCORETABLENO);
         scoreEamEntity = (ScoreEamEntity) getIntent().getSerializableExtra(Constant.IntentKey.SCORE_ENTITY);
         isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, false);
+        eamCodeStr = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE); // 制定时传入
 
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null) {
@@ -310,13 +312,14 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         refreshListController.refreshBegin();
     }
 
+    @SuppressLint("CheckResult")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void search(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity != null) {
-            if (commonSearchEvent.commonSearchEntity instanceof EamType) {
+            if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
                 loaderController.showLoader("正在确认设备评分情况...");
-                EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
-                ScoreHttpClient.doCheckDevice(eamType.id, scoreTime.getContent())
+                EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+                ScoreHttpClient.doCheckDevice(eamEntity.id, scoreTime.getContent())
                         .onErrorReturn(throwable -> {
                             ScoreDeviceCheckResultEntity scoreDeviceCheckResultEntity = new ScoreDeviceCheckResultEntity();
                             scoreDeviceCheckResultEntity.success = false;
@@ -326,10 +329,10 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
                         .subscribe(scoreDeviceCheckResultEntity -> {
                             if (scoreDeviceCheckResultEntity.success) {
                                 loaderController.closeLoader();
-                                eamCode.setContent(Util.strFormat(eamType.code));
-                                eamName.setContent(Util.strFormat(eamType.name));
-                                eamDept.setContent(Util.strFormat(eamType.getUseDept().name));
-                                scoreEamEntity.beamId = eamType;
+                                eamCode.setContent(Util.strFormat(eamEntity.code));
+                                eamName.setContent(Util.strFormat(eamEntity.name));
+                                eamDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
+                                scoreEamEntity.beamId = eamEntity;
                             } else {
                                 loaderController.showMsgAndclose(scoreDeviceCheckResultEntity.msg, false, 1500);
                             }
@@ -341,11 +344,11 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
     @Override
     public void getEamSuccess(CommonListEntity entity) {
         if (entity.result.size() > 0) {
-            EamType eamType = (EamType) entity.result.get(0);
-            eamCode.setContent(Util.strFormat(eamType.code));
-            eamName.setContent(Util.strFormat(eamType.name));
-            eamDept.setContent(Util.strFormat(eamType.getUseDept().name));
-            scoreEamEntity.beamId = eamType;
+            EamEntity eamEntity = (EamEntity) entity.result.get(0);
+            eamCode.setContent(Util.strFormat(eamEntity.code));
+            eamName.setContent(Util.strFormat(eamEntity.name));
+            eamDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
+            scoreEamEntity.beamId = eamEntity;
             return;
         }
         SnackbarHelper.showError(rootView, "未查询到设备：" + eamCodeStr);

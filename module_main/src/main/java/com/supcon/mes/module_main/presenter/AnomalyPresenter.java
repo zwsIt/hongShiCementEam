@@ -24,7 +24,7 @@ public class AnomalyPresenter extends AnomalyContract.Presenter {
     public void getAnomalyList(int page, int pageSize, Map<String, Object> params) {
         FastQueryCondEntity fastQueryCond = BAPQueryParamsHelper.createSingleFastQueryCond(params);
 
-        fastQueryCond.modelAlias = "abnormalinfoofeam";
+        fastQueryCond.modelAlias = "allAbnormalInfoOfEam";
 
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo", page);

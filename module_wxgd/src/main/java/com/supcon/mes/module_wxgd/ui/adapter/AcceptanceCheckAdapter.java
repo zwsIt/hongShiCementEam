@@ -83,8 +83,8 @@ public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<Acce
         @Override
         protected void initView() {
             super.initView();
+            chkBox.setVisibility(View.GONE);
             if (!isEditable) {
-                chkBox.setVisibility(View.GONE);
                 itemViewDelBtn.setVisibility(View.GONE);
             }
         }

@@ -3,6 +3,7 @@ package com.supcon.mes.middleware.controller;
 import android.annotation.SuppressLint;
 
 import com.app.annotation.Presenter;
+import com.google.gson.Gson;
 import com.supcon.common.view.base.controller.BasePresenterController;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.middleware.EamApplication;

@@ -33,8 +33,7 @@
                 android:layout_marginTop="@dimen/dp_20"
                 android:layout_marginRight="@dimen/dp_15"
                 android:layout_marginBottom="@dimen/dp_15"
-                android:src="@drawable/mine_icon_default"
-                android:tag="mineUserIcon" />
+                android:src="@drawable/mine_icon_default" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,7 +79,7 @@
                     android:textSize="@dimen/fontSize_20sp"
                     custom:content_size="20"
                     custom:content_value="10014"
-                    custom:key="工号"
+                    custom:key="编号"
                     custom:key_size="20" />
 
                 <include

@@ -122,7 +122,7 @@ public class ProcessedActivity extends BaseRefreshRecyclerActivity<ProcessedEnti
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radioButton = findViewById(checkedId);
-                queryParam.put(Constant.BAPQuery.NEWSTATE, radioButton.getText().toString());
+                queryParam.put(Constant.BAPQuery.NEWSTATE, "全部".equals(radioButton.getText().toString())? "" : radioButton.getText().toString());
                 refreshListController.refreshBegin();
             }
         });

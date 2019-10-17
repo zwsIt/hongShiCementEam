@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit;
  * @ClassName hongShiCementEam
  * @date 2019/4/3
  * ------------- Description -------------
- * 备件消耗台账
+ * 零部件消耗台账
  */
 @Router(Constant.Router.SPARE_PART_CONSUME_LEDGER)
 @Presenter(value = {SparePartsConsumeLedgerPresenter.class, WXGDStatisticsPresenter.class})

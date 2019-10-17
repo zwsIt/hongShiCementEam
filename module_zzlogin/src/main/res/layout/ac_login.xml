@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg_login_hs"
+    android:background="@drawable/bg_login"
     android:id="@+id/loginBg"
     android:tag="loginBg"
     android:paddingTop="@dimen/dp_23"
@@ -23,7 +23,7 @@
                 android:layout_marginTop="80dp"
                 android:id="@+id/loginLogo"
                 android:tag="loginLogo"
-                android:src="@drawable/ic_login_logo_hs"
+                android:src="@drawable/ic_login_logo"
                 />
             <com.supcon.mes.mbap.view.CustomEditText
                 android:layout_width="280dp"

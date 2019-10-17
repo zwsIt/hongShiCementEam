@@ -92,8 +92,8 @@ public class RepairStaffAdapter extends BaseListDataRecyclerViewAdapter<RepairSt
         @Override
         protected void initView() {
             super.initView();
+            chkBox.setVisibility(View.GONE);
             if (!editable) {
-                chkBox.setVisibility(View.GONE);
                 itemViewDelBtn.setVisibility(View.GONE);
             }
         }

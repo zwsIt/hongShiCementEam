@@ -9,7 +9,7 @@
     android:paddingBottom="5dp"
     tools:ignore="MissingDefaultResource">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -19,22 +19,38 @@
             android:id="@+id/statisticsPosition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:tag="statisticsPosition"
             android:textColor="@color/themeColor"
             android:textSize="@dimen/fontSize_16sp"
             android:textStyle="bold"
-            tools:text="1" />
+            tools:text="100" />
 
         <TextView
             android:id="@+id/statisticsEam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_toEndOf="@+id/statisticsPosition"
+            android:layout_toStartOf="@+id/statisticStatus"
             android:padding="@dimen/dp_5"
             android:tag="statisticsEam"
             android:textSize="@dimen/fontSize_16sp"
-            tools:text="辊压机" />
-    </LinearLayout>
+            tools:text="辊压机辊" />
+        <TextView
+            android:id="@+id/statisticStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:padding="@dimen/dp_5"
+            android:tag="statisticStatus"
+            android:textSize="@dimen/fontSize_14sp"
+            tools:text="隐患状态"/>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/statisticsContent"

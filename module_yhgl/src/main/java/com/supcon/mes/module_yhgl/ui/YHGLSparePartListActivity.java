@@ -191,6 +191,8 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, false);
+                        // 带入已添加备件，检验重复添加
+                        bundle = genAddDataList(bundle);
                         IntentRouter.go(context, Constant.Router.SPARE_PART_REF, bundle);
                     }
                 });
@@ -206,6 +208,8 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, true);
                         bundle.putLong(Constant.IntentKey.EAM_ID, eamID);
+                        // 带入已添加备件，检验重复添加
+                        bundle = genAddDataList(bundle);
                         IntentRouter.go(context, Constant.Router.SPARE_PART_REF, bundle);
                     }
                 });
@@ -299,6 +303,17 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
             }
         });
 
+    }
+
+    private Bundle genAddDataList(Bundle bundle) {
+        ArrayList<String> addedSPList = new ArrayList<>();
+        for (SparePartEntity sparePartEntity : mSparePartEntityList){
+            if (sparePartEntity.productID != null) {
+                addedSPList.add(sparePartEntity.productID.id.toString());
+            }
+        }
+        bundle.putStringArrayList(Constant.IntentKey.ADD_DATA_LIST, addedSPList);
+        return bundle;
     }
 
     private String generateSparePartApplyList(List<SparePartEntity> selectedEntityList) {

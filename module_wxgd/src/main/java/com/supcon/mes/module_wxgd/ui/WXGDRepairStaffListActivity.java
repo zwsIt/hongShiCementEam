@@ -1,6 +1,7 @@
 package com.supcon.mes.module_wxgd.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -149,7 +150,9 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        IntentRouter.go(context, Constant.Router.STAFF);
+                        Bundle bundle = new Bundle();
+                        bundle = genAddDataList(bundle);
+                        IntentRouter.go(context, Constant.Router.STAFF,bundle);
                     }
                 });
 
@@ -207,6 +210,17 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
             }
         });
 
+    }
+
+    private Bundle genAddDataList(Bundle bundle) {
+        ArrayList<String> addedRSList = new ArrayList<>();
+        for (RepairStaffEntity repairStaffEntity : mEntities) {
+            if (repairStaffEntity.repairStaff != null && repairStaffEntity.timesNum != null && repairStaffEntity.timesNum >= repairSum) {
+                addedRSList.add(repairStaffEntity.repairStaff.id.toString());
+            }
+        }
+        bundle.putStringArrayList(Constant.IntentKey.ADD_DATA_LIST, addedRSList);
+        return bundle;
     }
 
     @Override

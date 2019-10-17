@@ -227,10 +227,6 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
                         doSave();
                         break;
                     case 1:
-                        if (checkBeforeSubmit()){
-                            doSubmit((WorkFlowVar)obj);
-                        }
-                        break;
                     case 2:
                         if (checkBeforeSubmit()){
                             doSubmit((WorkFlowVar)obj);

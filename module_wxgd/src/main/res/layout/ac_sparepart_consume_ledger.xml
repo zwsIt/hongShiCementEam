@@ -14,7 +14,7 @@
         app:title_background_color="@color/themeColor"
         app:title_length="96dp"
         app:title_right_btn_need="false"
-        app:title_text="备件消耗台账" />
+        app:title_text="零部件消耗台账" />
 
     <include layout="@layout/ly_recyclerview" />
 </LinearLayout>

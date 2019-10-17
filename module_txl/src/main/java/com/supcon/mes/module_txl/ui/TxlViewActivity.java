@@ -2,7 +2,6 @@ package com.supcon.mes.module_txl.ui;
 
 import android.text.TextUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -33,13 +32,9 @@ import java.util.regex.Pattern;
  */
 @Router(Constant.Router.TXL_VIEW)
 public class TxlViewActivity extends BasePresenterActivity {
-    
-    @BindByTag("ivBack")
-    ImageView ivBack;
-    @BindByTag("tvBack")
-    TextView tvBack;
-    @BindByTag("usrInfo")
-    LinearLayout usrInfo;
+
+    @BindByTag("leftBtn")
+    ImageView leftBtn;
     @BindByTag("tvTelephone")
     CustomTextView tvTelephone;
     @BindByTag("email")
@@ -62,50 +57,49 @@ public class TxlViewActivity extends BasePresenterActivity {
     private TxlEntity mData;
     //匹配手机号码的正则表达式
     private Pattern mPattern = Pattern.compile("^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$");
-    
+
     @Override
     protected int getLayoutID() {
         return R.layout.activity_txl_view;
     }
-    
+
     @Override
     protected void onInit() {
         super.onInit();
         mData = (TxlEntity) getIntent().getSerializableExtra(Constant.IntentKey.TXL_ENTITY);
     }
-    
+
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.txl_view_title);
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
     }
-    
+
     @Override
     protected void initListener() {
         super.initListener();
-        ivBack.setOnClickListener(v -> back());
-        tvBack.setOnClickListener(v -> back());
+        leftBtn.setOnClickListener(v -> back());
         //电话拨打功能开发
         ivTelphone.setOnClickListener(v -> {
             if (!TextUtils.isEmpty(mData.getMOBILE()) && mPattern.matcher(mData.getMOBILE()).find())
                 SystemUtil.callPhone(context, mData.getMOBILE());
-            else ToastUtils.show(context, "未设置通话信息！");
+            else ToastUtils.show(context, "手机号不存在！");
         });
         //短信发送功能开发
         ivSms.setOnClickListener(v -> {
                     if (!TextUtils.isEmpty(mData.getMOBILE()) && mPattern.matcher(mData.getMOBILE()).find())
                         SystemUtil.sendSms(context, mData.getMOBILE());
-                    else ToastUtils.show(context, "未设置电话信息！");
+                    else ToastUtils.show(context, "手机号不存在！");
                 }
         );
         //邮件发送功能开发
-//        ivEmail.setOnClickListener(v -> {
-//            if (!TextUtils.isEmpty(mData.getEMAIL()) && mPattern.matcher(mData.getEMAIL()).find())
-//                SystemUtil.sendSms(context, mData.getEMAIL());
-//            else ToastUtils.show(context, "未设置邮箱信息！");
-//        });
+        ivEmail.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(mData.getEMAIL()) && mPattern.matcher(mData.getEMAIL()).find())
+                SystemUtil.sendSms(context, mData.getEMAIL());
+            else ToastUtils.show(context, "邮箱号不存在！");
+        });
     }
-    
+
     @Override
     protected void initData() {
         super.initData();
@@ -116,8 +110,8 @@ public class TxlViewActivity extends BasePresenterActivity {
         email.setContent((String) mData.getEMAIL());
         master.setContent((String) mData.getRZSJ());
         department.setContent(mData.getDepartmentName());
-        
-        File file = new File(Constant.IMAGE_SAVE_PATH + "TXL_" + String.valueOf(mData.getStaffId()) + ".jpg");
+
+        File file = new File(Constant.IMAGE_SAVE_PATH + mData.getStaffId() + ".jpg");
         if (file.exists()) {
             CustomCircleTextImageView customCircleTextImageView = findViewById(R.id.userIcon);
             Glide.with(customCircleTextImageView.getContext()).load(file)

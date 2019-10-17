@@ -40,6 +40,10 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
         return new ViewHolder(context);
     }
 
+    public void setCheckPosition(int checkPosition) {
+        this.checkPosition = checkPosition;
+    }
+
     class ViewHolder extends BaseRecyclerViewHolder<LubricationWarnEntity> {
 
         @BindByTag("itemLubriEquipmentNameTv")

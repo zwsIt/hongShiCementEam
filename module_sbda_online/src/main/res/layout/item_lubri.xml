@@ -22,7 +22,6 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemLubricationOilTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="润 滑 油:"
             app:max_lines="1" />
 
@@ -59,8 +58,8 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemLubricationPartTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="润 滑 部 位:"
+            app:key_width="@dimen/dp_120"
             app:max_lines="1" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -71,9 +70,8 @@
             android:tag="itemLubricationAttachEamTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="附 属 设 备:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -84,9 +82,8 @@
             android:tag="itemLubricationSparePartIdTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="备 件 编 码:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -97,9 +94,8 @@
             android:tag="itemLubricationLastDateTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="上次润滑日期:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -110,9 +106,8 @@
             android:tag="itemLubricationNextDateTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="下次润滑日期:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -123,9 +118,8 @@
             android:tag="itemLubricationLastDurationTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="上次润滑时长:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -136,9 +130,8 @@
             android:tag="itemLubricationNextDurationTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="下次润滑时长:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
     </LinearLayout>

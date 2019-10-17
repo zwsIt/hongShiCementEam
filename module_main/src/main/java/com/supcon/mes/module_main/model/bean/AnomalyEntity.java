@@ -11,6 +11,7 @@ import com.supcon.common.com_http.BaseEntity;
 public class AnomalyEntity extends BaseEntity {
     public String state;
     public String tableno;
+    public String worktableno;  // 统一使用
     public String soucretype;
     public String staffname;
     public String content;

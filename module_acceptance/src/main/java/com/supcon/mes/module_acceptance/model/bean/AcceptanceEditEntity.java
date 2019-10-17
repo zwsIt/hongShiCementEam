@@ -21,13 +21,13 @@ public class AcceptanceEditEntity extends BaseEntity {
     public final static int EDITTEXT = 0x03;
 
     public Long id;
-    public ValueEntity defaultValueType;//类型
-    public boolean defaultValue;
-    public String item;
-    public String isItemValue;
-    public String noItemValue;
-    public boolean result;
-    public String conclusion;
+    public ValueEntity defaultValueType;// 默认值类型
+    public boolean defaultValue; // 默认值
+    public String item; // 事项
+    public String isItemValue; // 是项值
+    public String noItemValue; // 否项值
+    public boolean result; // 结果
+    public String conclusion; // 结论
 
     public String category;//类别
     public Float total;//总计

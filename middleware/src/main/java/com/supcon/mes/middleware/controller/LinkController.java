@@ -179,7 +179,7 @@ public class LinkController extends BasePresenterController implements LinkQuery
     /**
      * @param isCancel
      * @return
-     * @description 设置派单环节作废是否显示：工单来源于隐患单需要隐藏
+     * @description 设置派单环节作废是否显示：工单来源于巡检、其他需要隐藏
      * @author zhangwenshuai1 2019/2/15
      */
     public void setCancelShow(boolean isCancel) {

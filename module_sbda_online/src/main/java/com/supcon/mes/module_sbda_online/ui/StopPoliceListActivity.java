@@ -75,6 +75,9 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.STOP_POLICE_S
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.STOP_POLICE_STOP_REASON;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.STOP_POLICE_STOP_TYPE;
 
+/**
+ * 运行记录汇总：默认查询设备类型为：
+ */
 @Router(Constant.Router.STOP_POLICE)
 @Presenter(value = StopPolicePresenter.class)
 public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoliceEntity> implements StopPoliceContract.View {
@@ -203,6 +206,7 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
 
     private Map<String, String> paramMap = new HashMap<>();
 
+    @SuppressLint("CheckResult")
     private void showPopUp(StopPoliceEntity stopPoliceEntity) {
         paramMap.put(STOP_POLICE_STAFF_ID, "" + EamApplication.getAccountInfo().staffId);
         paramMap.put(STOP_POLICE_ID, stopPoliceEntity.recordId.id);
@@ -369,9 +373,8 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
 
         refreshListController.setOnRefreshPageListener((page) -> {
             if (!queryParam.containsKey(Constant.BAPQuery.ON_OR_OFF)) {
-                queryParam.put(Constant.BAPQuery.ON_OR_OFF, "BEAM020/02");
+                queryParam.put(Constant.BAPQuery.ON_OR_OFF, "BEAM020/02"); // 开机状态：默认关
             }
-            LogUtil.e("ciruy", queryParam.toString());
             presenterRouter.create(StopPoliceAPI.class).runningGatherList(queryParam, page);
         });
         listEamNameFilter.setFilterSelectChangedListener(filterBean -> {

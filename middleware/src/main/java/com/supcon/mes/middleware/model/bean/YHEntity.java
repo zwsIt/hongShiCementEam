@@ -17,10 +17,10 @@ public class YHEntity extends BaseEntity {
     public long cid;
     public String describe;
     public WXGDEam eamID;
-    public SystemCodeEntity faultInfoType;
-    public SystemCodeEntity faultState;
+    public SystemCodeEntity faultInfoType; // 隐患类型:
+    public SystemCodeEntity faultState; // 隐患状态
     public SystemCodeEntity downStream; // 处理方式
-    public SystemCodeEntity sourceType;
+    public SystemCodeEntity sourceType; // 隐患来源
     public long findTime;
     public long id;
     public PendingEntity pending;

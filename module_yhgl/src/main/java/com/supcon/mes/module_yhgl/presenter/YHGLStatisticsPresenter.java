@@ -1,6 +1,5 @@
 package com.supcon.mes.module_yhgl.presenter;
 
-import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.module_yhgl.model.bean.YHListEntity;
 import com.supcon.mes.module_yhgl.model.contract.YHGLStatisticsContract;
@@ -28,7 +27,6 @@ public class YHGLStatisticsPresenter extends YHGLStatisticsContract.Presenter {
         pageQueryParams.put("page.pageNo", pageNum);
         pageQueryParams.put("page.pageSize", 20);
         pageQueryParams.put("page.maxPageSize", 500);
-        LogUtil.d("fastQueryCondEntity:"+fastQueryCondEntity);
         mCompositeSubscription.add(
                 YHGLHttpClient.faultInfoList(pageQueryParams, fastQueryCondEntity)
                         .onErrorReturn(new Function<Throwable, YHListEntity>() {

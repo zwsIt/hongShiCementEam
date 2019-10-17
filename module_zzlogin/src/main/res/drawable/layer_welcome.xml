@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
     <!-- 设置整个屏幕背景为白色 -->
     <item >
-        <bitmap android:src="@drawable/bg_login_hl"/>
+        <bitmap android:src="@drawable/bg_login"/>
     </item>
 
     <!-- 中间logo -->

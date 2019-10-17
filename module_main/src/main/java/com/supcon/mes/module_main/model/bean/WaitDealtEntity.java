@@ -2,6 +2,7 @@ package com.supcon.mes.module_main.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
 /**
  * @author yangfei.cao
@@ -29,7 +30,7 @@ public class WaitDealtEntity extends BaseEntity {
 
     public String processkey;//工作流编码
 
-    public String peroidtype;//时间类型
+    public SystemCodeEntity peroidtype;//时间类型
 
     public String istemp;//是否临时巡检
 
@@ -39,11 +40,11 @@ public class WaitDealtEntity extends BaseEntity {
 
     public String tableno;
 
-    public String workTableno; // 海螺使用
+    public String workTableno; // 注：统一使用
 
     public String openurl;
 
-    public String entrflag;
+    public String entrflag; // 委托标志
 
     public String content;//内容
 

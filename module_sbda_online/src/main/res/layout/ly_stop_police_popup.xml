@@ -31,6 +31,7 @@
             android:layout_height="@dimen/dp_40"
             android:tag="itemStopPoliceStopType"
             app:content_hint="请选择停机类别"
+            app:necessary="true"
             app:editable="true"
             app:key_size="14"
             app:text="停机类别" />
@@ -51,6 +52,7 @@
             android:layout_height="@dimen/dp_40"
             android:tag="itemStopPoliceStopExplain"
             app:edit_hint="请输入停机原因"
+            app:necessary="true"
             android:focusable="false"
             app:key="停机说明"
             app:key_size="14" />

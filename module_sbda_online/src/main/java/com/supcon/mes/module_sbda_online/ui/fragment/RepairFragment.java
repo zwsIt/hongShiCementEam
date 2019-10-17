@@ -35,8 +35,7 @@ public class RepairFragment extends BaseRefreshRecyclerFragment implements Repai
 
     public static RepairFragment newInstance(Long id) {
         eamId = id;
-        RepairFragment fragment = new RepairFragment();
-        return fragment;
+        return new RepairFragment();
     }
 
     @Override
@@ -66,8 +65,7 @@ public class RepairFragment extends BaseRefreshRecyclerFragment implements Repai
 
     @Override
     protected IListAdapter createAdapter() {
-        RepairAdapter repairAdapter = new RepairAdapter(getActivity());
-        return repairAdapter;
+        return new RepairAdapter(getActivity());
     }
 
     @Override

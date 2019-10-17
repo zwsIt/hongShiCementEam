@@ -34,7 +34,8 @@ public class WaitDealtPresenter extends WaitDealtContract.Presenter {
 
         Map<String, Object> paramsName = new HashMap<>();
         paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,BEAM2_PERSONWORKINFO,STAFFID");
+        paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,ALL_PERSON_WORK_INFO,STAFFID");
         fastQueryCond.subconds.add(joinSubcondEntity);
 
         Map<String, Object> pageQueryParams = new HashMap<>();
@@ -43,13 +44,13 @@ public class WaitDealtPresenter extends WaitDealtContract.Presenter {
         pageQueryParams.put("page.maxPageSize", 500);
 
         Flowable<CommonBAPListEntity<WaitDealtEntity>> mainClient;
-        if (EamApplication.isHailuo()){
+//        if (EamApplication.isHailuo()){
             fastQueryCond.modelAlias = "allPersonWorkInfo";
-            mainClient = MainClient.getWaitDealtByHaiLuo(fastQueryCond, pageQueryParams);
-        }else {
-            fastQueryCond.modelAlias = "personworkinfo";
-            mainClient =MainClient.getWaitDealt(fastQueryCond, pageQueryParams);
-        }
+            mainClient = MainClient.getWaitDealtNew(fastQueryCond, pageQueryParams);
+//        }else {
+//            fastQueryCond.modelAlias = "personworkinfo";
+//            mainClient =MainClient.getWaitDealt(fastQueryCond, pageQueryParams);
+//        }
 
         mCompositeSubscription.add(
                 mainClient

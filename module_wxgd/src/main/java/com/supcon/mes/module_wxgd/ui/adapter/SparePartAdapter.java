@@ -1,6 +1,7 @@
 package com.supcon.mes.module_wxgd.ui.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -25,12 +26,20 @@ import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.R;
+import com.supcon.mes.module_wxgd.controller.AutoRefreshSPStandingCropController;
+import com.supcon.mes.module_wxgd.ui.WXGDDispatcherActivity;
+import com.supcon.mes.module_wxgd.ui.WXGDExecuteActivity;
+import com.supcon.mes.module_wxgd.ui.WXGDSparePartListActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * SparePartAdapter 工单pt备件列表Adapter
+ * created by zhangwenshuai1 2019/10/8
+ */
 public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartEntity> {
 
     private boolean editable;
@@ -302,6 +311,13 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             standingCrop.setValue(data.standingCrop == null ? "" : String.valueOf(data.standingCrop.setScale(2, BigDecimal.ROUND_HALF_UP)));
             useState.setValue(Util.strFormat2(data.getUseState().value));
             remark.setInput(data.remark);
+
+            // 添加备件自动更新现存量
+            if (data.productID != null){
+                AutoRefreshSPStandingCropController autoRefreshSPStandingCropController = new AutoRefreshSPStandingCropController(standingCrop,data.productID.productCode);
+                autoRefreshSPStandingCropController.initData();
+            }
+
         }
     }
 }

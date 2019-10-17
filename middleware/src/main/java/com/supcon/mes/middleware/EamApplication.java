@@ -106,7 +106,7 @@ public class EamApplication extends MBapApp {
         String port = " ";
         String ip  = SharedPreferencesUtils.getParam(getAppContext(), MBapConstant.SPKey.IP, "");
         LogUtil.d("channel:"+channel+" ip:"+ip);
-        if(TextUtils.isEmpty(ip)){
+        if(TextUtils.isEmpty(ip) && BuildConfig.DEBUG){
 
             if (channel.equals("hongshi")) {
                 ip = "218.75.97.170";
@@ -117,7 +117,7 @@ public class EamApplication extends MBapApp {
                 port = "8099";
             }
             else if(channel.equals("dev")){
-                ip = "192.168.90.215";
+                ip = "192.168.90.49";
                 port = "8080";
             }
             else if (channel.equals("134")) {
@@ -133,7 +133,7 @@ public class EamApplication extends MBapApp {
                 port = "8080";
             }
             else{
-                ip = "192.168.90.9";
+                ip = "192.168.90.49";
                 port = "8080";
             }
             setIp(ip);
@@ -182,6 +182,16 @@ public class EamApplication extends MBapApp {
 
         String channel = ChannelUtil.getUMengChannel();
         if (channel.equals("hailuo")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isYNSW(){
+
+        String channel = ChannelUtil.getUMengChannel();
+        if (channel.equals("ynsw")) {
             return true;
         }
 

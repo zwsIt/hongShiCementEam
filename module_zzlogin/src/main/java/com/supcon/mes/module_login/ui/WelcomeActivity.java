@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.mes.mbap.MBapApp;
@@ -24,18 +25,21 @@ public class WelcomeActivity extends Activity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
-        boolean isHS = true;
-        if (EamApplication.isHongshi()) {
-            isHS = true;
-            getWindow().getDecorView().setBackgroundResource(R.drawable.layer_welcome_hs);
-        } else {
-            isHS = false;
-            getWindow().getDecorView().setBackgroundResource(R.drawable.layer_welcome_hl);
-        }
+
         super.onCreate(savedInstanceState);
+        if (EamApplication.isHongshi()) {
+            getWindow().getDecorView().setBackgroundResource(R.drawable.layer_welcome_hs);
+        } else if(EamApplication.isHailuo()){
+            getWindow().getDecorView().setBackgroundResource(R.drawable.layer_welcome_hl);
+        }else if(EamApplication.isYNSW()){
+            getWindow().getDecorView().setBackgroundResource(R.drawable.layer_welcome_ynsw);
+        }
+        else{
+            getWindow().getDecorView().setBackgroundResource(R.drawable.layer_welcome);
+        }
+
         StatusBarUtils.setWindowStatusBarColor(this, R.color.white);
-        boolean finalIsHS = isHS;
+
         new Handler().postDelayed(() -> {
             if (MBapApp.isIsLogin()) {
                 
@@ -57,10 +61,19 @@ public class WelcomeActivity extends Activity {
                 HeartBeatService.startLoginLoop(this);
             } else {
                 Bundle bundle = new Bundle();
-                if (!finalIsHS) {
+                if (EamApplication.isHailuo()) {
                     bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
                     bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
                 }
+                else if(EamApplication.isYNSW()){
+                    bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_ynsw);
+                    bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo);
+                }
+                else if(EamApplication.isHongshi()){
+                    bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hs);
+                    bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hs);
+                }
+
                 bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, true);
                 IntentRouter.go(WelcomeActivity.this, Constant.Router.LOGIN, bundle);
             }

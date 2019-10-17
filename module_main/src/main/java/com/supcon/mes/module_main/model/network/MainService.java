@@ -7,7 +7,7 @@ import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.module_main.model.bean.AnomalyEntity;
-import com.supcon.mes.module_main.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.module_main.model.bean.ProcessedEntity;
 import com.supcon.mes.module_main.model.bean.ScoreEntity;
 import com.supcon.mes.module_main.model.bean.WaitDealtEntity;
@@ -38,13 +38,13 @@ public interface MainService {
     Flowable<CommonBAPListEntity<WaitDealtEntity>> getWaitDealt(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
-     * 海螺:工作提醒
+     * 工作提醒(新)
      * @param fastQueryCondEntity
      * @param pageQueryMap
      * @return
      */
     @GET("/BEAM2/personWork/allPersonWorkInfo/allPsWorkInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_personWork_allPsWorkInfoList")
-    Flowable<CommonBAPListEntity<WaitDealtEntity>> getWaitDealtByHaiLuo(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    Flowable<CommonBAPListEntity<WaitDealtEntity>> getWaitDealtNew(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 
     /**
@@ -55,7 +55,7 @@ public interface MainService {
     @GET("/ec/workflow/proxyPendingResult.action")
     Flowable<BapResultEntity> proxyPending(@QueryMap Map<String, Object> pageQueryMap);
 
-    //档案查看
+    //档案查看:只查询当前登录人的设备，mobileFlag = 1 表示来自移动端
     @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action")
     Flowable<CommonBAPListEntity<EamEntity>> getEams(@Query("staffID") String staffID, @Query("mobileFlag") String mobileFlag, @QueryMap Map<String, Object> pageQueryMap);
 
@@ -82,21 +82,26 @@ public interface MainService {
     Flowable<CommonBAPListEntity<ProcessedEntity>> workflowHandleList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
-     * 海螺：获取我的流程(已处理的)
+     * 获取我的流程，即已处理的(新)
      * @param fastQueryCondEntity
      * @return
      */
     @POST("/BEAM2/personWork/allProcessInfo/allProFlowInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_personWork_allProFlowInfoList")
-    Flowable<CommonBAPListEntity<ProcessedEntity>> workflowHandleListByHaiLuo(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    Flowable<CommonBAPListEntity<ProcessedEntity>> workflowHandleListNew(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 
 
     //批量派单
-    @GET("/BEAM2/workList/workRecord/bulkSubmitWorkAndFault.action ")
+    @GET("/BEAM2/workList/workRecord/bulkSubmitWorkAndFault.action")
     Flowable<ResultEntity> bulkSubmitCustom(@QueryMap Map<String, Object> queryMap);
 
-    //首页待办数量
-    @GET("/BEAM2/personWork/abnormalinfoofeam/abnormalInfoList-query.action")
+    /**
+     * 异常记录
+     * @param fastQueryCondEntity
+     * @param pageQueryMap
+     * @return
+     */
+    @POST("/BEAM2/personWork/allAbnormalInfoOfEam/allAbnormalInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_personWork_allAbnormalInfoList")
     Flowable<CommonBAPListEntity<AnomalyEntity>> getAnomalyList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**

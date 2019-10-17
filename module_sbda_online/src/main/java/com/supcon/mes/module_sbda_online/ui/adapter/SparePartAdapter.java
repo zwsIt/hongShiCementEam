@@ -92,9 +92,9 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
         @Override
         protected void update(SparePartEntity data) {
 
-            if (EamApplication.isHongshi()) {
-                itemSparePartStandingCropTv.setVisibility(View.VISIBLE);
-            }
+//            if (EamApplication.isHongshi()) {
+//                itemSparePartStandingCropTv.setVisibility(View.VISIBLE);
+//            }
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getProductID().productName)
                     , Util.strFormat(data.getProductID().productCode));
             itemSparePartNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));

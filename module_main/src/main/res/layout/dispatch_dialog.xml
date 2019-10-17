@@ -40,6 +40,7 @@
         android:tag="dispatchPerson"
         app:content_hint="请选择负责人"
         app:editable="true"
+        app:necessary="true"
         app:key="负责人：" />
 
     <LinearLayout

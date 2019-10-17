@@ -28,6 +28,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.JWXItem;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.middleware.model.bean.RefLubricateEntity;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -163,7 +164,10 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        IntentRouter.go(context, Constant.Router.LUBRICATE_REF);
+                        // 带入已添加润滑油，检验重复添加
+                        Bundle bundle = new Bundle();
+                        bundle = genAddDataList(bundle);
+                        IntentRouter.go(context, Constant.Router.LUBRICATE_REF,bundle);
                     }
                 });
         RxView.clicks(refBtn)
@@ -174,6 +178,8 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, true);
                         bundle.putLong(Constant.IntentKey.EAM_ID, eamID);
+                        // 带入已添加润滑油，检验重复添加
+                        bundle = genAddDataList(bundle);
                         IntentRouter.go(context, Constant.Router.LUBRICATE_REF, bundle);
                     }
                 });
@@ -207,6 +213,17 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
 
     }
 
+    private Bundle genAddDataList(Bundle bundle) {
+        ArrayList<String> addedLOList = new ArrayList<>();
+        for (LubricateOilsEntity lubricateOilsEntity : mEntities){
+            if (lubricateOilsEntity.id != null) {
+                addedLOList.add(lubricateOilsEntity.id.toString());
+            }
+        }
+        bundle.putStringArrayList(Constant.IntentKey.ADD_DATA_LIST, addedLOList);
+        return bundle;
+    }
+
     @Override
     public void onBackPressed() {
         EventBus.getDefault().post(new LubricateOilsEvent(mEntities, dgDeletedIds));
@@ -227,9 +244,8 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addLuricateOil(RefLubricateEntity refLubricateEntity) {
-
         for (LubricateOilsEntity lubricateOilsEntity : mEntities) {
-            // 润滑参照判断重复，非参照添加无判断
+            // 润滑参照判断重复（id != null），非参照添加无判断
             if (lubricateOilsEntity.id != null && lubricateOilsEntity.id.equals(refLubricateEntity.id)) {
                 ToastUtils.show(context, "请勿重复添加润滑油!");
                 refreshListController.refreshComplete(mEntities);

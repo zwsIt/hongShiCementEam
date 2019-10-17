@@ -22,9 +22,8 @@
             android:tag="itemMaintenanceLastDateTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="上次维保日期:"
-            app:key_width="140dp" />
+            app:key_width="120dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceNextDateTv"
@@ -34,9 +33,8 @@
             android:tag="itemMaintenanceNextDateTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="下次维保日期:"
-            app:key_width="140dp" />
+            app:key_width="120dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceLastDurationTv"
@@ -47,9 +45,8 @@
             android:tag="itemMaintenanceLastDurationTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="上次维保时长(h):"
-            app:key_width="140dp" />
+            app:key_width="120dp" />
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemMaintenanceNextDurationTv"
@@ -60,9 +57,8 @@
             android:tag="itemMaintenanceNextDurationTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="下次维保时长(h):"
-            app:key_width="140dp" />
+            app:key_width="120dp" />
 
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -73,9 +69,8 @@
             android:tag="itemMaintenanceAttachEamTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="附 属 设 备:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -86,9 +81,8 @@
             android:tag="itemMaintenanceSparePartIdTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="备 件 编 码:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -99,7 +93,6 @@
             android:paddingTop="@dimen/dp_5"
             android:tag="itemMaintenanceClaimTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="要      求:"
             app:max_lines="100" />
 
@@ -110,7 +103,6 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemMaintenanceContentTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="内      容:"
             app:max_lines="100" />
 
@@ -122,9 +114,7 @@
             android:tag="itemMaintenanceMemoTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="备      注:"
-            app:key_width="140dp"
             app:max_lines="100" />
     </LinearLayout>
 

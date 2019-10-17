@@ -129,11 +129,11 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefresh(RefreshEvent event) {
         refreshListController.refreshBegin();
+        lubricationWarnAdapter.setCheckPosition(-1); // 还原选中状态
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
         refreshListController.refreshBegin();
     }
 

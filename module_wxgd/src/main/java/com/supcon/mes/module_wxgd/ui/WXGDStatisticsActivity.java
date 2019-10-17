@@ -28,6 +28,7 @@ import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.WorkCountEntity;
 import com.supcon.mes.middleware.model.contract.WorkCountContract;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.presenter.WorkCountPresenter;
 import com.supcon.mes.middleware.util.AnimatorUtil;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -58,6 +59,7 @@ import io.reactivex.functions.Consumer;
  * @ClassName hongShiCementEam
  * @date 2019/8/13
  * ------------- Description -------------
+ * 工单统计
  */
 @Router(Constant.Router.WXGD_STATISTICS)
 @Presenter(value = {WorkCountPresenter.class, WXGDStatisticsPresenter.class})
@@ -86,7 +88,7 @@ public class WXGDStatisticsActivity extends BaseRefreshRecyclerActivity<WXGDEnti
     private View timeStart, timeEnd;
     private DatePickController datePickController;
     private ImageView startExpend, endExpend;
-    private TextView startDate, endDate;
+    private TextView startDate, endDate; // 创建时间起止
 
     @Override
     protected IListAdapter<WXGDEntity> createAdapter() {
@@ -194,7 +196,10 @@ public class WXGDStatisticsActivity extends BaseRefreshRecyclerActivity<WXGDEnti
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
+        refreshListController.refreshBegin();
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refresh(RefreshEvent event) {
         refreshListController.refreshBegin();
     }
 

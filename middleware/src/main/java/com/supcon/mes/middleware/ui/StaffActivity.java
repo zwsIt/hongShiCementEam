@@ -68,6 +68,7 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
 
     private BaseSearchAdapter mBaseSearchAdapter;
     private String searchTag;
+    private ArrayList<String> addedRSList; // 已添加数据
 
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
@@ -79,6 +80,7 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
     protected void onInit() {
         super.onInit();
         searchTag = getIntent().getStringExtra(Constant.IntentKey.COMMON_SEARCH_TAG);
+        addedRSList = getIntent().getStringArrayListExtra(Constant.IntentKey.ADD_DATA_LIST);
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "没有信息哦~"));
@@ -97,7 +99,7 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
 
         titleSearchView = titleBar.searchView();
-        titleSearchView.setHint("请输入搜索信息");
+        titleSearchView.setHint("请输入人员姓名搜索");
 
         titleBar.setTitleText("人员搜索");
         titleBar.disableRightBtn();
@@ -113,9 +115,14 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
     @Override
     protected void initListener() {
         super.initListener();
-
         mBaseSearchAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
             CommonSearchEntity commonSearchEntity = (CommonSearchEntity) obj;
+            if (addedRSList != null) {
+                if (commonSearchEntity.getSearchId() != null && addedRSList.contains(commonSearchEntity.getSearchId())) {
+                    ToastUtils.show(context, "请勿重复添加人员!");
+                    return;
+                }
+            }
             CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
             commonSearchEvent.commonSearchEntity = commonSearchEntity;
             commonSearchEvent.flag = searchTag;

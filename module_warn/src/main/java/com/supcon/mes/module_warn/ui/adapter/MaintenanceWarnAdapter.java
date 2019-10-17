@@ -38,6 +38,10 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
         return new ViewHolder(context);
     }
 
+    public void setCheckPosition(int checkPosition) {
+        this.checkPosition = checkPosition;
+    }
+
     class ViewHolder extends BaseRecyclerViewHolder<MaintenanceWarnEntity> {
 
         @BindByTag("itemMaintenanceEquipmentNameTv")

@@ -19,14 +19,12 @@ import com.supcon.mes.mbap.view.CustomArrowView;
 import com.supcon.mes.mbap.view.CustomCacheView;
 import com.supcon.mes.mbap.view.CustomCircleTextImageView;
 import com.supcon.mes.mbap.view.CustomDialog;
-import com.supcon.mes.mbap.view.CustomPotraitView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.StaffPicController;
 import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
-import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_login.model.api.MineAPI;
 import com.supcon.mes.module_login.model.contract.MineContract;
 import com.supcon.mes.module_login.presenter.MinePresenter;
@@ -43,9 +41,6 @@ public class MineFragment extends BaseControllerFragment implements MineContract
 
     @BindByTag("logout")
     Button logout;
-
-    @BindByTag("minePotrait")
-    CustomPotraitView minePotrait;
 
     @BindByTag("mineClear")
     CustomCacheView mineClear;
@@ -66,7 +61,6 @@ public class MineFragment extends BaseControllerFragment implements MineContract
     CustomArrowView mineAbout;
     @BindByTag("ivSetting")
     ImageView ivSetting;
-    @BindByTag("mineUserIcon")
     CustomCircleTextImageView mineUserIcon;
     @BindByTag("mineUserName")
     TextView mineUserName;
@@ -92,6 +86,8 @@ public class MineFragment extends BaseControllerFragment implements MineContract
     @Override
     protected void initView() {
         super.initView();
+        mineUserIcon = rootView.findViewById(R.id.mineUserIcon);
+        getController(StaffPicController.class).setImageView(mineUserIcon);
     }
 
     @Override
@@ -104,7 +100,6 @@ public class MineFragment extends BaseControllerFragment implements MineContract
 
         });
 
-        minePotrait.setOnClickListener(this);
         mineClear.setOnClickListener(this);
         mineUpdate.setOnClickListener(this);
         mineShare.setOnClickListener(this);
@@ -120,8 +115,8 @@ public class MineFragment extends BaseControllerFragment implements MineContract
     @Override
     protected void initData() {
         super.initData();
-        mobilePhone.setText(Util.strFormat(EamApplication.getAccountInfo().mobile));
-        email.setText(Util.strFormat(EamApplication.getAccountInfo().email));
+//        mobilePhone.setText(Util.strFormat(EamApplication.getAccountInfo().mobile));
+//        email.setText(Util.strFormat(EamApplication.getAccountInfo().email));
     }
 
     private void updateCacheSize() {
@@ -144,9 +139,7 @@ public class MineFragment extends BaseControllerFragment implements MineContract
     @Override
     public void onClick(View view) {
 
-        if (view.getId() == R.id.minePotrait) {
-            LogUtil.d("minePotrait");
-        } else if (view.getId() == R.id.mineClear) {
+        if (view.getId() == R.id.mineClear) {
             LogUtil.d("mineClear");
             //点击清理缓存按钮后,进行相应的缓存清理工作
             new CustomDialog(context)
@@ -206,9 +199,17 @@ public class MineFragment extends BaseControllerFragment implements MineContract
 //        DeviceManager.getInstance().release();
         onLoadSuccessAndExit("登出成功！", () -> {
             Bundle bundle = new Bundle();
-            if (!EamApplication.isHongshi()) {
-                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
-                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
+            if (EamApplication.isHailuo()) {
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, com.supcon.mes.module_login.R.drawable.bg_login_hl);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, com.supcon.mes.module_login.R.drawable.ic_login_logo_hl);
+            }
+            else if(EamApplication.isYNSW()){
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, com.supcon.mes.module_login.R.drawable.bg_login_ynsw);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, com.supcon.mes.module_login.R.drawable.ic_login_logo);
+            }
+            else if(EamApplication.isHongshi()){
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, com.supcon.mes.module_login.R.drawable.bg_login_hs);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, com.supcon.mes.module_login.R.drawable.ic_login_logo_hs);
             }
 
             bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);

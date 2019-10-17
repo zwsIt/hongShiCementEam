@@ -35,8 +35,7 @@ public class MaintenanceFragment extends BaseRefreshRecyclerFragment implements 
 
     public static MaintenanceFragment newInstance(Long id) {
         eamId = id;
-        MaintenanceFragment fragment = new MaintenanceFragment();
-        return fragment;
+        return new MaintenanceFragment();
     }
 
     @Override
@@ -65,8 +64,7 @@ public class MaintenanceFragment extends BaseRefreshRecyclerFragment implements 
 
     @Override
     protected IListAdapter createAdapter() {
-        MaintenanceAdapter maintenanceAdapter = new MaintenanceAdapter(getActivity());
-        return maintenanceAdapter;
+        return new MaintenanceAdapter(getActivity());
     }
 
     @Override

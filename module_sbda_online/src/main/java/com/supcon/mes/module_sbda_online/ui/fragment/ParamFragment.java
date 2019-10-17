@@ -41,8 +41,7 @@ public class ParamFragment extends BaseRefreshRecyclerFragment<ParamEntity> impl
 
     @Override
     protected IListAdapter<ParamEntity> createAdapter() {
-        ParamAdapter paramAdapter = new ParamAdapter(getActivity());
-        return paramAdapter;
+        return new ParamAdapter(getActivity());
     }
 
     @Override

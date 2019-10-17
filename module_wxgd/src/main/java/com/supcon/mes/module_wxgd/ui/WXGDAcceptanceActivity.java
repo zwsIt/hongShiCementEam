@@ -19,6 +19,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
+import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
@@ -37,12 +38,16 @@ import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.AttachmentController;
+import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.middleware.model.bean.AccountInfo;
+import com.supcon.mes.middleware.model.bean.AttachmentEntity;
+import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.Staff;
@@ -52,6 +57,8 @@ import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
@@ -93,7 +100,7 @@ import java.util.Map;
 
 @Router(value = Constant.Router.WXGD_ACCEPTANCE)
 @Presenter(value = {WXGDListPresenter.class, GenerateAcceptancePresenter.class})
-@Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class, OnlineCameraController.class})
+@Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class, OnlineCameraController.class, AttachmentController.class})
 public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View, GenerateAcceptanceContract.View {
 
     @BindByTag("leftBtn")
@@ -173,6 +180,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private SparePartController mSparePartController;
     private LubricateOilsController mLubricateOilsController;
     private MaintenanceController maintenanceController;
+    private AttachmentController mAttachmentController;
 
     private List<Long> dgDeletedIds_acceptance = new ArrayList<>();
 
@@ -216,7 +224,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         mAcceptanceCheckController.setEditable(false);
         maintenanceController = getController(MaintenanceController.class);
         maintenanceController.setEditable(false);
-
+        mAttachmentController = getController(AttachmentController.class);
         mLinkController = new LinkController();
         roleController = new RoleController();  //角色
         roleController.queryRoleList(EamApplication.getUserName());
@@ -256,7 +264,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
             // 初始化工作流
             initLink();
 
-            getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
+            getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_GDPATH, Constant.PicType.GD_PIC);
             if (mWXGDEntity.attachmentEntities != null) {
                 getController(OnlineCameraController.class).setPicData(mWXGDEntity.attachmentEntities);
             }
@@ -738,7 +746,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         List<WXGDEntity> wxgdEntityList = entity.result;
         if (wxgdEntityList.size() > 0) {
             mWXGDEntity = wxgdEntityList.get(0);
-            updateInitView();
+            updateWXGDEntity(mWXGDEntity);
             updateInitData();
             mAcceptanceCheckController.setWxgdEntity(mWXGDEntity);
             mRepairStaffController.setWxgdEntity(mWXGDEntity);
@@ -749,6 +757,53 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }
+    }
+
+    /**
+     * 更新维修工单
+     *
+     * @param mWXGDEntity
+     */
+    private void updateWXGDEntity(WXGDEntity mWXGDEntity) {
+        mAttachmentController.refreshGalleryView(new OnAPIResultListener<AttachmentListEntity>() {
+            @Override
+            public void onFail(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSuccess(AttachmentListEntity result) {
+                initTableInfo();
+                mWXGDEntity.attachmentEntities = result.result;
+                downloadAttachment(mWXGDEntity.attachmentEntities);
+            }
+        }, mWXGDEntity.tableInfoId);
+
+
+    }
+
+    /**
+     * 初始化
+     */
+    private void initTableInfo() {
+        if (tableNo != null) {
+            titleText.setText(mWXGDEntity.pending == null ? "" : mWXGDEntity.pending.taskDescription);
+            initTableHeadView();
+            // 初始化工作流
+            initLink();
+            getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_GDPATH, Constant.PicType.GD_PIC);
+        }
+    }
+
+    private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
+        AttachmentDownloadController mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_GDPATH);
+        mDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_workList",
+                new OnSuccessListener<List<GalleryBean>>() {
+                    @Override
+                    public void onSuccess(List<GalleryBean> result) {
+                        yhGalleryView.setGalleryBeans(result);
+                    }
+                });
     }
 
     @Override

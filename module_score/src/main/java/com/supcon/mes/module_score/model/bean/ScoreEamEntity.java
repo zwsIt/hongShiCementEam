@@ -1,12 +1,13 @@
 package com.supcon.mes.module_score.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
 
 public class ScoreEamEntity extends BaseEntity {
 
-    public EamType beamId;
+    public EamEntity beamId;
     public int id = -1;
 
     public Staff scoreStaff;//评分人
@@ -22,9 +23,9 @@ public class ScoreEamEntity extends BaseEntity {
     public Float beamHeath;//设备卫生
     public Float beamEstimate;//档案管理
 
-    public EamType getBeamId() {
+    public EamEntity getBeamId() {
         if (beamId == null) {
-            beamId = new EamType();
+            beamId = new EamEntity();
         }
         return beamId;
     }

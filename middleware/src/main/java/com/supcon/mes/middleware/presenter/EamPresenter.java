@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
-import com.supcon.mes.middleware.model.bean.EamType;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.model.contract.EamContract;
@@ -48,7 +48,7 @@ public class EamPresenter extends EamContract.Presenter {
         pageQueryParams.put("page.maxPageSize", 500);
         mCompositeSubscription.add(MiddlewareHttpClient.getEam(fastQuery, pageQueryParams)
                 .onErrorReturn(throwable -> {
-                    CommonListEntity<EamType> commonListEntity = new CommonListEntity();
+                    CommonListEntity<EamEntity> commonListEntity = new CommonListEntity();
                     commonListEntity.errMsg = throwable.toString();
                     return commonListEntity;
                 }).subscribe(commonListEntity -> {

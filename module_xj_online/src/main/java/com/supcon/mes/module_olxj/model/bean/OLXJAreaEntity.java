@@ -66,7 +66,7 @@ public class OLXJAreaEntity extends BaseEntity {
     public boolean isSign;//需要签到
     public OLXJTaskEntity taskID;       //任务ID
 
-    public String finishType;       // 0 ,1 是否结束
+    public String finishType;       // 0 ,1 是否结束, 0:未结束 ；1：结束
     public String signedTime;       //签到时间
     public String signType;         //签到类型
     public String signReason;       //签到原因

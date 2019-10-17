@@ -54,6 +54,9 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
 
+/**
+ * 设备评分绩效
+ */
 @Router(value = Constant.Router.SCORE_EAM_LIST)
 @Presenter(value = ScoreEamListPresenter.class)
 public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements ScoreEamListContract.View {
@@ -82,11 +85,11 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
     private DatePickController datePickController;
 
     private final Map<String, Object> queryParam = new HashMap<>();
-    private String selecStr;
+    private String eamCode; // 设备编码
     private ScoreEamListAdapter scoreEamListAdapter;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    private String scoreTableNo;
+    private String scoreTableNo; // 设备评分绩效编号
 
     @Override
     protected IListAdapter createAdapter() {
@@ -104,7 +107,7 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
         super.onInit();
         EventBus.getDefault().register(this);
         scoreTableNo = getIntent().getStringExtra(Constant.IntentKey.SCORETABLENO);
-        selecStr = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
+        eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
     }
 
 
@@ -127,8 +130,8 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
         customSearchView.setHint("请输入设备");
         searchTitleBar.enableRightBtn();
         searchTitleBar.setTitleText("设备评分绩效");
-        customSearchView.setInput(selecStr);
-        if (TextUtils.isEmpty(scoreTableNo) && TextUtils.isEmpty(selecStr)) {
+        customSearchView.setInput(eamCode);
+        if (TextUtils.isEmpty(scoreTableNo) && TextUtils.isEmpty(eamCode)) {
             startTime.setDate(getThreeDay());
             stopTime.setDate(dateFormat.format(System.currentTimeMillis()));
             queryParam.put(Constant.BAPQuery.SCORE_TIME_START, getThreeDay());
@@ -153,16 +156,17 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
+                    bundle.putString(Constant.IntentKey.EAM_CODE,eamCode); // 默认带入当前设备
                     IntentRouter.go(ScoreEamListActivity.this, Constant.Router.SCORE_EAM_PERFORMANCE, bundle);
                 });
         refreshListController.setOnRefreshPageListener(pageIndex -> {
             queryParam.remove(Constant.BAPQuery.EAM_NAME);
             queryParam.remove(Constant.BAPQuery.EAM_CODE);
-            if (!TextUtils.isEmpty(selecStr)) {
-                if (Util.isContainChinese(selecStr)) {
-                    queryParam.put(Constant.BAPQuery.EAM_NAME, selecStr);
+            if (!TextUtils.isEmpty(eamCode)) {
+                if (Util.isContainChinese(eamCode)) {
+                    queryParam.put(Constant.BAPQuery.EAM_NAME, eamCode);
                 } else {
-                    queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
+                    queryParam.put(Constant.BAPQuery.EAM_CODE, eamCode);
                 }
             }
             queryParam.remove(Constant.BAPQuery.SCORE_TABLE_NO);
@@ -223,7 +227,7 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
     }
 
     public void doSearchTableNo(String search) {
-        selecStr = search;
+        eamCode = search;
         refreshListController.refreshBegin();
     }
 

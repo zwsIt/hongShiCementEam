@@ -58,7 +58,7 @@ import java.util.Map;
 
 /**
  * @description SparePartApplyEditActivity 备件领用申请审核
- * @author  2019/9/27
+ * @author zws 2019/9/27
  */
 @Router(value = Constant.Router.SPARE_PART_APPLY_VIEW)
 @Controller(value = {LinkController.class, TableInfoController.class, SparePartApplyDetailController.class,OnlineCameraController.class})

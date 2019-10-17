@@ -121,8 +121,7 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
     public static RoutineFragment newInstance(Long id, String code) {
         eamId = id;
         eamCodes = code;
-        RoutineFragment fragment = new RoutineFragment();
-        return fragment;
+        return new RoutineFragment();
     }
 
     @Override

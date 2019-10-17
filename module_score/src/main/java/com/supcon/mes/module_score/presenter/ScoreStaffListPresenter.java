@@ -8,9 +8,7 @@ import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
-import com.supcon.mes.module_score.model.bean.ScoreEamListEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
-import com.supcon.mes.module_score.model.contract.ScoreEamListContract;
 import com.supcon.mes.module_score.model.contract.ScoreStaffListContract;
 import com.supcon.mes.module_score.model.network.ScoreHttpClient;
 
@@ -35,6 +33,13 @@ public class ScoreStaffListPresenter extends ScoreStaffListContract.Presenter {
             Map<String, Object> timeParam = new HashMap<>();
             timeParam.put(Constant.BAPQuery.SCORE_DATA_START, param.get(Constant.BAPQuery.SCORE_DATA_START));
             timeParam.put(Constant.BAPQuery.SCORE_DATA_STOP, param.get(Constant.BAPQuery.SCORE_DATA_STOP));
+            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(timeParam);
+            fastQuery.subconds.addAll(subcondEntities);
+        }
+        if (param.containsKey(Constant.BAPQuery.SCORE_DAILY_START) || param.containsKey(Constant.BAPQuery.SCORE_DAILY_STOP)) {
+            Map<String, Object> timeParam = new HashMap<>();
+            timeParam.put(Constant.BAPQuery.SCORE_DAILY_START, param.get(Constant.BAPQuery.SCORE_DAILY_START));
+            timeParam.put(Constant.BAPQuery.SCORE_DAILY_STOP, param.get(Constant.BAPQuery.SCORE_DAILY_STOP));
             List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(timeParam);
             fastQuery.subconds.addAll(subcondEntities);
         }

@@ -6,14 +6,18 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.apt.Router;
+import com.bumptech.glide.Glide;
 import com.supcon.common.view.base.activity.BasePresenterActivity;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomCircleTextImageView;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.util.RequestOptionUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.R;
+
+import java.io.File;
 
 /**
  * @Author xushiyun
@@ -34,8 +38,6 @@ public class MineActivity extends BasePresenterActivity {
     ImageButton rightBtn;
     @BindByTag("titleBarLayout")
     RelativeLayout titleBarLayout;
-    @BindByTag("mineUserIcon")
-    CustomCircleTextImageView mineUserIcon;
     @BindByTag("mineUserName")
     CustomTextView mineUserName;
     @BindByTag("mineUserCode")
@@ -71,5 +73,13 @@ public class MineActivity extends BasePresenterActivity {
         mineUserDepart.setContent(EamApplication.getAccountInfo().getDepartmentName());
         mineUserWork.setContent(Util.strFormat(EamApplication.getAccountInfo().getPositionName()));
         mineUserPhone.setContent(Util.strFormat(EamApplication.getAccountInfo().getMobile()));
+
+        File file = new File(Constant.IMAGE_SAVE_PATH + EamApplication.getAccountInfo().getImageId() + ".jpg");
+        if (file.exists()) {
+            CustomCircleTextImageView customCircleTextImageView = findViewById(R.id.mineUserIcon);
+            Glide.with(customCircleTextImageView.getContext()).load(file)
+                    .apply(RequestOptionUtil.getEamRequestOptions(customCircleTextImageView.getContext()))
+                    .into(customCircleTextImageView);
+        }
     }
 }

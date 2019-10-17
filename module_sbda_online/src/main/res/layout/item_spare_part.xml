@@ -43,9 +43,9 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSparePartStandingCropTv"
-            android:visibility="gone"
+            android:visibility="visible"
             app:content_hint="--"
-            app:key="现   存   量:"
+            app:key="现  存  量:"
             app:max_lines="1" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -56,8 +56,8 @@
             android:tag="itemSparePartModelSpecifTv"
             app:content_hint="--"
             app:gravity="center"
-            app:key="规 格 型 号:"
-            app:key_width="140dp"
+            app:key="规格型号:"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -68,9 +68,8 @@
             android:tag="itemSparePartAttachEamTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
-            app:key="附 属 设 备:"
-            app:key_width="140dp"
+            app:key="附属设备:"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -81,9 +80,8 @@
             android:tag="itemSparePartLastDateTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="上次更换日期:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -94,9 +92,8 @@
             android:tag="itemSparePartNextDateTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="下次更换日期:"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -107,9 +104,8 @@
             android:tag="itemSparePartLastDurationTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="上次更换时长(天):"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -120,9 +116,8 @@
             android:tag="itemSparePartNextDurationTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="下次更换时长(天):"
-            app:key_width="140dp"
+            app:key_width="120dp"
             app:max_lines="100" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -133,9 +128,8 @@
             android:tag="itemSparePartMemoTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
-            app:key="备\t\t\t\t\t\t注\t:"
-            app:key_width="140dp"
+            app:key="备\t\t\t\t注:"
+            app:key_width="120dp"
             app:max_lines="100" />
 
 

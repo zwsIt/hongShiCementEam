@@ -25,8 +25,10 @@ import com.supcon.mes.middleware.model.event.AppExitEvent;
 import com.supcon.mes.middleware.model.event.DownloadDataEvent;
 import com.supcon.mes.middleware.model.event.LoginValidEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
+import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.DeviceManager;
 import com.supcon.mes.middleware.util.NFCHelper;
+import com.supcon.mes.middleware.util.ProcessHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_login.controller.SilentLoginController;
 import com.supcon.mes.module_login.service.HeartBeatService;
@@ -98,7 +100,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
         initIp = EamApplication.getIp();
         Api.getInstance().setDebug(BuildConfig.DEBUG);
         LogUtil.showLog = BuildConfig.DEBUG;
-
+        ProcessHelper.getInstance().startService(this);
         PushAgent.getInstance(context).onAppStart();
     }
 
@@ -155,6 +157,17 @@ public class MainActivity extends BaseMultiFragmentActivity {
         showFragment(0);
         if (EamApplication.isHailuo()) {
             logo.setImageResource(R.drawable.tabbar_logo_hl);
+        }else if(EamApplication.isHongshi()){
+            logo.setImageResource(R.drawable.tabbar_logo_hs);
+        }
+        else if("zs".equals(ChannelUtil.getUMengChannel())){
+            logo.setImageResource(R.drawable.tabbar_logo_zs);
+        }
+        else if("beiliu".equals(ChannelUtil.getUMengChannel())){
+            logo.setImageResource(R.drawable.tabbar_logo_bl);
+        }
+        else{
+            logo.setImageResource(R.drawable.tabbar_logo);
         }
     }
 

@@ -16,6 +16,7 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BasePresenterActivity;
+import com.supcon.common.view.util.DateUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
@@ -37,6 +38,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
 
 @Router(Constant.Router.DELAYDIALOG)
 @Presenter(value = DelayPresenter.class)
@@ -55,7 +57,8 @@ public class DelayDialogActivity extends BasePresenterActivity implements DelayC
 
     private DatePickController mDatePickController;
     private String delayDate;//延期日期
-    private String delayReason="";//延期原因
+    private String delayTime;//延时时长
+    private String delayReason = "";//延期原因
     private String ids, sourceType, peroidType;
     private long nextTime;
 
@@ -138,18 +141,33 @@ public class DelayDialogActivity extends BasePresenterActivity implements DelayC
         RxView.clicks(grayBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
+
+        RxTextView.textChanges(delayDuration.editText())
+                .skipInitialValue()
+                .subscribe(charSequence ->
+                        delayTime = charSequence.toString());
+
     }
 
     public boolean doCheck() {
-        if (TextUtils.isEmpty(delayDate)) {
+        if (delayDateTv.getVisibility() == View.VISIBLE && TextUtils.isEmpty(delayDate)) {
             ToastUtils.show(this, "延期日期不能为空");
             return false;
         }
-        long select = DateUtil.dateFormat(delayDate, "yyyy-MM-dd");
-        if (select <= nextTime) {
-            ToastUtils.show(this, "延期日期必须大于" + DateUtil.dateFormat(nextTime));
+        if (delayDuration.getVisibility() == View.VISIBLE && TextUtils.isEmpty(delayTime)) {
+            ToastUtils.show(this, "延期时长不能为空");
             return false;
         }
+        if (delayDateTv.getVisibility() == View.VISIBLE) {
+            long select = DateUtil.dateFormat(delayDate, "yyyy-MM-dd");
+            if (select <= nextTime) {
+                ToastUtils.show(this, "延期日期必须大于" + DateUtil.dateFormat(nextTime));
+                return false;
+            }
+        } else {
+            delayDate = delayTime;
+        }
+
         if (TextUtils.isEmpty(delayReason.trim())) {
             ToastUtils.show(this, "延期原因不允许为空!");
             return false;

@@ -40,6 +40,7 @@ import com.supcon.mes.middleware.model.api.EamAPI;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.contract.EamContract;
@@ -130,7 +131,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
     private Long deploymentId;
     private String powerCode;
     private LinkController mLinkController;
-    private EamType eamType;
+    private EamEntity mEamEntity;
 
     @Override
     protected IListAdapter createAdapter() {
@@ -148,7 +149,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         super.onInit();
         EventBus.getDefault().register(this);
         acceptanceEntity = (AcceptanceEntity) getIntent().getSerializableExtra(Constant.IntentKey.ACCEPTANCE_ENTITY);
-        eamType = (EamType) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
         isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, false);
 
         nfcHelper = NFCHelper.getInstance();
@@ -296,12 +297,12 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         super.initData();
         if (acceptanceEntity == null) {
             acceptanceEntity = new AcceptanceEntity();
-            if (eamType != null) {
-                acceptanceEntity.beamID = eamType;
-                acceptanceEntity.dept = eamType.getUseDept();
-                acceptanceEntity.area = eamType.getInstallPlace();
+            if (mEamEntity != null) {
+                acceptanceEntity.beamID = mEamEntity;
+                acceptanceEntity.dept = mEamEntity.getUseDept();
+                acceptanceEntity.area = mEamEntity.getInstallPlace();
             } else {
-                acceptanceEntity.getBeamID().id = -1;
+                acceptanceEntity.getBeamID().id = -1L;
             }
         }
         eamCode.setContent(Util.strFormat2(acceptanceEntity.getBeamID().code));
@@ -344,15 +345,15 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
                 staff.code = searchStaff.code;
                 acceptanceEntity.checkStaff = staff;
             }
-            if (commonSearchEvent.commonSearchEntity instanceof EamType) {
-                EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
-                eamCode.setContent(Util.strFormat(eamType.code));
-                eamName.setContent(Util.strFormat(eamType.name));
-                acceptanceDept.setContent(Util.strFormat(eamType.getUseDept().name));
-                acceptanceArea.setContent(Util.strFormat(eamType.getInstallPlace().name));
-                acceptanceEntity.beamID = eamType;
-                acceptanceEntity.dept = eamType.getUseDept();
-                acceptanceEntity.area = eamType.getInstallPlace();
+            if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
+                EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+                eamCode.setContent(Util.strFormat(eamEntity.code));
+                eamName.setContent(Util.strFormat(eamEntity.name));
+                acceptanceDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
+                acceptanceArea.setContent(Util.strFormat(eamEntity.getInstallPlace().name));
+                acceptanceEntity.beamID = eamEntity;
+                acceptanceEntity.dept = eamEntity.getUseDept();
+                acceptanceEntity.area = eamEntity.getInstallPlace();
                 refreshListController.refreshBegin();
             }
         }
@@ -381,14 +382,14 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
     @Override
     public void getEamSuccess(CommonListEntity entity) {
         if (entity.result.size() > 0) {
-            EamType eamType = (EamType) entity.result.get(0);
-            eamCode.setContent(Util.strFormat(eamType.code));
-            eamName.setContent(Util.strFormat(eamType.name));
-            acceptanceDept.setContent(Util.strFormat(eamType.getUseDept().name));
-            acceptanceArea.setContent(Util.strFormat(eamType.getInstallPlace().name));
-            acceptanceEntity.beamID = eamType;
-            acceptanceEntity.dept = eamType.getUseDept();
-            acceptanceEntity.area = eamType.getInstallPlace();
+            EamEntity eamEntity = (EamEntity) entity.result.get(0);
+            eamCode.setContent(Util.strFormat(eamEntity.code));
+            eamName.setContent(Util.strFormat(eamEntity.name));
+            acceptanceDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
+            acceptanceArea.setContent(Util.strFormat(eamEntity.getInstallPlace().name));
+            acceptanceEntity.beamID = eamEntity;
+            acceptanceEntity.dept = eamEntity.getUseDept();
+            acceptanceEntity.area = eamEntity.getInstallPlace();
             presenterRouter.create(AcceptanceEditAPI.class).getAcceptanceEdit(acceptanceEntity.getBeamID().id);
             return;
         }

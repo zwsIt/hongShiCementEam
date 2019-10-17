@@ -6,15 +6,25 @@
     android:background="@color/white"
     android:paddingTop="@dimen/dp_10"
     android:orientation="vertical">
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/itemFlowName"
-        android:tag="itemFlowName"
-        android:textColor="@color/xjAreaBlue"
-        android:textSize="@dimen/fontSize_12sp"
-        tools:text="流程"
-        android:gravity="start"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/itemFlowName"
+            android:tag="itemFlowName"
+            android:textColor="@color/xjAreaBlue"
+            android:textSize="@dimen/fontSize_12sp"
+            android:text="流程:分厂领导确认"
+            android:gravity="start"
+            android:ellipsize="end"
+            android:singleLine="true"/>
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/itemFlowDotLayout"
         android:layout_width="match_parent"
@@ -34,11 +44,11 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_other"
+            android:src="@drawable/ic_other_ed"
             android:tag="itemFlowDot" />
         <View
             android:id="@+id/itemFlowLineRight"
-            android:layout_width="70dp"
+            android:layout_width="60dp"
             android:layout_height="2dp"
             android:background="@color/red"
             android:tag="itemFlowLineRight"/>
@@ -48,23 +58,24 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/dp_5"
         android:background="@color/white"
-        android:gravity="center"
         android:orientation="vertical">
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/dp_80"
             android:layout_height="wrap_content"
             android:id="@+id/itemFlowStaff"
             android:tag="itemFlowStaff"
             android:textColor="@color/xjAreaBlue"
             android:textSize="@dimen/fontSize_12sp"
-            tools:text="处理人"
-            android:gravity="start"/>
+            android:text="处理人"
+            android:gravity="start"
+            android:singleLine="true"
+            android:ellipsize="end"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/itemFlowTime"
             android:tag="itemFlowTime"
-            android:text="时间"
+            android:text="10-09 13:30:30"
             android:textColor="@color/textColorlightblack"
             android:textSize="@dimen/fontSize_12sp"
             android:gravity="start"/>

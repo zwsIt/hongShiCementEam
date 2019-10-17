@@ -73,6 +73,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -313,6 +314,10 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                 });
     }
 
+    /**
+     * 加载巡检区域
+     * @param taskEntity
+     */
     @SuppressLint("CheckResult")
     private void doLoadArea(OLXJTaskEntity taskEntity) {
         onLoading("正在加载任务，请稍后...");
@@ -345,6 +350,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                                     onLoadSuccess();
                                     return;
                                 }
+                                // 无缓存，在线获取巡检区域数据
                                 if (mOLXJTaskAreaController == null) {
                                     mOLXJTaskAreaController = new OLXJTaskAreaController(context, 0);
 
@@ -402,22 +408,24 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     }
 
     private void showFinishDialog(OLXJTaskEntity olxjTaskEntity) {
-        new CustomDialog(context)
-                .twoButtonAlertDialog("当前巡检任务已完成,是否确定结束任务?")
-                .bindClickListener(R.id.grayBtn, v -> {
-                }, true)
+        CustomDialog customDialog = new CustomDialog(context);
+
+        customDialog.twoButtonAlertDialog("当前巡检任务已完成！")
+//                .bindClickListener(R.id.grayBtn, v -> {
+//                }, true)
                 .bindClickListener(R.id.redBtn, v -> {
 
                     onLoading("正在提交任务...");
                     presenterRouter.create(OLXJTaskStatusAPI.class).endTasks(String.valueOf(olxjTaskEntity.id), "结束任务", true);
-                }, true)
-                .show();
+                }, true);
+        customDialog.getDialog().findViewById(R.id.grayBtn).setVisibility(View.GONE);
+        customDialog.show();
     }
 
     String reason = null;
 
     private void showAbortDialog(OLXJTaskEntity olxjTaskEntity) {
-        boolean isAllFinished = mOLXJTaskListAdapter.isAllFinished();
+//        boolean isAllFinished = mOLXJTaskListAdapter.isAllFinished();
 //        new CustomDialog(context)
 //                .twoButtonAlertDialog(isAllFinished?"确定终止任务？":"还存在未完成的巡检项，确定终止任务？")
 //                .bindClickListener(R.id.grayBtn, v -> {}, true)
@@ -555,6 +563,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     }
 
 
+    @SuppressLint("CheckResult")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent event) {
         LogUtil.e("onLogin");
@@ -577,17 +586,18 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
             saveAreaCache(mAreaEntities.toString());
             saveTask(mOLXJTaskEntity.toString());
 
-
-            Flowable.timer(300, TimeUnit.MICROSECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<Long>() {
-                        @Override
-                        public void accept(Long aLong) throws Exception {
-                            if (mOLXJTaskListAdapter.isAllFinished()) {
+            // 当前巡检任务下全部完成巡检区域，自动结束任务
+            if (mOLXJTaskListAdapter.isAllFinished()) {
+                ToastUtils.show(context,"ok");
+                Flowable.timer(500, TimeUnit.MICROSECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<Long>() {
+                            @Override
+                            public void accept(Long aLong) throws Exception {
                                 showFinishDialog(mOLXJTaskListAdapter.getList().get(0));
                             }
-                        }
-                    });
+                        });
+            }
 
         }
 
@@ -840,13 +850,15 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
             IntentRouter.go(context, Constant.Router.OLXJ_WORK_LIST_UNHANDLED, bundle);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void updateStatusSuccess() {
         onLoadSuccess("任务操作成功！");
 //        ToastUtils.show(context, "任务操作成功！");
-        refreshListController.refreshBegin();
         saveAreaCache("");
         mAreaEntities.clear();
+        Flowable.timer(200,TimeUnit.MILLISECONDS)
+                .subscribe(aLong -> refreshListController.refreshBegin());
     }
 
     @Override
@@ -855,13 +867,15 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void cancelTasksSuccess() {
         onLoadSuccess("任务取消成功！");
 //        ToastUtils.show(context, "任务取消成功！");
-        refreshListController.refreshBegin();
         saveAreaCache("");
         mAreaEntities.clear();
+        Flowable.timer(200,TimeUnit.MILLISECONDS)
+                .subscribe(aLong -> refreshListController.refreshBegin());
     }
 
     @Override
@@ -870,13 +884,15 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 //        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void endTasksSuccess() {
         onLoadSuccess("任务操作成功！");
 //        ToastUtils.show(context, "任务取消成功！");
-        refreshListController.refreshBegin();
         saveAreaCache("");
         mAreaEntities.clear();
+        Flowable.timer(200,TimeUnit.MILLISECONDS)
+                .subscribe(aLong -> refreshListController.refreshBegin());
     }
 
     @Override

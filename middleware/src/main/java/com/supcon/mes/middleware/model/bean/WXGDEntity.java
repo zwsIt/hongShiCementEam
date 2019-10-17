@@ -103,6 +103,8 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public List<AttachmentEntity> attachmentEntities;
 
+    public SystemCodeEntity workState; // 工单工作流状态
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

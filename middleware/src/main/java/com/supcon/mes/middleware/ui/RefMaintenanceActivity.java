@@ -16,6 +16,7 @@ import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
@@ -34,6 +35,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +64,7 @@ public class RefMaintenanceActivity extends BaseRefreshRecyclerActivity<RefMaint
     private RefMaintainAdapter maintainAdapter;
     private Map<String, Object> queryParam = new HashMap<>();
     private Long eamID;
+    private ArrayList<String> addedMaList; // 已添加数据
 
     @Override
     protected IListAdapter createAdapter() {
@@ -73,6 +76,7 @@ public class RefMaintenanceActivity extends BaseRefreshRecyclerActivity<RefMaint
     protected void onInit() {
         super.onInit();
         eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
+        addedMaList = getIntent().getStringArrayListExtra(Constant.IntentKey.ADD_DATA_LIST);
     }
 
     @Override
@@ -112,6 +116,10 @@ public class RefMaintenanceActivity extends BaseRefreshRecyclerActivity<RefMaint
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 RefMaintainEntity refMaintainEntity = maintainAdapter.getItem(position);
+                if (refMaintainEntity.id != null && addedMaList.contains(refMaintainEntity.id.toString())){
+                    ToastUtils.show(context, "当前维保业务已存在，请勿重复添加!");
+                    return;
+                }
                 EventBus.getDefault().post(refMaintainEntity);
                 RefMaintenanceActivity.this.finish();
             }

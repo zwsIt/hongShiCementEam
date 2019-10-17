@@ -62,17 +62,17 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 //    }
 
     public boolean isAllFinished() {
-        boolean result = true;
+//        boolean result = true;
         if (mOLXJAreaEntities == null) {
-            return result;
+            return true;
         }
         for (OLXJAreaEntity areaEntity : mOLXJAreaEntities) {
-            if (!"1".equals(areaEntity.finishType)) {
+            if ("0".equals(areaEntity.finishType)) {
                 return false;
             }
         }
 
-        return result;
+        return true;
     }
 
     public boolean isExpand() {

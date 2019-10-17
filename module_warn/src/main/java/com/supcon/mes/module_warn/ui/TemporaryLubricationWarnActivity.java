@@ -24,6 +24,7 @@ import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
@@ -82,7 +83,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
 
     private TemporaryAdapter temporaryAdapter;
     private final Map<String, Object> queryParam = new HashMap<>();
-    private EamType eamType;
+    private EamEntity mEamEntity;
 
     @Override
     protected int getLayoutID() {
@@ -92,7 +93,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
     @Override
     protected void onInit() {
         super.onInit();
-        eamType = (EamType) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
         EventBus.getDefault().register(this);
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null) {
@@ -127,10 +128,10 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
     @Override
     protected void initData() {
         super.initData();
-        if (eamType != null) {
-            eamCode.setContent(Util.strFormat(eamType.code));
-            eamName.setContent(Util.strFormat(eamType.name));
-            queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(eamType.code));
+        if (mEamEntity != null) {
+            eamCode.setContent(Util.strFormat(mEamEntity.code));
+            eamName.setContent(Util.strFormat(mEamEntity.name));
+            queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(mEamEntity.code));
             refreshController.refreshBegin();
         }
     }

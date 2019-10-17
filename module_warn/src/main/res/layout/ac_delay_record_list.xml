@@ -11,13 +11,14 @@
         android:layout_above="@+id/btnLayout"
         android:orientation="vertical">
 
-        <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
-            android:id="@+id/searchTitleBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="searchTitleBar"
-            app:title_background_color="@color/themeColor"
-            app:title_text="延期记录" />
+<!--        <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar-->
+<!--            android:id="@+id/searchTitleBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:tag="searchTitleBar"-->
+<!--            app:title_background_color="@color/themeColor"-->
+<!--            app:title_text="延期记录" />-->
+        <include layout="@layout/ly_titlebar"/>
 
         <include layout="@layout/ly_recyclerview" />
 

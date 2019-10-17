@@ -12,7 +12,7 @@ package com.supcon.mes.middleware.model.bean;
 public enum TxlSearchType {
     STAFF_CODE("员工编号"),
     SRAFF_NAME("员工姓名"),
-    DEPARTMENT_NAME("部门名称"),
+//    DEPARTMENT_NAME("部门名称"),
     POSITION_NAME("岗位名称"),
     ;
     String typeName;

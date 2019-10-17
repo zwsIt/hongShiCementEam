@@ -8,6 +8,7 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.api.UpdateSupOSStandingCropAPI;
@@ -50,8 +51,7 @@ public class SparePartFragment extends BaseRefreshRecyclerFragment<SparePartEnti
 
     public static SparePartFragment newInstance(Long id) {
         eamId = id;
-        SparePartFragment fragment = new SparePartFragment();
-        return fragment;
+        return new SparePartFragment();
     }
 
     @Override
@@ -89,16 +89,15 @@ public class SparePartFragment extends BaseRefreshRecyclerFragment<SparePartEnti
     public void spareRecordSuccess(SparePartListEntity entity) {
         if (entity.result != null && entity.result.size() > 0) {
             sparePartEntities = entity.result;
-            if (EamApplication.isHongshi()) {
-                StringBuffer sparePartCodes = new StringBuffer();
-                Flowable.fromIterable(entity.result)
-                        .subscribe(sparePartEntity -> sparePartCodes.append(sparePartEntity.getProductID().productCode).append(","), throwable -> {
-                        }, () -> {
-                            presenterRouter.create(UpdateSupOSStandingCropAPI.class).updateStandingCrop(sparePartCodes.toString());
-                        });
-            } else {
-                refreshListController.refreshComplete(sparePartEntities);
-            }
+            refreshListController.refreshComplete(sparePartEntities);
+
+            // 更新现存量
+            StringBuffer sparePartCodes = new StringBuffer();
+            Flowable.fromIterable(entity.result)
+                    .subscribe(sparePartEntity -> sparePartCodes.append(sparePartEntity.getProductID().productCode).append(","), throwable -> {
+                    }, () -> {
+                        presenterRouter.create(UpdateSupOSStandingCropAPI.class).updateStandingCrop(sparePartCodes.toString());
+                    });
         } else {
             refreshListController.refreshComplete(null);
         }
@@ -106,8 +105,8 @@ public class SparePartFragment extends BaseRefreshRecyclerFragment<SparePartEnti
 
     @Override
     public void spareRecordFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
-        refreshListController.refreshComplete(null);
+        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
+        refreshListController.refreshComplete();
     }
 
     @SuppressLint("CheckResult")
@@ -115,15 +114,18 @@ public class SparePartFragment extends BaseRefreshRecyclerFragment<SparePartEnti
     public void updateStandingCropSuccess(CommonListEntity entity) {
         if (entity.result != null && entity.result.size() > 0) {
             Flowable.fromIterable(((List<StandingCropEntity>) entity.result))
-                    .flatMap((Function<StandingCropEntity, Flowable<SparePartEntity>>) standingCropEntity -> {
-                        Flowable<SparePartEntity> sparePartEntityFlowable = Flowable.fromIterable(sparePartEntities)
-                                .map(sparePartEntity -> {
-                                    if (standingCropEntity.productCode.equals(sparePartEntity.getProductID().productCode)) {
-                                        sparePartEntity.standingCrop = Float.valueOf(standingCropEntity.useQuantity);
-                                    }
-                                    return sparePartEntity;
-                                });
-                        return sparePartEntityFlowable;
+                    .flatMap(new Function<StandingCropEntity, Flowable<SparePartEntity>>() {
+                        @Override
+                        public Flowable<SparePartEntity> apply(StandingCropEntity standingCropEntity) throws Exception {
+                            Flowable<SparePartEntity> sparePartEntityFlowable = Flowable.fromIterable(sparePartEntities)
+                                    .map(sparePartEntity -> {
+                                        if (standingCropEntity.productCode.equals(sparePartEntity.getProductID().productCode)) {
+                                            sparePartEntity.standingCrop = Float.valueOf(standingCropEntity.useQuantity);
+                                        }
+                                        return sparePartEntity;
+                                    });
+                            return sparePartEntityFlowable;
+                        }
                     })
                     .subscribe(sparePartEntity -> {
                     }, throwable -> {
@@ -135,7 +137,7 @@ public class SparePartFragment extends BaseRefreshRecyclerFragment<SparePartEnti
 
     @Override
     public void updateStandingCropFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
-        refreshListController.refreshComplete(null);
+        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
+        refreshListController.refreshComplete();
     }
 }

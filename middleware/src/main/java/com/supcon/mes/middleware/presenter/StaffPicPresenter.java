@@ -1,6 +1,9 @@
 package com.supcon.mes.middleware.presenter;
 
+import android.text.TextUtils;
+
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.contract.StaffPicDownloadContract;
 import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
 import com.supcon.mes.middleware.util.PicUtil;
@@ -10,7 +13,6 @@ import java.io.File;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 
 /**
@@ -33,7 +35,7 @@ public class StaffPicPresenter extends StaffPicDownloadContract.Presenter {
                         .filter(new Predicate<ResponseBody>() {
                             @Override
                             public boolean test(ResponseBody responseBody) throws Exception {
-                                return responseBody!=null;
+                                return responseBody != null;
                             }
                         })
                         .map(new Function<ResponseBody, File>() {
@@ -67,5 +69,37 @@ public class StaffPicPresenter extends StaffPicDownloadContract.Presenter {
 //            }, throwable -> {
 //
 //            }, () -> customGalleryView.addGalleryBean(galleryBean));
+    }
+
+    @Override
+    public void getDocIds(long linkId) {
+        mCompositeSubscription.add(
+                MiddlewareHttpClient.getDocIds(linkId)
+                        .onErrorReturn(new Function<Throwable, CommonEntity<String>>() {
+                            @Override
+                            public CommonEntity<String> apply(Throwable throwable) throws Exception {
+                                CommonEntity<String> strEntity = new CommonEntity<>();
+                                strEntity.errMsg = throwable.toString();
+                                return strEntity;
+                            }
+                        })
+                        .subscribe(new Consumer<CommonEntity<String>>() {
+                            @Override
+                            public void accept(CommonEntity<String> strEntity) throws Exception {
+                                try {
+                                    if (TextUtils.isEmpty(strEntity.errMsg)) {
+                                        Long.parseLong(strEntity.result);
+                                        getView().getDocIdsSuccess(strEntity);
+                                    } else {
+                                        getView().getDocIdsFailed(strEntity.errMsg);
+                                    }
+                                } catch (Exception e) {
+                                    getView().getDocIdsFailed(e.getMessage());
+                                }
+
+                            }
+                        })
+
+        );
     }
 }

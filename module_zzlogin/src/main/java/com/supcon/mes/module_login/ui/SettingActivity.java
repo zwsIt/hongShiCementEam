@@ -427,9 +427,17 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
         onLoadSuccessAndExit("登出成功！", () -> {
             Bundle bundle = new Bundle();
             bundle.putBoolean(Constant.IntentKey.FIRST_LOGIN, false);
-            if (!EamApplication.isHongshi()) {
-                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
+            if (EamApplication.isHailuo()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
+            }
+            else if(EamApplication.isYNSW()){
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_ynsw);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo);
+            }
+            else if(EamApplication.isHongshi()){
+                bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hs);
+                bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hs);
             }
             IntentRouter.go(context, Constant.Router.LOGIN, bundle);
             finish();

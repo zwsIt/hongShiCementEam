@@ -98,7 +98,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * @ClassName eam
  * @date 2018/9/5
  * ------------- Description -------------
- * 待执行
+ * 待执行、通知
  */
 @Router(Constant.Router.WXGD_EXECUTE)
 @Presenter(value = {WXGDStopOrActivatePresenter.class, WXGDListPresenter.class})
@@ -349,7 +349,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : sdf.format(mWXGDEntity.planStartDate));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : sdf.format(mWXGDEntity.planEndDate));
 
-        mWXGDEntity.realEndDate = System.currentTimeMillis();
+        mWXGDEntity.realEndDate = mWXGDEntity != null ? mWXGDEntity.realEndDate : System.currentTimeMillis();
         realEndTime.setDate(DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
@@ -545,7 +545,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                             @Override
                             public void onClick(View v12) {
                                 if (TextUtils.isEmpty(reason)) {
-                                    ToastUtils.show(WXGDExecuteActivity.this, "请输入终止原因!");
+                                    ToastUtils.show(WXGDExecuteActivity.this, "请输入暂停原因!");
                                     return;
                                 }
                                 customDialog.dismiss();
@@ -810,10 +810,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
-            refreshController.refreshComplete();
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }
+        refreshController.refreshComplete();
     }
 
     @Override

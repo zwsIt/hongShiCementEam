@@ -158,7 +158,10 @@ public class YHGLLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         RxView.clicks(rightBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    IntentRouter.go(context, Constant.Router.LUBRICATE_REF);
+                    // 带入已添加润滑油，检验重复添加
+                    Bundle bundle = new Bundle();
+                    bundle = genAddDataList(bundle);
+                    IntentRouter.go(context, Constant.Router.LUBRICATE_REF,bundle);
                 });
 
         RxView.clicks(refBtn)
@@ -171,6 +174,8 @@ public class YHGLLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, true);
                     bundle.putLong(Constant.IntentKey.EAM_ID, eamID);
+                    // 带入已添加润滑油，检验重复添加
+                    bundle = genAddDataList(bundle);
                     IntentRouter.go(context, Constant.Router.LUBRICATE_REF, bundle);
                 });
 
@@ -196,6 +201,17 @@ public class YHGLLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         });
 
     }
+    private Bundle genAddDataList(Bundle bundle) {
+        ArrayList<String> addedLOList = new ArrayList<>();
+        for (LubricateOilsEntity lubricateOilsEntity : mEntities){
+            if (lubricateOilsEntity.id != null) {
+                addedLOList.add(lubricateOilsEntity.id.toString());
+            }
+        }
+        bundle.putStringArrayList(Constant.IntentKey.ADD_DATA_LIST, addedLOList);
+        return bundle;
+    }
+
 
     @Override
     public void onBackPressed() {

@@ -20,11 +20,13 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseControllerActivity;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.ui.view.TrapezoidView;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -88,7 +90,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
     @BindByTag("eamScore")
     TextView eamScore;
 
-    private EamType eamType;
+    private EamEntity mEamEntity;
     private AnomalyAdapter anomalyAdapter;
     private WorkAdapter workAdapter;
     private TextView waitMore;
@@ -102,7 +104,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        eamType = (EamType) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
     }
 
     @Override
@@ -114,7 +116,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         waitMore.setVisibility(View.VISIBLE);
         waitMore.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putSerializable(Constant.IntentKey.EAM, eamType);
+            bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
             IntentRouter.go(this, Constant.Router.ANOMALY, bundle);
         });
         View workTitle = rootView.findViewById(R.id.hs_eam_work_title);
@@ -147,7 +149,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(Constant.IntentKey.EAM, eamType);
+                bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
                 switch (position) {
                     case 0:
                         IntentRouter.go(EamDetailActivity.this, Constant.Router.OLXJ_EAM_UNHANDLED, bundle);
@@ -167,7 +169,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.EAM_CODE, eamType.code);
+                bundle.putString(Constant.IntentKey.EAM_CODE, mEamEntity.code);
                 IntentRouter.go(EamDetailActivity.this, Constant.Router.SCORE_EAM_LIST, bundle);
             }
         });
@@ -177,7 +179,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
     protected void onResume() {
         super.onResume();
         Map<String, Object> param = new HashMap<>();
-        param.put(Constant.BAPQuery.EAMCODE, eamType.code);
+        param.put(Constant.BAPQuery.EAMCODE, mEamEntity.code);
         presenterRouter.create(AnomalyAPI.class).getAnomalyList(1, 2, param);
 
     }
@@ -205,15 +207,15 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         workAdapter.setList(workInfos);
         workAdapter.notifyDataSetChanged();
 
-        eamName.setText(eamType.name);
-        presenterRouter.create(EamDetailAPI.class).getEamScore(eamType.id);
-        new EamPicController().initEamPic(eamPic, eamType.id);
+        eamName.setText(mEamEntity.name);
+        presenterRouter.create(EamDetailAPI.class).getEamScore(mEamEntity.id);
+        new EamPicController().initEamPic(eamPic, mEamEntity.id);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
         Map<String, Object> param = new HashMap<>();
-        param.put(Constant.BAPQuery.EAMCODE, eamType.code);
+        param.put(Constant.BAPQuery.EAMCODE, mEamEntity.code);
         presenterRouter.create(AnomalyAPI.class).getAnomalyList(1, 2, param);
     }
 
@@ -237,7 +239,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
     public void getAnomalyListFailed(String errorMsg) {
         LogUtil.e("获取待办失败:" + errorMsg);
         if (errorMsg.contains("401")) {
-            SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
+            ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
         }
         anomalyLayout.setVisibility(View.VISIBLE);
         anomalyAdapter.setList(null);

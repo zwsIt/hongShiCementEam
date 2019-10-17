@@ -43,8 +43,7 @@ public class SubsidiaryFragment extends BaseRefreshRecyclerFragment<SubsidiaryEn
 
     public static SubsidiaryFragment newInstance(Long id) {
         eamId = id;
-        SubsidiaryFragment fragment = new SubsidiaryFragment();
-        return fragment;
+        return new SubsidiaryFragment();
     }
 
     @Override

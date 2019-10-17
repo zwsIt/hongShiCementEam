@@ -58,7 +58,7 @@ public class AnomalyAdapter extends BaseListDataRecyclerViewAdapter<AnomalyEntit
 
         @Override
         protected void update(AnomalyEntity data) {
-            anomalyTableNo.setText(Util.strFormat2(data.tableno));
+            anomalyTableNo.setText(Util.strFormat2(data.worktableno));
             anomalyState.setText(Util.strFormat2(data.state));
             anomalySoucretype.setText(data.soucretype);
             anomalyStaff.setText(String.format(context.getString(R.string.device_style6), "待办人:", Util.strFormat(data.staffname)));

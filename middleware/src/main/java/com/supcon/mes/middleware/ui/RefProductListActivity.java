@@ -14,6 +14,7 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
@@ -35,6 +36,7 @@ import com.supcon.mes.middleware.util.Util;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,11 +67,11 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
     @BindByTag("customSearchView")
     CustomSearchView customSearchView;
 
-
     private RefProductAdapter refProductAdapter;
     private Map<String, Object> queryParam = new HashMap<>();
     private boolean isSparePartRef;
     private Long eamID;
+    private ArrayList<String> addedSPList; // 已添加数据
 
     @Override
     protected IListAdapter createAdapter() {
@@ -95,6 +97,7 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
 
         isSparePartRef = getIntent().getBooleanExtra(Constant.IntentKey.IS_SPARE_PART_REF, false);
         eamID = getIntent().getLongExtra(Constant.IntentKey.EAM_ID, 0);
+        addedSPList = getIntent().getStringArrayListExtra(Constant.IntentKey.ADD_DATA_LIST);
     }
 
     @Override
@@ -113,18 +116,19 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
         leftBtn.setOnClickListener(v -> {
             back();
         });
-        refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
-            @Override
-            public void onRefresh(int pageIndex) {
-                if (isSparePartRef) {
-                    presenterRouter.create(RefProductAPI.class).listRefSparePart(pageIndex, eamID, queryParam);
-                } else {
-                    presenterRouter.create(RefProductAPI.class).listRefProduct(pageIndex, queryParam);
-                }
+        refreshListController.setOnRefreshPageListener(pageIndex -> {
+            if (isSparePartRef) {
+                presenterRouter.create(RefProductAPI.class).listRefSparePart(pageIndex, eamID, queryParam);
+            } else {
+                presenterRouter.create(RefProductAPI.class).listRefProduct(pageIndex, queryParam);
             }
         });
         refProductAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
             SparePartRefEntity item = refProductAdapter.getItem(position);
+            if (addedSPList.contains(item.getProductID().id.toString())){
+                ToastUtils.show(context, "请勿重复添加备件!");
+                return;
+            }
             EventBus.getDefault().post(new SparePartAddEvent(isSparePartRef, item));
             RefProductListActivity.this.finish();
         });

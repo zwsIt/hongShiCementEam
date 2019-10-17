@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.ToastUtils;
@@ -28,6 +29,9 @@ import com.supcon.mes.module_main.model.bean.WaitDealtEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * @author yangfei.cao
@@ -73,7 +77,6 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
 
         @BindByTag("flowProcessView")
         RecyclerView flowProcessView;
-        private DealInfoController dealInfoController;
 
         public ContentViewHolder(Context context) {
             super(context);
@@ -87,6 +90,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
             flowProcessView.setLayoutManager(linearLayoutManager); // 水平线性布局
         }
 
+        @SuppressLint("CheckResult")
         @Override
         protected void initListener() {
             super.initListener();
@@ -105,79 +109,81 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                     onItemChildViewClick(view, 0, getItem(getAdapterPosition()));
                 }
             });
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    WaitDealtEntity item = getItem(getAdapterPosition());
-                    if (isEdit) {
-                        if (!TextUtils.isEmpty(item.state) && (item.state.equals("派工"))) {
-                            chkBox.performClick();
-                        } else {
-                            ToastUtils.show(context, "请先取消派单进去再进入详情操作！");
-                        }
-                        return;
-                    }
-                    if (TextUtils.isEmpty(item.processkey)) {
-                        if (item.dataid == null || TextUtils.isEmpty(item.soucretype)) {
-                            ToastUtils.show(context, "未查询到当前单据状态!");
-                            return;
-                        }
-                        if (!TextUtils.isEmpty(item.istemp) && item.soucretype.equals("巡检提醒")) {
-                            if (item.istemp.equals("1")) {
-                                IntentRouter.go(context, Constant.Router.LSXJ_LIST);
-                            } else {
-                                IntentRouter.go(context, Constant.Router.JHXJ_LIST);
-                            }
-                        } else {
-                            if (TextUtils.isEmpty(item.peroidtype)) {
-                                ToastUtils.show(context, "未查询到当前单据周期类型!");
+            RxView.clicks(itemView)
+                    .throttleFirst(2, TimeUnit.SECONDS)
+                    .subscribe(new Consumer<Object>() {
+                        @Override
+                        public void accept(Object o) throws Exception {
+                            WaitDealtEntity item = getItem(getAdapterPosition());
+                            if (isEdit) {
+                                if (!TextUtils.isEmpty(item.state) && (item.state.equals("派工"))) {
+                                    chkBox.performClick();
+                                } else {
+                                    ToastUtils.show(context, "请先取消派单进去再进入详情操作！");
+                                }
                                 return;
                             }
-                            Bundle bundle = new Bundle();
-                            bundle.putLong(Constant.IntentKey.WARN_ID, item.dataid);
-                            bundle.putString(Constant.IntentKey.PROPERTY, item.peroidtype);
-                            if (item.soucretype.equals("润滑提醒")) {
-                                IntentRouter.go(context, Constant.Router.LUBRICATION_EARLY_WARN, bundle);
-                            } else if (item.soucretype.equals("零部件提醒")) {
-                                IntentRouter.go(context, Constant.Router.SPARE_EARLY_WARN, bundle);
-                            } else if (item.soucretype.equals("维保提醒")) {
-                                IntentRouter.go(context, Constant.Router.MAINTENANCE_EARLY_WARN, bundle);
-                            }
-                        }
-
-                    } else {
-                        if (!TextUtils.isEmpty(item.workTableno) || !TextUtils.isEmpty(item.tableno)) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Constant.IntentKey.TABLENO, TextUtils.isEmpty(item.workTableno) ? item.tableno : item.workTableno);
-                            // 工单、巡检可跳转
-                            if (item.processkey.equals("work")) {
-                                if (!TextUtils.isEmpty(item.openurl)) {
-                                    switch (item.openurl) {
-                                        case Constant.WxgdView.RECEIVE_OPEN_URL:
-                                            IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);
-                                            break;
-                                        case Constant.WxgdView.DISPATCH_OPEN_URL:
-                                            IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
-                                            break;
-                                        case Constant.WxgdView.VIEW_OPEN_URL:
-                                            bundle.putBoolean(Constant.IntentKey.isEdit, false);
-                                        case Constant.WxgdView.EXECUTE_OPEN_URL:
-                                            IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
-                                            break;
-                                        case Constant.WxgdView.ACCEPTANCE_OPEN_URL:
-                                            IntentRouter.go(context, Constant.Router.WXGD_ACCEPTANCE, bundle);
-                                            break;
+                            if (TextUtils.isEmpty(item.processkey)) { // 预警跳转
+                                if (item.dataid == null || TextUtils.isEmpty(item.soucretype)) {
+                                    ToastUtils.show(context, "未查询到当前单据状态!");
+                                    return;
+                                }
+                                if (!TextUtils.isEmpty(item.istemp) && item.soucretype.equals("巡检提醒")) {
+                                    if (item.istemp.equals("1")) {
+                                        IntentRouter.go(context, Constant.Router.LSXJ_LIST);
+                                    } else {
+                                        IntentRouter.go(context, Constant.Router.JHXJ_LIST);
                                     }
                                 } else {
-                                    ToastUtils.show(context, "未查询到工单状态状态!");
+                                    if (item.peroidtype == null) {
+                                        ToastUtils.show(context, "未查询到当前单据周期类型!");
+                                        return;
+                                    }
+                                    Bundle bundle = new Bundle();
+                                    bundle.putLong(Constant.IntentKey.WARN_ID, item.dataid);
+                                    bundle.putString(Constant.IntentKey.PROPERTY, item.peroidtype.id);
+                                    if (item.soucretype.equals("润滑提醒")) {
+                                        IntentRouter.go(context, Constant.Router.LUBRICATION_EARLY_WARN, bundle);
+                                    } else if (item.soucretype.equals("零部件提醒")) {
+                                        IntentRouter.go(context, Constant.Router.SPARE_EARLY_WARN, bundle);
+                                    } else if (item.soucretype.equals("维保提醒")) {
+                                        IntentRouter.go(context, Constant.Router.MAINTENANCE_EARLY_WARN, bundle);
+                                    }
                                 }
-                            } else if (item.processkey.equals("faultInfoFW")) {
-                                IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
+
+                            } else {
+                                if (!TextUtils.isEmpty(item.workTableno)) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(Constant.IntentKey.TABLENO, item.workTableno);
+                                    // 工单跳转
+                                    if (item.processkey.equals("work")) {
+                                        if (!TextUtils.isEmpty(item.openurl)) {
+                                            switch (item.openurl) {
+                                                case Constant.WxgdView.RECEIVE_OPEN_URL:
+                                                    IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);
+                                                    break;
+                                                case Constant.WxgdView.DISPATCH_OPEN_URL:
+                                                    IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
+                                                    break;
+                                                case Constant.WxgdView.VIEW_OPEN_URL:
+                                                    bundle.putBoolean(Constant.IntentKey.isEdit, false);
+                                                case Constant.WxgdView.EXECUTE_OPEN_URL:
+                                                    IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
+                                                    break;
+                                                case Constant.WxgdView.ACCEPTANCE_OPEN_URL:
+                                                    IntentRouter.go(context, Constant.Router.WXGD_ACCEPTANCE, bundle);
+                                                    break;
+                                            }
+                                        } else {
+                                            ToastUtils.show(context, "未查询到工单状态状态!");
+                                        }
+                                    } else if (item.processkey.equals("faultInfoFW")) {  // 隐患单跳转
+                                        IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
+                                    }
+                                }
                             }
                         }
-                    }
-                }
-            });
+                    });
             chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -208,12 +214,21 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                 waitDealtTime.setText(data.excutetime != null ? DateUtil.dateFormat(data.excutetime, "yyyy-MM-dd HH:mm:ss") : "--");
             }
             waitDealtEamSource.setText(Util.strFormat(data.soucretype));
-            if (TextUtils.isEmpty(data.content)){
-                waitDealtContent.setVisibility(View.GONE);
-            }else {
+
+            // 隐患单、工单、设备验收单、润滑/维保预警 提供内容
+            if (Constant.ProcessKey.FAULT_INFO.equals(data.processkey) || Constant.ProcessKey.WORK.equals(data.processkey) || Constant.ProcessKey.CHECK_APPLY_FW.equals(data.processkey)
+             || "润滑提醒".equals(data.soucretype) || "维保提醒".equals(data.soucretype)){
                 waitDealtContent.setVisibility(View.VISIBLE);
+                waitDealtContent.setText(String.format(context.getString(R.string.device_style6), "内容:", Util.strFormat(data.content)));
+            }else {
+                waitDealtContent.setVisibility(View.GONE);
             }
-            waitDealtContent.setText(String.format(context.getString(R.string.device_style6), "内容:", Util.strFormat(data.content)));
+            // 工单、隐患单可委托
+            if (Constant.ProcessKey.WORK.equals(data.processkey) || Constant.ProcessKey.FAULT_INFO.equals(data.processkey)) {
+                waitDealtEntrust.setVisibility(View.VISIBLE);
+            } else {
+                waitDealtEntrust.setVisibility(View.GONE);
+            }
 
             if (data.overdateflag.equals("1")) {
                 waitDealtEamSource.setTextColor(context.getResources().getColor(R.color.orange));
@@ -232,11 +247,6 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
             } else {
                 waitDealtEamState.setText("");
             }
-            if (TextUtils.isEmpty(data.processkey)) {
-                waitDealtEntrust.setVisibility(View.GONE);
-            } else {
-                waitDealtEntrust.setVisibility(View.VISIBLE);
-            }
 
             if (!TextUtils.isEmpty(data.entrflag) && data.entrflag.equals("0")) {
                 waitDealtEntrust.setImageDrawable(context.getResources().getDrawable(R.drawable.btn_entrust));
@@ -244,17 +254,17 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                 waitDealtEntrust.setImageDrawable(context.getResources().getDrawable(R.drawable.btn_entrusted));
             }
 
-            if (!"MainActivity".equals(context.getClass().getSimpleName())){
+            if (!"MainActivity".equals(context.getClass().getSimpleName())) {
                 // 只处理工单、隐患单、验收单、运行记录、备件领用申请
-                if((Constant.ProcessKey.WORK.equals(data.processkey) || Constant.ProcessKey.FAULT_INFO.equals(data.processkey))
+                if ((Constant.ProcessKey.WORK.equals(data.processkey) || Constant.ProcessKey.FAULT_INFO.equals(data.processkey))
                         || Constant.ProcessKey.CHECK_APPLY_FW.equals(data.processkey) || Constant.ProcessKey.RUN_STATE_WF.equals(data.processkey)
-                        || Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey) && !TextUtils.isEmpty(data.openurl)){
+                        || Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey) && !TextUtils.isEmpty(data.openurl)) {
                     ProcessedEntity processedEntity = new ProcessedEntity();
                     processedEntity.prostatus = data.state;
                     processedEntity.openurl = data.openurl;
                     processedEntity.staffname = data.getStaffid().name;
                     processedEntity.tableid = data.tableid;
-                    dealInfoController = new DealInfoController(context,flowProcessView,processedEntity);
+                    DealInfoController dealInfoController = new DealInfoController(context, flowProcessView, processedEntity);
                     dealInfoController.getDealInfoList();
                 }
 //                flowProcessShow(data);

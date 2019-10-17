@@ -47,8 +47,7 @@ public class LubricationFragment extends BaseRefreshRecyclerFragment<LubriEntity
 
     @Override
     protected IListAdapter createAdapter() {
-        LubriAdapter lubriAdapter = new LubriAdapter(getActivity());
-        return lubriAdapter;
+        return new LubriAdapter(getActivity());
     }
 
     @Override

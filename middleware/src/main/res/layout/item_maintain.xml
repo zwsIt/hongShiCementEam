@@ -26,40 +26,24 @@
         android:orientation="vertical"
         android:paddingStart="@dimen/dp_10">
 
-        <LinearLayout
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/attachEam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/dp_5"
-            android:paddingBottom="@dimen/dp_5">
+            android:tag="attachEam"
+            app:editable="false"
+            app:text="附属设备:"
+            app:text_size="15" />
 
-            <com.supcon.mes.mbap.view.CustomVerticalTextView
-                android:id="@+id/sparePartName"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingRight="5dp"
-                android:tag="sparePartName"
-                app:editable="false"
-                app:key="零部件："
-                app:necessary="false"
-                app:text_size="15" />
-
-            <include layout="@layout/ly_vertical_line" />
-
-            <com.supcon.mes.mbap.view.CustomVerticalTextView
-                android:id="@+id/attachEam"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:paddingStart="@dimen/dp_5"
-                android:tag="attachEam"
-                app:editable="false"
-                app:text="附属设备:"
-                app:text_size="15" />
-
-        </LinearLayout>
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/sparePartName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="sparePartName"
+            app:editable="false"
+            app:key="零部件："
+            app:necessary="false"
+            app:text_size="15" />
         <!--<include layout="@layout/ly_line" />-->
         <!--<com.supcon.mes.mbap.view.CustomTextView-->
             <!--android:layout_width="match_parent"-->
@@ -78,16 +62,10 @@
             <!--app:key_width="@dimen/dp_100"-->
             <!--app:key_size="14"/>-->
 
-        <include layout="@layout/ly_line" />
-
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/claim"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_1"
-            android:background="@color/white"
-            android:paddingTop="@dimen/dp_5"
-            android:paddingBottom="@dimen/dp_5"
             android:tag="claim"
             app:edit_maxLine="4"
             app:key="@string/claim"
@@ -98,9 +76,6 @@
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_1"
-            android:background="@color/white"
-            android:paddingTop="@dimen/dp_5"
             android:paddingBottom="@dimen/dp_5"
             android:tag="content"
             app:edit_maxLine="4"

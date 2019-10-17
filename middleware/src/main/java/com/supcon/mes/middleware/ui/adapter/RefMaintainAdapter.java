@@ -40,9 +40,9 @@ public class RefMaintainAdapter extends BaseListDataRecyclerViewAdapter<RefMaint
         RelativeLayout layout_refproduct;
 
         @BindByTag("sparePartName")
-        CustomVerticalTextView sparePartName;
+        CustomTextView sparePartName;
         @BindByTag("attachEam")
-        CustomVerticalTextView attachEam;
+        CustomTextView attachEam;
         @BindByTag("lastExeTime")
         CustomTextView lastExeTime;
         @BindByTag("nextExeTime")

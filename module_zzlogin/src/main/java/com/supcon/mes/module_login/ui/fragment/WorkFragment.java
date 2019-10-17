@@ -423,7 +423,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
             pendingQueryParams.add(workInfo.pendingUrl);
         }
 
-        if (EamApplication.isHailuo()) {
+        if (!EamApplication.isHongshi()) {
             doZhiZhiLogin();
         }
         refreshList();

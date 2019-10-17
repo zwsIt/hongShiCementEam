@@ -42,12 +42,12 @@ ext{
 
     minSdkVersion = 19
     targetSdkVersion = 22
-    versionCode = 37
-    versionName = "8.10.07.37"
+    versionCode = 38
+    versionName = "8.20.00.38"
 
-    ProductCode = "8.20.04"
+    ProductCode = "8.20.00"
     EamCode = "01"
-    MobileCode = "01"  //测试版本，不足一位加“0”补足
+    MobileCode = "00"  //测试版本，不足一位加“0”补足
 
     isAlone  = false
 
@@ -67,7 +67,7 @@ ext{
     mbapVersion         = '9.7.29.3debug2'
 
     vibVersion          = '9.7.29.1'
-    sb2Version          = '9.7.29.2debug3'
+    sb2Version          = '9.7.29.2debug4'
     nfcVersion          = '9.7.29.1'
 
 //zz

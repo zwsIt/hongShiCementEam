@@ -148,7 +148,7 @@ public class ScoreMechanicStaffPerformanceActivity extends BaseRefreshActivity i
             scoreStaffEntity.patrolWorker.code = EamApplication.getAccountInfo().staffCode;
             scoreStaffEntity.patrolWorker.id = EamApplication.getAccountInfo().staffId;
         } else {
-            scoreStaff.setEnabled(false);
+            scoreStaff.setEditable(false);
         }
         scoreStaff.setKey("机修工");
         scoreStaff.setContent(scoreStaffEntity.getPatrolWorker().name);

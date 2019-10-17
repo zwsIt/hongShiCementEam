@@ -54,10 +54,10 @@ public class SparePartConsumeLedgerAdapter extends BaseListDataRecyclerViewAdapt
         CustomTextView itemSpareConsumptionTv;
 
         @BindByTag("itemSpareTeamTv")
-        CustomVerticalTextView itemSpareTeamTv;
+        CustomTextView itemSpareTeamTv;
 
         @BindByTag("itemSpareStaffTv")
-        CustomVerticalTextView itemSpareStaffTv;
+        CustomTextView itemSpareStaffTv;
 
         @BindByTag("itemSpareTableNoTv")
         CustomTextView itemSpareTableNoTv;

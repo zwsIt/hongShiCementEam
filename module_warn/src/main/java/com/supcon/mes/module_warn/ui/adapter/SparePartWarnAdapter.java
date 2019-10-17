@@ -37,6 +37,9 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
     protected BaseRecyclerViewHolder<SparePartWarnEntity> getViewHolder(int viewType) {
         return new ViewHolder(context);
     }
+    public void setCheckPosition(int checkPosition) {
+        this.checkPosition = checkPosition;
+    }
 
     class ViewHolder extends BaseRecyclerViewHolder<SparePartWarnEntity> {
 

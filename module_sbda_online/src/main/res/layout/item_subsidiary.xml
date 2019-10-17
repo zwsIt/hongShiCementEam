@@ -60,7 +60,6 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemEquipmentModelTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="规格型号:"
             app:max_lines="100" />
 
@@ -108,7 +107,6 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemEquipmentDateTv"
             app:content_hint="--"
-            app:gravity="center"
             android:visibility="gone"
             app:key="出厂日期:"
             app:max_lines="100" />
@@ -121,7 +119,6 @@
             android:tag="itemEquipmentMemoTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="备\t\t\t注:"
             app:max_lines="1" />
 

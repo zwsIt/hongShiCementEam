@@ -131,9 +131,21 @@ public class YHGLMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
                     }
                     Bundle bundle = new Bundle();
                     bundle.putLong(Constant.IntentKey.EAM_ID, eamID);
+                    bundle = genAddDataList(bundle);
                     IntentRouter.go(context, Constant.Router.MAINTAIN_REF, bundle);
                 });
 
+    }
+
+    private Bundle genAddDataList(Bundle bundle) {
+        ArrayList<String> addedSPList = new ArrayList<>();
+        for (MaintainEntity maintainEntity : mEntities){
+            if (maintainEntity.getJwxItem().id != null) {
+                addedSPList.add(maintainEntity.getJwxItem().id.toString());
+            }
+        }
+        bundle.putStringArrayList(Constant.IntentKey.ADD_DATA_LIST, addedSPList);
+        return bundle;
     }
 
     @Override

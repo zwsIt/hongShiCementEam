@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.base.fragment.BaseControllerFragment;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.mes.mbap.beans.LoginEvent;
@@ -22,7 +21,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.model.api.EamAPI;
-import com.supcon.mes.module_main.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.module_main.model.contract.EamContract;
 import com.supcon.mes.module_main.presenter.EamPresenter;
 import com.supcon.mes.module_main.ui.adaper.EamListAdapter;
@@ -125,11 +124,7 @@ public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implemen
 
     @Override
     public void getEamsSuccess(CommonBAPListEntity entity) {
-        if (entity.result.size() > 0) {
-            refreshListController.refreshComplete(entity.result);
-        } else {
-            refreshListController.refreshComplete(null);
-        }
+        refreshListController.refreshComplete(entity.result);
     }
 
     @Override

@@ -184,7 +184,8 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                     SnackbarHelper.showError(itemView, "请填写结果");
                     return;
                 }
-                if (xjWorkItemEntity.isphone && xjWorkItemEntity.isPhonere == false) {
+                if (xjWorkItemEntity.conclusionID != null && xjWorkItemEntity.conclusionID.equals("realValue/02")
+                        && xjWorkItemEntity.isphone && !xjWorkItemEntity.isPhonere) {
                     SnackbarHelper.showError(itemView, "该巡检项要求拍照");
                     return;
                 }
@@ -214,7 +215,7 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                         if (TextUtils.isEmpty(charSequence)) {
                             if (xjWorkItemEntity != null)
                                 xjWorkItemEntity.result = charSequence.toString();
-                            changeState(false);
+                            changeState(xjWorkItemEntity, false);
                         } else {
                             if ("数字".equals(xjWorkItemEntity.inputStandardID.valueTypeMoblie.value) && OLXJConstant.MobileEditType.INPUTE.equals(xjWorkItemEntity.inputStandardID.editTypeMoblie.id)) {  //值类型判断：字符/数字
                                 if (xjWorkItemEntity.autoJudge) {
@@ -289,11 +290,11 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                             if (Arrays.asList(normalRangeArr).contains(xjWorkItemEntity.defaultVal)) {
                                 xjWorkItemEntity.conclusionID = "realValue/01";
                                 xjWorkItemEntity.conclusionName = "正常";
-                                changeState(false);
+                                changeState(xjWorkItemEntity, false);
                             } else {
                                 xjWorkItemEntity.conclusionID = "realValue/02";
                                 xjWorkItemEntity.conclusionName = "异常";
-                                changeState(true);
+                                changeState(xjWorkItemEntity, true);
                             }
                             xjWorkItemEntity.result = xjWorkItemEntity.defaultVal;
                         }
@@ -310,9 +311,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                         if (Arrays.asList(normalRangeArr).contains(xjWorkItemEntity.result)) {
                             xjWorkItemEntity.conclusionID = "realValue/01";
                             xjWorkItemEntity.conclusionName = "正常";
-                            changeState(false);
+                            changeState(xjWorkItemEntity, false);
                         } else {
-                            changeState(true);
+                            changeState(xjWorkItemEntity, true);
                             xjWorkItemEntity.conclusionID = "realValue/02";
                             xjWorkItemEntity.conclusionName = "异常";
                         }
@@ -389,9 +390,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
             mOLXJCameraController.addListener(ufItemPics, getAdapterPosition(), OLXJWorkListEamAdapterNew.this);
             ufItemContent.setText(data.content);
             if (data.conclusionID != null && data.conclusionID.equals("realValue/02")) {
-                changeState(true);
+                changeState(data, true);
             } else {
-                changeState(false);
+                changeState(data, false);
             }
 
             if (OLXJConstant.MobileEditType.INPUTE.equals(data.inputStandardID.editTypeMoblie.id)) {   //录入框
@@ -481,7 +482,6 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
             } else if (data.isphone) {
                 ufItemPics.setTextHeight(DisplayUtil.dip2px(30, context));
             } else {
-
                 ufItemPics.setTextHeight(DisplayUtil.dip2px(0, context));
                 ufItemPics.setPadding(0, 0, 10, 0);
                 ufItemPics.clear();
@@ -489,13 +489,16 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
             }
         }
 
-        private void changeState(boolean isVisible) {
+        private void changeState(OLXJWorkItemEntity xjWorkItemEntity, boolean isVisible) {
             if (isVisible) {
                 ufBtnLayout.setVisibility(View.VISIBLE);
                 ufContentLine.setVisibility(View.VISIBLE);
+                ufItemPics.setVisibility(View.VISIBLE);
             } else {
                 ufBtnLayout.setVisibility(View.GONE);
                 ufContentLine.setVisibility(View.GONE);
+                ufItemPics.clear();
+                xjWorkItemEntity.xjImgUrl = "";
             }
         }
 
@@ -600,9 +603,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
 
                 xjWorkItemEntity.conclusionID = "realValue/01";
                 xjWorkItemEntity.conclusionName = "正常";
-                changeState(false);
+                changeState(xjWorkItemEntity, false);
             } else {  //异常
-                changeState(true);
+                changeState(xjWorkItemEntity, true);
                 xjWorkItemEntity.conclusionID = "realValue/02";
                 xjWorkItemEntity.conclusionName = "异常";
 
@@ -640,9 +643,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                 if (inputResult > small && inputResult < big) {  //区间内、异常
                     xjWorkItemEntity.conclusionID = "realValue/02";
                     xjWorkItemEntity.conclusionName = "异常";
-                    changeState(true);
+                    changeState(xjWorkItemEntity, true);
                 } else {  //正常
-                    changeState(false);
+                    changeState(xjWorkItemEntity, false);
                     xjWorkItemEntity.conclusionID = "realValue/01";
                     xjWorkItemEntity.conclusionName = "正常";
                 }
@@ -650,9 +653,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                 if (inputResult >= small && inputResult < big) {  //区间内、异常
                     xjWorkItemEntity.conclusionID = "realValue/02";
                     xjWorkItemEntity.conclusionName = "异常";
-                    changeState(true);
+                    changeState(xjWorkItemEntity, true);
                 } else {  //正常
-                    changeState(false);
+                    changeState(xjWorkItemEntity, false);
                     xjWorkItemEntity.conclusionID = "realValue/01";
                     xjWorkItemEntity.conclusionName = "正常";
                 }
@@ -660,9 +663,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                 if (inputResult > small && inputResult <= big) {  //区间内、异常
                     xjWorkItemEntity.conclusionID = "realValue/02";
                     xjWorkItemEntity.conclusionName = "异常";
-                    changeState(true);
+                    changeState(xjWorkItemEntity, true);
                 } else {  //正常
-                    changeState(false);
+                    changeState(xjWorkItemEntity, false);
                     xjWorkItemEntity.conclusionID = "realValue/01";
                     xjWorkItemEntity.conclusionName = "正常";
                 }
@@ -670,9 +673,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                 if (inputResult >= small && inputResult <= big) {  //区间内、异常
                     xjWorkItemEntity.conclusionID = "realValue/02";
                     xjWorkItemEntity.conclusionName = "异常";
-                    changeState(true);
+                    changeState(xjWorkItemEntity, true);
                 } else {  //正常
-                    changeState(false);
+                    changeState(xjWorkItemEntity, false);
                     xjWorkItemEntity.conclusionID = "realValue/01";
                     xjWorkItemEntity.conclusionName = "正常";
                 }
@@ -697,41 +700,41 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
 
             if (xjWorkItemEntity.normalRange.contains("≥")) {
                 if (inputResult < num) {  //异常
-                    changeState(true);
+                    changeState(xjWorkItemEntity, true);
                     xjWorkItemEntity.conclusionID = "realValue/02";
                     xjWorkItemEntity.conclusionName = "异常";
                 } else {  //正常
-                    changeState(false);
+                    changeState(xjWorkItemEntity, false);
                     xjWorkItemEntity.conclusionID = "realValue/01";
                     xjWorkItemEntity.conclusionName = "正常";
                 }
             } else if (xjWorkItemEntity.normalRange.contains("＞")) {
                 if (inputResult <= num) {  //异常
-                    changeState(true);
+                    changeState(xjWorkItemEntity, true);
                     xjWorkItemEntity.conclusionID = "realValue/02";
                     xjWorkItemEntity.conclusionName = "异常";
                 } else {  //正常
-                    changeState(false);
+                    changeState(xjWorkItemEntity, false);
                     xjWorkItemEntity.conclusionID = "realValue/01";
                     xjWorkItemEntity.conclusionName = "正常";
                 }
             } else if (xjWorkItemEntity.normalRange.contains("≤")) {
                 if (inputResult > num) {  //异常
-                    changeState(true);
+                    changeState(xjWorkItemEntity, true);
                     xjWorkItemEntity.conclusionID = "realValue/02";
                     xjWorkItemEntity.conclusionName = "异常";
                 } else {  //正常
-                    changeState(false);
+                    changeState(xjWorkItemEntity, false);
                     xjWorkItemEntity.conclusionID = "realValue/01";
                     xjWorkItemEntity.conclusionName = "正常";
                 }
             } else {
                 if (inputResult >= num) {  //异常
-                    changeState(true);
+                    changeState(xjWorkItemEntity, true);
                     xjWorkItemEntity.conclusionID = "realValue/02";
                     xjWorkItemEntity.conclusionName = "异常";
                 } else {  //正常
-                    changeState(false);
+                    changeState(xjWorkItemEntity, false);
                     xjWorkItemEntity.conclusionID = "realValue/01";
                     xjWorkItemEntity.conclusionName = "正常";
                 }

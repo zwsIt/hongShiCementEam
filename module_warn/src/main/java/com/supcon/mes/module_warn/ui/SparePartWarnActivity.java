@@ -130,11 +130,11 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefresh(RefreshEvent event) {
         refreshListController.refreshBegin();
+        sparePartWarnAdapter.setCheckPosition(-1); // 还原初始状态
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
         refreshListController.refreshBegin();
     }
 

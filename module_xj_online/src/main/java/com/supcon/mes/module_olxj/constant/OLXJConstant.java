@@ -27,7 +27,7 @@ public interface OLXJConstant {
     }
 
     /**
-     * 巡检项-检查状态
+     * 巡检项-结论状态
      */
     interface MobileConclusion {
         String NORMAL = "realValue/01"; //正常

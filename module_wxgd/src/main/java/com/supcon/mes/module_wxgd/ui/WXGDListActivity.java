@@ -482,14 +482,12 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(LoginEvent loginEvent) {
-        LogUtil.w("---------------------------------", "测试登录刷新...");
         refreshListController.refreshBegin();
     }
 
     @SuppressLint("CheckResult")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refresh(LoginValidEvent loginValidEvent) {
-        LogUtil.w("---------------------------------", "测试登录失效刷新...");
         Flowable.timer(500, TimeUnit.MILLISECONDS)
                 .compose(RxSchedulers.io_main())
                 .subscribe(new Consumer<Long>() {

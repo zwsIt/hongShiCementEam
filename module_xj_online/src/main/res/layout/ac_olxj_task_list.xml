@@ -63,7 +63,8 @@
             android:background="@drawable/sl_blue_radius_btn"
             android:tag="olxjFinishBtn"
             android:text="结束任务"
-            android:textSize="@dimen/fontSize_16sp" />
+            android:textSize="@dimen/fontSize_16sp"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/olxjAbortBtn"

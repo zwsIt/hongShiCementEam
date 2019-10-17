@@ -61,7 +61,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:tag="titleText"
-            android:text="移动设备管理"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="16sp"
             tools:ignore="HardcodedText,RtlHardcoded" />
@@ -79,9 +79,23 @@
             app:content_color="@color/white"
             app:content_hint="请选择设备"
             app:editable="true"
-            app:key_width="0dp" />
-    </RelativeLayout>
+            app:key_width="0dp"
+            android:visibility="gone"
+            />
 
+
+    </RelativeLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_8"
+        android:src="@drawable/ic_search_cc"
+        android:id="@+id/eamSearchIv"
+        android:tag="eamSearchIv"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="@dimen/dp_20"
+        />
 
     <ScrollView
         android:id="@+id/workScrollView"

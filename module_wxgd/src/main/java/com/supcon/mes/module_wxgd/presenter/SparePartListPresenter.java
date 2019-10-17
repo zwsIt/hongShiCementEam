@@ -21,11 +21,11 @@ public class SparePartListPresenter extends SparePartListContract.Presenter {
     @Override
     public void updateStandingCrop(String productCode) {
         Flowable<CommonListEntity<StandingCropEntity>> commonListEntityFlowable;
-        if (EamApplication.isHongshi()) {
+//        if (EamApplication.isHongshi()) {
             commonListEntityFlowable = MiddlewareHttpClient.updateStandingCrop(productCode);
-        } else {
-            commonListEntityFlowable = HttpClient.updateStandingCrop(productCode);
-        }
+//        } else {
+//            commonListEntityFlowable = HttpClient.updateStandingCrop(productCode);
+//        }
         mCompositeSubscription.add(
                 commonListEntityFlowable
                         .onErrorReturn(new Function<Throwable, CommonListEntity<StandingCropEntity>>() {

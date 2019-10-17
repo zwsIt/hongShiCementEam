@@ -218,7 +218,7 @@ public interface ApiService {
     /**
      * @param
      * @return
-     * @description 备件消耗台账
+     * @description 零部件消耗台账
      * @author zhangwenshuai1 2018/9/11
      */
     @GET("/BEAM2/workList/sparePart/productConsumeList-query.action")

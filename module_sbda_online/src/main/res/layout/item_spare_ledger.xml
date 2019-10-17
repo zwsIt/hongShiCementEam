@@ -34,7 +34,6 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSpareLedgerModelTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="规格型号:"
             app:max_lines="100" />
 
@@ -46,7 +45,6 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemSpareLedgerTypeTv"
             app:content_hint="--"
-            app:gravity="center"
             app:key="设备类型:"
             app:max_lines="100" />
 
@@ -58,7 +56,6 @@
             android:tag="itemSpareLedgerFileStateTv"
             android:visibility="gone"
             app:content_hint="--"
-            app:gravity="center"
             app:key="建档标记:"
             app:max_lines="100" />
 

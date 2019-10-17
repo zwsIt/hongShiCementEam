@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.mes.mbap.view.CustomContentTextDialog;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.model.bean.FlowProcessEntity;
@@ -58,6 +59,18 @@ public class FlowProcessAdapter extends BaseListDataRecyclerViewAdapter<FlowProc
         @Override
         protected int layoutId() {
             return R.layout.hs_item_flow_process;
+        }
+
+        @Override
+        protected void initListener() {
+            super.initListener();
+            itemFlowStaff.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    CustomContentTextDialog.showContent(context,itemFlowStaff.getText().toString());
+                    return false;
+                }
+            });
         }
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -114,7 +127,7 @@ public class FlowProcessAdapter extends BaseListDataRecyclerViewAdapter<FlowProc
                     itemFlowLineRight.setVisibility(View.GONE);
                     itemFlowTime.setVisibility(View.GONE);
                 }
-            } else if (Constant.TableStatus_CH.END.equals(data.flowProcess)) {
+            } else if (Constant.TableStatus_CH.OVER.equals(data.flowProcess) || Constant.TableStatus_CH.END.equals(data.flowProcess)) {
                 if (data.isFinish) {
                     itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_end_end));
                     itemFlowLineRight.setVisibility(View.VISIBLE);
@@ -126,8 +139,15 @@ public class FlowProcessAdapter extends BaseListDataRecyclerViewAdapter<FlowProc
                     itemFlowTime.setVisibility(View.GONE);
                 }
             } else {
-                itemFlowLineRight.setVisibility(View.GONE);
-                itemFlowTime.setVisibility(View.GONE);
+                if (data.isFinish) {
+                    itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_other_ed));
+                    itemFlowLineRight.setVisibility(View.VISIBLE);
+                    itemFlowTime.setVisibility(View.VISIBLE);
+                }else {
+                    itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_other_ing));
+                    itemFlowLineRight.setVisibility(View.GONE);
+                    itemFlowTime.setVisibility(View.GONE);
+                }
             }
             itemFlowName.setText(data.flowProcess);
             itemFlowStaff.setText(data.dealStaff);

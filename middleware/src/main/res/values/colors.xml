@@ -6,8 +6,8 @@
 
     <color name="themeColor">#dd4c52</color>
     <color name="equipmentThemeColor">#dd4c52</color>
-    <!--<color name="themeColor">#356cbc</color>-->
-    <!--<color name="equipmentThemeColor">#356cbc</color>-->
+<!--    <color name="themeColor">#356cbc</color>-->
+<!--    <color name="equipmentThemeColor">#356cbc</color>-->
 
     <color name="customRed">#dd4c52</color>
     <color name="deviceTitleColor">#3c5569</color>

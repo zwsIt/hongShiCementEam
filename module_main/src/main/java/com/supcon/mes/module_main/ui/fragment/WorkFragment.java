@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.BaseConstant;
 import com.supcon.common.com_http.util.RxSchedulers;
 import com.supcon.common.view.base.fragment.BaseControllerFragment;
@@ -42,12 +44,14 @@ import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.ui.view.MarqueeTextView;
+import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
@@ -112,6 +116,9 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
 
     @BindByTag("eamTv")
     CustomTextView eamTv;
+
+    @BindByTag("eamSearchIv")
+    ImageView eamSearchIv;
 
     //待办
     @BindByTag("waitDealtLayout")
@@ -243,7 +250,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         workAdapter.setList(workInfos);
         workAdapter.notifyDataSetChanged();
 
-        if (EamApplication.isHailuo()) {
+        if (!EamApplication.isHongshi()) {
             doZhiZhiLogin();
         }
 
@@ -322,10 +329,33 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         GalleryBean galleryBean = new GalleryBean();
         if (EamApplication.isHongshi()) {
             galleryBean.resId = R.drawable.banner_hssn;
-        } else {
+            ads.add(galleryBean);
+        } else if(EamApplication.isHailuo()){
             galleryBean.resId = R.drawable.banner_hailuo;
+            ads.add(galleryBean);
+        }else if(EamApplication.isYNSW()){
+            galleryBean.resId = R.drawable.pic_ynsw_ban01;
+            ads.add(galleryBean);
+            galleryBean = new GalleryBean();
+            galleryBean.resId = R.drawable.pic_ynsw_ban02;
+            ads.add(galleryBean);
+            galleryBean = new GalleryBean();
+            galleryBean.resId = R.drawable.pic_ynsw_ban03;
+            ads.add(galleryBean);
         }
-        ads.add(galleryBean);
+        else if("zs".equals(ChannelUtil.getUMengChannel())){
+            galleryBean.resId = R.drawable.pic_zs_ban01;
+            ads.add(galleryBean);
+        }
+        else if("beiliu".equals(ChannelUtil.getUMengChannel())){
+            galleryBean.resId = R.drawable.pic_bl_ban01;
+            ads.add(galleryBean);
+        }
+        else{
+            galleryBean.resId = R.drawable.pic_banner05;
+            ads.add(galleryBean);
+        }
+
         workCustomAd.setGalleryBeans(ads);
     }
 
@@ -478,6 +508,18 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
             }
         });
 
+        RxView.clicks(eamSearchIv)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Bundle bundle = new Bundle();
+//                    bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                        bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "Main");
+                        IntentRouter.go(getActivity(), Constant.Router.EAM, bundle);
+                    }
+                });
+
         scoreLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -550,11 +592,11 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                     proxyStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
                     CustomTextView person = customDialog.getDialog().findViewById(R.id.proxyPerson);
                     person.setContent(Util.strFormat(proxyStaff.name));
-                } else if (commonSearchEvent.commonSearchEntity instanceof EamType) {
-                    EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
-                    eamTv.setContent(Util.strFormat(eamType.name));
+                } else if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
+                    EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+                    eamTv.setContent(Util.strFormat(eamEntity.name));
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(Constant.IntentKey.EAM, eamType);
+                    bundle.putSerializable(Constant.IntentKey.EAM, eamEntity);
                     IntentRouter.go(getActivity(), Constant.Router.EAM_DETAIL, bundle);
                 }
             }
@@ -685,9 +727,9 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     @Override
     public void getEamSuccess(CommonListEntity entity) {
         if (entity.result.size() > 0) {
-            EamType eamType = (EamType) entity.result.get(0);
+            EamEntity eamEntity = (EamEntity) entity.result.get(0);
             Bundle bundle = new Bundle();
-            bundle.putSerializable(Constant.IntentKey.EAM, eamType);
+            bundle.putSerializable(Constant.IntentKey.EAM, eamEntity);
             IntentRouter.go(getActivity(), Constant.Router.EAM_DETAIL, bundle);
             return;
         }

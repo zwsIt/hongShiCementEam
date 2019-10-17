@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
@@ -47,12 +48,14 @@ public class DelayRecordActivity extends BaseRefreshRecyclerActivity<DelayRecord
 
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
+    @BindByTag("titleText")
+    TextView titleText;
 
-    @BindByTag("customSearchView")
-    CustomSearchView titleSearchView;
-
-    @BindByTag("searchTitleBar")
-    CustomHorizontalSearchTitleBar searchTitleBar;
+//    @BindByTag("customSearchView")
+//    CustomSearchView titleSearchView;
+//
+//    @BindByTag("searchTitleBar")
+//    CustomHorizontalSearchTitleBar searchTitleBar;
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -88,10 +91,7 @@ public class DelayRecordActivity extends BaseRefreshRecyclerActivity<DelayRecord
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(15));
-        //设置搜索框默认提示语
-        titleSearchView.setHint("请输入设备");
-        searchTitleBar.setBackgroundResource(R.color.gradient_start);
-        searchTitleBar.disableRightBtn();
+        titleText.setText("延期记录");
     }
 
     @SuppressLint("CheckResult")
@@ -99,25 +99,6 @@ public class DelayRecordActivity extends BaseRefreshRecyclerActivity<DelayRecord
     protected void initListener() {
         super.initListener();
         leftBtn.setOnClickListener(v -> onBackPressed());
-
-        searchTitleBar.setOnExpandListener(isExpand -> {
-            if (isExpand) {
-                titleSearchView.setHint("设备名称或编码");
-                titleSearchView.setInputTextColor(com.supcon.mes.middleware.R.color.hintColor);
-            } else {
-                titleSearchView.setHint("搜索");
-                titleSearchView.setInputTextColor(com.supcon.mes.middleware.R.color.black);
-            }
-        });
-        RxTextView.textChanges(titleSearchView.editText())
-                .skipInitialValue()
-                .subscribe(charSequence -> {
-                    if (TextUtils.isEmpty(charSequence)) {
-                        doSearch(charSequence.toString());
-                    }
-                });
-        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () ->
-                doSearch(titleSearchView.getInput()));
 
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override

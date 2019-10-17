@@ -17,7 +17,7 @@ import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
-import com.supcon.mes.middleware.model.bean.EamType;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -56,7 +56,7 @@ public class AnomalyActivity extends BaseRefreshRecyclerActivity<AnomalyEntity> 
     TextView titleText;
 
     private AnomalyAdapter anomalyAdapter;
-    private EamType eamType;
+    private EamEntity mEamEntity;
 
     @Override
     protected IListAdapter<AnomalyEntity> createAdapter() {
@@ -72,7 +72,7 @@ public class AnomalyActivity extends BaseRefreshRecyclerActivity<AnomalyEntity> 
     @Override
     protected void onInit() {
         super.onInit();
-        eamType = (EamType) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class AnomalyActivity extends BaseRefreshRecyclerActivity<AnomalyEntity> 
             @Override
             public void onRefresh(int pageIndex) {
                 Map<String, Object> param = new HashMap<>();
-                param.put(Constant.BAPQuery.EAMCODE, eamType.code);
+                param.put(Constant.BAPQuery.EAMCODE, mEamEntity.code);
                 presenterRouter.create(AnomalyAPI.class).getAnomalyList(pageIndex, 20, param);
             }
         });

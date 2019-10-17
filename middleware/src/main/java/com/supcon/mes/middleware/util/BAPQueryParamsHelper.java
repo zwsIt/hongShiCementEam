@@ -13,11 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 //import static com.supcon.mes.middleware.constant.Constant.BAPQuery.BE;
+import static com.supcon.mes.middleware.constant.Constant.BAPQuery.BE;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.GE;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LE;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LIKE;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LIKE_OPT_BLUR;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LIKE_OPT_Q;
+import static com.supcon.mes.middleware.constant.Constant.BAPQuery.LONG;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.SYSTEMCODE;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TEXT;
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_JOIN;
@@ -118,6 +120,15 @@ public class BAPQueryParamsHelper {
     private static SubcondEntity parseKey(String key, Object value) {
         SubcondEntity subcondEntity = null;
         switch (key) {
+            case Constant.BAPQuery.ID:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.columnName = key;
+                subcondEntity.dbColumnType = LONG;
+                subcondEntity.operator = BE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
             case Constant.BAPQuery.NAME:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.type = TYPE_NORMAL;
@@ -323,6 +334,8 @@ public class BAPQueryParamsHelper {
             case Constant.BAPQuery.PRIORITY:
             case Constant.BAPQuery.FAULT_INFO_TYPE:
             case Constant.BAPQuery.LINK_STATE:
+            case Constant.BAPQuery.EAM_STATE:
+            case Constant.BAPQuery.ON_OR_OFF:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = key;
                 subcondEntity.type = TYPE_NORMAL;
@@ -342,14 +355,6 @@ public class BAPQueryParamsHelper {
                 subcondEntity.value = String.valueOf(value);
                 break;
             case Constant.BAPQuery.EAM_CODE:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = key;
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.dbColumnType = Constant.BAPQuery.BAPCODE;
-                subcondEntity.operator = Constant.BAPQuery.LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-                break;
             case Constant.BAPQuery.EAMCODE:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = key;
@@ -386,15 +391,6 @@ public class BAPQueryParamsHelper {
                 subcondEntity.paramStr = LIKE_OPT_BLUR;
                 subcondEntity.value = String.valueOf(value);
                 break;
-            case Constant.BAPQuery.EAM_STATE:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = key;
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.dbColumnType = Constant.BAPQuery.SYSTEMCODE;
-                subcondEntity.operator = Constant.BAPQuery.BE;
-                subcondEntity.paramStr = LIKE_OPT_Q;
-                subcondEntity.value = String.valueOf(value);
-                break;
             case Constant.BAPQuery.EAM_AREA:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = "ID";
@@ -419,15 +415,6 @@ public class BAPQueryParamsHelper {
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
                 subcondEntity.operator = "=includeCustSub#BEAM_AREAS";
-                subcondEntity.paramStr = LIKE_OPT_Q;
-                subcondEntity.value = String.valueOf(value);
-                break;
-            case Constant.BAPQuery.ON_OR_OFF:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = key;
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.dbColumnType = Constant.BAPQuery.SYSTEMCODE;
-                subcondEntity.operator = Constant.BAPQuery.BE;
                 subcondEntity.paramStr = LIKE_OPT_Q;
                 subcondEntity.value = String.valueOf(value);
                 break;

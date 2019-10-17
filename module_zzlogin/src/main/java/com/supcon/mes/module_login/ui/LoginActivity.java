@@ -387,11 +387,7 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
 
             //跳转到主页
 //            if (isFirstIn) {
-            if (EamApplication.isHongshi()) {
-                IntentRouter.go(context, Constant.Router.MAIN_REDLION);
-            } else {
-                IntentRouter.go(context, Constant.Router.MAIN_REDLION);
-            }
+            IntentRouter.go(context, Constant.Router.MAIN_REDLION);
             isFirstIn = false;
 //            }
             LoginActivity.this.finish();

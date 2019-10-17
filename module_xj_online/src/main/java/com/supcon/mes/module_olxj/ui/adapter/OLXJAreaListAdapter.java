@@ -15,7 +15,9 @@ import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.middleware.EamApplication;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_olxj.R;
+import com.supcon.mes.module_olxj.constant.OLXJConstant;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 import com.supcon.mes.module_olxj.ui.view.TipPopwindow;
 
@@ -149,7 +151,7 @@ public class OLXJAreaListAdapter extends BaseListDataRecyclerViewAdapter<OLXJAre
                     .subscribe(xjWorkItemEntity -> {
                                 if (xjWorkItemEntity.isFinished) {
                                     finishedNum.getAndIncrement();
-                                    if (!TextUtils.isEmpty(xjWorkItemEntity.conclusionID) && xjWorkItemEntity.conclusionID.equals("realValue/02")) {
+                                    if (!TextUtils.isEmpty(xjWorkItemEntity.conclusionID) && OLXJConstant.MobileConclusion.AB_NORMAL.equals(xjWorkItemEntity.conclusionID)) {
                                         faultPosition.getAndIncrement();
                                         isFault = true;
 //                                        faultMsg.append(faultPosition.get()).append(".")
