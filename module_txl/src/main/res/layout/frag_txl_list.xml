@@ -30,7 +30,6 @@
             android:src="@drawable/ic_back"
             android:visibility="gone" />
     </LinearLayout>
-
     <com.supcon.mes.mbap.view.CustomSearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
@@ -39,7 +38,6 @@
         android:visibility="gone"
         android:tag="searchView"
         app:search_hint="请输入姓名/首字母/电话" />
-    <include layout="@layout/ly_line" />
 
     <LinearLayout
         android:layout_width="match_parent"

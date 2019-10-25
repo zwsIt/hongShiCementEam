@@ -256,22 +256,11 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-        updateInitView();
-
-    }
-
-    public void updateInitView() {
-        if (mWXGDEntity != null) {
-            titleText.setText((mWXGDEntity.pending != null && isEdit) ? mWXGDEntity.pending.taskDescription : "通知");
-            initTableHeadView();
-        }
-
     }
 
     @Override
     protected void initData() {
         super.initData();
-        updateInitData();
     }
 
     public void updateInitData() {
@@ -296,6 +285,8 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadView() {
+        if (mWXGDEntity == null) return;
+        titleText.setText((mWXGDEntity.pending != null && isEdit) ? mWXGDEntity.pending.taskDescription : "通知");
         if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
         } else {
@@ -349,7 +340,12 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : sdf.format(mWXGDEntity.planStartDate));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : sdf.format(mWXGDEntity.planEndDate));
 
-        mWXGDEntity.realEndDate = mWXGDEntity != null ? mWXGDEntity.realEndDate : System.currentTimeMillis();
+        if (mWXGDEntity != null) {
+            mWXGDEntity.realEndDate = mWXGDEntity.realEndDate != null ? mWXGDEntity.realEndDate : System.currentTimeMillis();
+        } else {
+            mWXGDEntity.realEndDate = System.currentTimeMillis();
+        }
+
         realEndTime.setDate(DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
@@ -803,9 +799,9 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         List<WXGDEntity> wxgdEntityList = entity.result;
         if (wxgdEntityList.size() > 0) {
             mWXGDEntity = wxgdEntityList.get(0);
-            oldWxgdEntity = GsonUtil.gsonToBean(mWXGDEntity.toString(), WXGDEntity.class);
-            updateInitView();
+            initTableHeadView();
             updateInitData();
+            oldWxgdEntity = GsonUtil.gsonToBean(mWXGDEntity.toString(), WXGDEntity.class);
             mRepairStaffController.setWxgdEntity(mWXGDEntity);
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
@@ -818,7 +814,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
     @Override
     public void listWxgdsFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, errorMsg);
+        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
         refreshController.refreshComplete();
     }
 

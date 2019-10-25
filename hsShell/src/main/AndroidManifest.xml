@@ -21,7 +21,7 @@
         android:roundIcon="${APP_ROUND_ICON}"
 
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppBaseTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon, android:theme,android:allowBackup, android:label"
         android:allowBackup="true">

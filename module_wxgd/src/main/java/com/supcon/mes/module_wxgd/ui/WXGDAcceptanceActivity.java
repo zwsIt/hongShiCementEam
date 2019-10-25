@@ -100,7 +100,7 @@ import java.util.Map;
 
 @Router(value = Constant.Router.WXGD_ACCEPTANCE)
 @Presenter(value = {WXGDListPresenter.class, GenerateAcceptancePresenter.class})
-@Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class, OnlineCameraController.class, AttachmentController.class})
+@Controller(value = {LinkController.class,SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class, OnlineCameraController.class, AttachmentController.class})
 public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View, GenerateAcceptanceContract.View {
 
     @BindByTag("leftBtn")
@@ -225,10 +225,10 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         maintenanceController = getController(MaintenanceController.class);
         maintenanceController.setEditable(false);
         mAttachmentController = getController(AttachmentController.class);
-        mLinkController = new LinkController();
+        mLinkController = getController(LinkController.class);
+
         roleController = new RoleController();  //角色
         roleController.queryRoleList(EamApplication.getUserName());
-
         registerController(Constant.Controller.ROLE, roleController);
 
         mSinglePickController = new SinglePickController(this);
@@ -254,21 +254,14 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-        updateInitView();
+        initPicPath();
     }
 
-    public void updateInitView() {
-        if (mWXGDEntity != null) {
-            titleText.setText(mWXGDEntity.pending == null ? "" : mWXGDEntity.pending.taskDescription);
-            initTableHeadView();
-            // 初始化工作流
-            initLink();
-
-            getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_GDPATH, Constant.PicType.GD_PIC);
-            if (mWXGDEntity.attachmentEntities != null) {
-                getController(OnlineCameraController.class).setPicData(mWXGDEntity.attachmentEntities);
-            }
-        }
+    /**
+     * 初始化工单图片保存路径及名称
+     */
+    private void initPicPath() {
+        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_GDPATH, Constant.PicType.GD_PIC);
     }
 
     @Subscribe
@@ -295,6 +288,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadView() {
+        if (mWXGDEntity == null) return;
         if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
         } else {
@@ -324,14 +318,6 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     @Override
     protected void initData() {
         super.initData();
-        updateInitData();
-//        presenterRouter.create(WXGDDispatcherAPI.class).getWxgdInfo(1000, 1000);
-    }
-
-    public void updateInitData() {
-        if (mWXGDEntity != null) {
-            initTableHeadData();
-        }
     }
 
     /**
@@ -341,6 +327,8 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadData() {
+        if (mWXGDEntity == null) return;
+        titleText.setText(mWXGDEntity.pending == null ? "" : mWXGDEntity.pending.taskDescription);
         workSource.setText(mWXGDEntity.workSource == null ? "" : mWXGDEntity.workSource.value);
         if (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) {
             eamName.setValue(mWXGDEntity.eamID.name);
@@ -746,36 +734,35 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         List<WXGDEntity> wxgdEntityList = entity.result;
         if (wxgdEntityList.size() > 0) {
             mWXGDEntity = wxgdEntityList.get(0);
-            updateWXGDEntity(mWXGDEntity);
-            updateInitData();
+            initTableHeadView();
+            initLink();
+            initTableHeadData();
+            initPic();
             mAcceptanceCheckController.setWxgdEntity(mWXGDEntity);
             mRepairStaffController.setWxgdEntity(mWXGDEntity);
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
-            refreshController.refreshComplete();
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }
+        refreshController.refreshComplete();
     }
 
     /**
-     * 更新维修工单
-     *
-     * @param mWXGDEntity
+     * 初始化照片
      */
-    private void updateWXGDEntity(WXGDEntity mWXGDEntity) {
+    private void initPic() {
         mAttachmentController.refreshGalleryView(new OnAPIResultListener<AttachmentListEntity>() {
             @Override
-            public void onFail(String errorMsg) {
-
-            }
+            public void onFail(String errorMsg) {}
 
             @Override
-            public void onSuccess(AttachmentListEntity result) {
-                initTableInfo();
-                mWXGDEntity.attachmentEntities = result.result;
-                downloadAttachment(mWXGDEntity.attachmentEntities);
+            public void onSuccess(AttachmentListEntity entity) {
+                mWXGDEntity.attachmentEntities = entity.result;
+                if (entity.result.size() > 0){
+                    downloadAttachment(mWXGDEntity.attachmentEntities);
+                }
             }
         }, mWXGDEntity.tableInfoId);
 
@@ -783,18 +770,9 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     }
 
     /**
-     * 初始化
+     * 下载图片
+     * @param attachmentEntities
      */
-    private void initTableInfo() {
-        if (tableNo != null) {
-            titleText.setText(mWXGDEntity.pending == null ? "" : mWXGDEntity.pending.taskDescription);
-            initTableHeadView();
-            // 初始化工作流
-            initLink();
-            getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_GDPATH, Constant.PicType.GD_PIC);
-        }
-    }
-
     private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
         AttachmentDownloadController mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_GDPATH);
         mDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_workList",
@@ -808,7 +786,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
     @Override
     public void listWxgdsFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, errorMsg);
+        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
         refreshController.refreshComplete();
     }
 

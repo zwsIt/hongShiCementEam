@@ -15,6 +15,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
@@ -33,6 +34,7 @@ import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.Module;
+import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
@@ -45,6 +47,7 @@ import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.DeviceAddEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_yhgl.IntentRouter;
@@ -69,7 +72,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Router(Constant.Router.YH_VIEW)
 @Presenter(YHSubmitPresenter.class)
-@Controller(value = {OnlineCameraController.class, LinkController.class})
+@Controller(value = {LinkController.class})
 public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -114,7 +117,7 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
     CustomVerticalTextView yhViewDescription;
 
     @BindByTag("yhGalleryView")
-    CustomGalleryView yhViewGalleryView;
+    CustomGalleryView yhGalleryView;
 
     @BindByTag("yhViewMemo")
     CustomVerticalEditText yhViewMemo;
@@ -171,9 +174,15 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
         if (!TextUtils.isEmpty(mYHEntity.describe)) {
             yhViewDescription.setContent(mYHEntity.describe);
         }
-        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
+        //初始化附件
         if (mYHEntity.attachmentEntities != null) {
-            getController(OnlineCameraController.class).setPicData(mYHEntity.attachmentEntities);
+            AttachmentDownloadController attachmentDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_YHPATH);
+            attachmentDownloadController.downloadYHPic(mYHEntity.attachmentEntities, "BEAM2_1.0.0_faultInfo", new OnSuccessListener<List<GalleryBean>>() {
+                @Override
+                public void onSuccess(List<GalleryBean> result) {
+                    yhGalleryView.setGalleryBeans(result);
+                }
+            });
         }
 
         if (!TextUtils.isEmpty(mYHEntity.remark)) {

@@ -6,7 +6,7 @@
     android:background="@color/bgGray2"
     android:orientation="vertical">
 
-    <include layout="@layout/ly_titlebar" />
+    <include layout="@layout/ly_titlebar_local" />
 
     <LinearLayout
         android:id="@+id/dateLayout"

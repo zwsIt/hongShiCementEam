@@ -18,6 +18,7 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomNumView;
+import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
@@ -76,7 +77,7 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
         @BindByTag("sum")
         CustomNumView sum;
         @BindByTag("oilType")
-        CustomVerticalSpinner oilType;  //加换油
+        CustomSpinner oilType;  //加换油
         @BindByTag("remark")
         CustomVerticalEditText remark;
         @BindByTag("itemViewDelBtn")
@@ -200,8 +201,14 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
 
 
             oilType.setSpinner(data.oilType != null ? Util.strFormat2(data.oilType.value) : "");
-            attachEam.setValue(Util.strFormat2(data.getJwxItemID().getAttachEamId().getAttachEamId().name));
-            sparePartId.setValue(Util.strFormat2(data.getJwxItemID().getSparePartId().getProductID().productName));
+            if (data.jwxItemID != null){
+                if (data.jwxItemID.sparePartId != null && data.jwxItemID.sparePartId.productID != null){
+                    sparePartId.setContent(data.jwxItemID.sparePartId.productID.productName);
+                }
+                if (data.jwxItemID.accessoryEamId != null && data.jwxItemID.accessoryEamId.attachEamId != null){
+                    attachEam.setContent(data.jwxItemID.accessoryEamId.attachEamId.name);
+                }
+            }
             oilCode.setValue(data.lubricate != null ? Util.strFormat2(data.lubricate.code) : "");
             oilName.setValue(data.lubricate != null ? Util.strFormat2(data.lubricate.name) : "");
             remark.setInput(data.remark);

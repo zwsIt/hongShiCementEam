@@ -73,7 +73,7 @@ public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<Acce
 
         @Override
         protected int layoutId() {
-            return R.layout.item_acceptance;
+            return R.layout.item_yhgl_acceptance;
         }
 
         @Override

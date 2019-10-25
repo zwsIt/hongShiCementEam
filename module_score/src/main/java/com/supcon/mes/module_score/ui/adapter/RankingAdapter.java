@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.R;
 import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
@@ -74,22 +75,32 @@ public class RankingAdapter extends BaseListDataRecyclerViewAdapter<ScoreStaffEn
         @Override
         protected void update(ScoreStaffEntity data) {
             rankingLayout.setBackground(context.getResources().getDrawable(R.drawable.ranking_stroke));
-            ranking.setText("");
 //            if (getAdapterPosition() == 0) {
-//                ranking.setBackground(context.getResources().getDrawable(R.drawable.pic_no1));
+//                ranking.setBackground(context.getResources().getDrawable(R.drawable-xhdpi.pic_no1));
 //            } else if (getAdapterPosition() == 1) {
-//                ranking.setBackground(context.getResources().getDrawable(R.drawable.pic_no2));
+//                ranking.setBackground(context.getResources().getDrawable(R.drawable-xhdpi.pic_no2));
 //            } else if (getAdapterPosition() == 2) {
-//                ranking.setBackground(context.getResources().getDrawable(R.drawable.pic_no3));
+//                ranking.setBackground(context.getResources().getDrawable(R.drawable-xhdpi.pic_no3));
 //            } else {
             ranking.setTextColor(context.getResources().getColor(R.color.color_9f9f9f));
-            ranking.setText(String.valueOf(getAdapterPosition() + 1));
-            ranking.setBackground(null);
+            // 判断排名
+            if (getAdapterPosition() == 0){
+                ranking.setText(String.valueOf(getAdapterPosition() + 1));
+                data.rank = Integer.parseInt(ranking.getText().toString()) ;
+            }else {
+                if (data.score == getItem(getAdapterPosition()-1).score){
+                    data.rank = getItem(getAdapterPosition()-1).rank ;
+                }else { // 小于
+                    data.rank = getItem(getAdapterPosition()-1).rank + 1 ;
+                }
+                ranking.setText(String.valueOf(data.rank));
+            }
+
 //            }
             name.setText(data.getPatrolWorker().name);
             depot.setText(Util.strFormat(data.getPatrolWorker().getMainPosition().getDepartment().name));
             score.setText(Util.big(data.score));
-            if (rank == (getAdapterPosition() + 1)) {
+            if (EamApplication.getAccountInfo().staffId == data.patrolWorker.id/*rank == (getAdapterPosition() + 1)*/) {
 //                if (rank > 3) {
                 ranking.setTextColor(context.getResources().getColor(R.color.color_dd4351));
 //                }

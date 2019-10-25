@@ -11,14 +11,14 @@ public class SparePartReceiveEntity extends BaseEntity {
     public Float origDemandQuity;//申请数量
     public Float currDemandQuity;//领用量
     public String remark;//备注
-    public SparePartId sparePartId;//备件编码
+    public Good sparePartId;//备件编码
     public Double price; // 单价
     public Double total; // 总价
 
 
-    public SparePartId getSparePartId() {
+    public Good getSparePartId() {
         if (sparePartId == null) {
-            sparePartId = new SparePartId();
+            sparePartId = new Good();
         }
         return sparePartId;
     }

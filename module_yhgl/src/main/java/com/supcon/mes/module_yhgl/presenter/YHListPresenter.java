@@ -29,7 +29,6 @@ public class YHListPresenter extends YHListContract.Presenter {
         pageQueryParams.put("page.pageNo", pageNum);
         pageQueryParams.put("page.pageSize", 20);
         pageQueryParams.put("page.maxPageSize", 500);
-        LogUtil.d("fastQueryCondEntity:"+fastQueryCondEntity);
         mCompositeSubscription.add(
                 YHGLHttpClient.faultInfoListPending(pageQueryParams, fastQueryCondEntity)
                         .onErrorReturn(new Function<Throwable, YHListEntity>() {

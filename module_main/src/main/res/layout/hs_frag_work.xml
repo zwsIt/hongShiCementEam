@@ -45,7 +45,7 @@
             android:layout_marginRight="@dimen/dp_5"
             android:paddingBottom="@dimen/dp_3"
             android:tag="workDepot"
-            android:textColor="#ebb2b4"
+            android:textColor="@color/white"
             android:textSize="@dimen/fontSize_12sp"
             tools:text="开发部" />
     </LinearLayout>
@@ -123,7 +123,10 @@
                 android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
                 android:tag="waitDealtRecycler"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                />
 
             <LinearLayout
                 android:id="@+id/waitDealtLayout"
@@ -217,7 +220,9 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                >
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/workRecycler"
@@ -226,7 +231,10 @@
                     android:nestedScrollingEnabled="false"
                     android:overScrollMode="never"
                     android:tag="workRecycler"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="UnusedAttribute"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginRight="@dimen/dp_5"
+                    />
             </RelativeLayout>
 
         </LinearLayout>

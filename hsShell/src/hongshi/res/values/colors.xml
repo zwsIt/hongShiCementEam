@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="themeColor">#CE5050</color><!--红狮-->
+    <color name="equipmentThemeColor">#CE5050</color>
+</resources>

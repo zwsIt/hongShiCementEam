@@ -149,7 +149,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 
     private String thermometervalue = ""; // 全局测温值
 
-    WXGDEam mEam;
+    WXGDEam mEam; // 注：用于记录同设备归类
     private OLXJCameraController mCameraController;
     private CustomGalleryView customGalleryView;
     boolean isSmoothScroll = false;
@@ -1119,6 +1119,9 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 
         List<OLXJWorkItemEntity> xjWorkItemEntities = new ArrayList<>();
         List<OLXJWorkItemEntity> xjWorkItemTopEntities = new ArrayList<>();
+
+        List<Long> eamIdList = new ArrayList<>(); // 记录归类设备的id，防止出现重复归类
+
 //        OLXJWorkItemEntity headerEntity = new OLXJWorkItemEntity();
 //        headerEntity.headerPicPath = TextUtils.isEmpty(mXJAreaEntity.eamInspectionGuideImageAttachementInfo) ? "" : Constant.IMAGE_SAVE_PATH + mXJAreaEntity.eamInspectionGuideImageAttachementInfo;
 //        headerEntity.viewType = ListType.HEADER.value();
@@ -1135,10 +1138,11 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                             xjWorkItemEntities.add(titleEntity);
                         }
 
-                        if (mEam == null && !TextUtils.isEmpty(workItemEntity.eamID.name)
+                        if (/*!eamIdList.contains(workItemEntity.eamID.id)*/mEam == null && !TextUtils.isEmpty(workItemEntity.eamID.name)
                                 || mEam != null && !mEam.name.equals(workItemEntity.eamID.name)
                                 || mEam != null && !mEam.code.equals(workItemEntity.eamID.code)) {
                             mEam = workItemEntity.eamID;
+//                            eamIdList.add(mEam.id);
                             OLXJWorkItemEntity titleEntity = new OLXJWorkItemEntity();
                             titleEntity.title = workItemEntity.eamID.name;
                             titleEntity.eamID = workItemEntity.eamID;
@@ -1149,7 +1153,19 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                     if (workItemEntity.getPrioritySort() == 1) {
                         xjWorkItemTopEntities.add(workItemEntity);
                     } else {
-                        xjWorkItemEntities.add(workItemEntity);
+//                        if (eamIdList.contains(workItemEntity.eamID.id)){
+//                            //若包含已归类的设备标题，则插在改设备归类的下面
+//                            if (xjWorkItemEntities.size() >0){
+//                                for (int i = xjWorkItemEntities.size() -1 ;i >= 0;i--){
+//                                    if (xjWorkItemEntities.get(i).eamID != null && xjWorkItemEntities.get(i).eamID.id.equals(workItemEntity.eamID.id)){
+//                                        xjWorkItemEntities.add(i-1,workItemEntity);
+//                                    }
+//                                }
+//                            }
+//                        }else {
+                            xjWorkItemEntities.add(workItemEntity);
+//                        }
+
                     }
 
                     if (workItemEntity.eamID != null && !hashSet.contains(workItemEntity.eamID.id)) {
@@ -1161,7 +1177,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                 }, () -> {
                     mEam = null;
                     if (xjWorkItemTopEntities.size() > 0) {
-                        refreshListController.refreshComplete(xjWorkItemTopEntities);
+                        refreshListController.refreshComplete(xjWorkItemTopEntities);  // 展示高优先级项
                     } else {
                         refreshListController.refreshComplete(xjWorkItemEntities);
                     }

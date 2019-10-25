@@ -195,7 +195,8 @@ public class RepairStaffAdapter extends BaseListDataRecyclerViewAdapter<RepairSt
             } else {
                 repairStaffName.setValue("");
             }
-            workHour.setContent(data.workHour == null ? "" : String.valueOf(data.workHour.setScale(2, BigDecimal.ROUND_HALF_UP)));
+            if (data.workHour != null)
+                workHour.setContent(String.valueOf(data.workHour.setScale(2, BigDecimal.ROUND_HALF_UP)));
             if (data.startTime != null) {
                 actualStartTime.setDate(DateUtil.dateTimeFormat(data.startTime));
             } else {

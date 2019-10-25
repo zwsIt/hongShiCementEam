@@ -1125,7 +1125,7 @@ public class XJWorkItemListNewAdapter extends BaseListDataRecyclerViewAdapter<XJ
 //            File file = new File(data.headerPicPath);
 //            if (!file.exists() || file.isDirectory()) {
 //                galleryBean = new GalleryBean();
-//                galleryBean.resId = R.drawable.ic_zwtp;
+//                galleryBean.resId = R.drawable-xhdpi.ic_zwtp;
 //                ads.add(galleryBean);
 //            } else {
 //                String[] picUrls = data.headerPicPath.split(",");

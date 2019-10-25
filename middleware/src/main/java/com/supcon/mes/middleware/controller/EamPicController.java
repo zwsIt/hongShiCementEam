@@ -57,20 +57,23 @@ public class EamPicController extends BasePresenterController {
                 for (AttachmentEntity attachmentEntity : entity.result) {
                     if ("pic".equals(attachmentEntity.fileType)) {
 
-                        mAttachmentDownloadController.downloadEamPic(attachmentEntity, "mobileEAM_1.0.0_work", new OnSuccessListener<File>() {
-                            @Override
-                            public void onSuccess(File result) {
-                                CommonDeviceEntity commonDeviceEntity = EamApplication.dao().getCommonDeviceEntityDao().queryBuilder().where(CommonDeviceEntityDao.Properties.EamId.eq(eamId)).unique();
 
-                                if (commonDeviceEntity != null) {
-                                    commonDeviceEntity.eamPic = result.getAbsolutePath();
-                                    EamApplication.dao().getCommonDeviceEntityDao().update(commonDeviceEntity);
+                        if("BEAM_baseInfo_baseInfo".equals(attachmentEntity.type)) {
+                            mAttachmentDownloadController.downloadEamPic(attachmentEntity, "mobileEAM_1.0.0_work", new OnSuccessListener<File>() {
+                                @Override
+                                public void onSuccess(File result) {
+                                    CommonDeviceEntity commonDeviceEntity = EamApplication.dao().getCommonDeviceEntityDao().queryBuilder().where(CommonDeviceEntityDao.Properties.EamId.eq(eamId)).unique();
+
+                                    if (commonDeviceEntity != null) {
+                                        commonDeviceEntity.eamPic = result.getAbsolutePath();
+                                        EamApplication.dao().getCommonDeviceEntityDao().update(commonDeviceEntity);
+                                    }
+
+                                    if (imageView.getContext() != null && !((Activity) imageView.getContext()).isDestroyed())
+                                        Glide.with(imageView.getContext()).load(result).apply(RequestOptionUtil.getEamRequestOptions(imageView.getContext())).into(imageView);
                                 }
-
-                                if (imageView.getContext() != null && !((Activity) imageView.getContext()).isDestroyed())
-                                    Glide.with(imageView.getContext()).load(result).apply(RequestOptionUtil.getEamRequestOptions(imageView.getContext())).into(imageView);
-                            }
-                        });
+                            });
+                        }
                     }
                 }
 

@@ -13,13 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
         android:gravity="center_vertical">
 
         <include
+            android:layout_centerVertical="true"
             layout="@layout/ly_title_pic"
-            android:layout_width="5dp"
-            android:layout_height="13dp" />
+            android:layout_width="@dimen/dp_4"
+            android:layout_height="@dimen/dp_18" />
 
         <TextView
             style="@style/TitleTextColor"
@@ -55,11 +55,11 @@
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="cumulativeRunTime"
         app:key="累计运行时间"
-        app:key_width="100dp"
+        app:key_width="@dimen/dp_120"
         app:necessary="false" />
 
     <View
-        android:layout_width="345dp"
+        style="@style/SBDASplitLine"
         android:layout_height="1dp"
         android:layout_gravity="center_horizontal"
         android:background="#EDEDF0" />
@@ -73,10 +73,10 @@
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="cumulativeDownTime"
         app:key="累计停机时间"
-        app:key_width="100dp" />
+        app:key_width="@dimen/dp_120" />
 
     <View
-        android:layout_width="345dp"
+        style="@style/SBDASplitLine"
         android:layout_height="1dp"
         android:layout_gravity="center_horizontal"
         android:background="#EDEDF0" />
@@ -90,7 +90,7 @@
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="cumulativeDownNum"
         app:key="停机次数"
-        app:key_width="100dp"
+        app:key_width="@dimen/dp_120"
         app:necessary="false" />
 
     <!--<View-->

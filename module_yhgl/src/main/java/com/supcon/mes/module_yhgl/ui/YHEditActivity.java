@@ -43,11 +43,15 @@ import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.AttachmentController;
+import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.AreaDao;
+import com.supcon.mes.middleware.model.bean.AttachmentEntity;
+import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
@@ -62,6 +66,8 @@ import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
@@ -115,7 +121,8 @@ import static com.supcon.mes.middleware.constant.Constant.IntentKey.DEPLOYMENT_I
  */
 @Router(Constant.Router.YH_EDIT)
 @Presenter(value = {YHSubmitPresenter.class, YHListPresenter.class})
-@Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class, MaintenanceController.class, OnlineCameraController.class})
+@Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class, MaintenanceController.class, OnlineCameraController.class,
+        AttachmentController.class, AttachmentDownloadController.class})
 public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContract.View, YHListContract.View {
 
     @BindByTag("leftBtn")
@@ -199,7 +206,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private Map<String, Area> mAreas;
     private Map<String, RepairGroupEntity> mRepairGroups;
 
-    //    private AttachmentController mAttachmentController;
     private LinkController mLinkController;
     private List<GalleryBean> pics = new ArrayList<>();
     private boolean isCancel = false;
@@ -236,6 +242,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private String currentAcceptChkDateTime = DateUtil.dateTimeFormat(new Date().getTime()); // 当前验收时间
     private List<SystemCodeEntity> checkResultList = new ArrayList<>();
     private List<String> checkResultListStr = new ArrayList<>();
+    private AttachmentController mAttachmentController;
+    private AttachmentDownloadController mAttachmentDownloadController;
 
     @Subscribe
     public void onReceiveImageDeleteEvent(ImageDeleteEvent imageDeleteEvent) {
@@ -255,8 +263,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         EventBus.getDefault().register(this);
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
-        mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY);
-        tableNo = getIntent().getStringExtra(Constant.IntentKey.TABLENO);
+        mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY); // 隐患单列表、隐患统计列表传参
+        tableNo = getIntent().getStringExtra(Constant.IntentKey.TABLENO); // 工作提醒待办传参
         deploymentId = getIntent().getLongExtra(DEPLOYMENT_ID, 0L);
 
         mSparePartController = getController(SparePartController.class);
@@ -268,9 +276,14 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         maintenanceController = getController(MaintenanceController.class);
         maintenanceController.setEditable(true);
 
+        mAttachmentController = getController(AttachmentController.class);
+        mAttachmentDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_YHPATH);
+
         initSinglePickController();
         initDatePickController();
         initCheckResult();
+
+        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
     }
 
     private void initCheckResult() {
@@ -311,14 +324,15 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("隐患编辑");
-
-        updateInitView();
     }
 
     public void updateInitView() {
         if (mYHEntity == null) return;
+        //工作流初始化
+        iniTransition();
+
         mYHEntity.downStream = new SystemCodeEntity();
-        oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
+//        oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
 
         if (null != mYHEntity.eamID && !mYHEntity.eamID.checkNil()) {
             yhEditArea.setEditable(false);
@@ -336,10 +350,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         if (!TextUtils.isEmpty(mYHEntity.describe)) {
             yhEditDescription.setInput(mYHEntity.describe);
         }
-        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
-        if (mYHEntity.attachmentEntities != null) {
-            getController(OnlineCameraController.class).setPicData(mYHEntity.attachmentEntities);
-        }
+        // 加载图片
+        initPic();
+
         if (!TextUtils.isEmpty(mYHEntity.remark)) {
             yhEditMemo.setInput(mYHEntity.remark);
         }
@@ -347,6 +360,36 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         initCheckView();
     }
 
+    /**
+     * 加载隐患图片
+     *
+     */
+    private void initPic() {
+        if (mYHEntity != null) {
+            mAttachmentController.refreshGalleryView(new OnAPIResultListener<AttachmentListEntity>() {
+                @Override
+                public void onFail(String errorMsg) {
+
+                }
+
+                @Override
+                public void onSuccess(AttachmentListEntity result) {
+                    if (result.result.size() > 0){
+                        mYHEntity.attachmentEntities = result.result;
+                        downloadAttachment(mYHEntity.attachmentEntities);
+                    }
+                }
+            }, mYHEntity.tableInfoId);
+        }
+    }
+
+    private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
+        mAttachmentDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_faultInfo", result -> yhGalleryView.setGalleryBeans(result));
+    }
+
+    /**
+     * 初始化验收数据
+     */
     private void initCheckView() {
         acceptChkStaff.setContent(EamApplication.getAccountInfo().staffName);
         acceptChkStaffCode.setContent(EamApplication.getAccountInfo().staffCode);
@@ -378,21 +421,21 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 EamApplication.dao().getRepairGroupEntityDao().queryBuilder().where(RepairGroupEntityDao.Properties.IsUse.eq(Boolean.valueOf(true)), RepairGroupEntityDao.Properties.Ip.eq(EamApplication.getIp())).list();
         mRepairGroups = initEntities(repairGroupEntities);
 
-        updateInitData();
     }
 
     public void updateInitData() {
         if (mYHEntity != null) {
-            iniTransition();
 
             if (mYHEntity.priority == null && yhPriorityEntity.size() > 0) {
                 mYHEntity.priority = yhPriorityEntity.get(0);
             }
             yhEditPriority.setSpinner(mYHEntity.priority != null ? mYHEntity.priority.value : "");
+
             if (mYHEntity.faultInfoType == null && yhTypeEntities.size() > 0) {
                 mYHEntity.faultInfoType = yhTypeEntities.get(0);
             }
             yhEditType.setSpinner(mYHEntity.faultInfoType != null ? mYHEntity.faultInfoType.value : "");
+
             if (mYHEntity.repairType == null && wxTypeEntities.size() > 0) {
                 mYHEntity.repairType = wxTypeEntities.get(0);
             }
@@ -633,12 +676,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             }
         });
 
-/*        getController(BaseCameraController.class).setOnSuccessListener(new OnSuccessListener<File>() {
-            @Override
-            public void onSuccess(File result) {
-                uploadLocalPic(result);
-            }
-        });*/
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -1233,19 +1270,20 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             mYHEntity = result.get(0);
             updateInitView();
             updateInitData();
+            oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
             mSparePartController.setYHEntity(mYHEntity);
             mLubricateOilsController.setYHEntity(mYHEntity);
             mRepairStaffController.setYHEntity(mYHEntity);
             maintenanceController.setYHEntity(mYHEntity);
-            refreshController.refreshComplete();
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }
+        refreshController.refreshComplete();
     }
 
     @Override
     public void queryYHListFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, errorMsg);
+        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
         refreshController.refreshComplete();
     }
 

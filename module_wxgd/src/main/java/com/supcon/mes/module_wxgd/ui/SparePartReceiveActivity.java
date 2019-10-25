@@ -200,14 +200,14 @@ public class SparePartReceiveActivity extends BaseRefreshRecyclerActivity<SpareP
             }
         }
         SparePartReceiveEntity sparePartReceiveEntity = new SparePartReceiveEntity();
-        SparePartId sparePartId = new SparePartId();
-        sparePartId.id = good.id;
-        sparePartId.productCode = good.productCode;
-        sparePartId.productName = good.productName;
-        sparePartId.productModel = good.productModel;
-        sparePartId.productSpecif = good.productSpecif;
-        sparePartId.productBaseUnit = good.productBaseUnit;
-        sparePartReceiveEntity.sparePartId = sparePartId;
+//        SparePartId sparePartId = new SparePartId();
+//        sparePartId.id = good.id;
+//        sparePartId.productCode = good.productCode;
+//        sparePartId.productName = good.productName;
+//        sparePartId.productModel = good.productModel;
+//        sparePartId.productSpecif = good.productSpecif;
+//        sparePartId.productBaseUnit = good.productBaseUnit;
+        sparePartReceiveEntity.sparePartId = good;
         mSparePartEntityList.add(sparePartReceiveEntity);
         refreshListController.refreshComplete(mSparePartEntityList);
         ensure.setVisibility(View.VISIBLE);

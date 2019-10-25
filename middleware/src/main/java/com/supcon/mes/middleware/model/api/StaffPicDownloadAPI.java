@@ -11,7 +11,7 @@ import java.io.File;
  */
 @ContractFactory(entites = {File.class, CommonEntity.class})
 public interface StaffPicDownloadAPI {
-    void getStaffPic(long id);
+    void getStaffPic(long id,String picType);
 
     void getDocIds(long linkId);
 }

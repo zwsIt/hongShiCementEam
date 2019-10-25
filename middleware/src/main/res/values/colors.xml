@@ -4,10 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="themeColor">#dd4c52</color>
-    <color name="equipmentThemeColor">#dd4c52</color>
-<!--    <color name="themeColor">#356cbc</color>-->
-<!--    <color name="equipmentThemeColor">#356cbc</color>-->
+    <color name="themeColor">#356cbc</color>
+    <color name="equipmentThemeColor">#356cbc</color>
 
     <color name="customRed">#dd4c52</color>
     <color name="deviceTitleColor">#3c5569</color>
@@ -58,4 +56,5 @@
     <color name="red">#dd4c52</color>
     <color name="color_ffa000">#ffa000</color>
     <color name="color_dddddd">#dddddd</color>
+    <color name="tab_default_gray">#B7B7B7</color>
 </resources>

@@ -11,6 +11,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.util.HtmlParser;
@@ -68,23 +69,25 @@ public class YHGLStatisticsAdapter extends BaseListDataRecyclerViewAdapter<YHEnt
         @Override
         protected void initListener() {
             super.initListener();
-            RxView.clicks(itemView)
-                    .throttleFirst(1, TimeUnit.SECONDS)
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object o) throws Exception {
-                            YHEntity yhEntity = getItem(getAdapterPosition());
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable(YHGL_ENTITY, yhEntity);
+            if (EamApplication.isHongshi()){
+                RxView.clicks(itemView)
+                        .throttleFirst(1, TimeUnit.SECONDS)
+                        .subscribe(new Consumer<Object>() {
+                            @Override
+                            public void accept(Object o) throws Exception {
+                                YHEntity yhEntity = getItem(getAdapterPosition());
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(YHGL_ENTITY, yhEntity);
 
-                            if (Constant.TableStatus_CH.TAKE_EFFECT.equals(yhEntity.pending.taskDescription)) {
-                                IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
-                            } else if (Constant.TableStatus_CH.EDIT.equals(yhEntity.pending.taskDescription) && yhEntity.pending.id != null ) {  // 本人代办
-                                IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
-                            } else
-                                IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
-                        }
-                    });
+                                if (Constant.TableStatus_CH.TAKE_EFFECT.equals(yhEntity.pending.taskDescription)) {
+                                    IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
+                                } else if (Constant.TableStatus_CH.EDIT.equals(yhEntity.pending.taskDescription) && yhEntity.pending.id != null ) {  // 本人代办
+                                    IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
+                                } else
+                                    IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
+                            }
+                        });
+            }
         }
 
         @Override

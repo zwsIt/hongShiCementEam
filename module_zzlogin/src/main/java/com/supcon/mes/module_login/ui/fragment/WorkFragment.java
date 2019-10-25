@@ -219,7 +219,7 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
 
         titleText.setText(ChannelUtil.getAppName());
         leftBtn.setImageResource(R.drawable.sl_top_menu);
-//        rightBtn.setImageResource(R.drawable.sl_top_pending);
+//        rightBtn.setImageResource(R.drawable-xhdpi.sl_top_pending);
 //        rightBtn.setVisibility(View.VISIBLE);
 
 

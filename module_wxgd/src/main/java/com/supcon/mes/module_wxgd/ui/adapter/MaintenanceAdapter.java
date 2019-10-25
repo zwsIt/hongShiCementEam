@@ -149,8 +149,16 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
         @Override
         protected void update(MaintainEntity data) {
             index.setText(String.valueOf(getAdapterPosition() + 1));
-            sparePartName.setContent(Util.strFormat(data.getJwxItem().getSparePartId().getProductID().productName));
-            attachEam.setContent(Util.strFormat(data.getJwxItem().getAttachEamId().getAttachEamId().name));
+            if (data.jwxItemID != null){
+                if (data.jwxItemID.sparePartId != null && data.jwxItemID.sparePartId.productID != null){
+                    sparePartName.setContent(data.jwxItemID.sparePartId.productID.productName);
+                }
+                if (data.jwxItemID.accessoryEamId != null && data.jwxItemID.accessoryEamId.attachEamId != null){
+                    attachEam.setContent(data.jwxItemID.accessoryEamId.attachEamId.name);
+                }
+                claim.setContent(data.jwxItemID.claim);
+                content.setContent(data.jwxItemID.content);
+            }
 
             if (data.getJwxItem().isDuration()) {
                 durationLayout.setVisibility(View.VISIBLE);
@@ -161,9 +169,6 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
                 lastTime.setContent(data.getJwxItem().lastTime != null ? DateUtil.dateFormat(data.getJwxItem().lastTime) : "");
                 nextTime.setContent(data.getJwxItem().nextTime != null ? DateUtil.dateFormat(data.getJwxItem().nextTime) : "");
             }
-
-            claim.setContent(Util.strFormat(data.getJwxItem().claim));
-            content.setContent(Util.strFormat(data.getJwxItem().content));
 
         }
     }

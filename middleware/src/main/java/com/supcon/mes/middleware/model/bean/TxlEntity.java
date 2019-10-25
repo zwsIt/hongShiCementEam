@@ -19,28 +19,28 @@ import org.greenrobot.greendao.annotation.Id;
  */
 @Entity
 public class TxlEntity extends BaseEntity implements ITxlEntity {
-    /**
-     * PICTURE : null
-     * STAFFID : 1001
-     * BIRTHDAY : null
-     * POSITIONWORKID : 1000
-     * NAME : 马晓倩
-     * LAYNO : 1
-     * COMPANYNAME : 默认公司
-     * SECURITY_CLASS : null
-     * FJHM : null
-     * POSITIONNAME : 开发工程师
-     * ZKXNH : null
-     * DEPARTMENTNAME : 开发一部
-     * SORT : 2147483647
-     * VERSION : 2
-     * MOBILE : null
-     * FULLPATHNAME : 开发部/开发一部
-     * SEX : SEX_NATURE/FEMALE
-     * RZSJ : null
-     * EMAIL : null
-     * CODE : 101
-     */
+    /*{
+        PICTURE: "bap-workspace/uploads\2019\10\21\1001_20191021155431424\1.png",
+                STAFFID: 1001,
+            BIRTHDAY: null,
+            POSITIONWORKID: 1000,
+            sort: 2147483647,
+            NAME: "吴华莹",
+            COMPANYNAME: "默认公司",
+            layno: 1,
+            SECURITY_CLASS: null,
+            FJHM: null,
+            POSITIONNAME: "测试工程师",
+            ZKXNH: null,
+            DEPARTMENTNAME: "测试部",
+            VERSION: 4,
+            MOBILE: "13366666666",
+            FULLPATHNAME: "解决方案开发中心/测试部",
+            SEX: "SEX_NATURE/FEMALE",
+            RZSJ: null,
+            EMAIL: "wuhuaying@supcon.com",
+            CODE: "cs001"
+    }*/
     @SerializedName("PICTURE")
     private String PICTURE;
     @Id
@@ -84,14 +84,13 @@ public class TxlEntity extends BaseEntity implements ITxlEntity {
     private String CODE;
 
 
-
     @Generated(hash = 1823368555)
     public TxlEntity(String PICTURE, Long STAFFID, String BIRTHDAY,
-            int POSITIONWORKID, String NAME, int LAYNO, String COMPANYNAME,
-            String SECURITY_CLASS, String FJHM, String POSITIONNAME, String ZKXNH,
-            String DEPARTMENTNAME, int SORT, int VERSION, String MOBILE,
-            String FULLPATHNAME, String SEX, String RZSJ, String EMAIL,
-            String CODE) {
+                     int POSITIONWORKID, String NAME, int LAYNO, String COMPANYNAME,
+                     String SECURITY_CLASS, String FJHM, String POSITIONNAME, String ZKXNH,
+                     String DEPARTMENTNAME, int SORT, int VERSION, String MOBILE,
+                     String FULLPATHNAME, String SEX, String RZSJ, String EMAIL,
+                     String CODE) {
         this.PICTURE = PICTURE;
         this.STAFFID = STAFFID;
         this.BIRTHDAY = BIRTHDAY;
@@ -118,53 +117,52 @@ public class TxlEntity extends BaseEntity implements ITxlEntity {
     public TxlEntity() {
     }
 
-   
-    
+
     @Override
     public String getStaffCode() {
         return CODE;
     }
-    
+
     @Override
     public String getStaffName() {
         return NAME;
     }
-    
+
     @Override
     public String getSex() {
         return SEX;
     }
-    
+
     @Override
     public String getDepartmentName() {
         return DEPARTMENTNAME;
     }
-    
+
     @Override
     public String getDepartmentFullPath() {
         return FULLPATHNAME;
     }
-    
+
     @Override
     public String getPositionName() {
         return POSITIONNAME;
     }
-    
+
     @Override
     public String getStaffBirthday() {
-        return BIRTHDAY+"";
+        return BIRTHDAY + "";
     }
-    
+
     @Override
     public String getDeploymentTime() {
         return "";
     }
-    
+
     @Override
     public Long getStaffId() {
         return Long.valueOf(STAFFID);
     }
-    
+
     @Override
     public String getCompanyName() {
         return COMPANYNAME;

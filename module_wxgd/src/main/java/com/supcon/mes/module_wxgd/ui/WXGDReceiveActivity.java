@@ -473,10 +473,10 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
-            refreshController.refreshComplete();
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }
+        refreshController.refreshComplete();
 
     }
 

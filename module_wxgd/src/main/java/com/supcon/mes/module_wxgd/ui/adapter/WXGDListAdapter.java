@@ -15,6 +15,7 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AttachmentController;
@@ -89,10 +90,11 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
         LinearLayout faultInfoDescribeLl;
         @BindByTag("receiveBtnLl")
         LinearLayout receiveBtnLl;
+        @BindByTag("itemGalleryView")
+        CustomGalleryView itemGalleryView;
 
         ImageView itemWXGDDeviceIc;
 
-        private OnlineCameraController mOnlineCameraController;
         private AttachmentController mAttachmentController;
 
 
@@ -277,20 +279,20 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                 receiveBtnLl.setVisibility(View.GONE);
             }
 
-            mOnlineCameraController = new OnlineCameraController(itemView);
-//            mOnlineCameraController.addGalleryView(getAdapterPosition(), itemGalleryView);
-            if (data.attachmentEntities != null) {
-//                downloadAttachment(data.attachmentEntities);
-            } else {
+//            initAttachments(data);
 
+        }
+
+        private void initAttachments(WXGDEntity data) {
+            if (data.attachmentEntities != null) {
+                downloadAttachment(data.attachmentEntities);
+            } else {
                 if (mAttachmentController == null) {
                     mAttachmentController = new AttachmentController();
                 }
-
                 mAttachmentController.refreshGalleryView(new OnAPIResultListener<AttachmentListEntity>() {
                     @Override
-                    public void onFail(String errorMsg) {
-                    }
+                    public void onFail(String errorMsg) {}
 
                     @Override
                     public void onSuccess(AttachmentListEntity entity) {
@@ -298,21 +300,19 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                             return;
                         }
                         data.attachmentEntities = entity.result;
-//                        downloadAttachment(entity.result);
+                        downloadAttachment(entity.result);
                     }
                 }, data.tableInfoId);
             }
-
         }
 
         private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
-
             if (mDownloadController == null) {
-                mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_YHPATH);
+                mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_GDPATH);
             }
 
-//            mDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_faultInfo",
-//                    result -> itemGalleryView.setGalleryBeans(result));
+            mDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_workList",
+                    result -> itemGalleryView.setGalleryBeans(result));
         }
 
     }

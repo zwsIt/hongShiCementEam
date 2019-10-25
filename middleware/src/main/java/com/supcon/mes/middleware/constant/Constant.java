@@ -18,10 +18,10 @@ public interface Constant {
     String YH_PATH = FILE_PATH + "yh" + File.separator;
     String XJ_BASE_PATH = FILE_PATH + "xj_base" + File.separator;
     String EAM_BASE_PATH = FILE_PATH + "eam_base" + File.separator;
-    String IMAGE_SAVE_PATH = FILE_PATH + "pics" + File.separator;   //在线单据下载的缺陷图片存放位置
-    String IMAGE_SAVE_YHPATH = YH_PATH + "pics" + File.separator;   //缺陷拍摄的图片位置
-    String IMAGE_SAVE_XJPATH = XJ_PATH + "pics" + File.separator;   //巡检拍摄的图片路径
-    String IMAGE_SAVE_GDPATH = FILE_PATH + "gd" + File.separator + "pics" + File.separator;   //工单拍摄的图片路径
+    String IMAGE_SAVE_PATH = FILE_PATH + "pics" + File.separator;   //在线下载的图片存放位置
+    String IMAGE_SAVE_YHPATH = YH_PATH + "pics" + File.separator;   //缺陷的图片位置
+    String IMAGE_SAVE_XJPATH = XJ_PATH + "pics" + File.separator;   //巡检的图片路径
+    String IMAGE_SAVE_GDPATH = FILE_PATH + "gd" + File.separator + "pics" + File.separator;   //工单的图片路径
     String CID = "cid";
     String CNAME = "cname";
     String XJ_GUIDE_IMGPATH = FILE_PATH + "eamInspectionGuideImage" + File.separator; //设备巡检指导图片路径
@@ -396,6 +396,8 @@ public interface Constant {
         int STOP_POLICE = 23;  //停机报警
         int SPARE_PART_CONSUME_LEDGER = 24;  //零部件消耗台账
         int SPARE_PART_RECEIVE_RECORD = 25;  //备件领用记录
+
+        int ZZ = 99;  //知之应用
     }
 
     interface HSProcesskey {
@@ -573,7 +575,6 @@ public interface Constant {
         String EAM_CODE = "EAM_CODE";//设备编码
         String EAMCODE = "EAMCODE";//设备编码
         String EAM_STATE = "EAM_STATE";//设备状态
-        String EAM_TYPE = "EAM_TYPE";//设备类型
         String EAM_AREA = "EAM_AREA";//区域类型
         String EAM_AREANAME = "EAM_AREANAME";//区域类型主设备
         String IS_MAIN_EQUIP = "IS_MAIN_EQUIP";//是否主设备
@@ -619,7 +620,12 @@ public interface Constant {
         String IS_EAM_TASK = "IS_EAM_TASK";//是否设备巡检或临时巡检
 
         String STAR_TIME = "STAR_TIME";//巡检开始时间
+        String STAR_TIME1 = "STAR_TIME1";//巡检开始时间起点
+        String STAR_TIME2 = "STAR_TIME2";//巡检开始时间终点
+        String END_TIME1 = "END_TIME1";//巡检结束时间起点
+        String END_TIME2 = "END_TIME2";//巡检结束时间终点
         String END_TIME = "END_TIME";//巡检结束时间
+
         //停机报警更新单个列表内容时所用的请求参数key值
         String STOP_POLICE_STAFF_ID = "staffId";
         String STOP_POLICE_ID = "id";
@@ -630,6 +636,8 @@ public interface Constant {
 
         String NEWSTATE = "NEWSTATE";
 
+        String EAMTYPE_NAME = "EAMTYPE_NAME"; // 设备类型：名称
+        String EAMTYPE_CODE = "EAMTYPE_CODE";//设备类型：编码
     }
 
 

@@ -92,7 +92,7 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
         }
         mAcceptanceCheckEntities = entity.result;
         if (mCustomListWidget != null) {
-//            mCustomListWidget.setData(entity.result);
+            mCustomListWidget.setData(entity.result);
             if (isEditable) {
                 mCustomListWidget.setShowText("编辑 (" + mAcceptanceCheckEntities.size() + ")");
             } else {

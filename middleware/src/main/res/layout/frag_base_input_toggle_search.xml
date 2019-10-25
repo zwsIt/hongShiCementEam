@@ -11,7 +11,7 @@
         android:id="@+id/fitInStatusBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_25"
-        android:background="@color/transparent"
+        android:background="@color/themeColor"
         android:tag="fitInStatusBar"
         android:visibility="gone" />
 

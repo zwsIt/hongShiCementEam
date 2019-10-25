@@ -7,6 +7,9 @@ import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
 import com.supcon.mes.middleware.model.contract.DeviceDCSParamQueryContract;
 import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 

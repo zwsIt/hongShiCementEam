@@ -92,6 +92,7 @@
             android:paddingLeft="@dimen/dp_5"
             android:paddingTop="@dimen/dp_5"
             android:tag="itemMaintenanceClaimTv"
+            app:key_width="@dimen/dp_120"
             app:content_hint="--"
             app:key="要      求:"
             app:max_lines="100" />
@@ -103,6 +104,7 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="itemMaintenanceContentTv"
             app:content_hint="--"
+            app:key_width="@dimen/dp_120"
             app:key="内      容:"
             app:max_lines="100" />
 
@@ -114,6 +116,7 @@
             android:tag="itemMaintenanceMemoTv"
             android:visibility="gone"
             app:content_hint="--"
+            app:key_width="@dimen/dp_120"
             app:key="备      注:"
             app:max_lines="100" />
     </LinearLayout>

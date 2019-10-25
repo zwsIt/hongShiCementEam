@@ -43,11 +43,11 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_below="@+id/mineTitle"
-            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginLeft="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_20"
-            android:layout_marginRight="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_20"
             android:layout_marginBottom="@dimen/dp_15"
-            android:src="@drawable/mine_icon_default" />
+            android:src="@drawable/ic_default_txl_pic" />
 
         <TextView
             android:id="@+id/mineUserName"
@@ -99,7 +99,7 @@
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="50dp"-->
             <!--android:tag="mobilePhone"-->
-            <!--custom:arrow_icon="@drawable/ic_bluetooth_phone"-->
+            <!--custom:arrow_icon="@drawable-xhdpi/ic_bluetooth_phone"-->
             <!--tools:arrow_text="138****8899" />-->
 
             <!--<include layout="@layout/ly_line" />-->
@@ -182,7 +182,7 @@
             android:layout_gravity="bottom"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="#ce2f3f"
+            android:background="@color/themeColor"
             android:tag="logout"
             android:text="退出当前账号"
             android:textColor="@color/white"

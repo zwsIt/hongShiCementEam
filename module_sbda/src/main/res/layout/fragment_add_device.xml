@@ -12,7 +12,7 @@
             android:layout_height="38dp"
             app:select_text_color="@color/themeColor"
             app:unselect_text_color="@color/white"
-            android:background="@color/equipmentThemeColor"
+            android:background="@color/themeColor"
             />
 
         <android.support.v4.view.ViewPager

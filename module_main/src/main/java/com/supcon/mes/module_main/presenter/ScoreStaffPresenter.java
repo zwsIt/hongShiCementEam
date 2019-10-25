@@ -1,5 +1,6 @@
 package com.supcon.mes.module_main.presenter;
 
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.module_main.model.bean.ScoreEntity;
 import com.supcon.mes.module_main.model.contract.ScoreStaffContract;
@@ -29,7 +30,7 @@ public class ScoreStaffPresenter extends ScoreStaffContract.Presenter {
                 }).subscribe(new Consumer<CommonEntity<ScoreEntity>>() {
                     @Override
                     public void accept(CommonEntity<ScoreEntity> scoreEntity) throws Exception {
-                        if (scoreEntity.result != null) {
+                        if (scoreEntity.success) {
                             getView().getPersonScoreSuccess(scoreEntity);
                         } else {
                             getView().getPersonScoreFailed(scoreEntity.errMsg);

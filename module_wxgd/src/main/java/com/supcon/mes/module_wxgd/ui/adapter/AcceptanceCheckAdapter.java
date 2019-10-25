@@ -103,24 +103,6 @@ public class AcceptanceCheckAdapter extends BaseListDataRecyclerViewAdapter<Acce
                 itemSwipeLayout.open();
                 return true;
             });
-            itemViewDelBtn.setOnClickListener(v -> {
-                AcceptanceCheckEntity item = getItem(getAdapterPosition());
-                itemSwipeLayout.close();
-                new CustomDialog(context)
-                        .twoButtonAlertDialog("确认删除该备件：" + Util.strFormat(item.getCheckStaff().name))
-                        .bindView(R.id.redBtn, "确认")
-                        .bindView(R.id.grayBtn, "取消")
-                        .bindClickListener(R.id.redBtn, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                List<AcceptanceCheckEntity> list = getList();
-                                AcceptanceCheckAdapter.this.list.remove(getAdapterPosition());
-                                EventBus.getDefault().post(new RefreshEvent(item.id));
-                            }
-                        }, true)
-                        .bindClickListener(R.id.grayBtn, null, true)
-                        .show();
-            });
         }
 
         @Override

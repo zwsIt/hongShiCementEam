@@ -42,9 +42,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.android.support:multidex:1.0.3'
-//    implementation files('libs/libjsapi.aar')
     implementation files('libs/libjsapi-release.aar')
-//    implementation files('libs/libwebview.aar')
     implementation files('libs/libwebview-release.aar')
     api files('libs/coresdk.aar')
 
@@ -56,5 +54,4 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
     implementation "com.android.support:recyclerview-v7:28.0.0"
     implementation 'frankiesardo:icepick:3.2.0'
-//    implementation project(':coresdk')
 }

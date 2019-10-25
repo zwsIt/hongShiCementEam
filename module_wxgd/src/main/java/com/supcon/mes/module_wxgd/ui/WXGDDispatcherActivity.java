@@ -267,16 +267,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-        updateInitView();
-    }
-
-    public void updateInitView() {
-        if (mWXGDEntity != null) {
-            titleText.setText(mWXGDEntity.pending == null ? "" : mWXGDEntity.pending.taskDescription);
-            initTableHeadView();
-            // 初始化工作流
-            initLink();
-        }
     }
 
     /**
@@ -286,6 +276,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/9/1
      */
     private void initLink() {
+        // 工单来源为巡检或其他时显示作废按钮
         if (mWXGDEntity.workSource != null && (Constant.WxgdWorkSource.patrolcheck.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.other.equals(mWXGDEntity.workSource.id))) {
             mLinkController.setCancelShow(true);
         } else {
@@ -301,16 +292,17 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadView() {
+        if (mWXGDEntity == null) return;
         if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
         } else {
-//            if (TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo)) {
-//                repairLl.setVisibility(View.GONE);
-//                faultInfo.setVisibility(View.GONE);
-//            } else {
-//                repairLl.setVisibility(View.VISIBLE);
-//                faultInfo.setVisibility(View.VISIBLE);
-//            }
+            if (TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo)) {
+                repairLl.setVisibility(View.GONE);
+                faultInfo.setVisibility(View.GONE);
+            } else {
+                repairLl.setVisibility(View.VISIBLE);
+                faultInfo.setVisibility(View.VISIBLE);
+            }
         }
         realEndTime.setVisibility(View.GONE);
         dispatcherLayout.setVisibility(View.GONE);
@@ -320,13 +312,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @Override
     protected void initData() {
         super.initData();
-        updateInitData();
-    }
-
-    public void updateInitData() {
-        if (mWXGDEntity != null) {
-            initTableHeadData();
-        }
     }
 
     /**
@@ -336,8 +321,9 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadData() {
+        if (mWXGDEntity == null) return;
+        titleText.setText(mWXGDEntity.pending == null ? "" : mWXGDEntity.pending.taskDescription);
         workSource.setText(mWXGDEntity.workSource == null ? "" : mWXGDEntity.workSource.value);
-
         if (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) {
             eamName.setValue(mWXGDEntity.eamID.name);
             eamCode.setValue(mWXGDEntity.eamID.code);
@@ -368,24 +354,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @Override
     protected void initListener() {
         super.initListener();
-
-        /*refreshFrameLayout.setPtrHandler(new PtrDefaultHandler() {
-            @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                Map<String, Object> queryParam = new HashMap<>();
-                queryParam.put(Constant.BAPQuery.TABLE_NO, mWXGDEntity.tableNo);
-                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam);
-            }
-
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                if (scrollView.getY() - 100 > 0){
-                    return false;
-                }
-                return super.checkCanDoRefresh(frame, content, header);
-            }
-        });*/
-
         refreshController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -893,17 +861,18 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         List<WXGDEntity> wxgdEntityList = entity.result;
         if (wxgdEntityList.size() > 0) {
             mWXGDEntity = wxgdEntityList.get(0);
+            initTableHeadView();
+            initLink();
+            initTableHeadData();
             oldWxgdEntity = GsonUtil.gsonToBean(mWXGDEntity.toString(), WXGDEntity.class);
-            updateInitView();
-            updateInitData();
             mRepairStaffController.setWxgdEntity(mWXGDEntity);
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
-            refreshController.refreshComplete();
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }
+        refreshController.refreshComplete();
     }
 
     @Override

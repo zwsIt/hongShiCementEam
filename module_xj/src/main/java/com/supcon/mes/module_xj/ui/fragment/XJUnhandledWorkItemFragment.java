@@ -139,7 +139,7 @@ public class XJUnhandledWorkItemFragment extends BaseRefreshRecyclerFragment<XJW
 //        ImageView imageView = new ImageView(context);
 //        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,DisplayUtil.dip2px(60,context));
 //        imageView.setLayoutParams(layoutParams);
-//        imageView.setImageResource(R.drawable.pic_banner01);
+//        imageView.setImageResource(R.drawable-xhdpi.pic_banner01);
 //        contentView.addView(imageView,0);
         initEmptyView();
     }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -20,7 +21,9 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.beans.FilterBean;
 import com.supcon.mes.mbap.beans.LoginEvent;
+import com.supcon.mes.mbap.listener.OnTitleSearchExpandListener;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
@@ -29,6 +32,7 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomFilterView;
+import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
@@ -42,6 +46,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.AnimatorUtil;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_sbda_online.IntentRouter;
 import com.supcon.mes.module_sbda_online.R;
@@ -66,6 +71,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.STOP_POLICE_EAM_IDS;
@@ -87,11 +93,15 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
-    @BindByTag("titleText")
-    TextView titleText;
+    //    @BindByTag("titleText")
+//    TextView titleText;
+    @BindByTag("searchTitleBar")
+    CustomHorizontalSearchTitleBar searchTitleBar;
 
-    @BindByTag("listEamNameFilter")
-    CustomFilterView listEamNameFilter;
+    @BindByTag("listEamTypeFilter")
+    CustomFilterView listEamTypeFilter;
+    @BindByTag("eamFilterLl")
+    LinearLayout eamFilterLl;
 
 
     private View timeStart, timeEnd;
@@ -132,11 +142,16 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
-        titleText.setText("停机报警");
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(5));
-
-        listEamNameFilter.setData(FilterHelper.createEamNameFilter());
+        searchTitleBar.disableRightBtn();
+        searchTitleBar.searchView().setHint("搜索");
+        // 红狮特殊处理
+        if (EamApplication.isHongshi()) {
+            listEamTypeFilter.setData(FilterHelper.createEamTypeFilter());
+        } else {
+            eamFilterLl.setVisibility(View.GONE);
+        }
 
         timeStart = findViewById(R.id.stopPoliceStartTime);
         timeEnd = findViewById(R.id.stopPoliceStopTime);
@@ -158,6 +173,7 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
         endDate.setText(DateUtil.dateFormat(getTimeOfDayEnd(), "yyyy-MM-dd"));
         queryParam.put(Constant.BAPQuery.OPEN_TIME_START, dateFormat.format(getTimeOfDayStart()));
         queryParam.put(Constant.BAPQuery.OPEN_TIME_STOP, dateFormat.format(getTimeOfDayEnd()));
+        queryParam.put(Constant.BAPQuery.EAM_NAME,""); // 默认增加设备名称
 
         singlePickerController.textSize(18);
         singlePickerController.setCanceledOnTouchOutside(true);
@@ -371,15 +387,47 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
 
+        searchTitleBar.setOnExpandListener(new OnTitleSearchExpandListener() {
+            @Override
+            public void onTitleSearchExpand(boolean isExpand) {
+                if (isExpand) {
+                    searchTitleBar.searchView().setHint("设备名称搜索");
+                    searchTitleBar.searchView().setInputTextColor(com.supcon.mes.middleware.R.color.hintColor);
+                } else {
+                    searchTitleBar.searchView().setHint("搜索");
+                    searchTitleBar.searchView().setInputTextColor(com.supcon.mes.middleware.R.color.black);
+                }
+            }
+        });
+        RxTextView.textChanges(searchTitleBar.editText())
+                .skipInitialValue()
+                .debounce(500,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        doSearch(charSequence.toString().trim());
+                    }
+                });
+        KeyExpandHelper.doActionSearch(searchTitleBar.editText(), true, () ->
+                doSearch(searchTitleBar.searchView().getInput().trim()));
+
         refreshListController.setOnRefreshPageListener((page) -> {
             if (!queryParam.containsKey(Constant.BAPQuery.ON_OR_OFF)) {
                 queryParam.put(Constant.BAPQuery.ON_OR_OFF, "BEAM020/02"); // 开机状态：默认关
             }
             presenterRouter.create(StopPoliceAPI.class).runningGatherList(queryParam, page);
         });
-        listEamNameFilter.setFilterSelectChangedListener(filterBean -> {
-            queryParam.put(Constant.BAPQuery.EAM_NAME, !((ScreenEntity) filterBean).name.equals("设备不限") ? ((ScreenEntity) filterBean).name : "");
-            doRefresh();
+        listEamTypeFilter.setFilterSelectChangedListener(new CustomFilterView.FilterSelectChangedListener() {
+            @Override
+            public void onFilterSelected(FilterBean filterBean) {
+                ScreenEntity entity = (ScreenEntity) filterBean;
+                if ("全部".equals(entity.name)){
+                    queryParam.remove(Constant.BAPQuery.EAMTYPE_NAME);
+                }else {
+                    queryParam.put(Constant.BAPQuery.EAMTYPE_NAME,entity.name);
+                }
+                StopPoliceListActivity.this.doRefresh();
+            }
         });
         timeStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,12 +436,9 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
                 datePickController.listener((year, month, day, hour, minute, second) -> {
                     if (compareTime(year + "-" + month + "-" + day, endDate.getText().toString())) {
                         startDate.setText(year + "-" + month + "-" + day);
-                        if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME_START)) {
-                            queryParam.remove(Constant.BAPQuery.OPEN_TIME_START);
-                        }
                         queryParam.put(Constant.BAPQuery.OPEN_TIME_START, year + "-" + month + "-" + day + " " + "00" + ":" + "00" + ":" + "00");
-                        queryParam.put(Constant.BAPQuery.EAM_NAME, "");
-                        listEamNameFilter.setCurrentItem("设备不限");
+//                        queryParam.put(Constant.BAPQuery.EAM_NAME, "");
+//                        listEamNameFilter.setCurrentItem("设备不限");
                         doRefresh();
                     }
 
@@ -407,12 +452,9 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
                 datePickController.listener((year, month, day, hour, minute, second) -> {
                     if (compareTime(startDate.getText().toString(), year + "-" + month + "-" + day)) {
                         endDate.setText(year + "-" + month + "-" + day);
-                        if (!queryParam.containsKey(Constant.BAPQuery.OPEN_TIME_STOP)) {
-                            queryParam.remove(Constant.BAPQuery.OPEN_TIME_STOP);
-                        }
                         queryParam.put(Constant.BAPQuery.OPEN_TIME_STOP, year + "-" + month + "-" + day + " " + "23" + ":" + "59" + ":" + "59");
-                        listEamNameFilter.setCurrentItem("设备不限");
-                        queryParam.put(Constant.BAPQuery.EAM_NAME, "");
+//                        listEamNameFilter.setCurrentItem("设备不限");
+//                        queryParam.put(Constant.BAPQuery.EAM_NAME, "");
                         doRefresh();
                     }
                 }).show(DateUtil.dateFormat(endDate.getText().toString()), endExpend);
@@ -422,6 +464,10 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
 
     }
 
+    private void doSearch(String search) {
+        queryParam.put(Constant.BAPQuery.EAM_NAME,search);
+        refreshListController.refreshBegin();
+    }
     private void doRefresh() {
         refreshListController.refreshBegin();
     }

@@ -21,7 +21,7 @@ import okhttp3.ResponseBody;
  */
 public class StaffPicPresenter extends StaffPicDownloadContract.Presenter {
     @Override
-    public void getStaffPic(long id) {
+    public void getStaffPic(long id, String picType) {
 
         mCompositeSubscription.add(
                 MiddlewareHttpClient.downloadStaffPic(id)
@@ -42,7 +42,7 @@ public class StaffPicPresenter extends StaffPicDownloadContract.Presenter {
                             @Override
                             public File apply(ResponseBody responseBody) throws Exception {
 
-                                return PicUtil.savePicToDisk(String.valueOf(id), Constant.IMAGE_SAVE_PATH, responseBody);
+                                return PicUtil.savePicToDisk(id + picType, Constant.IMAGE_SAVE_PATH, responseBody);
                             }
                         })
                         .subscribe(new Consumer<File>() {
@@ -87,8 +87,8 @@ public class StaffPicPresenter extends StaffPicDownloadContract.Presenter {
                             @Override
                             public void accept(CommonEntity<String> strEntity) throws Exception {
                                 try {
-                                    if (TextUtils.isEmpty(strEntity.errMsg)) {
-                                        Long.parseLong(strEntity.result);
+                                    if (TextUtils.isEmpty(strEntity.errMsg) && !TextUtils.isEmpty(strEntity.result)) {
+//                                        Long.parseLong(strEntity.result);
                                         getView().getDocIdsSuccess(strEntity);
                                     } else {
                                         getView().getDocIdsFailed(strEntity.errMsg);

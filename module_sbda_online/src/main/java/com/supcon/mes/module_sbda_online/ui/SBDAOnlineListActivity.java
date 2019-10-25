@@ -199,7 +199,7 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnli
                 doSearchTableNo(titleSearchView.getInput()));
 
         listTypeFilter.setFilterSelectChangedListener(filterBean -> {
-            queryParam.put(Constant.BAPQuery.EAM_TYPE, ((ScreenEntity) filterBean).code != null ? ((ScreenEntity) filterBean).code : "");
+            queryParam.put(Constant.BAPQuery.EAMTYPE_CODE, ((ScreenEntity) filterBean).code != null ? ((ScreenEntity) filterBean).code : "");
             doRefresh();
         });
         listStatusFilter.setFilterSelectChangedListener(filterBean -> {

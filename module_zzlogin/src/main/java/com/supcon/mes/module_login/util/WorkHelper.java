@@ -76,7 +76,7 @@ public class WorkHelper {
                     workInfo.router = Constant.Router.YXJL_LIST;
                     break;
 //                    case Constant.WorkType.QXGL:
-//                        object.put("iconResId", R.drawable.ic_work_qxgl_small);
+//                        object.put("iconResId", R.drawable-xhdpi.ic_work_qxgl_small);
 //                        object.put("router", Constant.Router.QXGL_LIST);
 //                        break;
                 case Constant.WorkType.YHGL:

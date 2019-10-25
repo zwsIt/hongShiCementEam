@@ -106,17 +106,19 @@ public class TxlViewActivity extends BasePresenterActivity {
 //        tvTelephone.setContent(mData.getClass());
         staffName.setText(mData.getStaffName());
         positionName.setText(mData.getPositionName());
-        tvTelephone.setContent((String) mData.getMOBILE());
-        email.setContent((String) mData.getEMAIL());
-        master.setContent((String) mData.getRZSJ());
+        tvTelephone.setContent(mData.getMOBILE());
+        email.setContent(mData.getEMAIL());
+        master.setContent(mData.getRZSJ());
         department.setContent(mData.getDepartmentName());
 
-        File file = new File(Constant.IMAGE_SAVE_PATH + mData.getStaffId() + ".jpg");
-        if (file.exists()) {
-            CustomCircleTextImageView customCircleTextImageView = findViewById(R.id.userIcon);
-            Glide.with(customCircleTextImageView.getContext()).load(file)
-                    .apply(RequestOptionUtil.getEamRequestOptions(customCircleTextImageView.getContext()))
-                    .into(customCircleTextImageView);
+        if (!TextUtils.isEmpty(mData.getPICTURE())){
+            File file = new File(Constant.IMAGE_SAVE_PATH + mData.getStaffId() + ".jpg");
+            if (file.exists()) {
+                CustomCircleTextImageView customCircleTextImageView = findViewById(R.id.userIcon);
+                Glide.with(customCircleTextImageView.getContext()).load(file)
+                        .apply(RequestOptionUtil.getNoCacheRequestOptions())
+                        .into(customCircleTextImageView);
+            }
         }
     }
 }

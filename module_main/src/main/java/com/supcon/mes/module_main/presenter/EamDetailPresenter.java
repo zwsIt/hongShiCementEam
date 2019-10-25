@@ -1,8 +1,12 @@
 package com.supcon.mes.module_main.presenter;
 
+import android.text.TextUtils;
+
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.module_main.model.contract.EamDetailContract;
 import com.supcon.mes.module_main.model.network.MainClient;
+
+import org.w3c.dom.Text;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;

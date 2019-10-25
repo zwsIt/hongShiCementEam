@@ -2,9 +2,13 @@ package com.supcon.mes.module_txl.presenter;
 
 import android.text.TextUtils;
 
+import com.supcon.mes.middleware.model.bean.TxlEntity;
 import com.supcon.mes.middleware.model.bean.TxlListEntity;
 import com.supcon.mes.module_txl.model.contract.TxlListContract;
 import com.supcon.mes.module_txl.model.network.TxlHttpClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.functions.Function;
 

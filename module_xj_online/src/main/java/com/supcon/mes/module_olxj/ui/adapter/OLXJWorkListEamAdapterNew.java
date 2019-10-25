@@ -126,6 +126,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
         @BindByTag("ufItemPartEndBtn")
         Button ufItemPartEndBtn; //部位完成
 
+        @BindByTag("ufItemDirectDealBtn")
+        Button ufItemDirectDealBtn; // 处理(巡检项直接处理，巡检结论异常时，隐患单直接生效)
+
 
         @BindByTag("ufItemPart")
         CustomTextView ufItemPart;  //部位
@@ -198,6 +201,33 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                     xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
 //                    EventBus.getDefault().post(new RefreshEvent());
                     onItemChildViewClick(ufItemEndBtn, 0, xjWorkItemEntity);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            // 直接处理：结论异常时，隐患单直接生效
+            ufItemDirectDealBtn.setOnClickListener(v -> {
+                OLXJWorkItemEntity xjWorkItemEntity = getItem(getAdapterPosition());
+                xjWorkItemEntity.result = TextUtils.isEmpty(xjWorkItemEntity.result) ? xjWorkItemEntity.defaultVal : xjWorkItemEntity.result;
+                if (TextUtils.isEmpty(xjWorkItemEntity.result)) {
+                    SnackbarHelper.showError(itemView, "请填写结果");
+                    return;
+                }
+                if (xjWorkItemEntity.conclusionID != null && OLXJConstant.MobileConclusion.AB_NORMAL.equals(xjWorkItemEntity.conclusionID)
+                        && xjWorkItemEntity.isphone && !xjWorkItemEntity.isPhonere) {
+                    SnackbarHelper.showError(itemView, "该巡检项要求拍照");
+                    return;
+                }
+                oldImgUrl = "";
+                try {
+                    xjWorkItemEntity.realRemark = ufItemRemark.getInput().trim();
+                    xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
+                    xjWorkItemEntity.isFinished = true;
+                    xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+                    xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
+                    xjWorkItemEntity.isEffective = true; // 直接处理的巡检项
+                    onItemChildViewClick(ufItemDirectDealBtn, 0, xjWorkItemEntity);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

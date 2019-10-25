@@ -74,11 +74,11 @@ public class MineActivity extends BasePresenterActivity {
         mineUserWork.setContent(Util.strFormat(EamApplication.getAccountInfo().getPositionName()));
         mineUserPhone.setContent(Util.strFormat(EamApplication.getAccountInfo().getMobile()));
 
-        File file = new File(Constant.IMAGE_SAVE_PATH + EamApplication.getAccountInfo().getImageId() + ".jpg");
+        File file = new File(Constant.IMAGE_SAVE_PATH + EamApplication.getAccountInfo().getStaffId() + ".jpg");
         if (file.exists()) {
             CustomCircleTextImageView customCircleTextImageView = findViewById(R.id.mineUserIcon);
             Glide.with(customCircleTextImageView.getContext()).load(file)
-                    .apply(RequestOptionUtil.getEamRequestOptions(customCircleTextImageView.getContext()))
+                    .apply(RequestOptionUtil.getNoCacheRequestOptions())
                     .into(customCircleTextImageView);
         }
     }

@@ -248,6 +248,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
 
     @Override
     public void getEamScoreSuccess(CommonEntity entity) {
+        // 默认100分
         eamScore.setText(((String) entity.result));
         float star = Float.valueOf((String) entity.result) / 20;
         starLevel.setRating(star);

@@ -205,8 +205,14 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
             sum.getNumViewInput().setText(Util.big(data.oilQuantity));
 
             oilType.setSpinner(data.oilType != null ? Util.strFormat2(data.oilType.value) : "");
-            attachEam.setValue(Util.strFormat2(data.getJwxItemID().getAttachEamId().getAttachEamId().name));
-            sparePartId.setValue(Util.strFormat2(data.getJwxItemID().getSparePartId().getProductID().productName));
+            if (data.jwxItemID != null){
+                if (data.jwxItemID.sparePartId != null && data.jwxItemID.sparePartId.productID != null){
+                    sparePartId.setContent(data.jwxItemID.sparePartId.productID.productName);
+                }
+                if (data.jwxItemID.accessoryEamId != null && data.jwxItemID.accessoryEamId.attachEamId != null){
+                    attachEam.setContent(data.jwxItemID.accessoryEamId.attachEamId.name);
+                }
+            }
             oilCode.setValue(data.lubricate != null ? Util.strFormat2(data.lubricate.code) : "");
             oilName.setValue(data.lubricate != null ? Util.strFormat2(data.lubricate.name) : "");
             remark.setInput(data.remark);

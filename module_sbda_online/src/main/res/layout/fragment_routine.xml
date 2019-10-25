@@ -28,7 +28,10 @@
 
                 <include layout="@layout/ly_sbda_online_device_info" />
 
-                <include layout="@layout/ly_sbda_online_divider" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_6"
+                    android:background="@color/bgGray" />
 
                 <include layout="@layout/ly_sbda_online_runtime_info" />
 
@@ -46,7 +49,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_4"
+                    android:layout_height="@dimen/dp_6"
                     android:background="@color/bgGray" />
 
                 <include layout="@layout/ly_sbda_online_doc_info" />

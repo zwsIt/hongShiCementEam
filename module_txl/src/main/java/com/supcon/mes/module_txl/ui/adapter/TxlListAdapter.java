@@ -1,6 +1,8 @@
 package com.supcon.mes.module_txl.ui.adapter;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
@@ -41,6 +43,7 @@ public class TxlListAdapter extends BaseListDataRecyclerViewAdapter<ITxlEntity> 
             return mTxlListItemViewController.layout();
         }
         
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected void update(ITxlEntity data) {
             txlListItemViewController = mTxlListItemViewController.newInstance();

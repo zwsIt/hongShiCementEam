@@ -9,7 +9,9 @@ import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
 import com.supcon.mes.module_olxj.R;
+import com.supcon.mes.module_olxj.util.TextHelper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -72,18 +74,18 @@ public class DeviceDCSParamAdapter extends BaseListDataRecyclerViewAdapter<Devic
 
             if (!TextUtils.isEmpty(data.maxValue)) {
                 itemDCSParamMax.setContent(data.maxValue);
-                if (!TextUtils.isEmpty(data.latestValue) && !TextUtils.isEmpty(data.minValue)
-                        && TextUtils.isDigitsOnly(data.latestValue) && TextUtils.isDigitsOnly(data.maxValue)) {
-                    if (Long.parseLong(data.latestValue) > Long.parseLong(data.maxValue)) {
+                if (!TextUtils.isEmpty(data.latestValue) /*&& !TextUtils.isEmpty(data.minValue)*/
+                        && TextHelper.isNumber(data.latestValue) && TextHelper.isNumber(data.maxValue)) {
+                    if (new BigDecimal(data.latestValue).compareTo(new BigDecimal(data.maxValue)) > 0) {
                         itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customRed));
                     }
                 }
             }
             if (!TextUtils.isEmpty(data.minValue)) {
                 itemDCSParamMin.setContent(data.minValue);
-                if (!TextUtils.isEmpty(data.latestValue) && !TextUtils.isEmpty(data.minValue)
-                        && TextUtils.isDigitsOnly(data.latestValue) && TextUtils.isDigitsOnly(data.minValue)) {
-                    if (Long.parseLong(data.latestValue) < Long.parseLong(data.minValue)) {
+                if (!TextUtils.isEmpty(data.latestValue) /*&& !TextUtils.isEmpty(data.minValue)*/
+                        && TextHelper.isNumber(data.latestValue) && TextHelper.isNumber(data.minValue)) {
+                    if (new BigDecimal(data.latestValue).compareTo(new BigDecimal(data.minValue)) < 0) {
                         itemDCSParam.setContentTextColor(context.getResources().getColor(R.color.customRed));
                     }
                 }

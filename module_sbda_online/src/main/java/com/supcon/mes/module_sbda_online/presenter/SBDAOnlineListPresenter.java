@@ -47,9 +47,9 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
             List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(stateParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }
-        if (params.containsKey(Constant.BAPQuery.EAM_TYPE)) {
+        if (params.containsKey(Constant.BAPQuery.EAMTYPE_CODE)) {
             Map<String, Object> typeParam = new HashMap();
-            typeParam.put(Constant.BAPQuery.EAM_TYPE, params.get(Constant.BAPQuery.EAM_TYPE));
+            typeParam.put(Constant.BAPQuery.EAMTYPE_CODE, params.get(Constant.BAPQuery.EAMTYPE_CODE));
             JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(typeParam, "EAM_EAMTYPE,EAMTYPE_CODE,EAM_BaseInfo,EAM_TYPE");
             fastQuery.subconds.add(joinSubcondEntity);
         }

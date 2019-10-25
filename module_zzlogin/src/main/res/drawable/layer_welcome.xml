@@ -9,7 +9,7 @@
     <!--<item android:gravity="center">
         <bitmap
             android:gravity="center"
-            android:src="@drawable/ic_login_logo_hs"
+            android:src="@drawable-xhdpi/ic_login_logo_hs"
             android:mipMap="true"
             
             />

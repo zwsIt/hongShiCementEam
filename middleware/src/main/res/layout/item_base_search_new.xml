@@ -27,7 +27,7 @@
     <!--android:layout_height="@dimen/dp_60"-->
     <!--android:layout_gravity="center_vertical"-->
     <!--android:padding="@dimen/dp_10"-->
-    <!--android:src="@drawable/item_icon"-->
+    <!--android:src="@drawable-xhdpi/item_icon"-->
     <!--android:tag="circleImageView"-->
     <!--android:visibility="gone" />-->
 

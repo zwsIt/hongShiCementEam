@@ -23,8 +23,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:orientation="horizontal"
+                android:background="@color/white"
                 android:paddingLeft="@dimen/dp_10"
                 android:paddingBottom="@dimen/dp_5">
 
@@ -53,17 +53,18 @@
                     app:necessary="false"
                     app:text_size="15" />
             </LinearLayout>
-
+            <include layout="@layout/ly_line_light"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="@dimen/dp_1"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingLeft="@dimen/dp_10">
 
                 <com.supcon.mes.mbap.view.CustomVerticalDateView
                     android:id="@+id/acceptanceTime"
-                    style="@style/CustomStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:paddingRight="@dimen/dp_10"
                     android:tag="acceptanceTime"
                     app:editable="false"
@@ -74,11 +75,13 @@
 
                 <com.supcon.mes.mbap.view.CustomVerticalSpinner
                     android:id="@+id/acceptanceResult"
-                    style="@style/CustomStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:paddingStart="@dimen/dp_10"
                     android:tag="acceptanceResult"
                     app:editable="false"
-                    app:necessary="true"
+                    app:necessary="false"
                     app:text="验收结论"
                     app:text_size="15" />
             </LinearLayout>
@@ -87,7 +90,6 @@
                 android:id="@+id/remark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:paddingLeft="20dp"
                 android:paddingTop="@dimen/dp_10"

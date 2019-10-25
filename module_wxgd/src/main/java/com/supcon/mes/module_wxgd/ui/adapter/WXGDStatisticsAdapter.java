@@ -11,6 +11,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.util.HtmlParser;
@@ -66,64 +67,66 @@ public class WXGDStatisticsAdapter extends BaseListDataRecyclerViewAdapter<WXGDE
         @Override
         protected void initListener() {
             super.initListener();
-            RxView.clicks(itemView)
-                    .throttleFirst(1, TimeUnit.SECONDS)
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object o) throws Exception {
-                            WXGDEntity wxgdEntity = getItem(getAdapterPosition());
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
-                            bundle.putBoolean(Constant.IntentKey.STATISTIC_SORCE,true);  // 仅适用于跳转-->完成工单
-                            if (wxgdEntity.pending != null && !TextUtils.isEmpty(wxgdEntity.pending.taskDescription)) {
-                                switch (wxgdEntity.pending.taskDescription) {
-                                    case Constant.TableStatus_CH.EDIT:
-                                    case Constant.TableStatus_CH.DISPATCH:
-                                        if (wxgdEntity.pending.id == null){
+            if (EamApplication.isHongshi()){
+                RxView.clicks(itemView)
+                        .throttleFirst(1, TimeUnit.SECONDS)
+                        .subscribe(new Consumer<Object>() {
+                            @Override
+                            public void accept(Object o) throws Exception {
+                                WXGDEntity wxgdEntity = getItem(getAdapterPosition());
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
+                                bundle.putBoolean(Constant.IntentKey.STATISTIC_SORCE,true);  // 仅适用于跳转-->完成工单
+                                if (wxgdEntity.pending != null && !TextUtils.isEmpty(wxgdEntity.pending.taskDescription)) {
+                                    switch (wxgdEntity.pending.taskDescription) {
+                                        case Constant.TableStatus_CH.EDIT:
+                                        case Constant.TableStatus_CH.DISPATCH:
+                                            if (wxgdEntity.pending.id == null){
+                                                IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+                                            }else {
+                                                IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
+                                            }
+                                            break;
+                                        case Constant.TableStatus_CH.CONFIRM:
+                                            if (wxgdEntity.pending.id == null){
+                                                IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+                                            }else {
+                                                IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);
+                                            }
+                                        case Constant.TableStatus_CH.EXECUTE:
+                                        case Constant.TableStatus_CH.EXECUTE_NOTIFY:
+                                            if (wxgdEntity.pending.id == null){
+                                                IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+                                            }else {
+                                                IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
+                                            }
+                                            break;
+                                        case Constant.TableStatus_CH.NOTIFY:
+                                            bundle.putBoolean(Constant.IntentKey.isEdit, false);
+                                            if (wxgdEntity.pending.id == null){
+                                                IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+                                            }else {
+                                                IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
+                                            }
+                                            break;
+                                        case Constant.TableStatus_CH.ACCEPT:
+                                            if (wxgdEntity.pending.id == null){
+                                                IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+                                            }else {
+                                                IntentRouter.go(context, Constant.Router.WXGD_ACCEPTANCE, bundle);
+                                            }
+                                            break;
+                                        default:
                                             IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-                                        }else {
-                                            IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
-                                        }
-                                        break;
-                                    case Constant.TableStatus_CH.CONFIRM:
-                                        if (wxgdEntity.pending.id == null){
-                                            IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-                                        }else {
-                                            IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);
-                                        }
-                                    case Constant.TableStatus_CH.EXECUTE:
-                                    case Constant.TableStatus_CH.EXECUTE_NOTIFY:
-                                        if (wxgdEntity.pending.id == null){
-                                            IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-                                        }else {
-                                            IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
-                                        }
-                                        break;
-                                    case Constant.TableStatus_CH.NOTIFY:
-                                        bundle.putBoolean(Constant.IntentKey.isEdit, false);
-                                        if (wxgdEntity.pending.id == null){
-                                            IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-                                        }else {
-                                            IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
-                                        }
-                                        break;
-                                    case Constant.TableStatus_CH.ACCEPT:
-                                        if (wxgdEntity.pending.id == null){
-                                            IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-                                        }else {
-                                            IntentRouter.go(context, Constant.Router.WXGD_ACCEPTANCE, bundle);
-                                        }
-                                        break;
-                                    default:
-                                        IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-                                        break;
+                                            break;
+                                    }
+                                } else {
+                                    IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
                                 }
-                            } else {
-                                IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-                            }
 
-                        }
-                    });
+                            }
+                        });
+            }
         }
 
         @Override

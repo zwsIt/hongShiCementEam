@@ -26,6 +26,7 @@ import java.io.File;
  * @Related-classes
  * @Desc
  */
+@Deprecated
 public class TxlListMainFragment extends BasePresenterFragment {
     @BindByTag("ivBack")
     ImageView ivBack;

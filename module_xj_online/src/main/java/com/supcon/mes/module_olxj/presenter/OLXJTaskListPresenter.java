@@ -94,6 +94,7 @@ public class OLXJTaskListPresenter extends OLXJTaskContract.Presenter {
         fastQueryCondEntity.subconds.add(joinSubcondEntity);
 
 
+
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo", 1);
         pageQueryParams.put("page.pageSize", 20);

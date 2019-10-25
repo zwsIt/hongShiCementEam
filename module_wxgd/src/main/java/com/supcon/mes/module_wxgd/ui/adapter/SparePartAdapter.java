@@ -27,6 +27,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.controller.AutoRefreshSPStandingCropController;
+import com.supcon.mes.module_wxgd.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.ui.WXGDDispatcherActivity;
 import com.supcon.mes.module_wxgd.ui.WXGDExecuteActivity;
 import com.supcon.mes.module_wxgd.ui.WXGDSparePartListActivity;
@@ -42,6 +43,7 @@ import java.util.List;
  */
 public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartEntity> {
 
+    private final Context context;
     private boolean editable;
     private int repairSum;
     private String tableStatus; //单据状态
@@ -49,6 +51,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
 
     public SparePartAdapter(Context context, boolean editable) {
         super(context);
+        this.context = context;
         this.editable = editable;
     }
 
@@ -249,7 +252,8 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
                             actualQuantity.getNumViewInput().setText(null);
                             return;
                         }
-                        sparePartEntity.actualQuantity = new BigDecimal(charSequence.toString());
+                        if (sparePartEntity.actualQuantity != null)
+                            sparePartEntity.actualQuantity = new BigDecimal(charSequence.toString());
                     });
 
         }
@@ -313,8 +317,8 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             remark.setInput(data.remark);
 
             // 添加备件自动更新现存量
-            if (data.productID != null){
-                AutoRefreshSPStandingCropController autoRefreshSPStandingCropController = new AutoRefreshSPStandingCropController(standingCrop,data.productID.productCode);
+            if (data.productID != null) {
+                AutoRefreshSPStandingCropController autoRefreshSPStandingCropController = new AutoRefreshSPStandingCropController(standingCrop, data.productID.productCode);
                 autoRefreshSPStandingCropController.initData();
             }
 

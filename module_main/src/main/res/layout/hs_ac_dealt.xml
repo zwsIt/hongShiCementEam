@@ -10,7 +10,7 @@
         android:layout_above="@+id/dispatch"
         android:orientation="vertical">
 
-        <include layout="@layout/ly_titlebar" />
+        <include layout="@layout/ly_titlebar_local" />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -25,6 +25,7 @@ public interface ITxlEntity{
     Long getStaffId();
 
     String getMOBILE();
+    String getPICTURE();
     /**
      * 详情中显示的数据信息
      */

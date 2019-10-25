@@ -13,13 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
         android:gravity="center_vertical">
 
         <include
+            android:layout_centerVertical="true"
             layout="@layout/ly_title_pic"
-            android:layout_width="5dp"
-            android:layout_height="13dp" />
+            android:layout_width="@dimen/dp_4"
+            android:layout_height="@dimen/dp_18" />
 
         <TextView
             style="@style/TitleTextColor"
@@ -54,11 +54,12 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="eamCode"
+        app:key_width="@dimen/dp_120"
         app:key="设备编码"
         app:necessary="false" />
 
     <View
-        android:layout_width="345dp"
+        style="@style/SBDASplitLine"
         android:layout_height="1dp"
         android:layout_gravity="center_horizontal"
         android:background="#EDEDF0" />
@@ -72,12 +73,13 @@
         android:layout_marginEnd="@dimen/dp_12"
         android:paddingTop="@dimen/dp_5"
         android:paddingBottom="@dimen/dp_5"
+        app:key_width="@dimen/dp_120"
         android:tag="eamName"
         app:key="设备名称"
         app:necessary="false" />
 
     <View
-        android:layout_width="345dp"
+        style="@style/SBDASplitLine"
         android:layout_height="1dp"
         android:layout_gravity="center_horizontal"
         android:background="#EDEDF0" />
@@ -91,11 +93,12 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="eamModel"
+        app:key_width="@dimen/dp_120"
         app:key="规格型号"
         app:necessary="false" />
 
     <View
-        android:layout_width="345dp"
+        style="@style/SBDASplitLine"
         android:layout_height="1dp"
         android:layout_gravity="center_horizontal"
         android:background="#EDEDF0" />
@@ -107,6 +110,7 @@
         android:layout_marginStart="@dimen/dp_12"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="@dimen/dp_12"
+        app:key_width="@dimen/dp_120"
         android:tag="eamType"
         app:key="设备类型"
         app:necessary="false" />

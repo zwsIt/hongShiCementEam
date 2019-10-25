@@ -238,9 +238,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 .skipInitialValue()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribe(charSequence -> {
-                    if (TextUtils.isEmpty(charSequence)) {
-                        refreshListController.refreshBegin();
-                    }
+                    refreshListController.refreshBegin();
                 });
 
         leftBtn.setOnClickListener(v -> back());

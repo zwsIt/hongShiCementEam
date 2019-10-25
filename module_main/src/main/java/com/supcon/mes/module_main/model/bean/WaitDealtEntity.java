@@ -9,6 +9,7 @@ import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
  * @ClassName hongShiCementEam
  * @date 2019/7/24
  * ------------- Description -------------
+ * 工作提醒Entity
  */
 public class WaitDealtEntity extends BaseEntity {
 

@@ -55,7 +55,11 @@ public class OnlineCameraController extends BaseCameraController {
     }
 
 
-    public void setPicData(List<AttachmentEntity> attachmentEntities){
+    /**
+     * 加载照片
+     * @param attachmentEntities
+     */
+    public void setPicData(List<AttachmentEntity> attachmentEntities, String entityCode){
         if(attachmentEntities == null ){
             return;
         }
@@ -74,7 +78,7 @@ public class OnlineCameraController extends BaseCameraController {
             mDownloadController = new AttachmentDownloadController(dir);
         }
 
-        mDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_faultInfo", new OnSuccessListener<List<GalleryBean>>() {
+        mDownloadController.downloadYHPic(attachmentEntities, entityCode, new OnSuccessListener<List<GalleryBean>>() {
             @Override
             public void onSuccess(List<GalleryBean> result) {
                 yhGalleryView.setGalleryBeans(result);

@@ -344,9 +344,9 @@ public interface NetworkAPI {
     Flowable<CommonListEntity<DeviceDCSEntity>> getMeasParam(@Query("eamId") long eamId);
 
     /**
-     * 获取设备
+     * 获取设备（档案查看）
      */
-    @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action")
+    @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action?1=1&permissionCode=BEAM_1.0.0_baseInfo_baseLayoutForView")
     Flowable<CommonListEntity<EamEntity>> getEam(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 

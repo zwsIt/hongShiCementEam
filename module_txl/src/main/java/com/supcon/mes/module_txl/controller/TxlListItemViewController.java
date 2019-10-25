@@ -82,14 +82,16 @@ public class TxlListItemViewController extends BaseViewController implements ILa
         mData = data;
         userIcon = rootView.findViewById(R.id.userIcon);
         initListener();
-        userIcon.setImageDrawable(null);
-        presenterRouter.create(StaffPicDownloadAPI.class).getStaffPic(data.getStaffId());
+
+//        userIcon.setImageDrawable(null);
+//        presenterRouter.create(StaffPicDownloadAPI.class).getStaffPic(data.getStaffId());
+
         staffName.setText(data.getStaffName());
         phone.setText(data.getMOBILE());
         company.setText(data.getCompanyName());
         department.setText(data.getDepartmentName());
 
         userIcon.setTag(R.id.imageid, data.getStaffId());
-        new StaffPicController(rootView).initEamPic(data.getStaffId(), userIcon);
+        new StaffPicController(rootView).initStaffPic(data.getStaffId(), userIcon,data.getPICTURE());
     }
 }

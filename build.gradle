@@ -59,12 +59,12 @@ ext{
 //    sb2Version          = '8.5.911.6debug10'
 //    nfcVersion          = '8.5.911.4'
 
-    aptVersion          = '9.7.29.2'
-    annotationVersion   = '9.7.29.2'
-    httpVersion         = '9.7.29.2'
-    viewVersion         = '9.7.29.3debug9'
-    routerVersion       = '9.7.29.2'
-    mbapVersion         = '9.7.29.3debug2'
+    aptVersion          = '9.7.29.3'
+    annotationVersion   = '9.7.29.3'
+    httpVersion         = '9.7.29.3'
+    viewVersion         = '9.7.29.3debug36'
+    routerVersion       = '9.7.29.3'
+    mbapVersion         = '9.7.29.3debug5'
 
     vibVersion          = '9.7.29.1'
     sb2Version          = '9.7.29.2debug4'

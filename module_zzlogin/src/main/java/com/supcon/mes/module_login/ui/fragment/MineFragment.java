@@ -43,8 +43,8 @@ public class MineFragment extends BaseControllerFragment implements MineContract
     @BindByTag("logout")
     Button logout;
 
-    @BindByTag("minePotrait")
-    CustomPotraitView minePotrait;
+//    @BindByTag("minePotrait")
+//    CustomPotraitView minePotrait;
 
     @BindByTag("mineClear")
     CustomCacheView mineClear;
@@ -102,7 +102,7 @@ public class MineFragment extends BaseControllerFragment implements MineContract
 
         });
 
-        minePotrait.setOnClickListener(this);
+//        minePotrait.setOnClickListener(this);
         mineClear.setOnClickListener(this);
         mineUpdate.setOnClickListener(this);
         mineShare.setOnClickListener(this);

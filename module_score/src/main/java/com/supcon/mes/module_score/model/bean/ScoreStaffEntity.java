@@ -14,6 +14,8 @@ public class ScoreStaffEntity extends BaseEntity {
     public float score = 100;//分数
     public Long scoreData;//评分时间
 
+    public int rank; // 排名
+
 
     public Staff getPatrolWorker() {
         if (patrolWorker == null) {

@@ -184,7 +184,7 @@
             android:layout_height="2dip"
             android:indeterminateOnly="false"
             android:max="100"
-            android:progressDrawable="@drawable/layer_web_progressbar"
+            android:progressDrawable="@drawable-xhdpi/layer_web_progressbar"
             android:tag="progressBar" />
 
         <com.supcon.common.view.view.js.BridgeWebView

@@ -121,7 +121,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     CustomVerticalTextView yhViewDescription;
 
     @BindByTag("yhGalleryView")
-    CustomGalleryView yhViewGalleryView;
+    CustomGalleryView yhGalleryView;
 
     @BindByTag("yhViewMemo")
     CustomEditText yhViewMemo;
@@ -184,7 +184,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         }
         getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
         if (mYHEntity.attachmentEntities != null) {
-            getController(OnlineCameraController.class).setPicData(mYHEntity.attachmentEntities);
+            getController(OnlineCameraController.class).setPicData(mYHEntity.attachmentEntities,"BEAM2_1.0.0_faultInfo");
         }
 
         if (!TextUtils.isEmpty(mYHEntity.remark)) {

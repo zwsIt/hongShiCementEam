@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.R;
@@ -39,6 +40,8 @@ public class DailyLubricationPartAdapter extends BaseListDataRecyclerViewAdapter
         TextView itemLubriNumTv;
         @BindByTag("itemLubriPartTv")
         CustomTextView itemLubriPartTv;
+        @BindByTag("itemLubriNextTime")
+        CustomTextView itemLubriNextTime;
 
         @BindByTag("chkBox")
         CheckBox chkBox;
@@ -89,7 +92,7 @@ public class DailyLubricationPartAdapter extends BaseListDataRecyclerViewAdapter
             itemLubriChangeTv.setText(String.format(context.getString(R.string.device_style1), "加/换油:", Util.strFormat(data.getOilType().value)));
             itemLubriNumTv.setText(String.format(context.getString(R.string.device_style1), "用量:", Util.big2(data.sum)));
             itemLubriPartTv.setValue(Util.strFormat(data.lubricatePart));
-
+            itemLubriNextTime.setContent(data.nextTime != null ? DateUtil.dateFormat(data.nextTime) : "--");
             if (data.isCheck) {
                 chkBox.setChecked(true);
             } else {

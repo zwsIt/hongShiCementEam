@@ -83,6 +83,17 @@
                 app:key="润   滑   部   位:"
                 app:key_width="110dp"
                 app:max_lines="1" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/itemLubriNextTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp_5"
+                android:tag="itemLubriNextTime"
+                app:content_hint="--"
+                app:gravity="center_vertical|right"
+                app:key="下次润滑日期:"
+                app:key_width="110dp"
+                app:max_lines="1" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

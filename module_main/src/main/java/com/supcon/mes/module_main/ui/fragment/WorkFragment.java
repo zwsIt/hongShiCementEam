@@ -149,6 +149,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     private List<MenuPopwindowBean> lubricateMenu;
     private List<MenuPopwindowBean> repairMenu;
     private List<MenuPopwindowBean> formMenu;
+    private List<MenuPopwindowBean> zzMenu;
     private ArrayList<WorkInfo> workInfos;
     private ScoreEntity scoreEntity;
     private CommonSearchStaff proxyStaff;
@@ -159,7 +160,6 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     private TextView waitMore;  // 工作提醒：更多
     private AtomicBoolean atomicBoolean = new AtomicBoolean(false);
     private UserPowerCheckController userPowerCheckController;
-    private List<WorkInfo> zzApps;
 
     @Override
     protected int getLayoutID() {
@@ -301,27 +301,33 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     }
 
     private void initZhiZhiApps(List<OwnMinAppItem> list) {
-        if (zzApps == null) {
-            zzApps = new ArrayList<>();
-        } else {
-            if (zzApps.size() != 0) {
-                zzApps.clear();
-            }
+
+        if(list == null || list.size() == 0){
+            return;
         }
-        for (int i = 0; i < list.size(); i++) {
-            OwnMinAppItem appItem = list.get(i);
-            WorkInfo workInfo = new WorkInfo();
-            workInfo.iconUrl = appItem.getAppiconurl();
-            workInfo.name = appItem.getAppname();
-            workInfo.pendingUrl = appItem.getAppurl();
-            workInfo.appItem = appItem;
-            workInfo.isOpen = true;
-            workInfo.router = appItem.getAppurl();
-            zzApps.add(workInfo);
-        }
-        workInfos.addAll(zzApps);
+        zzMenu = MenuHelper.getZZMenu(list);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 5);
+        workRecycler.setLayoutManager(layoutManager);
+        WorkInfo workInfo5 = new WorkInfo();
+        workInfo5.name = "流程图";
+        workInfo5.iconResId = R.drawable.menu_form_selector;
+        workInfos.add(workInfo5);
         workAdapter.setList(workInfos);
         workAdapter.notifyDataSetChanged();
+    }
+
+    private void goZZApp(MenuPopwindowBean menuPopwindowBean) {
+
+        switch (menuPopwindowBean.getAppItem().getApptype()) {
+            case 1:
+                SLCoreSdk.client().openTFAppListActivity(menuPopwindowBean.getAppItem());
+                break;
+            case 2:
+                SLCoreSdk.client().openWebApp(menuPopwindowBean.getAppItem());
+                break;
+
+        }
     }
 
     private void initAd() {
@@ -425,6 +431,11 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                         menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
                         childView.setSelected(true);
                         break;
+                    case 4:
+                        if (!menuPopwindow.refreshList(zzMenu)) return;
+                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
+                        childView.setSelected(true);
+                        break;
                 }
                 oldPosition = position;
             }
@@ -467,6 +478,9 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                             bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
                             bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
                             bundle.putString(BaseConstant.WEB_URL, sdurl);
+                            break;
+                        case Constant.HSWorkType.ZZ:
+                            goZZApp(menuPopwindowBean);
                             break;
                     }
                     IntentRouter.go(getContext(), menuPopwindowBean.getRouter(), bundle);

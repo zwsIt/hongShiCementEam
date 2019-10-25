@@ -2,6 +2,7 @@ package com.supcon.mes.middleware.util;
 
 import android.content.Context;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.middleware.R;
@@ -44,4 +45,14 @@ public class RequestOptionUtil {
 
 
     }
+
+    public static RequestOptions getNoCacheRequestOptions(){
+        return new RequestOptions()
+                .placeholder(R.drawable.ic_default_txl_pic)
+                .error(R.drawable.ic_default_txl_pic)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)//跳过硬盘缓存
+                .skipMemoryCache(true);//跳过内存缓存
+    }
+
+
 }

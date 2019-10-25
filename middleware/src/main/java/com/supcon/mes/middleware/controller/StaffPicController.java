@@ -1,9 +1,11 @@
 package com.supcon.mes.middleware.controller;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import com.app.annotation.Presenter;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.util.DisplayUtil;
@@ -35,6 +37,7 @@ public class StaffPicController extends BaseViewController implements StaffPicDo
     CustomCircleTextImageView mineUserIcon;
 
     CustomCircleTextImageView userIcon;
+    private String picServerPath; // 图片路径
 
     public StaffPicController(View rootView) {
         super(rootView);
@@ -43,21 +46,22 @@ public class StaffPicController extends BaseViewController implements StaffPicDo
     @Override
     public void getStaffPicSuccess(File file) {
         picFile = new File(file.getParent(), imageId + ".jpg");
-        file.renameTo(picFile);
+        file.renameTo(picFile); // 下载的图片重命名为staffId的
         if (mSuccessListener != null) {
             mSuccessListener.onSuccess(picFile);
         }
 
         if (userIcon != null && userIcon.getTag(R.id.imageid).equals(imageId)) {
-            Glide.with(userIcon.getContext()).load(picFile).apply(RequestOptionUtil.getEamRequestOptions(userIcon.getContext())).into(userIcon);
+
+            Glide.with(userIcon.getContext()).load(picFile).apply(RequestOptionUtil.getNoCacheRequestOptions()).into(userIcon);
         }
 
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.ic_people)
-                .override(DisplayUtil.dip2px(100, context), DisplayUtil.dip2px(100, context))
-                .centerInside();
         if (mineUserIcon != null) {
-            Glide.with(context).load(picFile).apply(requestOptions).into(mineUserIcon);
+//            RequestOptions requestOptions = new RequestOptions()
+//                    .placeholder(R.drawable.ic_default_txl_pic)
+//                    .override(DisplayUtil.dip2px(100, context), DisplayUtil.dip2px(100, context))
+//                    .centerInside();
+            Glide.with(context).load(picFile).apply(RequestOptionUtil.getNoCacheRequestOptions()).into(mineUserIcon);
         }
     }
 
@@ -74,10 +78,11 @@ public class StaffPicController extends BaseViewController implements StaffPicDo
 
         if (accountInfo != null) {
             long imgId = accountInfo.imageId;
-            if (imgId != 0)
-                getStaffPic(accountInfo.imageId);
-            else
-                mineUserIcon.setImageResource(R.drawable.ic_user_default);
+            if (imgId != 0){
+                this.imageId = accountInfo.staffId;
+                getStaffPic(accountInfo.imageId,"");
+            }else
+                mineUserIcon.setImageResource(R.drawable.ic_default_txl_pic);
         }
     }
 
@@ -85,13 +90,14 @@ public class StaffPicController extends BaseViewController implements StaffPicDo
     public void getStaffPicFailed(String errorMsg) {
         LogUtil.e("StaffPicController:" + errorMsg);
 //        if (userIcon != null && userIcon.getTag(R.id.imageid).equals(imageId)) {
-//            Glide.with(userIcon.getContext()).load(R.drawable.ic_default_pic3).into(userIcon);
+//            Glide.with(userIcon.getContext()).load(R.drawable-xhdpi.ic_default_pic3).into(userIcon);
 //        }
     }
 
     @Override
     public void getDocIdsSuccess(CommonEntity entity) {
-        presenterRouter.create(StaffPicDownloadAPI.class).getStaffPic(Long.parseLong((String) entity.result));
+        // 根据获取的图片附件的id下载图片
+        presenterRouter.create(StaffPicDownloadAPI.class).getStaffPic(Long.parseLong((String) entity.result),getPicType());
     }
 
 
@@ -99,18 +105,19 @@ public class StaffPicController extends BaseViewController implements StaffPicDo
     public void getDocIdsFailed(String errorMsg) {
         LogUtil.e("StaffPicController:" + errorMsg);
         if (userIcon != null && userIcon.getTag(R.id.imageid).equals(imageId)) {
-            Glide.with(userIcon.getContext()).load(R.drawable.ic_default_pic3).into(userIcon);
+            Glide.with(userIcon.getContext()).load(R.drawable.ic_default_txl_pic).into(userIcon);
         }
     }
 
     @Override
-    public void getStaffPic(long id) {
-        this.imageId = id;
-        presenterRouter.create(StaffPicDownloadAPI.class).getStaffPic(id);
+    public void getStaffPic(long id, String picType) {
+//        this.imageId = id;
+        presenterRouter.create(StaffPicDownloadAPI.class).getStaffPic(id,picType);
     }
 
     @Override
     public void getDocIds(long linkId) {
+        // 获取图片的id
         presenterRouter.create(StaffPicDownloadAPI.class).getDocIds(linkId);
     }
 
@@ -118,13 +125,30 @@ public class StaffPicController extends BaseViewController implements StaffPicDo
         return picFile;
     }
 
-    public void initEamPic(long linkId, CustomCircleTextImageView userIcon) {
-        this.imageId = linkId;
+    /**'
+     * 通讯录头像
+     * @param linkId
+     * @param userIcon
+     * @param picServerPath
+     */
+    public void initStaffPic(long linkId, CustomCircleTextImageView userIcon,String picServerPath) {
+        this.imageId = linkId;  // staffId 即 linkId，同时赋值为imageId
         this.userIcon = userIcon;
+        this.picServerPath = picServerPath;
         getDocIds(linkId);
     }
 
     public void setImageView(CustomCircleTextImageView mineUserIcon) {
         this.mineUserIcon = mineUserIcon;
     }
+
+    /**
+     * 解析图片格式
+     */
+    private String getPicType(){
+        if (TextUtils.isEmpty(picServerPath)) return "";
+
+        return picServerPath.substring(picServerPath.lastIndexOf("."));
+    }
+
 }

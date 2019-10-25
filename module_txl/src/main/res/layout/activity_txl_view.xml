@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".ui.TxlListActivity">
 
-    <include layout="@layout/ly_titlebar" />
+    <include layout="@layout/ly_titlebar_local" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:padding="@dimen/dp_10"
-            android:src="@drawable/mine_icon_default" />
+            android:src="@drawable/ic_default_txl_pic" />
 
         <TextView
             android:id="@+id/staffName"
@@ -61,8 +61,8 @@
 
             <ImageView
                 android:id="@+id/ivTelphone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_25"
+                android:layout_height="@dimen/dp_25"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
                 android:src="@drawable/txl_view_phone"
@@ -85,8 +85,8 @@
 
             <ImageView
                 android:id="@+id/ivSms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_25"
+                android:layout_height="@dimen/dp_25"
                 android:layout_marginTop="@dimen/dp_5"
                 android:src="@drawable/txl_view_message"
                 android:tag="ivSms" />
@@ -109,8 +109,8 @@
 
             <ImageView
                 android:id="@+id/ivEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_25"
+                android:layout_height="@dimen/dp_25"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginBottom="@dimen/dp_5"
                 android:src="@drawable/txl_view_mail"

@@ -6,17 +6,27 @@
     android:background="@color/bgGray"
     android:orientation="vertical">
 
-    <include layout="@layout/ly_titlebar" />
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchTitleBar"
+        android:tag="searchTitleBar"
+        app:title_background_color="@color/themeColor"
+        app:title_right_btn_need="false"
+        app:title_text="停机报警"
+        app:title_length="@dimen/dp_80"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/themeColor"
         android:orientation="horizontal"
+        android:id="@+id/eamFilterLl"
+        android:tag="eamFilterLl"
         android:paddingLeft="@dimen/dp_5">
 
         <include
-            layout="@layout/ly_filter_eam_name"
+            layout="@layout/ly_filter_eam_type"
             android:layout_width="wrap_content"
             android:layout_height="40dp" />
 

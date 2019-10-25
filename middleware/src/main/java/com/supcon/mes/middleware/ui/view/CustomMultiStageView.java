@@ -177,7 +177,7 @@ public class CustomMultiStageView<Data> extends BaseLinearLayout {
         
         public void changeStatus() {
             if (data.isRootEntity()) {
-//                areaIcon.setImageResource(R.drawable.ic_multi_home);
+//                areaIcon.setImageResource(R.drawable-xhdpi.ic_multi_home);
             } else if (data.getChildListSize() <= 0) {
 //                areaIcon.setVisibility(INVISIBLE);
             } else if (data.isExpanded()) {

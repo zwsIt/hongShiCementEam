@@ -67,13 +67,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
@@ -230,8 +230,12 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 
         //手动刷新事件
         refreshListController.setOnRefreshListener(() -> {
-            queryParam.put(Constant.BAPQuery.STAR_TIME, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
-            queryParam.put(Constant.BAPQuery.END_TIME, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(new Date());
+//            queryParam.put(Constant.BAPQuery.STAR_TIME1, new StringBuilder(today).append(Constant.TimeString.START_TIME).toString());
+            queryParam.put(Constant.BAPQuery.STAR_TIME2, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
+            queryParam.put(Constant.BAPQuery.END_TIME1, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
+//            queryParam.put(Constant.BAPQuery.END_TIME2, new StringBuilder(today).append(Constant.TimeString.END_TIME).toString());
             presenterRouter.create(OLXJTaskAPI.class).getOJXJLastTaskList(queryParam);
         });
 
@@ -756,7 +760,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @Override
     public void getOJXJLastTaskListFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
-        LogUtil.e(ErrorMsgHelper.msgParse(errorMsg));
+        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
     }
 
     private void goXL() {

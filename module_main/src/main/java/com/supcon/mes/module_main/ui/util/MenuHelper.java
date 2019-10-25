@@ -4,6 +4,7 @@ import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_login.model.bean.WorkInfo;
 import com.supcon.mes.module_main.ui.view.MenuPopwindowBean;
 
 import org.json.JSONArray;
@@ -12,6 +13,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bluetron.coresdk.model.bean.response.OwnMinAppItem;
 
 
 public class MenuHelper {
@@ -137,6 +140,22 @@ public class MenuHelper {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+        return works;
+    }
+
+
+    public static List<MenuPopwindowBean> getZZMenu(List<OwnMinAppItem> zzWorks) {
+        List<MenuPopwindowBean> works = new ArrayList<>();
+        for(OwnMinAppItem ownMinAppItem : zzWorks){
+
+            MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();
+            menuPopwindowBean.setType(Constant.HSWorkType.ZZ);
+            menuPopwindowBean.setPower(true);
+            menuPopwindowBean.setName(ownMinAppItem.getAppname());
+            menuPopwindowBean.setRouter(ownMinAppItem.getAppurl());
+            menuPopwindowBean.setAppItem(ownMinAppItem);
+            works.add(menuPopwindowBean);
         }
         return works;
     }

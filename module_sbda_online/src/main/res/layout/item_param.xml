@@ -23,7 +23,7 @@
             android:paddingLeft="@dimen/dp_5"
             android:tag="paramName"
             app:content_hint="--"
-            app:gravity="right"
+            app:gravity ="right"
             app:key="参数名称:"
             app:max_lines="1" />
 
