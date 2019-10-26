@@ -1138,11 +1138,11 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                             xjWorkItemEntities.add(titleEntity);
                         }
 
-                        if (/*!eamIdList.contains(workItemEntity.eamID.id)*/mEam == null && !TextUtils.isEmpty(workItemEntity.eamID.name)
+                        if (!eamIdList.contains(workItemEntity.eamID.id)/*mEam == null && !TextUtils.isEmpty(workItemEntity.eamID.name)
                                 || mEam != null && !mEam.name.equals(workItemEntity.eamID.name)
-                                || mEam != null && !mEam.code.equals(workItemEntity.eamID.code)) {
+                                || mEam != null && !mEam.code.equals(workItemEntity.eamID.code)*/) {
                             mEam = workItemEntity.eamID;
-//                            eamIdList.add(mEam.id);
+                            eamIdList.add(mEam.id);
                             OLXJWorkItemEntity titleEntity = new OLXJWorkItemEntity();
                             titleEntity.title = workItemEntity.eamID.name;
                             titleEntity.eamID = workItemEntity.eamID;
@@ -1153,18 +1153,17 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                     if (workItemEntity.getPrioritySort() == 1) {
                         xjWorkItemTopEntities.add(workItemEntity);
                     } else {
-//                        if (eamIdList.contains(workItemEntity.eamID.id)){
-//                            //若包含已归类的设备标题，则插在改设备归类的下面
-//                            if (xjWorkItemEntities.size() >0){
-//                                for (int i = xjWorkItemEntities.size() -1 ;i >= 0;i--){
-//                                    if (xjWorkItemEntities.get(i).eamID != null && xjWorkItemEntities.get(i).eamID.id.equals(workItemEntity.eamID.id)){
-//                                        xjWorkItemEntities.add(i-1,workItemEntity);
-//                                    }
-//                                }
-//                            }
-//                        }else {
+                        if (eamIdList.contains(workItemEntity.eamID.id) && eamIdList.size() > 1 && !xjWorkItemEntities.get(xjWorkItemEntities.size()-1).eamID.id.equals(workItemEntity.eamID.id)){
+                            //若包含已归类的设备标题，则插在改设备归类的下面
+                            for (int i = xjWorkItemEntities.size() -1 ;i > 0;i--){
+                                if (xjWorkItemEntities.get(i).eamID != null && xjWorkItemEntities.get(i).eamID.id.equals(workItemEntity.eamID.id)){
+                                    xjWorkItemEntities.add(i+1,workItemEntity);
+                                    break;
+                                }
+                            }
+                        }else {
                             xjWorkItemEntities.add(workItemEntity);
-//                        }
+                        }
 
                     }
 

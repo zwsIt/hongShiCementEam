@@ -895,7 +895,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 //        ToastUtils.show(context, "任务取消成功！");
         saveAreaCache("");
         mAreaEntities.clear();
-        Flowable.timer(200,TimeUnit.MILLISECONDS)
+        Flowable.timer(500,TimeUnit.MILLISECONDS)
                 .subscribe(aLong -> refreshListController.refreshBegin());
     }
 

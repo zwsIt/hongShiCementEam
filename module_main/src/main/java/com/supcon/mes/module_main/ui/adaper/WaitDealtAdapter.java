@@ -156,7 +156,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                     Bundle bundle = new Bundle();
                                     bundle.putString(Constant.IntentKey.TABLENO, item.workTableno);
                                     // 工单跳转
-                                    if (item.processkey.equals("work")) {
+                                    if (Constant.ProcessKey.WORK.equals(item.processkey)) {
                                         if (!TextUtils.isEmpty(item.openurl)) {
                                             switch (item.openurl) {
                                                 case Constant.WxgdView.RECEIVE_OPEN_URL:
@@ -177,8 +177,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                         } else {
                                             ToastUtils.show(context, "未查询到工单状态状态!");
                                         }
-                                    } else if (item.processkey.equals("faultInfoFW")) {  // 隐患单跳转
+                                    } else if (Constant.ProcessKey.FAULT_INFO.equals(item.processkey)) {  // 隐患单跳转
                                         IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
+                                    }else if (Constant.ProcessKey.SPARE_PART_APPLY.equals(item.processkey)){ // 备件领用申请跳转
+
                                     }
                                 }
                             }
