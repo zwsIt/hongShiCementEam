@@ -82,7 +82,7 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.STOP_POLICE_S
 import static com.supcon.mes.middleware.constant.Constant.BAPQuery.STOP_POLICE_STOP_TYPE;
 
 /**
- * 运行记录汇总：默认查询设备类型为：
+ * 运行记录汇总：
  */
 @Router(Constant.Router.STOP_POLICE)
 @Presenter(value = StopPolicePresenter.class)

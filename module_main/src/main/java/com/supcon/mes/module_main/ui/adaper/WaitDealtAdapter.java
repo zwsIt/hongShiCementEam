@@ -180,7 +180,24 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                     } else if (Constant.ProcessKey.FAULT_INFO.equals(item.processkey)) {  // 隐患单跳转
                                         IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
                                     }else if (Constant.ProcessKey.SPARE_PART_APPLY.equals(item.processkey)){ // 备件领用申请跳转
-
+                                        if (!TextUtils.isEmpty(item.openurl)) {
+                                            bundle.putLong(Constant.IntentKey.TABLE_ID,item.dataid);
+                                            bundle.putLong(Constant.IntentKey.PENDING_ID,item.pendingid);
+                                            switch (item.openurl){
+                                                case Constant.HLSparePartView.EDIT_URL:
+                                                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_EDIT,bundle);
+                                                    break;
+                                                case Constant.HLSparePartView.SUBMIT_EDIT_URL:
+                                                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_SUBMIT_EDIT, bundle);
+                                                    break;
+                                                case Constant.HLSparePartView.SEND_EDIT_URL:
+                                                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_SUBMIT_EDIT, bundle);
+                                                    break;
+                                                case Constant.HLSparePartView.VIEW_URL:
+                                                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_VIEW, bundle);
+                                                    break;
+                                            }
+                                        }
                                     }
                                 }
                             }

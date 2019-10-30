@@ -151,9 +151,9 @@ public class WorkFragment extends BaseRefreshRecyclerFragment<WorkInfo> implemen
                         ToastUtils.show(context, msg);
                     }
                 });
-
             }
         });
+
     }
 
     private void initZhiZhiApps(List<OwnMinAppItem> list) {

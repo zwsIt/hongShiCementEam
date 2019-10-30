@@ -84,7 +84,7 @@ public class DealInfoController extends BasePresenterController implements DealI
             for (int j = 0;j < flowProcessEntityList.size();j++){
                 if (!data.get(0).toString().equals(flowProcessEntityList.get(j).flowProcess)){
                     count++;
-                    if (count == flowProcessEntityList.size()){ // 添加
+                    if (j == flowProcessEntityList.size()-1){ // 添加
                         flowProcessEntity = new FlowProcessEntity();
                         flowProcessEntity.isFinish = true;
                         flowProcessEntity.flowProcess = data.get(0).toString(); // 活动名称
@@ -104,11 +104,16 @@ public class DealInfoController extends BasePresenterController implements DealI
             }
         }
 
-        //删除存在和当前活动状态相同者，通知状态删除执行只显示通知
-        for (FlowProcessEntity flowProEntity :flowProcessEntityList){
-            if (flowProEntity.flowProcess.equals(processedEntity.prostatus) || (Constant.TableStatus_CH.EXECUTE.equals(flowProEntity.flowProcess) && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus))){
-                flowProcessEntityList.remove(flowProEntity);
-                break;
+        // 若流程出数据列表get(0).flowProcess和当前状态相同，清空列表
+        if (flowProcessEntityList.get(0).flowProcess.equals(processedEntity.prostatus)){
+            flowProcessEntityList.clear();
+        }else {
+            //删除存在和当前活动状态相同者，通知状态删除执行只显示通知
+            for (FlowProcessEntity flowProEntity :flowProcessEntityList){
+                if (flowProEntity.flowProcess.equals(processedEntity.prostatus) || (Constant.TableStatus_CH.EXECUTE.equals(flowProEntity.flowProcess) && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus))){
+                    flowProcessEntityList.remove(flowProEntity);
+                    break;
+                }
             }
         }
         genFlowProEntity(flowProcessEntityList); // 需要添加当前状态

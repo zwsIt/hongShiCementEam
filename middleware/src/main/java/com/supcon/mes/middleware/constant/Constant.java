@@ -200,6 +200,7 @@ public interface Constant {
         String SPARE_PART_APPLY_EDIT = "SPARE_PART_APPLY_EDIT"; // 备件领用申请编辑
         String SPARE_PART_APPLY_SUBMIT_EDIT = "SPARE_PART_APPLY_SUBMIT_EDIT"; // 备件领用申请审批编辑
         String SPARE_PART_APPLY_VIEW = "SPARE_PART_APPLY_VIEW"; // 备件领用申请查看
+        String SPARE_PART_APPLY_DETAIL_LIST = "SPARE_PART_APPLY_DETAIL_LIST"; // 备件领用申请明细list
     }
 
 
@@ -885,6 +886,23 @@ public interface Constant {
         String ACCEPT = "BEAM049/04"; // 验收
         String TAKE_EFFECT = "BEAM049/05"; // 生效
         String CANCEL = "BEAM049/06"; // 作废
+    }
+
+    /**
+     * 备件领用申请单据视图(注：海螺使用)
+     */
+    interface HLSparePartView {
+        String EDIT_URL = "/BEAM2/sparePart/apply/sparePartEdit.action";// 领用人申请
+        String SUBMIT_EDIT_URL = "/BEAM2/sparePart/apply/sparePartSubmitEdit.action";
+        String VIEW_URL = "/BEAM2/sparePart/apply/sparePartView.action";// 保全处经办人审批、 公司分管领导审批、总经理审批
+        String SEND_EDIT_URL = "/BEAM2/sparePart/apply/sparePartSendEdit.action";// 仓库管理员发货
+    }
+
+    /**
+     * EventBus 发送标识
+     */
+    interface EventFlag{
+        String SPAD = "sparePartApplyDetail"; // 备件领用申请明细PT
     }
 
 }

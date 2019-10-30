@@ -1,5 +1,6 @@
 package com.supcon.mes.module_wxgd.presenter;
 
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;

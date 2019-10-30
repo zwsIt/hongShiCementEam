@@ -47,7 +47,7 @@ public interface ApiService {
      * @description 获取工单列表
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET
+    @POST
     Flowable<WXGDListEntity> listWxgds(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
@@ -249,7 +249,7 @@ public interface ApiService {
      * @description 备件领用申请PT明细
      * @author zws 2018/8/28
      */
-    @POST("/BEAM2/sparePart/apply/data-dg1535960092493.action")
+    @POST("/BEAM2/sparePart/apply/data-dg1535943746846.action")
     Flowable<SparePartReceiveListEntity> listSparePartApplyDetail(@Query("apply.id") long id);
 
     /**

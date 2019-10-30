@@ -2,6 +2,7 @@ package com.supcon.mes.module_main.ui.util;
 
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_login.model.bean.WorkInfo;
@@ -93,7 +94,12 @@ public class MenuHelper {
                         menuPopwindowBean.setRouter(Constant.Router.MAINTENANCE_EARLY_WARN);
                         break;
                     case Constant.HSWorkType.SPARE_PART_RECEIVE:
-                        menuPopwindowBean.setRouter(Constant.Router.SPARE_PART_RECEIVE);
+                        if (EamApplication.isHailuo()){
+                            menuPopwindowBean.setPower(true);
+                            menuPopwindowBean.setRouter(Constant.Router.SPARE_PART_APPLY_EDIT);
+                        }else {
+                            menuPopwindowBean.setRouter(Constant.Router.SPARE_PART_RECEIVE);
+                        }
                         break;
                     case Constant.HSWorkType.TD:
                         menuPopwindowBean.setRouter(Constant.Router.TD);

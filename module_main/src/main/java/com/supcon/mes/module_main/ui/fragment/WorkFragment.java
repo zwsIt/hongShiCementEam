@@ -283,7 +283,13 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
             public void onGetMinAppList(List<OwnMinAppItem> list) {
                 //System.out.println(list);
                 LogUtil.d("zz list size:" + list.size());
-                initZhiZhiApps(list);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initZhiZhiApps(list);
+                    }
+                });
+
             }
 
             @Override
@@ -298,6 +304,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                 });
             }
         });
+
     }
 
     private void initZhiZhiApps(List<OwnMinAppItem> list) {
@@ -371,18 +378,6 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     @Override
     protected void initListener() {
         super.initListener();
-
-        if (EamApplication.isHailuo()){
-            workName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(Constant.IntentKey.TABLE_ID,1008);
-                    bundle.putLong(Constant.IntentKey.PENDING_ID,24517);
-                    IntentRouter.go(context,Constant.Router.SPARE_PART_APPLY_EDIT,bundle);
-                }
-            });
-        }
 
         workAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override

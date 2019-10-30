@@ -14,6 +14,7 @@ public class SparePartReceiveEntity extends BaseEntity {
     public Good sparePartId;//备件编码
     public Double price; // 单价
     public Double total; // 总价
+    public Double defference; // 差额
 
 
     public Good getSparePartId() {

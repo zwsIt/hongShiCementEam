@@ -146,7 +146,7 @@ dependencies {
         implementation project(':module_data_manage')
         implementation project(':module_sbda')
         implementation project(':module_wxgd')
-//        implementation project(':module_xj')
+        implementation project(':module_sparepartapply_hl')
         implementation project(':module_xj_online')
         implementation project(':module_yhgl')
         implementation project(':module_tsd')

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray">
+
+    <include layout="@layout/ly_spare_part_apply_body"
+        android:layout_above="@+id/workFlowBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/workFlowBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/sh_white_stroke"
+        android:orientation="vertical"
+        android:tag="workFlowBar">
+
+        <com.supcon.mes.mbap.view.CustomEditText
+            android:id="@+id/commentInput"
+            style="@style/HintTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="@dimen/dp_3"
+            android:paddingBottom="@dimen/dp_3"
+            android:tag="commentInput"
+            app:edit_hint="填写意见"
+            app:text_color="@color/textColorlightblack"
+            app:text_size="14" />
+
+        <com.supcon.mes.mbap.view.CustomWorkFlowView
+            android:id="@+id/workFlowView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="workFlowView"
+            app:commentable="false" />
+    </LinearLayout>
+
+</RelativeLayout>

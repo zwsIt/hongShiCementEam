@@ -25,7 +25,6 @@ import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -217,11 +216,11 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void search(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity != null) {
-            if (commonSearchEvent.commonSearchEntity instanceof EamType) {
-                EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
-                eamCode.setContent(Util.strFormat(eamType.code));
-                eamName.setContent(Util.strFormat(eamType.name));
-                queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(eamType.code));
+            if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
+                EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+                eamCode.setContent(Util.strFormat(eamEntity.code));
+                eamName.setContent(Util.strFormat(eamEntity.name));
+                queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(eamEntity.code));
                 refreshController.refreshBegin();
             }
         }

@@ -70,7 +70,7 @@ public class StopPoliceAdapter extends BaseListDataRecyclerViewAdapter<StopPolic
         @SuppressLint("StringFormatInvalid")
         @Override
         protected void update(StopPoliceEntity stopPoliceEntity) {
-            itemStopPoliceName.setContent(Util.strFormat(stopPoliceEntity.getEamType().name));
+            itemStopPoliceName.setContent(Util.strFormat(stopPoliceEntity.getEamID().name));
             itemStopPoliceStartTime.setContent(stopPoliceEntity.openTime != null ? dateFormat.format(stopPoliceEntity.openTime) : "--");
             itemStopPoliceCloseTime.setContent(stopPoliceEntity.closedTime != null ? dateFormat.format(stopPoliceEntity.closedTime) : "--");
             itemStopPoliceTotalTime.setContent(Util.big2(stopPoliceEntity.totalHour));
