@@ -156,7 +156,7 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
         datePickController.textSize(18);
 
         sparePartApplyDetailController = getController(SparePartApplyDetailController.class);
-        sparePartApplyDetailController.setEditable(true);
+        sparePartApplyDetailController.setEditable(true,false).setPTUrl("/BEAM2/sparePart/apply/data-dg1535943746846.action");
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.module_wxgd.R;
+import com.supcon.mes.module_sparepartapply_hl.R;
 import com.supcon.mes.module_wxgd.model.bean.SparePartApplyEntity;
 
 /**

@@ -102,7 +102,7 @@ public class SparePartReceiveAdapter extends BaseListDataRecyclerViewAdapter<Spa
                             item.origDemandQuity = null;
                             return;
                         }
-                        item.origDemandQuity = Util.strToFloat(charSequence.toString());
+                        item.origDemandQuity = Util.strToDouble(charSequence.toString());
                     });
             RxTextView.textChanges(remark.editText())
                     .skipInitialValue()

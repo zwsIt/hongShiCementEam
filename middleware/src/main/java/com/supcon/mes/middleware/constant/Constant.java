@@ -199,6 +199,7 @@ public interface Constant {
         String SPARE_PART_APPLY_LIST = "SPARE_PART_APPLY_LIST"; // 备件领用申请list
         String SPARE_PART_APPLY_EDIT = "SPARE_PART_APPLY_EDIT"; // 备件领用申请编辑
         String SPARE_PART_APPLY_SUBMIT_EDIT = "SPARE_PART_APPLY_SUBMIT_EDIT"; // 备件领用申请审批编辑
+        String SPARE_PART_APPLY_SEND_EDIT = "SPARE_PART_APPLY_SEND_EDIT"; // 备件领用申请发货
         String SPARE_PART_APPLY_VIEW = "SPARE_PART_APPLY_VIEW"; // 备件领用申请查看
         String SPARE_PART_APPLY_DETAIL_LIST = "SPARE_PART_APPLY_DETAIL_LIST"; // 备件领用申请明细list
     }

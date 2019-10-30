@@ -127,13 +127,13 @@ public class SparePartApplyViewActivity extends BaseRefreshActivity implements S
         datePickController.setSecondVisible(true);
         datePickController.textSize(18);
 
-        getController(SparePartApplyDetailController.class).setEditable(false);
+        getController(SparePartApplyDetailController.class).setEditable(false,false).setPTUrl("/BEAM2/sparePart/apply/data-dg1535944293237.action");
     }
 
     @Override
     protected void initView() {
         super.initView();
-        titleText.setText("备件领用申请");
+        titleText.setText("备件领用申请审核");
         applyStaff.setEditable(false);
         applyTime.setEditable(false);
         explain.setEditable(false);

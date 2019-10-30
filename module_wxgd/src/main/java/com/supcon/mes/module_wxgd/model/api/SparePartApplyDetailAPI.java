@@ -11,5 +11,5 @@ public interface SparePartApplyDetailAPI {
      * @description 获取备件领用申请明细list
      * @author user 2019/10/29
      */
-    void listSparePartApplyDetail(Long id);
+    void listSparePartApplyDetail(String url, Long id);
 }

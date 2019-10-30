@@ -31,6 +31,7 @@ import com.supcon.mes.middleware.model.event.SparePartAddEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.module_sparepartapply_hl.R;
+import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
 import com.supcon.mes.module_sparepartapply_hl.model.event.SparePartApplyDetailEvent;
 import com.supcon.mes.module_sparepartapply_hl.ui.adapter.SparePartApplyDetailAdapter;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -76,6 +77,7 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
     protected List<SparePartReceiveEntity> sparePartReceiveEntityList = new ArrayList<>();
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
     private boolean editable;
+    private String url; // 获取备件领用申请明细PT之url
 
     @Override
     protected void onInit() {
@@ -89,7 +91,10 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
 
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID,0);
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);//放在onInit()中会存在迟于创建Adapter，故setEditable
-        sparePartApplyDetailAdapter.setEditable(editable);
+
+        sparePartApplyDetailAdapter.setEditable(editable,getIntent().getBooleanExtra(SPAHLConstant.IntentKey.IS_SEND_STATUS,false));
+
+        url = getIntent().getStringExtra(Constant.IntentKey.URL);
 
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
@@ -144,7 +149,7 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
                         IntentRouter.go(context, Constant.Router.SPARE_PART_REF, bundle);
                     }
                 });
-        refreshListController.setOnRefreshListener(() -> presenterRouter.create(SparePartApplyDetailAPI.class).listSparePartApplyDetail(tableId));
+        refreshListController.setOnRefreshListener(() -> presenterRouter.create(SparePartApplyDetailAPI.class).listSparePartApplyDetail(url,tableId));
 
         sparePartApplyDetailAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override

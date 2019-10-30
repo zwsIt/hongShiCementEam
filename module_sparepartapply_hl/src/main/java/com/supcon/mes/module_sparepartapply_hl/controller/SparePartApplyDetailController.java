@@ -14,6 +14,8 @@ import com.supcon.mes.middleware.model.bean.SparePartReceiveEntity;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveListEntity;
 import com.supcon.mes.middleware.model.event.BaseEvent;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
+import com.supcon.mes.module_sparepartapply_hl.ui.adapter.SparePartApplyDetailAdapter;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.model.api.SparePartApplyDetailAPI;
 import com.supcon.mes.module_wxgd.model.contract.SparePartApplyDetailContract;
@@ -36,7 +38,9 @@ import java.util.List;
 public class SparePartApplyDetailController extends BaseViewController implements SparePartApplyDetailContract.View {
 
     private boolean editable;
-    public Long tableId; // 单据ID
+    private boolean isSendStatus; // 是否是备件领用发货状态
+    private Long tableId; // 单据ID
+    private String url; // 备件明细PT之url
 
     private List<SparePartReceiveEntity> sparePartReceiveEntityList = new ArrayList<>();
 
@@ -47,8 +51,18 @@ public class SparePartApplyDetailController extends BaseViewController implement
         super(rootView);
     }
 
-    public void setEditable(boolean isEditable) {
+    public SparePartApplyDetailController setEditable(boolean isEditable,boolean isSendStatus) {
         this.editable = isEditable;
+        this.isSendStatus = isSendStatus;
+        return this;
+    }
+
+    /**
+     * 设置备件领用明细数据url
+     * @param url
+     */
+    public void setPTUrl(String url){
+        this.url = url;
     }
 
     @Override
@@ -56,19 +70,20 @@ public class SparePartApplyDetailController extends BaseViewController implement
         super.onInit();
         EventBus.getDefault().register(this);
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID,-1);
-
     }
 
     @Override
     public void initView() {
         super.initView();
-        sparePartListWidget.setAdapter(new SparePartReceiveAdapter(context,editable));
+        SparePartApplyDetailAdapter sparePartApplyDetailAdapter = new SparePartApplyDetailAdapter(context);
+        sparePartApplyDetailAdapter.setEditable(editable,isSendStatus);
+        sparePartListWidget.setAdapter(sparePartApplyDetailAdapter);
     }
 
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(SparePartApplyDetailAPI.class).listSparePartApplyDetail(tableId);
+        presenterRouter.create(SparePartApplyDetailAPI.class).listSparePartApplyDetail(url,tableId);
     }
 
     @Override
@@ -83,8 +98,9 @@ public class SparePartApplyDetailController extends BaseViewController implement
                     case 0:
 //                        bundle.putString(Constant.IntentKey.SPARE_PART_ENTITIES, sparePartReceiveEntityList.toString());
                         bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, editable);
-//                        bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
+                        bundle.putBoolean(SPAHLConstant.IntentKey.IS_SEND_STATUS, isSendStatus);
                         bundle.putLong(Constant.IntentKey.TABLE_ID,tableId);
+                        bundle.putString(Constant.IntentKey.URL,url);
                         IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_DETAIL_LIST, bundle);
                         break;
                     default:
@@ -122,7 +138,7 @@ public class SparePartApplyDetailController extends BaseViewController implement
             if (entity.result.size() == 0){
                 sparePartListWidget.clear();
             }
-            if (editable) {
+            if (editable || isSendStatus) {
                 sparePartListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
                 sparePartListWidget.setShowText("查看 (" + entity.result.size() + ")");

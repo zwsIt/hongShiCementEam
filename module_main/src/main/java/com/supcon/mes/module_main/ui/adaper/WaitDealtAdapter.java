@@ -191,7 +191,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                                     IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_SUBMIT_EDIT, bundle);
                                                     break;
                                                 case Constant.HLSparePartView.SEND_EDIT_URL:
-                                                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_SUBMIT_EDIT, bundle);
+                                                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_SEND_EDIT, bundle);
                                                     break;
                                                 case Constant.HLSparePartView.VIEW_URL:
                                                     IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_VIEW, bundle);

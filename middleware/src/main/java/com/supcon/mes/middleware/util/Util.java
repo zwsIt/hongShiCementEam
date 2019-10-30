@@ -344,6 +344,18 @@ public class Util {
             return 0;
         }
     }
+    public static Double strToDouble(String str) {
+        if (str == null || TextUtils.isEmpty(str)) {
+            return 0D;
+        }
+        try {
+            Double aDouble = Double.valueOf(str);
+            return aDouble;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0D;
+        }
+    }
 
     /**
      * 浮点型保留两位小数

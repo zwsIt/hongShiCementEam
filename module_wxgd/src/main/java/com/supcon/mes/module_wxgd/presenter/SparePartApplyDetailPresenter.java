@@ -9,9 +9,9 @@ import io.reactivex.functions.Function;
 
 public class SparePartApplyDetailPresenter extends SparePartApplyDetailContract.Presenter {
     @Override
-    public void listSparePartApplyDetail(Long id) {
+    public void listSparePartApplyDetail(String url, Long id) {
         mCompositeSubscription.add(
-                HttpClient.listSparePartApplyDetail(id)
+                HttpClient.listSparePartApplyDetail(url, id)
                 .onErrorReturn(throwable -> {
                     SparePartReceiveListEntity entity = new SparePartReceiveListEntity();
                     entity.errMsg = throwable.toString();

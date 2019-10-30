@@ -59,14 +59,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @description SparePartApplySubmitViewActivity 备件领用申请出库审核编辑
- * @author zws 2019/10/29
+ * @description SparePartApplyEditActivity 备件领用申请发货编辑
+ * @author zws 2019/9/27
  */
-@Deprecated
-@Router(value = Constant.Router.SPARE_PART_APPLY_SUBMIT_EDIT)
+@Router(value = Constant.Router.SPARE_PART_APPLY_SEND_EDIT)
 @Controller(value = {LinkController.class, TableInfoController.class, SparePartApplyDetailController.class,OnlineCameraController.class})
 @Presenter(value = {SparePartApplyPresenter.class})
-public class SparePartApplySubmitViewActivity extends BaseRefreshActivity implements SparePartApplyContract.View {
+public class SparePartApplySendEditActivity extends BaseRefreshActivity implements SparePartApplyContract.View {
     @BindByTag("leftBtn")
     CustomImageButton leftBtn;
     @BindByTag("titleText")
@@ -128,13 +127,13 @@ public class SparePartApplySubmitViewActivity extends BaseRefreshActivity implem
         datePickController.setSecondVisible(true);
         datePickController.textSize(18);
 
-        getController(SparePartApplyDetailController.class).setEditable(false,false);
+        getController(SparePartApplyDetailController.class).setEditable(false,true).setPTUrl("/BEAM2/sparePart/apply/data-dg1569581670417.action");
     }
 
     @Override
     protected void initView() {
         super.initView();
-        titleText.setText("备件领用申请");
+        titleText.setText("备件领用申请发货");
         applyStaff.setEditable(false);
         applyTime.setEditable(false);
         explain.setEditable(false);
@@ -322,7 +321,7 @@ public class SparePartApplySubmitViewActivity extends BaseRefreshActivity implem
         onLoadSuccessAndExit("处理成功！", new OnLoaderFinishListener() {
             @Override
             public void onLoaderFinished() {
-                SparePartApplySubmitViewActivity.this.finish();
+                SparePartApplySendEditActivity.this.finish();
                 EventBus.getDefault().post(new RefreshEvent());
             }
         });

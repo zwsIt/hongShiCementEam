@@ -249,8 +249,8 @@ public interface ApiService {
      * @description 备件领用申请PT明细
      * @author zws 2018/8/28
      */
-    @POST("/BEAM2/sparePart/apply/data-dg1535943746846.action")
-    Flowable<SparePartReceiveListEntity> listSparePartApplyDetail(@Query("apply.id") long id);
+    @POST
+    Flowable<SparePartReceiveListEntity> listSparePartApplyDetail(@Url String url,@Query("apply.id") long id);
 
     /**
      * @param 

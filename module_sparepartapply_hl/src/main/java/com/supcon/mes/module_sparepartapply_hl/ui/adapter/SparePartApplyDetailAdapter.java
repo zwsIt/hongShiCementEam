@@ -32,6 +32,7 @@ import java.util.List;
 public class SparePartApplyDetailAdapter extends BaseListDataRecyclerViewAdapter<SparePartReceiveEntity> {
 
     private boolean editable;
+    private boolean isSendStatus; // 是否是备件领用发货状态
 
     public SparePartApplyDetailAdapter(Context context) {
         super(context);
@@ -46,8 +47,9 @@ public class SparePartApplyDetailAdapter extends BaseListDataRecyclerViewAdapter
         return new ViewHolder(context);
     }
 
-    public void setEditable(boolean editable) {
+    public void setEditable(boolean editable, boolean isSendStatus) {
         this.editable = editable;
+        this.isSendStatus = isSendStatus;
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<SparePartReceiveEntity> {
@@ -81,6 +83,9 @@ public class SparePartApplyDetailAdapter extends BaseListDataRecyclerViewAdapter
             EditInputFilter editInputFilter = new EditInputFilter();
             sum.getNumViewInput().setFilters(new InputFilter[]{editInputFilter});
             currDemandQuity.getNumViewInput().setFilters(new InputFilter[]{editInputFilter});
+            if (!editable){
+                itemViewDelBtn.setVisibility(View.GONE);
+            }
         }
 
         @SuppressLint("CheckResult")
@@ -98,7 +103,20 @@ public class SparePartApplyDetailAdapter extends BaseListDataRecyclerViewAdapter
                             item.origDemandQuity = null;
                             return;
                         }
-                        item.origDemandQuity = Util.strToFloat(charSequence.toString());
+                        item.origDemandQuity = Util.strToDouble(charSequence.toString());
+                    });
+            RxTextView.textChanges(currDemandQuity.getNumViewInput())
+                    .skipInitialValue()
+                    .subscribe(charSequence -> {
+                        SparePartReceiveEntity item = getItem(getAdapterPosition());
+                        if (item == null) {
+                            return;
+                        }
+                        if (TextUtils.isEmpty(charSequence)) {
+                            item.currDemandQuity = null;
+                            return;
+                        }
+                        item.currDemandQuity = Util.strToDouble(charSequence.toString());
                     });
             RxTextView.textChanges(remark.editText())
                     .skipInitialValue()
@@ -121,6 +139,7 @@ public class SparePartApplyDetailAdapter extends BaseListDataRecyclerViewAdapter
                     onItemChildViewClick(itemViewDelBtn, 0, sparePartReceiveEntity);
                 }
             });
+
         }
 
         @Override
@@ -137,8 +156,9 @@ public class SparePartApplyDetailAdapter extends BaseListDataRecyclerViewAdapter
             remark.setEditable(editable);
             sum.getNumViewInput().setText(data.origDemandQuity == null ? "" : data.origDemandQuity.toString());
 
-            currDemandQuity.setEditable(editable);
-            currDemandQuity.getNumViewInput().setEnabled(editable);
+            currDemandQuity.setEditable(isSendStatus);
+            currDemandQuity.getNumViewInput().setEnabled(isSendStatus);
+            currDemandQuity.getNumViewInput().setText(Util.strFormat2(data.currDemandQuity));
 
         }
     }
