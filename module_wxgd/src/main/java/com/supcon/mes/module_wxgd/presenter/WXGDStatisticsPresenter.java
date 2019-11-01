@@ -26,9 +26,11 @@ public class WXGDStatisticsPresenter extends WXGDStatisticsContract.Presenter {
         pageQueryParam.put("page.maxPageSize", 500);
         pageQueryParam.put("page.pageNo", pageNum);
 
+        pageQueryParam.put("fastQueryCond", fastQueryCondEntity);
+
         String url = "/BEAM2/workList/workRecord/workList-query.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
         mCompositeSubscription.add(
-                HttpClient.listWxgds(url, fastQueryCondEntity, pageQueryParam)
+                HttpClient.listWxgds(url, pageQueryParam)
                         .onErrorReturn(throwable -> {
                             WXGDListEntity wxgdListEntity = new WXGDListEntity();
                             wxgdListEntity.success = false;

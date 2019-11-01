@@ -13,15 +13,13 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveEntity;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveListEntity;
 import com.supcon.mes.middleware.model.event.BaseEvent;
-import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
 import com.supcon.mes.module_sparepartapply_hl.ui.adapter.SparePartApplyDetailAdapter;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.model.api.SparePartApplyDetailAPI;
 import com.supcon.mes.module_wxgd.model.contract.SparePartApplyDetailContract;
 import com.supcon.mes.module_wxgd.model.event.ListEvent;
-import com.supcon.mes.module_wxgd.presenter.SparePartApplyDetailPresenter;
-import com.supcon.mes.module_wxgd.ui.adapter.SparePartReceiveAdapter;
+import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyDetailPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -89,23 +87,20 @@ public class SparePartApplyDetailController extends BaseViewController implement
     @Override
     public void initListener() {
         super.initListener();
-        sparePartListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                Bundle bundle = new Bundle();
-                switch (action) {
-                    case CustomListWidget.ACTION_VIEW_ALL:
-                    case 0:
+        sparePartListWidget.setOnChildViewClickListener((childView, action, obj) -> {
+            Bundle bundle = new Bundle();
+            switch (action) {
+                case CustomListWidget.ACTION_VIEW_ALL:
+                case 0:
 //                        bundle.putString(Constant.IntentKey.SPARE_PART_ENTITIES, sparePartReceiveEntityList.toString());
-                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, editable);
-                        bundle.putBoolean(SPAHLConstant.IntentKey.IS_SEND_STATUS, isSendStatus);
-                        bundle.putLong(Constant.IntentKey.TABLE_ID,tableId);
-                        bundle.putString(Constant.IntentKey.URL,url);
-                        IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_DETAIL_LIST, bundle);
-                        break;
-                    default:
-                        break;
-                }
+                    bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, editable);
+                    bundle.putBoolean(SPAHLConstant.IntentKey.IS_SEND_STATUS, isSendStatus);
+                    bundle.putLong(Constant.IntentKey.TABLE_ID,tableId);
+                    bundle.putString(Constant.IntentKey.URL,url);
+                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_DETAIL_LIST, bundle);
+                    break;
+                default:
+                    break;
             }
         });
     }

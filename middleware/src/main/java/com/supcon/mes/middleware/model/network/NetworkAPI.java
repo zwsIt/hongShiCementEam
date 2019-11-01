@@ -373,4 +373,13 @@ public interface NetworkAPI {
      */
     @GET("/foundation/userPermission/checkUserPower.action")
     Flowable<Object> checkUserPower(@Query("companyId") long companyId, @Query("menuOperateCodes") String menuOperateCodes);
+
+    /**
+     * 获取单据提交的__pc__
+     * @param operateCode
+     * @param flowKey
+     * @return
+     */
+    @POST("/mobile/mobileCommon/foundation/getPc.action")
+    Flowable<CommonEntity> getPc(@Query("operateCode") String operateCode, @Query("flowKey") String flowKey);
 }

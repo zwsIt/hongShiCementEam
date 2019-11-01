@@ -15,7 +15,6 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
-import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
@@ -23,7 +22,6 @@ import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.Good;
-import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveEntity;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveListEntity;
 import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
@@ -37,9 +35,7 @@ import com.supcon.mes.module_sparepartapply_hl.ui.adapter.SparePartApplyDetailAd
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.model.api.SparePartApplyDetailAPI;
 import com.supcon.mes.module_wxgd.model.contract.SparePartApplyDetailContract;
-import com.supcon.mes.module_wxgd.model.event.SparePartEvent;
-import com.supcon.mes.module_wxgd.presenter.SparePartApplyDetailPresenter;
-import com.supcon.mes.module_wxgd.ui.adapter.SparePartReceiveAdapter;
+import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyDetailPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

@@ -48,7 +48,7 @@ public interface ApiService {
      * @author zhangwenshuai1 2018/8/13
      */
     @POST
-    Flowable<WXGDListEntity> listWxgds(@Url String url, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    Flowable<WXGDListEntity> listWxgds(@Url String url, /*@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity,*/ @QueryMap Map<String, Object> pageQueryMap);
 
     /**
      * 维修工单接单提交
@@ -236,12 +236,11 @@ public interface ApiService {
     /**
      * 获取备件领用申请单表头信息
      * @param id
-     * @param includes
      * @return
      */
     @POST("/BEAM2/sparePart/apply/get.action")
-    @Multipart
-    Flowable<SparePartApplyHeaderInfoEntity> get(@Query("id") Long id, @Part("includes") String includes );
+//    @Multipart
+    Flowable<SparePartApplyHeaderInfoEntity> get(@Query("id") Long id, @QueryMap Map<String,Object> queryMap/*@Part("includes") String includes 丢失返回数据 */);
 
     /**
      * @param
@@ -258,7 +257,7 @@ public interface ApiService {
      * @description 
      * @author zws 2019/9/28
      */
-    @POST("/BEAM2/sparePart/apply/sparePartEdit/submit.action?__pc__=dGFzazM0MHxzcGFyZVBhcnRBcHBseQ__&_bapFieldPermissonModelCode_=BEAM2_1.0.0_sparePart_Apply&_bapFieldPermissonModelName_=Apply&superEdit=false")
+    @POST("/BEAM2/sparePart/apply/sparePartEdit/submit.action?_bapFieldPermissonModelCode_=BEAM2_1.0.0_sparePart_Apply&_bapFieldPermissonModelName_=Apply&superEdit=false")
     @Multipart
-    Flowable<BapResultEntity> sparePartApplyDoSubmit(@PartMap Map<String, RequestBody> paramMap,@Part List<MultipartBody.Part> partList);
+    Flowable<BapResultEntity> sparePartApplyDoSubmit(@PartMap Map<String, RequestBody> paramMap,@Part List<MultipartBody.Part> partList,@Query("__pc__") String pc);
 }

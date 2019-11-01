@@ -84,7 +84,7 @@ public class DealInfoController extends BasePresenterController implements DealI
             for (int j = 0;j < flowProcessEntityList.size();j++){
                 if (!data.get(0).toString().equals(flowProcessEntityList.get(j).flowProcess)){
                     count++;
-                    if (j == flowProcessEntityList.size()-1){ // 添加
+                    if (count == flowProcessEntityList.size()){ // 添加
                         flowProcessEntity = new FlowProcessEntity();
                         flowProcessEntity.isFinish = true;
                         flowProcessEntity.flowProcess = data.get(0).toString(); // 活动名称
@@ -103,21 +103,24 @@ public class DealInfoController extends BasePresenterController implements DealI
                 }
             }
         }
-
-        // 若流程出数据列表get(0).flowProcess和当前状态相同，清空列表
-        if (flowProcessEntityList.get(0).flowProcess.equals(processedEntity.prostatus)){
-            flowProcessEntityList.clear();
-        }else {
-            //删除存在和当前活动状态相同者，通知状态删除执行只显示通知
-            for (FlowProcessEntity flowProEntity :flowProcessEntityList){
-                if (flowProEntity.flowProcess.equals(processedEntity.prostatus) || (Constant.TableStatus_CH.EXECUTE.equals(flowProEntity.flowProcess) && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus))){
-                    flowProcessEntityList.remove(flowProEntity);
-                    break;
-                }
+        // 通知状态删除执行只显示通知
+        for (FlowProcessEntity flowProEntity :flowProcessEntityList){
+            if ((Constant.TableStatus_CH.EXECUTE.equals(flowProEntity.flowProcess) && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus))){
+                flowProcessEntityList.remove(flowProEntity);
+                break;
             }
         }
-        genFlowProEntity(flowProcessEntityList); // 需要添加当前状态
-        recyclerView.setAdapter(new FlowProcessAdapter(context, flowProcessEntityList));
+        // 过滤驳回后出现的颠倒流程
+        List<FlowProcessEntity> flowProcessEntityFilterList = new ArrayList<>();
+        for (FlowProcessEntity processEntity : flowProcessEntityList){
+            if (processEntity.flowProcess.equals(processedEntity.prostatus)){ // 和当前状态则退出循环
+                break;
+            }else {
+                flowProcessEntityFilterList.add(processEntity); // 不同则添加
+            }
+        }
+        genFlowProEntity(flowProcessEntityFilterList); // 需要添加当前状态
+        recyclerView.setAdapter(new FlowProcessAdapter(context, flowProcessEntityFilterList));
     }
 
     @Override

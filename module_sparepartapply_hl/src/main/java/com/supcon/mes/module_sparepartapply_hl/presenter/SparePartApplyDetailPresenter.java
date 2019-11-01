@@ -1,4 +1,4 @@
-package com.supcon.mes.module_wxgd.presenter;
+package com.supcon.mes.module_sparepartapply_hl.presenter;
 
 import com.supcon.mes.middleware.model.bean.SparePartReceiveListEntity;
 import com.supcon.mes.module_wxgd.model.contract.SparePartApplyDetailContract;

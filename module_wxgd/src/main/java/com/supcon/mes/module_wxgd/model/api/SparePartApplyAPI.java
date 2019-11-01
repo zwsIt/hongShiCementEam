@@ -10,5 +10,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = {BapResultEntity.class})
 public interface SparePartApplyAPI {
-    void submitSparePartApply(Map<String, Object> map,Map<String, Object> attachmentMap);
+    void submitSparePartApply(Map<String, Object> map,Map<String, Object> attachmentMap,String pc);
 }

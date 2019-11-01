@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="@dimen/dp_15"
     android:background="@color/white"
     android:orientation="vertical">
@@ -37,11 +38,21 @@
                 android:orientation="vertical"
                 android:padding="@dimen/dp_5">
 
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_5"
+                    android:id="@+id/tableNo"
+                    android:tag="tableNo"
+                    app:key_width="0dp"
+                    app:content_hint="单据编号"
+                    app:content_size="14"
+                    app:max_lines="1"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/waitDealtEamName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_3"
                     android:tag="waitDealtEamName"
                     android:textColor="#333333"
                     android:textSize="@dimen/fontSize_16sp"
@@ -51,7 +62,7 @@
                     android:id="@+id/waitDealtTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_3"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:tag="waitDealtTime"
                     android:textColor="#757575"
                     android:textSize="@dimen/fontSize_14sp"
@@ -61,7 +72,7 @@
                     android:id="@+id/waitDealtContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_3"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:tag="waitDealtContent"
                     android:textColor="#757575"
                     android:textSize="@dimen/fontSize_14sp"
@@ -79,7 +90,6 @@
                 android:tag="waitDealtEamState"
                 android:textSize="@dimen/fontSize_14sp"
                 tools:text="待验收" />
-
 
             <TextView
                 android:id="@+id/waitDealtEamSource"

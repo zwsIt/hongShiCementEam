@@ -22,13 +22,15 @@ public class WXGDListPresenter extends WXGDListContract.Presenter {
         pageQueryParam.put("page.maxPageSize", 500);
         pageQueryParam.put("page.pageNo", pageNum);
 
+        pageQueryParam.put("fastQueryCond", fastQueryCondEntity);
+
         String url = "/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
         if (queryParam.containsKey(Constant.BAPQuery.WORK_STATE)
                 && queryParam.get(Constant.BAPQuery.WORK_STATE).equals(Constant.WxgdStatus.COMPLETE)) {
             url = "/BEAM2/workList/workRecord/workList-query.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
         }
         mCompositeSubscription.add(
-                HttpClient.listWxgds(url, fastQueryCondEntity, pageQueryParam)
+                HttpClient.listWxgds(url, pageQueryParam)
                         .onErrorReturn(throwable -> {
                             WXGDListEntity wxgdListEntity = new WXGDListEntity();
                             wxgdListEntity.success = false;

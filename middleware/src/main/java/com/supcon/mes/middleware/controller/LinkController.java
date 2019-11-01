@@ -13,6 +13,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.api.LinkQueryAPI;
 import com.supcon.mes.middleware.model.bean.LinkListEntity;
 import com.supcon.mes.middleware.model.contract.LinkQueryContract;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.presenter.LinkPresenter;
 import com.supcon.mes.middleware.util.LinkHelper;
 
@@ -39,6 +40,7 @@ public class LinkController extends BasePresenterController implements LinkQuery
     private List<Transition> mTransitions;
     private Long pendingId;
     private boolean isCancel;//是否显示作废
+    private OnSuccessListener listener;
 
     @SuppressLint("CheckResult")
     @Override
@@ -48,6 +50,9 @@ public class LinkController extends BasePresenterController implements LinkQuery
                 Collections.reverse(entity.result);
             }
             mLinkEntities = entity.result;
+            if (listener != null){
+                listener.onSuccess(entity.result.get(0).source); // 返回operateCode
+            }
         }
         if (mCustomPopTransation != null)
             mCustomPopTransation.setTransitions(LinkHelper.convertToTransition(entity.result));
@@ -184,5 +189,9 @@ public class LinkController extends BasePresenterController implements LinkQuery
      */
     public void setCancelShow(boolean isCancel) {
         this.isCancel = isCancel;
+    }
+
+    public void setOnSuccessListener(OnSuccessListener onSuccessListener) {
+        this.listener = onSuccessListener;
     }
 }

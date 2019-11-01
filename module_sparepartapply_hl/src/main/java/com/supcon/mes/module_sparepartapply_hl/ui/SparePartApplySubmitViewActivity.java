@@ -45,7 +45,7 @@ import com.supcon.mes.module_sparepartapply_hl.controller.TableInfoController;
 import com.supcon.mes.module_wxgd.model.api.SparePartApplyAPI;
 import com.supcon.mes.module_wxgd.model.bean.SparePartApplyHeaderInfoEntity;
 import com.supcon.mes.module_wxgd.model.contract.SparePartApplyContract;
-import com.supcon.mes.module_wxgd.presenter.SparePartApplyPresenter;
+import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyPresenter;
 import com.supcon.mes.module_wxgd.util.SparePartReceiveMapManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -307,7 +307,7 @@ public class SparePartApplySubmitViewActivity extends BaseRefreshActivity implem
             attachmentMap.put("linkId", String.valueOf(sparePartApplyHeaderInfoEntity.getTableInfoId()));
         }
         onLoading("单据处理中...");
-        presenterRouter.create(SparePartApplyAPI.class).submitSparePartApply(map, attachmentMap);
+        presenterRouter.create(SparePartApplyAPI.class).submitSparePartApply(map, attachmentMap,"");
 
     }
 

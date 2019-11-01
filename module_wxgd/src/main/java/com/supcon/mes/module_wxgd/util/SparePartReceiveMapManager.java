@@ -82,5 +82,24 @@ public class SparePartReceiveMapManager {
         return sparePartReceiveDtos;
     }
 
+    /**
+     * @param
+     * @return
+     * @description dataGrid删除数据id参数封装
+     * @author zhangwenshuai1 2018/9/18
+     */
+    public static Map<String, Object> dgDeleted(Map<String, Object> map, List<Long> list, String dg) {
+        if (list.size() <= 0)
+            return map;
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            sb.append(list.get(i)).append(",");
+            map.put(dg + "DeletedIds[" + i + "]", list.get(i).toString());
+        }
+        map.put("dgDeletedIds['" + dg + "']", sb.substring(0, sb.length() - 1));
+        return map;
+    }
+
 }
 

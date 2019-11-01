@@ -1,6 +1,7 @@
 package com.supcon.mes.module_wxgd.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
@@ -30,6 +31,7 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
     private Long deploymentId;
     private Long tableInfoId;
     private int version;
+    private EamEntity eam; // 设备
 
     public Long getTableInfoId() {
         return tableInfoId;
@@ -71,7 +73,7 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
         this.createTime = createTime;
     }
 
-    public Staff    getApplyStaff() {
+    public Staff getApplyStaff() {
         if (applyStaff == null){
             return new Staff();
         }
@@ -126,5 +128,16 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
 
     public void setRepairWork(WXGDEntity repairWork) {
         this.repairWork = repairWork;
+    }
+
+    public EamEntity getEam() {
+        if (eam == null){
+            return new EamEntity();
+        }
+        return eam;
+    }
+
+    public void setEam(EamEntity eam) {
+        this.eam = eam;
     }
 }

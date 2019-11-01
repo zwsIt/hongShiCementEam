@@ -18,11 +18,14 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.controller.DealInfoController;
+import com.supcon.mes.module_main.model.bean.EamEntity;
 import com.supcon.mes.module_main.model.bean.FlowProcessEntity;
 import com.supcon.mes.module_main.model.bean.ProcessedEntity;
 import com.supcon.mes.module_main.model.bean.WaitDealtEntity;
@@ -77,6 +80,9 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
 
         @BindByTag("flowProcessView")
         RecyclerView flowProcessView;
+
+        @BindByTag("tableNo")
+        CustomTextView tableNo;
 
         public ContentViewHolder(Context context) {
             super(context);
@@ -180,6 +186,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                     } else if (Constant.ProcessKey.FAULT_INFO.equals(item.processkey)) {  // 隐患单跳转
                                         IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
                                     }else if (Constant.ProcessKey.SPARE_PART_APPLY.equals(item.processkey)){ // 备件领用申请跳转
+                                        if (!EamApplication.isHailuo()) return;
                                         if (!TextUtils.isEmpty(item.openurl)) {
                                             bundle.putLong(Constant.IntentKey.TABLE_ID,item.dataid);
                                             bundle.putLong(Constant.IntentKey.PENDING_ID,item.pendingid);
@@ -220,6 +227,12 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
         @SuppressLint("SetTextI18n")
         @Override
         protected void update(WaitDealtEntity data) {
+            if (Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey)){
+                tableNo.setVisibility(View.VISIBLE);
+                tableNo.setContent(data.workTableno);
+            }else {
+                tableNo.setVisibility(View.GONE);
+            }
             if (isEdit && !TextUtils.isEmpty(data.state) && (data.state.equals("派工"))) {
                 chkBox.setVisibility(View.VISIBLE);
                 chkBox.setChecked(data.isCheck);

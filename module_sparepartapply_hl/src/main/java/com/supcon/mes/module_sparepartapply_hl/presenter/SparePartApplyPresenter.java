@@ -1,4 +1,4 @@
-package com.supcon.mes.module_wxgd.presenter;
+package com.supcon.mes.module_sparepartapply_hl.presenter;
 
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.util.FormDataHelper;
@@ -14,11 +14,11 @@ import okhttp3.RequestBody;
 public class SparePartApplyPresenter extends SparePartApplyContract.Presenter {
 
     @Override
-    public void submitSparePartApply(Map<String, Object> map, Map<String, Object> attachmentMap) {
+    public void submitSparePartApply(Map<String, Object> map, Map<String, Object> attachmentMap, String pc) {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         List<MultipartBody.Part> parts = FormDataHelper.createFileForm(attachmentMap);
         mCompositeSubscription.add(
-                HttpClient.sparePartApplyDoSubmit(formBody,parts)
+                HttpClient.sparePartApplyDoSubmit(formBody,parts,pc)
                         .onErrorReturn(throwable -> {
                             BapResultEntity entity = new BapResultEntity();
                             entity.errMsg = throwable.toString();
