@@ -29,7 +29,7 @@
                 android:tag="repairStaffName"
                 app:gravity="center"
                 app:key="@string/staff"
-                app:text_size="15" />
+                app:key_width="@dimen/dp_50"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,8 +45,7 @@
                     android:paddingEnd="5dp"
                     android:tag="actualStartTime"
                     app:editable="true"
-                    app:text="@string/actualStartTime"
-                    app:text_size="15" />
+                    app:text="@string/actualStartTime" />
 
                 <include layout="@layout/ly_vertical_line" />
 
@@ -57,8 +56,7 @@
                     android:paddingEnd="5dp"
                     android:tag="actualEndTime"
                     app:editable="true"
-                    app:text="@string/actualEndTime"
-                    app:text_size="15" />
+                    app:text="@string/actualEndTime" />
             </LinearLayout>
 
             <com.supcon.mes.mbap.view.CustomTextView
@@ -71,7 +69,7 @@
                 android:tag="workHour"
                 app:gravity="center"
                 app:text="@string/workHour"
-                app:text_size="15" />
+                app:key_width="@dimen/dp_60"/>
 
             <com.supcon.mes.mbap.view.CustomVerticalEditText
                 android:id="@+id/remark"
@@ -85,8 +83,7 @@
                 android:tag="remark"
                 app:edit_hint="请输入备注信息"
                 app:edit_maxLine="4"
-                app:key="@string/remark"
-                app:text_size="15" />
+                app:key="@string/remark" />
         </LinearLayout>
 
 

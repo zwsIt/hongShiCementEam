@@ -74,6 +74,7 @@ public interface OLXJNetworkAPI {
      * @return
      */
     @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/data-dg1488776891029.action?datagridCode=mobileEAM_1.0.0_potrolTaskNew_tempViewdg1489026162123&rt=json")
+//    @POST("/mobileEAM/potrolTaskNew/potrolTPartWF/taskGatherList-query.action?1=1&permissionCode=mobileEAM_1.0.0_potrolTaskNew_taskGatherList")
     Flowable<CommonBAPListEntity<OLXJWorkItemEntity>> queryWorkList(@QueryMap Map<String, Object> queryParam);
 
 
@@ -134,7 +135,12 @@ public interface OLXJNetworkAPI {
     Flowable<ResultEntity> endTask(@Query("taskIDs") String taskIDs, @Query("endReason") String endReason, @Query("type") boolean isFinish);
 
     /**
-     * 获取区域列表
+     * 获取区域列表: 计划巡检
+     */
+    @POST("/mobileEAM/potrolTaskNew/potrolTPartWF/signGatherList-query.action?1=1&permissionCode=mobileEAM_1.0.0_potrolTaskNew_signGatherList")
+    Flowable<CommonBAPListEntity<OLXJAreaEntity>> signGatherList(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
+    /**
+     * 获取区域列表: 临时巡检
      */
     @GET("/mobileEAM/work/work/workPart-query.action?valueType=mobileEAM001/02&&permissionCode=mobileEAM_1.0.0_work_workLayout&page.pageSize=20&page.maxPageSize=500")
     Flowable<CommonBAPListEntity<OLXJAreaEntity>> queryOLXJArea(@Query("workGroupID") long workGroupID, @Query("page.pageNo") int pageNo);

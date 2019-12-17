@@ -52,6 +52,10 @@ public class ErrorMsgHelper {
             msg2 = "无法连接服务器!";
         } else if (errorMsg.contains("No address associated with hostname")) {
             msg2 = "无法解析服务器地址，请检查设置！";
+        }else if (errorMsg.contains("IllegalArgumentException: Query map contained null key.")) {
+            msg2 = "提交参数集Map含空key,请检查确认！";
+        }else if (errorMsg.contains("IllegalArgumentException: Query map contained null value for key '")) {
+            msg2 = "提交参数集Map的key '"+errorMsg.substring(errorMsg.indexOf("'")+1,errorMsg.lastIndexOf("'"))+"' 含空value,请检查确认！";
         } else if (errorMsg.contains("Exception")) {
             msg2 = "获取数据失败！";
         } else {

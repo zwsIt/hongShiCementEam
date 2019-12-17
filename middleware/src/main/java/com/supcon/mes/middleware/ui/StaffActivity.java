@@ -175,6 +175,8 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
                         commonSearchStaff.code = userInfo.staff.code;
                         commonSearchStaff.name = userInfo.staff.name;
                         commonSearchStaff.userId = userInfo.id;
+                        commonSearchStaff.mainPosition = userInfo.staff.getMainPosition().name;
+                        commonSearchStaff.department = userInfo.staff.getMainPosition().getDepartment().name;
                         commonSearchEntities.add(commonSearchStaff);
                     }, throwable -> {
                     }, () -> refreshListController.refreshComplete(commonSearchEntities));

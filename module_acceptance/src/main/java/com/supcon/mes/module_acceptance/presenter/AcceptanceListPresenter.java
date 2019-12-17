@@ -33,14 +33,14 @@ public class AcceptanceListPresenter extends AcceptanceListContract.Presenter {
             Map<String, Object> eamParam = new HashMap<>();
             eamParam.put(Constant.BAPQuery.EAM_CODE, param.get(Constant.BAPQuery.EAM_CODE));
             eamParam.put(Constant.BAPQuery.EAM_NAME, param.get(Constant.BAPQuery.EAM_NAME));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(eamParam, "EAM_BaseInfo,EAM_ID,BEAM2_CHECK_APPLIES,BEAMID");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(eamParam, "EAM_BaseInfo,EAM_ID,BEAM2_CHECK_APPLIES,BEAMID");
             fastQuery.subconds.add(joinSubcondEntity);
         }
 
         if (param.containsKey(Constant.BAPQuery.TABLE_NO)) {
             Map<String, Object> tabParam = new HashMap<>();
             tabParam.put(Constant.BAPQuery.TABLE_NO, param.get(Constant.BAPQuery.TABLE_NO));
-            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(tabParam);
+            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(tabParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }
 

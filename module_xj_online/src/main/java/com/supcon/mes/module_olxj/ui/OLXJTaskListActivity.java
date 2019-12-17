@@ -27,6 +27,7 @@ import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
+import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.listener.OnTextListener;
 import com.supcon.mes.mbap.utils.DateUtil;
@@ -35,6 +36,9 @@ import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDialog;
+import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomSheetDialog;
+import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.NFCEvent;
@@ -81,6 +85,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -129,11 +134,14 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     List<SystemCodeEntity> cartReasonInfoList = new ArrayList<>();  //签到原因对象list
     List<String> cartReasonList = new ArrayList<>();  //签到原因名称list
 
+    // 任务终止原因
+    List<SystemCodeEntity> endReasonInfoList = new ArrayList<>();
+    List<String> endReasonList = new ArrayList<>();
+
     private boolean isFront = false;
     private int enterPosition = -1;
     private NFCHelper nfcHelper;
     private CustomDialog customDialog;
-    private boolean isFirstIn = true;
 
     @Override
     protected IListAdapter<OLXJTaskEntity> createAdapter() {
@@ -228,14 +236,13 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
             }
         });
 
-        //手动刷新事件
         refreshListController.setOnRefreshListener(() -> {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(new Date());
 //            queryParam.put(Constant.BAPQuery.STAR_TIME1, new StringBuilder(today).append(Constant.TimeString.START_TIME).toString());
             queryParam.put(Constant.BAPQuery.STAR_TIME2, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
             queryParam.put(Constant.BAPQuery.END_TIME1, DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
-//            queryParam.put(Constant.BAPQuery.END_TIME2, new StringBuilder(today).append(Constant.TimeString.END_TIME).toString());
+            queryParam.put(Constant.BAPQuery.TABLE_NO, getIntent().getStringExtra(Constant.IntentKey.TABLENO)); // 工作提醒传参
             presenterRouter.create(OLXJTaskAPI.class).getOJXJLastTaskList(queryParam);
         });
 
@@ -359,24 +366,22 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                                     mOLXJTaskAreaController = new OLXJTaskAreaController(context, 0);
 
                                 }
-                                mOLXJTaskAreaController.getData(taskEntity, new OnSuccessListener<Boolean>() {
-                                    @Override
-                                    public void onSuccess(Boolean result) {
-                                        if (result) {
-                                            mAreaEntities = mOLXJTaskAreaController.getAreaEntities();
-                                            new Handler(getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    onLoadSuccess();
-                                                    mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-                                                    saveAreaCache(mAreaEntities.toString());
+                                // 加载巡检区域及巡检项
+                                mOLXJTaskAreaController.getData(taskEntity, result -> {
+                                    if (result) {
+                                        mAreaEntities = mOLXJTaskAreaController.getAreaEntities();
+                                        new Handler(getMainLooper()).post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                onLoadSuccess();
+                                                mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+                                                saveAreaCache(mAreaEntities.toString());
 
-                                                    getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
-                                                }
-                                            });
-                                        } else {
-                                            onLoadFailed("加载失败");
-                                        }
+                                                getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
+                                            }
+                                        });
+                                    } else {
+                                        onLoadFailed("加载失败");
                                     }
                                 });
                             }
@@ -429,21 +434,11 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     String reason = null;
 
     private void showAbortDialog(OLXJTaskEntity olxjTaskEntity) {
-//        boolean isAllFinished = mOLXJTaskListAdapter.isAllFinished();
-//        new CustomDialog(context)
-//                .twoButtonAlertDialog(isAllFinished?"确定终止任务？":"还存在未完成的巡检项，确定终止任务？")
-//                .bindClickListener(R.id.grayBtn, v -> {}, true)
-//                .bindClickListener(R.id.redBtn, v -> {
-//
-//                    onLoading("正在终止任务...");
-//                    presenterRouter.create(OLXJTaskStatusAPI.class).endTasks(String.valueOf(olxjTaskEntity.id), "终止任务", false);
-//                }, true)
-//                .show();
-
         reason = "";
         customDialog = new CustomDialog(context).layout(R.layout.item_dialog,
-                DisplayUtil.getScreenWidth(context) - DisplayUtil.dip2px(40, context), WRAP_CONTENT)
-                .bindView(R.id.blueBtn, "确定")
+                DisplayUtil.getScreenWidth(context) - DisplayUtil.dip2px(40, context), WRAP_CONTENT);
+        ((ImageView)customDialog.getDialog().findViewById(R.id.customEditIcon)).setImageResource(R.drawable.ic_expand);
+        customDialog.bindView(R.id.blueBtn, "确定")
                 .bindView(R.id.grayBtn, "取消")
                 .bindTextChangeListener(R.id.reason, new OnTextListener() {
                     @Override
@@ -451,6 +446,12 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                         reason = text.trim();
                     }
                 })
+                .bindClickListener(R.id.customEditIcon, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showEndTaskReason(customDialog.getDialog().findViewById(R.id.reason));
+                    }
+                }, false)
                 .bindClickListener(R.id.blueBtn, new View.OnClickListener() {
                     @Override
                     public void onClick(View v12) {
@@ -467,6 +468,26 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         customDialog.show();
     }
 
+    /**
+     * 终止任务原因选择
+     * @param reason
+     */
+    private void showEndTaskReason(CustomEditText reason) {
+        if (endReasonInfoList.size() <= 0){
+            ToastUtils.show(context,"暂无原因数据，请退出页面重新加载");
+            return;
+        }
+        new SinglePickController<String>(this)
+                .list(endReasonList)
+                .listener(new SinglePicker.OnItemPickListener() {
+                    @Override
+                    public void onItemPicked(int index, Object item) {
+                        reason.setContent(String.valueOf(item));
+                    }
+                })
+                .show();
+    }
+
     @Override
     protected void initData() {
         super.initData();
@@ -479,6 +500,13 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
             }
         }
 
+        //初始化任务终止原因列表
+        endReasonInfoList = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.XJ_END_TASK);
+        if (endReasonInfoList.size() > 0) {
+            for (SystemCodeEntity entity : endReasonInfoList) {
+                endReasonList.add(entity.value);
+            }
+        }
 
     }
 
@@ -496,14 +524,6 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @Override
     protected void onRestart() {
         super.onRestart();
-        LogUtil.i("onRestart");
-//        Flowable.timer(100, TimeUnit.MILLISECONDS)
-//                .subscribe(new Consumer<Long>() {
-//                    @Override
-//                    public void accept(Long aLong) throws Exception {
-//                        refreshListController.refreshBegin();
-//                    }
-//                });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -584,26 +604,33 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @SuppressLint("CheckResult")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAreaUpdate(OLXJAreaEntity areaEntity) {
-        if (enterPosition != -1) {
-            mAreaEntities.set(enterPosition, areaEntity);
-            mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-            saveAreaCache(mAreaEntities.toString());
-            saveTask(mOLXJTaskEntity.toString());
+        Flowable.timer(0,TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aLong -> {
+                    if (enterPosition != -1) {
+                        mAreaEntities.set(enterPosition, areaEntity);
+                        mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+                        saveAreaCache(mAreaEntities.toString());
+                        saveTask(mOLXJTaskEntity.toString());
+                    }
+                }, throwable -> {
 
-            // 当前巡检任务下全部完成巡检区域，自动结束任务
-            if (mOLXJTaskListAdapter.isAllFinished()) {
-                ToastUtils.show(context,"ok");
-                Flowable.timer(500, TimeUnit.MICROSECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                showFinishDialog(mOLXJTaskListAdapter.getList().get(0));
-                            }
-                        });
-            }
+                }, () -> {
+                    if (enterPosition != -1) {
+                        // 当前巡检任务下全部完成巡检区域，自动结束任务
+                        if (mOLXJTaskListAdapter.isAllFinished()) {
+//                                Flowable.timer(300, TimeUnit.MILLISECONDS)
+//                                        .observeOn(AndroidSchedulers.mainThread())
+//                                        .subscribe(new Consumer<Long>() {
+//                                            @Override
+//                                            public void accept(Long aLong) throws Exception {
+                                            showFinishDialog(mOLXJTaskListAdapter.getList().get(0));
+//                                            }
+//                                        });
+                        }
 
-        }
+                    }
+                });
 
     }
 
@@ -733,30 +760,6 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 
     }
 
-//    @SuppressLint("CheckResult")
-//    private void getAreaCache() {
-//        Flowable.timer(200, TimeUnit.MILLISECONDS)
-//                .subscribeOn(Schedulers.io())
-//                .map(new Function<Long, List<OLXJAreaEntity>>() {
-//                    @Override
-//                    public List<OLXJAreaEntity> apply(Long aLong) throws Exception {
-//                        String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.JHXJ_TASK_CONTENT, "");
-//                        if (!TextUtils.isEmpty(cache)) {
-//                            mAreaEntities = GsonUtil.jsonToList(cache, OLXJAreaEntity.class);
-//                        }
-//                        return mAreaEntities;
-//                    }
-//                })
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<List<OLXJAreaEntity>>() {
-//                    @Override
-//                    public void accept(List<OLXJAreaEntity> mAreaEntities) throws Exception {
-//                        mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-//                        getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
-//                    }
-//                });
-//    }
-
     @Override
     public void getOJXJLastTaskListFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
@@ -789,6 +792,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
             goArea(xjAreaEntity);
         } else {
             if (cartReasonList.size() <= 0) {
+                ToastUtils.show(context,"签到原因为空，请退出页面重新加载");
                 return;
             }
             new SinglePickController<String>(this).list(cartReasonList).listener((index, item) -> {
@@ -858,7 +862,6 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @Override
     public void updateStatusSuccess() {
         onLoadSuccess("任务操作成功！");
-//        ToastUtils.show(context, "任务操作成功！");
         saveAreaCache("");
         mAreaEntities.clear();
         Flowable.timer(200,TimeUnit.MILLISECONDS)
@@ -875,7 +878,6 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @Override
     public void cancelTasksSuccess() {
         onLoadSuccess("任务取消成功！");
-//        ToastUtils.show(context, "任务取消成功！");
         saveAreaCache("");
         mAreaEntities.clear();
         Flowable.timer(200,TimeUnit.MILLISECONDS)
@@ -891,12 +893,18 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @SuppressLint("CheckResult")
     @Override
     public void endTasksSuccess() {
-        onLoadSuccess("任务操作成功！");
-//        ToastUtils.show(context, "任务取消成功！");
-        saveAreaCache("");
-        mAreaEntities.clear();
-        Flowable.timer(500,TimeUnit.MILLISECONDS)
-                .subscribe(aLong -> refreshListController.refreshBegin());
+        Flowable.timer(0,TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aLong -> {
+                    onLoadSuccess("任务操作成功！");
+                    saveAreaCache("");
+                    mAreaEntities.clear();
+                }, throwable -> {
+
+                }, () -> refreshListController.refreshBegin());
+
+//        Flowable.timer(500,TimeUnit.MILLISECONDS)
+//                .subscribe(aLong -> refreshListController.refreshBegin());
     }
 
     @Override

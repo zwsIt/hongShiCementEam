@@ -29,13 +29,13 @@ public class StopPolicePresenter extends StopPoliceContract.Presenter {
             Map<String, Object> timeParam = new HashMap();
             timeParam.put(Constant.BAPQuery.OPEN_TIME_START, params.get(Constant.BAPQuery.OPEN_TIME_START));
             timeParam.put(Constant.BAPQuery.OPEN_TIME_STOP, params.get(Constant.BAPQuery.OPEN_TIME_STOP));
-            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(timeParam);
+            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(timeParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }
         if (params.containsKey(Constant.BAPQuery.ON_OR_OFF)) {
             Map<String, Object> orParam = new HashMap();
             orParam.put(Constant.BAPQuery.ON_OR_OFF, params.get(Constant.BAPQuery.ON_OR_OFF));
-            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(orParam);
+            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(orParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }
         if (params.containsKey(Constant.BAPQuery.EAM_NAME)) {
@@ -44,7 +44,7 @@ public class StopPolicePresenter extends StopPoliceContract.Presenter {
             if (EamApplication.isHongshi()){
                 nameParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
             }
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(nameParam, "EAM_BaseInfo,EAM_ID,BEAM2_RUNNING_GATHERS,EAMID");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(nameParam, "EAM_BaseInfo,EAM_ID,BEAM2_RUNNING_GATHERS,EAMID");
             fastQuery.subconds.add(joinSubcondEntity);
         }
 
@@ -56,7 +56,7 @@ public class StopPolicePresenter extends StopPoliceContract.Presenter {
 
                     Map<String, Object> queryParam = new HashMap();
                     queryParam.put(Constant.BAPQuery.EAMTYPE_NAME, params.get(Constant.BAPQuery.EAMTYPE_NAME));
-                    JoinSubcondEntity joinSubcondEntityIn = BAPQueryParamsHelper.crateJoinSubcondEntity(queryParam, "EAM_EAMTYPE,EAMTYPE_CODE,EAM_BaseInfo,EAM_TYPE");
+                    JoinSubcondEntity joinSubcondEntityIn = BAPQueryParamsHelper.createJoinSubcondEntity(queryParam, "EAM_EAMTYPE,EAMTYPE_CODE,EAM_BaseInfo,EAM_TYPE");
 
                     joinSubcondEntity.subconds.add(joinSubcondEntityIn);
                 }
@@ -70,11 +70,11 @@ public class StopPolicePresenter extends StopPoliceContract.Presenter {
         pageQueryParams.put("page.maxPageSize", 500);
 
         Flowable<StopPoliceListEntity> httpClient;
-        if (EamApplication.isHongshi()){
-            httpClient = SBDAOnlineHttpClient.gatherMobileListByHS(fastQuery, pageQueryParams);
-        }else {
+//        if (EamApplication.isHongshi()){
+//            httpClient = SBDAOnlineHttpClient.gatherMobileListByHS(fastQuery, pageQueryParams);
+//        }else {
             httpClient = SBDAOnlineHttpClient.runningGatherList(fastQuery, pageQueryParams);
-        }
+//        }
 
         mCompositeSubscription.add(
                 httpClient

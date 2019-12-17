@@ -72,6 +72,12 @@ public class OLXJWorkItemPresenter extends OLXJWorkListContract.Presenter {
         queryParams.put("dgPage.pageNo", pageNum);
         queryParams.put("dgPage.pageSize", 500);
         queryParams.put("dgPage.maxPageSize", 500);
+//        queryParams.put("taskIDs",taskId);
+//        queryParams.put("itemType","totalItem");
+//        queryParams.put("page.pageNo", pageNum);
+//        queryParams.put("page.pageSize", 500);
+//        queryParams.put("page.maxPageSize", 500);
+
         mCompositeSubscription.add(
                 OLXJClient.queryWorkList(queryParams)
                         .onErrorReturn(new Function<Throwable, CommonBAPListEntity<OLXJWorkItemEntity>>() {

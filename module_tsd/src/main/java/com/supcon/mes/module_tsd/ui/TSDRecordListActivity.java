@@ -49,10 +49,10 @@ public class TSDRecordListActivity extends BaseWebViewActivity {
     @Override
     protected void initView() {
         super.initView();
-        if(!EamApplication.isDev()) {
-            ((ViewGroup) findViewById(R.id.leftBtn).getParent()).setBackgroundResource(R.color.mobileValueColor);
-            StatusBarUtils.setWindowStatusBarColor(this, R.color.mobileValueColor);
-        }
+//        if(!EamApplication.isDev()) {
+            ((ViewGroup) findViewById(R.id.leftBtn).getParent()).setBackgroundResource(R.color.h5Theme);
+            StatusBarUtils.setWindowStatusBarColor(this, R.color.h5Theme);
+//        }
         titleText.setText("停送电记录");
     }
 

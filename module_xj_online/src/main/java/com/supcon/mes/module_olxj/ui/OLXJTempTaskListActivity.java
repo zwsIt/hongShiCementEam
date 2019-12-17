@@ -255,9 +255,9 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
             }
         });
 
-        //手动刷新事件
         refreshListController.setOnRefreshListener(() -> {
 //            queryParam.put(Constant.BAPQuery.IS_EAM_TASK, "0");
+            queryParam.put(Constant.BAPQuery.TABLE_NO, getIntent().getStringExtra(Constant.IntentKey.TABLENO)); // 工作提醒传参
             presenterRouter.create(OLXJTempTaskAPI.class).getOJXJTempTaskList(queryParam);
         });
 

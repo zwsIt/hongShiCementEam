@@ -26,6 +26,6 @@ public interface ApiService {
 //    @GET("/foundation/staff/list-data.action?&staff.code=&staff.name=&department.name=&position.name=&companyId=1000&cusDepartmentDown=yes&cusPositionDown=yes&pageSize=20&&records.pageSize=20&records.maxPageSize=500")
 //    Flowable<TxlListEntity> getStaffList(@Query("records.pageNo") int pageNum);
     @GET("/foundation/staff/list-data.action?&companyId=1000&cusDepartmentDown=yes&cusPositionDown=yes&pageSize=20&&records.pageSize=20&records.maxPageSize=500")
-    Flowable<TxlListEntity> getStaffList(@Query("records.pageNo") int pageNum,@Query("staff.code")String staffCode,@Query("staff.name")String staffName, @Query("position.name")String positionname);
+    Flowable<TxlListEntity> getStaffList(@Query("records.pageNo") int pageNum,@Query("staff.code")String staffCode,@Query("staff.name")String staffName, @Query("position.name")String positionName);
     
 }

@@ -21,14 +21,9 @@ import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
  */
 public class RankingAdapter extends BaseListDataRecyclerViewAdapter<ScoreStaffEntity> {
 
-    private int rank = -1;
 
     public RankingAdapter(Context context) {
         super(context);
-    }
-
-    public void setRank(int rank) {
-        this.rank = rank;
     }
 
     @Override
@@ -91,7 +86,7 @@ public class RankingAdapter extends BaseListDataRecyclerViewAdapter<ScoreStaffEn
                 if (data.score == getItem(getAdapterPosition()-1).score){
                     data.rank = getItem(getAdapterPosition()-1).rank ;
                 }else { // 小于
-                    data.rank = getItem(getAdapterPosition()-1).rank + 1 ;
+                    data.rank = getAdapterPosition()+1 /*getItem(getAdapterPosition()-1).rank + 1*/ ;
                 }
                 ranking.setText(String.valueOf(data.rank));
             }
@@ -100,10 +95,8 @@ public class RankingAdapter extends BaseListDataRecyclerViewAdapter<ScoreStaffEn
             name.setText(data.getPatrolWorker().name);
             depot.setText(Util.strFormat(data.getPatrolWorker().getMainPosition().getDepartment().name));
             score.setText(Util.big(data.score));
-            if (EamApplication.getAccountInfo().staffId == data.patrolWorker.id/*rank == (getAdapterPosition() + 1)*/) {
-//                if (rank > 3) {
+            if (EamApplication.getAccountInfo().staffId == data.patrolWorker.id) {
                 ranking.setTextColor(context.getResources().getColor(R.color.color_dd4351));
-//                }
                 rankingLayout.setBackground(context.getResources().getDrawable(R.drawable.ranking_stroke_select));
             }
         }

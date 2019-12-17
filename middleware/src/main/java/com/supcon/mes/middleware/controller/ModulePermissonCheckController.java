@@ -46,10 +46,10 @@ public class ModulePermissonCheckController extends BasePresenterController impl
         }
     }
 
-    public void checkModulePermission(String userName, String proccessKey, OnSuccessListener<Long> onSuccessListener, View addBtn){
+    public void checkModulePermission(String userName, String processKey, OnSuccessListener<Long> onSuccessListener, View addBtn){
         this.mOnSuccessListener = onSuccessListener;
         this.addBtn = addBtn;
-        presenterRouter.create(ModulePermissonCheckAPI.class).checkModulePermission(userName, proccessKey);
+        presenterRouter.create(ModulePermissonCheckAPI.class).checkModulePermission(userName, processKey);
     }
 
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10">
+
+    <ImageView
+        android:id="@+id/eamIc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        android:src="@drawable/ic_lub_part" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/eamIc"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_10">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/lubPart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="lubPart"
+            app:editable="false"
+            app:text="@string/lub_part"
+            app:text_size="15" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/eamType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="eamType"
+            app:editable="false"
+            app:text="设备类型" />
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="remark"
+            app:editable="false"
+            app:text="@string/remark"
+            app:text_size="15" />
+    </LinearLayout>
+
+</RelativeLayout>

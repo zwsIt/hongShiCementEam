@@ -27,7 +27,7 @@ public class EditInputFilter implements InputFilter {
     /**
      * 小数点后的数字的位数
      */
-    public static final int POINTER_LENGTH = 2;
+    public static int POINTER_LENGTH = 2;
 
     private static final String POINTER = ".";
 
@@ -38,6 +38,10 @@ public class EditInputFilter implements InputFilter {
         init();
     }
 
+    public EditInputFilter(int scale) {
+        POINTER_LENGTH = scale;
+        init();
+    }
     public EditInputFilter() {
         init();
     }

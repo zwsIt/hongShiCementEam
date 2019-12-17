@@ -21,7 +21,7 @@ public class YHQueryParamsHelper {
         if (queryMap.containsKey(Constant.BAPQuery.EAM_NAME)) {
             Map<String, Object> eamMap = new HashMap<>();
             eamMap.put(Constant.BAPQuery.EAM_NAME, queryMap.get(Constant.BAPQuery.EAM_NAME));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(eamMap, "EAM_BaseInfo,EAM_ID,BEAM2_FAULT_INFOS,EAMID");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(eamMap, "EAM_BaseInfo,EAM_ID,BEAM2_FAULT_INFOS,EAMID");
             singleFastQueryCond.subconds.add(joinSubcondEntity);
 
         }
@@ -37,7 +37,7 @@ public class YHQueryParamsHelper {
         otherMap.remove(Constant.BAPQuery.EAM_NAME);
         otherMap.remove(Constant.BAPQuery.YH_AREA);
 
-        List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(otherMap);
+        List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(otherMap);
         singleFastQueryCond.subconds.addAll(baseSubcondEntities);
         return singleFastQueryCond;
     }

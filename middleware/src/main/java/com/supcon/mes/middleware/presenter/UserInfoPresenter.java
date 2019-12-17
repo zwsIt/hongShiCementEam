@@ -14,9 +14,9 @@ import io.reactivex.functions.Function;
 public class UserInfoPresenter extends UserListQueryContract.Presenter {
 
     @Override
-    public void queryUserInfoList(String staffName,int pageNo) {
+    public void queryUserInfoList(String staffName, int pageNo) {
         mCompositeSubscription.add(
-                MiddlewareHttpClient.queryUserInfoList(staffName,pageNo)
+                MiddlewareHttpClient.queryUserInfoList(staffName, pageNo, pageNo)
                         .onErrorReturn(new Function<Throwable, UserInfoListEntity>() {
                             @Override
                             public UserInfoListEntity apply(Throwable throwable) throws Exception {
@@ -29,10 +29,9 @@ public class UserInfoPresenter extends UserListQueryContract.Presenter {
                         .subscribe(new Consumer<UserInfoListEntity>() {
                             @Override
                             public void accept(UserInfoListEntity userInfoListEntity) throws Exception {
-                                if(userInfoListEntity.result!=null && userInfoListEntity.result.size()!=0){
+                                if (userInfoListEntity.result != null && userInfoListEntity.result.size() != 0) {
                                     getView().queryUserInfoListSuccess(userInfoListEntity);
-                                }
-                                else {
+                                } else {
                                     getView().queryUserInfoListFailed(userInfoListEntity.errMsg);
                                 }
                             }

@@ -23,20 +23,20 @@ public class ScoreEamListPresenter extends ScoreEamListContract.Presenter {
             Map<String, Object> timeParam = new HashMap<>();
             timeParam.put(Constant.BAPQuery.SCORE_TIME_START, param.get(Constant.BAPQuery.SCORE_TIME_START));
             timeParam.put(Constant.BAPQuery.SCORE_TIME_STOP, param.get(Constant.BAPQuery.SCORE_TIME_STOP));
-            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(timeParam);
+            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.createSubcondEntity(timeParam);
             fastQuery.subconds.addAll(subcondEntities);
         }
         if (param.containsKey(Constant.BAPQuery.SCORE_TABLE_NO)) {
             Map<String, Object> noParam = new HashMap<>();
             noParam.put(Constant.BAPQuery.SCORE_TABLE_NO, param.get(Constant.BAPQuery.SCORE_TABLE_NO));
-            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(noParam);
+            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.createSubcondEntity(noParam);
             fastQuery.subconds.addAll(subcondEntities);
         }
         if (param.containsKey(Constant.BAPQuery.EAM_CODE) || param.containsKey(Constant.BAPQuery.EAM_NAME)) {
             Map<String, Object> eamParam = new HashMap<>();
             eamParam.put(Constant.BAPQuery.EAM_CODE, param.get(Constant.BAPQuery.EAM_CODE));
             eamParam.put(Constant.BAPQuery.EAM_NAME, param.get(Constant.BAPQuery.EAM_NAME));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(eamParam, "EAM_BaseInfo,EAM_ID,BEAM_SCORE_HEADS,BEAM_ID");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(eamParam, "EAM_BaseInfo,EAM_ID,BEAM_SCORE_HEADS,BEAM_ID");
             fastQuery.subconds.add(joinSubcondEntity);
         }
         fastQuery.modelAlias = "scoreHead";

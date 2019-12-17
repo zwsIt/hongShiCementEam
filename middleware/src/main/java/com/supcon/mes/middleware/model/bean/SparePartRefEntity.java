@@ -114,4 +114,8 @@ public class SparePartRefEntity extends BaseEntity {
     public int getVersion() {
         return version;
     }
+
+    public void setStandingCrop(BigDecimal standingCrop) {
+        this.standingCrop = standingCrop;
+    }
 }

@@ -2,6 +2,7 @@ package com.supcon.mes.middleware.presenter;
 
 import android.text.TextUtils;
 
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -28,13 +30,21 @@ public class RefProductPresenter extends RefProductContract.Presenter {
     @Override
     public void listRefProduct(int pageNum, Map<String, Object> queryParam) {
         FastQueryCondEntity fastQueryCondEntity = BAPQueryParamsHelper.createSingleFastQueryCond(queryParam);
-        fastQueryCondEntity.modelAlias = "product";
+
         Map<String, Object> pageQueryParam = new HashMap<>();
-        pageQueryParam.put("page.pageSize", 20);
+        pageQueryParam.put("page.pageSize", 100);
         pageQueryParam.put("page.maxPageSize", 500);
         pageQueryParam.put("page.pageNo", pageNum);
 
-        mCompositeSubscription.add(MiddlewareHttpClient.listRefProduct(fastQueryCondEntity, pageQueryParam)
+        Flowable<RefProductListEntity> flowable;
+        if(EamApplication.isHailuo()){
+            fastQueryCondEntity.modelAlias = "productInfo"; // BEAM2备件参照
+            flowable = MiddlewareHttpClient.refProductQuery(fastQueryCondEntity, pageQueryParam);
+        }else {
+            fastQueryCondEntity.modelAlias = "product"; // MESBasic物品参照
+            flowable = MiddlewareHttpClient.listRefProduct(fastQueryCondEntity, pageQueryParam);
+        }
+        mCompositeSubscription.add(flowable
                 .onErrorReturn(throwable -> {
                     RefProductListEntity refProductListEntity = new RefProductListEntity();
                     refProductListEntity.errMsg = throwable.toString();
@@ -62,7 +72,6 @@ public class RefProductPresenter extends RefProductContract.Presenter {
             fastQueryCondEntity.subconds.clear();
             fastQueryCondEntity.subconds.add(joinSubcondEntity);
         }
-
 
         Map<String, Object> pageQueryParam = new HashMap<>();
         pageQueryParam.put("page.pageSize", 20);

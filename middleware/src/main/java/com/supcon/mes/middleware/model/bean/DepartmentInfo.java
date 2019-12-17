@@ -50,10 +50,15 @@ public class DepartmentInfo extends BaseEntity implements CommonSearchEntity, Cl
     public String getSearchName() {
         return name;
     }
-    
+
+    @Override
+    public String getSearchCode() {
+        return code;
+    }
+
     @Override
     public String getSearchProperty() {
-        return code;
+        return fullPathName;
     }
     
     @Override

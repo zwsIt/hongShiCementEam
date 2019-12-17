@@ -93,10 +93,8 @@
                 android:id="@+id/buildVersion"
                 android:tag="buildVersion"
                 app:content_color="@color/textColorblack"
-                android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_5"
-                app:gravity="center"
-                />
+                app:gravity="center"/>
         </LinearLayout>
 
 

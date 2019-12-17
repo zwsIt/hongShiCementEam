@@ -2,6 +2,7 @@ package com.supcon.mes.module_main.ui.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +31,8 @@ import com.supcon.mes.module_login.model.contract.MineContract;
 import com.supcon.mes.module_login.presenter.MinePresenter;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
+
+import static com.supcon.mes.middleware.EamApplication.fontSizeScale;
 
 
 /**
@@ -71,6 +74,7 @@ public class MineFragment extends BaseControllerFragment implements MineContract
     @BindByTag("email")
     CustomArrowView email;
 
+
     private Uri uri;
 
     @Override
@@ -109,6 +113,7 @@ public class MineFragment extends BaseControllerFragment implements MineContract
         mineAbout.setOnClickListener(this);
         ivSetting.setOnClickListener(v -> IntentRouter.go(context, Constant.Router.SETTING));
         mineUserIcon.setOnClickListener(v -> IntentRouter.go(context, Constant.Router.MINE));
+
 
     }
 
@@ -166,11 +171,11 @@ public class MineFragment extends BaseControllerFragment implements MineContract
             LogUtil.d("mineUpdate");
             String channel = ChannelUtil.getUMengChannel();
             if (channel.equals("hongshi")) {
-                uri = Uri.parse("https://www.pgyer.com/zDk8?from=singlemessage");
+                uri = Uri.parse("https://fir.im/gr4e");
             } else if (channel.equals("hailuo")) {
-                uri = Uri.parse("https://www.pgyer.com/70NM?from=singlemessage");
+                uri = Uri.parse("https://fir.im/conch");
             } else {
-                uri = Uri.parse("https://www.pgyer.com");
+                uri = Uri.parse("https://fir.im/");
             }
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
@@ -202,12 +207,10 @@ public class MineFragment extends BaseControllerFragment implements MineContract
             if (EamApplication.isHailuo()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, com.supcon.mes.module_login.R.drawable.bg_login_hl);
                 bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, com.supcon.mes.module_login.R.drawable.ic_login_logo_hl);
-            }
-            else if(EamApplication.isYNSW()){
+            } else if (EamApplication.isYNSW()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, com.supcon.mes.module_login.R.drawable.bg_login_ynsw);
                 bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, com.supcon.mes.module_login.R.drawable.ic_login_logo);
-            }
-            else if(EamApplication.isHongshi()){
+            } else if (EamApplication.isHongshi()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, com.supcon.mes.module_login.R.drawable.bg_login_hs);
                 bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, com.supcon.mes.module_login.R.drawable.ic_login_logo_hs);
             }

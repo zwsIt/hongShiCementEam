@@ -79,11 +79,7 @@ public class MenuHelper {
             for (MenuPopwindowBean menuPopwindowBean : works) {
                 switch (menuPopwindowBean.getType()) {
                     case Constant.HSWorkType.DAILY_WXGD:
-                        menuPopwindowBean.setRouter(Constant.Router.WXGD_LIST);
-                        break;
                     case Constant.HSWorkType.REPAIR_WXGD:
-                        menuPopwindowBean.setRouter(Constant.Router.WXGD_LIST);
-                        break;
                     case Constant.HSWorkType.OHAUL_WXGD:
                         menuPopwindowBean.setRouter(Constant.Router.WXGD_LIST);
                         break;
@@ -94,11 +90,11 @@ public class MenuHelper {
                         menuPopwindowBean.setRouter(Constant.Router.MAINTENANCE_EARLY_WARN);
                         break;
                     case Constant.HSWorkType.SPARE_PART_RECEIVE:
-                        if (EamApplication.isHailuo()){
+                        if (EamApplication.isHongshi()) {
+                            menuPopwindowBean.setRouter(Constant.Router.SPARE_PART_RECEIVE);
+                        } else {
                             menuPopwindowBean.setPower(true);
                             menuPopwindowBean.setRouter(Constant.Router.SPARE_PART_APPLY_EDIT);
-                        }else {
-                            menuPopwindowBean.setRouter(Constant.Router.SPARE_PART_RECEIVE);
                         }
                         break;
                     case Constant.HSWorkType.TD:
@@ -106,6 +102,15 @@ public class MenuHelper {
                         break;
                     case Constant.HSWorkType.SD:
                         menuPopwindowBean.setRouter(Constant.Router.SD);
+                        break;
+                    case Constant.HSWorkType.TSD_CANCEL:
+                    case Constant.HSWorkType.TSD_APPROVAL:
+                        menuPopwindowBean.setRouter(Constant.Router.TSD_COMMON);
+                        break;
+                    case Constant.HSWorkType.JX_TICKETS:
+                        menuPopwindowBean.setRouter(Constant.Router.OVERHAUL_WORKTICKET_LIST);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -141,7 +146,11 @@ public class MenuHelper {
                     case Constant.HSWorkType.SPARE_PART_RECEIVE_RECORD:
                         menuPopwindowBean.setRouter(Constant.Router.SPARE_PART_RECEIVE_RECORD);
                         break;
-
+                    case Constant.HSWorkType.TSD_STATISTICS:
+                        menuPopwindowBean.setRouter(Constant.Router.TSD_COMMON);
+                        break;
+                    default:
+                        break;
                 }
             }
         } catch (JSONException e) {
@@ -153,13 +162,16 @@ public class MenuHelper {
 
     public static List<MenuPopwindowBean> getZZMenu(List<OwnMinAppItem> zzWorks) {
         List<MenuPopwindowBean> works = new ArrayList<>();
-        for(OwnMinAppItem ownMinAppItem : zzWorks){
+        for (OwnMinAppItem ownMinAppItem : zzWorks) {
+//          注：  ownMinAppItem.getCreateType() = 1：自建(apptype=1 公众号打开；apptype=2 小程序打开); = 2：supos(apptype=1 公众号打开); = 3 第三方小程序：(apptype=2 小程序打开)。
+
+            if (ownMinAppItem.getCreateType() == 2) continue;
 
             MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();
             menuPopwindowBean.setType(Constant.HSWorkType.ZZ);
             menuPopwindowBean.setPower(true);
             menuPopwindowBean.setName(ownMinAppItem.getAppname());
-            menuPopwindowBean.setRouter(ownMinAppItem.getAppurl());
+            menuPopwindowBean.setRouter(ownMinAppItem.getAppId());  // 保证不为空，可跳转
             menuPopwindowBean.setAppItem(ownMinAppItem);
             works.add(menuPopwindowBean);
         }

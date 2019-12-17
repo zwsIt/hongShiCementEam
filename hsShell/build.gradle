@@ -153,7 +153,7 @@ dependencies {
         implementation project(':module_sbda_online')
         implementation project(':module_zz_new')
         implementation project(':module_score')
-//        implementation project(':vibLib')
+        implementation project(':module_overhaul_workticket')
         implementation project(':module_warn')
         implementation project(':module_acceptance')
     }

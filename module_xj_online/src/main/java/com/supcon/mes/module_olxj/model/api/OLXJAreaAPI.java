@@ -14,7 +14,7 @@ public interface OLXJAreaAPI {
     /**
      * 查询在线巡检区域列表
      */
-    void getOJXJAreaList(long groupId, int pageNo);
+    void getOJXJAreaList(String taskTableNo, long groupId, int pageNo);
 
 
     /**

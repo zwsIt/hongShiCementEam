@@ -21,25 +21,25 @@
         android:orientation="vertical"
         android:tag="workFlowBar">
 
-        <com.supcon.mes.mbap.view.CustomEditText
-            android:id="@+id/commentInput"
-            style="@style/HintTextColor"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="@dimen/dp_3"
-            android:paddingBottom="@dimen/dp_3"
-            android:tag="commentInput"
-            app:edit_hint="填写意见"
-            app:text_color="@color/textColorlightblack"
-            app:text_size="14" />
+<!--        <com.supcon.mes.mbap.view.CustomEditText-->
+<!--            android:id="@+id/commentInput"-->
+<!--            style="@style/HintTextColor"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:paddingLeft="20dp"-->
+<!--            android:paddingTop="@dimen/dp_3"-->
+<!--            android:paddingBottom="@dimen/dp_3"-->
+<!--            android:tag="commentInput"-->
+<!--            app:edit_hint="填写意见"-->
+<!--            app:text_color="@color/textColorlightblack"-->
+<!--            app:text_size="14" />-->
 
         <com.supcon.mes.mbap.view.CustomWorkFlowView
             android:id="@+id/workFlowView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="workFlowView"
-            app:commentable="false" />
+            app:commentable="true" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -32,7 +32,7 @@ public class SparePartsConsumeLedgerPresenter extends SparePartsConsumeLedgerCon
             Map<String, Object> productParam = new HashMap<>();
             productParam.put(Constant.BAPQuery.PRODUCT_NAME, params.get(Constant.BAPQuery.PRODUCT_NAME));
             productParam.put(Constant.BAPQuery.PRODUCT_CODE, params.get(Constant.BAPQuery.PRODUCT_CODE));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(productParam, "S2BASE_PRODUCT,PRODUCT_ID,BEAM2_SPARE_PARTS,PRODUCTID");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(productParam, "S2BASE_PRODUCT,PRODUCT_ID,BEAM2_SPARE_PARTS,PRODUCTID");
             fastQueryCond.subconds.add(joinSubcondEntity);
         }
         fastQueryCond.modelAlias = "sparePart";

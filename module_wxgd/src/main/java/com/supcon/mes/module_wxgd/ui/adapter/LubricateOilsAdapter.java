@@ -2,10 +2,12 @@ package com.supcon.mes.module_wxgd.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,14 +19,17 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.view.CustomDialog;
+import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomNumView;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 
 import org.greenrobot.eventbus.EventBus;
@@ -83,6 +88,10 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
         TextView itemViewDelBtn;
         @BindByTag("chkBox")
         CheckBox chkBox;
+        @BindByTag("lubricatingPart")
+        CustomEditText lubricatingPart;
+
+        private ImageView mPartCustomEditIcon; // 润滑部位：处理选择可以选择润滑部位
 
 
         public ViewHolder(Context context) {
@@ -101,6 +110,14 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
             if (!editable) {
                 itemViewDelBtn.setVisibility(View.GONE);
             }
+            mPartCustomEditIcon = lubricatingPart.findViewById(R.id.customEditIcon); // 解决设置listener时null
+            if (editable){
+                lubricatingPart.setEditable(true);
+                mPartCustomEditIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_search66));
+            }else {
+                lubricatingPart.setEditable(false);
+            }
+
         }
 
         @SuppressLint("CheckResult")
@@ -182,6 +199,23 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
                         }
                         lubricateOilsEntity.remark = charSequence.toString();
                     });
+            RxTextView.textChanges(lubricatingPart.editText())
+                    .skipInitialValue()
+                    .subscribe(charSequence -> {
+                        LubricateOilsEntity lubricateOilsEntity = getItem(getAdapterPosition());
+                        if (lubricateOilsEntity == null) {
+                            return;
+                        }
+                        lubricateOilsEntity.lubricatingPart = charSequence.toString();
+                    });
+            mPartCustomEditIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constant.IntentKey.POSITION,getAdapterPosition());
+                    IntentRouter.go(context, Constant.Router.LUBRICATE_PART_REF,bundle);
+                }
+            });
 
         }
 
@@ -216,6 +250,7 @@ public class LubricateOilsAdapter extends BaseListDataRecyclerViewAdapter<Lubric
             oilCode.setValue(data.lubricate != null ? Util.strFormat2(data.lubricate.code) : "");
             oilName.setValue(data.lubricate != null ? Util.strFormat2(data.lubricate.name) : "");
             remark.setInput(data.remark);
+            lubricatingPart.setContent(data.lubricatingPart);
         }
     }
 }

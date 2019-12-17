@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar" />
+
+    <TextView
+        android:id="@+id/cts_font_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_50"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_10"
+        android:tag="cts_font_prompt"
+        android:text="设置后，会改变字体大小。如果在使用过程中存在问题或意见，可反馈给中控团队"
+        android:textColor="@color/black"
+        android:textSize="@dimen/fontSize_17sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.supcon.mes.module_main.ui.view.ChangeTextSizeView
+        android:id="@+id/cts_font_change"
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_50"
+        android:background="@color/white"
+        android:tag="cts_font_change"
+        app:circleRadius="11dp"
+        app:lineColor="@color/color_A7A7A7"
+        app:standerSize="16" />
+
+
+</LinearLayout>

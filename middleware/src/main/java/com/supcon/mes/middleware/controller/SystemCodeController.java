@@ -40,6 +40,7 @@ public class SystemCodeController extends BasePresenterController implements Sys
         entityCodes.add(Constant.SystemCode.MOBILE_EAM001);
         entityCodes.add(Constant.SystemCode.MOBILE_EAM054);
         entityCodes.add(Constant.SystemCode.MOBILE_EAM055);
+        entityCodes.add(Constant.SystemCode.XJ_END_TASK);
 
         entityCodes.add(Constant.SystemCode.XJ_TYPE);//巡检类型：巡检？点检？
 
@@ -55,6 +56,10 @@ public class SystemCodeController extends BasePresenterController implements Sys
         //停机类型，停机原因对应的系统编码加载
         entityCodes.add(Constant.SystemCode.TJ_TYPE);
         entityCodes.add(Constant.SystemCode.TJ_REASON);
+
+        // 检修作业票
+        entityCodes.add(Constant.SystemCode.RISK_ACCEMENT);
+        entityCodes.add(Constant.SystemCode.HAZARD_CON_POINT);
     }
 
     @Override

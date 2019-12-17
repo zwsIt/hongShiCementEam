@@ -180,14 +180,14 @@ public class OLXJWorkListFinishAdapter extends BaseListDataRecyclerViewAdapter<O
             }
             fItemNormalRange.setContent(data.normalRange);
 
-            if ("wiLinkState/02".equals(data.linkState)) {  //免检
+            if ("wiLinkState/02".equals(data.getLinkState().id)) {  //免检
                 fExemption.setVisibility(View.VISIBLE);
                 fSkip.setVisibility(View.GONE);
             } else {
                 fExemption.setVisibility(View.GONE);
             }
 
-            if ("wiLinkState/03".equals(data.linkState)) { //跳检
+            if ("wiLinkState/03".equals(data.getLinkState().id)) { //跳检
                 fSkip.setVisibility(View.VISIBLE);
                 fExemption.setVisibility(View.GONE);
             } else {
@@ -233,7 +233,7 @@ public class OLXJWorkListFinishAdapter extends BaseListDataRecyclerViewAdapter<O
                 fItemPics.clear();
             }
 
-            if (data.control && !OLXJConstant.MobileWiLinkState.EXEMPTION_STATE.equals(data.linkState)) {
+            if (data.control && !OLXJConstant.MobileWiLinkState.EXEMPTION_STATE.equals(data.getLinkState().id)) {
                 buttonBar.setVisibility(View.VISIBLE);
                 viewDivide.setVisibility(View.VISIBLE);
             } else {

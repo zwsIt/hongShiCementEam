@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
+import com.supcon.mes.module_olxj.constant.OLXJConstant;
 
 /**
  * Created by wangshizhan on 2019/4/1
@@ -114,13 +116,14 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
     public String endTime;  //结束时间
     public String skipReasonID;//跳过原因ID
     public String skipReasonName; //跳过原因名称
-    public String linkState = "wiLinkState/01"; //状态,默认待检
+//    public String linkState = "wiLinkState/01"; //状态,默认待检
+    private SystemCodeEntity linkState; //状态,默认待检
     public boolean isFinished = false;
     public Long staffId;
     public boolean isPhonere;//实际是否拍照
     public boolean realispass;
     public String xjImgUrl; //图片路径，逗号相隔
-    public String realValue;
+    public SystemCodeEntity realValue;
     public String itemnumber;//逻辑位号
 
     public int sort;//排序
@@ -129,6 +132,8 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
     public ValueEntity priority;//优先级
 
     public boolean isEffective; // 隐患单是否生效（注：true：结论异常巡检项生成生效隐患单；否则编辑）
+
+    private TaskSignBean taskSignID; // 签到
 
     public long tableInfoId;
     @Expose
@@ -170,4 +175,43 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
         }
         return prioritySort;
     }
+
+    public SystemCodeEntity getLinkState() {
+        if (linkState == null){
+            linkState = new SystemCodeEntity();
+            linkState.setId(OLXJConstant.MobileWiLinkState.WAIT_STATE);
+        }
+        return linkState;
+    }
+
+    public void setLinkState(SystemCodeEntity linkState) {
+        this.linkState = linkState;
+    }
+
+    public TaskSignBean getTaskSignID() {
+        if (taskSignID == null) {
+            taskSignID = new TaskSignBean();
+        }
+        return taskSignID;
+    }
+
+    public void setTaskSignID(TaskSignBean taskSignID) {
+        this.taskSignID = taskSignID;
+    }
+
+    public class TaskSignBean extends BaseEntity {
+
+        /**
+         * cardTime : null
+         * cardType : null
+         * cartReason : null
+         * id : null
+         */
+
+        public Long cardTime; // 刷卡时间
+        public SystemCodeEntity cardType; // 刷卡类型
+        public SystemCodeEntity cartReason; // 手工签到原因
+        public Long id;
+    }
+
 }

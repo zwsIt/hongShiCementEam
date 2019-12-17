@@ -27,6 +27,7 @@ import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.FaultPicHelper;
@@ -211,7 +212,7 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
 
                 case "fReRecordBtn":
 
-                    if (!xjWorkItemEntity.control || OLXJConstant.MobileWiLinkState.EXEMPTION_STATE.equals(xjWorkItemEntity.linkState)) {  //禁修改(结论不可修改或免检)
+                    if (!xjWorkItemEntity.control || OLXJConstant.MobileWiLinkState.EXEMPTION_STATE.equals(xjWorkItemEntity.getLinkState().id)) {  //禁修改(结论不可修改或免检)
 
                         SnackbarHelper.showMessage(rootView, "该巡检项不允许重录");
 
@@ -329,9 +330,9 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
                     @Override
                     public boolean test(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
                         if (!TextUtils.isEmpty(deviceName) && !deviceName.equals("不限") && olxjWorkItemEntity.eamID != null) {
-                            return olxjWorkItemEntity.isFinished && deviceName.equals(olxjWorkItemEntity.eamID.name);
+                            return !OLXJConstant.MobileWiLinkState.WAIT_STATE.equals(olxjWorkItemEntity.getLinkState().getId()) && deviceName.equals(olxjWorkItemEntity.eamID.name);
                         }
-                        return olxjWorkItemEntity.isFinished;
+                        return !OLXJConstant.MobileWiLinkState.WAIT_STATE.equals(olxjWorkItemEntity.getLinkState().getId());
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -406,7 +407,9 @@ public class OLXJWorkListHandledActivity extends BaseRefreshRecyclerActivity<OLX
     private void doRerecord(OLXJWorkItemEntity xjWorkItemEntity) {
         xjWorkItemEntity.isFinished = false;
         xjWorkItemEntity.endTime = null;
-        xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.WAIT_STATE;
+        SystemCodeEntity linkState = new SystemCodeEntity();
+        linkState.setId(OLXJConstant.MobileWiLinkState.WAIT_STATE);
+        xjWorkItemEntity.setLinkState(linkState);
         xjWorkItemEntity.realispass = false;
         xjWorkItemEntity.skipReasonID = null;
         xjWorkItemEntity.skipReasonName = null;

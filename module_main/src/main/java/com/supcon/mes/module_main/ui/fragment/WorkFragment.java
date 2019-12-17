@@ -45,7 +45,6 @@ import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
@@ -60,16 +59,16 @@ import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_login.model.bean.WorkInfo;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
-import com.supcon.mes.module_main.model.api.EamAnomalyAPI;
+import com.supcon.mes.module_main.model.api.MainPendingNumAPI;
 import com.supcon.mes.module_main.model.api.ScoreStaffAPI;
 import com.supcon.mes.module_main.model.api.WaitDealtAPI;
 import com.supcon.mes.module_main.model.bean.ScoreEntity;
 import com.supcon.mes.module_main.model.bean.WaitDealtEntity;
 import com.supcon.mes.module_main.model.bean.WorkNumEntity;
-import com.supcon.mes.module_main.model.contract.EamAnomalyContract;
+import com.supcon.mes.module_main.model.contract.MainPendingNumContract;
 import com.supcon.mes.module_main.model.contract.ScoreStaffContract;
 import com.supcon.mes.module_main.model.contract.WaitDealtContract;
-import com.supcon.mes.module_main.presenter.EamAnomalyPresenter;
+import com.supcon.mes.module_main.presenter.MainPendingNumPresenter;
 import com.supcon.mes.module_main.presenter.ScoreStaffPresenter;
 import com.supcon.mes.module_main.presenter.WaitDealtPresenter;
 import com.supcon.mes.module_main.ui.MainActivity;
@@ -107,9 +106,9 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 /**
  * Created by wangshizhan on 2017/8/11.
  */
-@Presenter(value = {WaitDealtPresenter.class, EamPresenter.class, ScoreStaffPresenter.class, EamAnomalyPresenter.class})
+@Presenter(value = {WaitDealtPresenter.class, EamPresenter.class, ScoreStaffPresenter.class, MainPendingNumPresenter.class})
 public class WorkFragment extends BaseControllerFragment implements WaitDealtContract.View, EamContract.View, ScoreStaffContract.View
-        , MainActivity.WorkOnTouchListener, EamAnomalyContract.View {
+        , MainActivity.WorkOnTouchListener, MainPendingNumContract.View {
 
     @BindByTag("workCustomAd")
     CustomAdView workCustomAd;
@@ -160,6 +159,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     private TextView waitMore;  // 工作提醒：更多
     private AtomicBoolean atomicBoolean = new AtomicBoolean(false);
     private UserPowerCheckController userPowerCheckController;
+    private View mChildView;
 
     @Override
     protected int getLayoutID() {
@@ -188,7 +188,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     @Override
     public void onResume() {
         super.onResume();
-        presenterRouter.create(EamAnomalyAPI.class).getSloganInfo();
+        presenterRouter.create(MainPendingNumAPI.class).getSloganInfo();
         presenterRouter.create(ScoreStaffAPI.class).getPersonScore(String.valueOf(EamApplication.getAccountInfo().getStaffId()));
         if (atomicBoolean.compareAndSet(true, true)) {
             getWorkData();
@@ -281,7 +281,6 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         SLCoreSdk.client().getMinAppList(new CoreSdkContract.GetMinAppListCallBack() {
             @Override
             public void onGetMinAppList(List<OwnMinAppItem> list) {
-                //System.out.println(list);
                 LogUtil.d("zz list size:" + list.size());
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -299,7 +298,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ToastUtils.show(context, msg);
+                        ToastUtils.show(context, "获取知之系统菜单失败");
                     }
                 });
             }
@@ -309,7 +308,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
 
     private void initZhiZhiApps(List<OwnMinAppItem> list) {
 
-        if(list == null || list.size() == 0){
+        if (list == null || list.size() == 0) {
             return;
         }
         zzMenu = MenuHelper.getZZMenu(list);
@@ -320,21 +319,35 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         workInfo5.name = "流程图";
         workInfo5.iconResId = R.drawable.menu_form_selector;
         workInfos.add(workInfo5);
+
+        // supos质量管理 开放到主页级别
+        for (OwnMinAppItem ownMinAppItem : list) {
+            if (ownMinAppItem.getCreateType() == 2) {
+                WorkInfo workInfo6 = new WorkInfo();
+                workInfo6.name = ownMinAppItem.getAppname();
+                workInfo6.iconResId = R.drawable.ic_work_quality;
+                workInfo6.appItem = ownMinAppItem;
+                workInfos.add(workInfo6);
+            }
+        }
         workAdapter.setList(workInfos);
         workAdapter.notifyDataSetChanged();
     }
 
     private void goZZApp(MenuPopwindowBean menuPopwindowBean) {
 
-        switch (menuPopwindowBean.getAppItem().getApptype()) {
-            case 1:
-                SLCoreSdk.client().openTFAppListActivity(menuPopwindowBean.getAppItem());
-                break;
-            case 2:
-                SLCoreSdk.client().openWebApp(menuPopwindowBean.getAppItem());
-                break;
+        // 内部判断跳转
+        SLCoreSdk.client().openApp(menuPopwindowBean.getAppItem());
 
-        }
+//        switch (menuPopwindowBean.getAppItem().getApptype()) {
+//            case 1:
+//                SLCoreSdk.client().openTFAppListActivity(menuPopwindowBean.getAppItem());
+//                break;
+//            case 2:
+//                SLCoreSdk.client().openWebApp(menuPopwindowBean.getAppItem());
+//                break;
+//
+//        }
     }
 
     private void initAd() {
@@ -343,10 +356,10 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         if (EamApplication.isHongshi()) {
             galleryBean.resId = R.drawable.banner_hssn;
             ads.add(galleryBean);
-        } else if(EamApplication.isHailuo()){
+        } else if (EamApplication.isHailuo()) {
             galleryBean.resId = R.drawable.banner_hailuo;
             ads.add(galleryBean);
-        }else if(EamApplication.isYNSW()){
+        } else if (EamApplication.isYNSW()) {
             galleryBean.resId = R.drawable.pic_ynsw_ban01;
             ads.add(galleryBean);
             galleryBean = new GalleryBean();
@@ -355,16 +368,13 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
             galleryBean = new GalleryBean();
             galleryBean.resId = R.drawable.pic_ynsw_ban03;
             ads.add(galleryBean);
-        }
-        else if("zs".equals(ChannelUtil.getUMengChannel())){
+        } else if ("zs".equals(ChannelUtil.getUMengChannel())) {
             galleryBean.resId = R.drawable.pic_zs_ban01;
             ads.add(galleryBean);
-        }
-        else if("beiliu".equals(ChannelUtil.getUMengChannel())){
+        } else if ("beiliu".equals(ChannelUtil.getUMengChannel())) {
             galleryBean.resId = R.drawable.pic_bl_ban01;
             ads.add(galleryBean);
-        }
-        else{
+        } else {
             galleryBean.resId = R.drawable.pic_banner05;
             ads.add(galleryBean);
         }
@@ -386,6 +396,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
 //                    ToastUtils.show(getActivity(), "正在加载待办,请稍后点击!");
 //                    return;
 //                }
+                mChildView = childView;
                 if (oldPosition != -1)
                     workRecycler.getChildAt(oldPosition).setSelected(false);
                 if (oldPosition == position) {
@@ -431,6 +442,17 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                         menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
                         childView.setSelected(true);
                         break;
+                    case 5:
+                    default:
+                        WorkInfo workInfo = (WorkInfo) obj;
+                        MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();
+//                        menuPopwindowBean.setType(Constant.HSWorkType.ZZ);
+//                        menuPopwindowBean.setPower(true);
+//                        menuPopwindowBean.setName(workInfo.appItem.getAppname());
+//                        menuPopwindowBean.setRouter(workInfo.appItem.getAppId());  // 保证不为空，可跳转
+                        menuPopwindowBean.setAppItem(workInfo.appItem);
+                        goZZApp(menuPopwindowBean);
+                        break;
                 }
                 oldPosition = position;
             }
@@ -458,7 +480,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                             break;
                         case Constant.HSWorkType.TD:
                             String tdurl = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                                    + Constant.WebUrl.TD_LIST + "&date=" + System.currentTimeMillis();
+                                    + Constant.WebUrl.TD_LIST_NEW + "&date=" + System.currentTimeMillis();
                             bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
                             bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
                             bundle.putString(BaseConstant.WEB_URL, tdurl);
@@ -467,13 +489,41 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                             break;
                         case Constant.HSWorkType.SD:
                             String sdurl = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                                    + Constant.WebUrl.SD_LIST + "&date=" + System.currentTimeMillis();
+                                    + Constant.WebUrl.SD_LIST_NEW + "&date=" + System.currentTimeMillis();
                             bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
                             bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
                             bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
                             bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
                             bundle.putString(BaseConstant.WEB_URL, sdurl);
                             break;
+                        case Constant.HSWorkType.TSD_CANCEL:
+                            bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                            bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                            bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
+                            bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                            bundle.putString(BaseConstant.WEB_URL, "http://" + EamApplication.getIp() + ":" + EamApplication.getPort() + Constant.WebUrl.TSD_CANCEL + "&date=" + System.currentTimeMillis());
+                            break;
+                        case Constant.HSWorkType.TSD_APPROVAL:
+                            bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                            bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                            bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
+                            bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                            bundle.putString(BaseConstant.WEB_URL, "http://" + EamApplication.getIp() + ":" + EamApplication.getPort() + Constant.WebUrl.TSD_APPROVAL + "&date=" + System.currentTimeMillis());
+                            break;
+                        case Constant.HSWorkType.TSD_STATISTICS:
+                            bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                            bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                            bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
+                            bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                            bundle.putString(BaseConstant.WEB_URL, "http://" + EamApplication.getIp() + ":" + EamApplication.getPort() + Constant.WebUrl.TSD_STATISTICS + "&date=" + System.currentTimeMillis());
+                            break;
+//                        case Constant.HSWorkType.JX_TICKETS:
+//                            bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+//                            bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+//                            bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
+//                            bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+//                            bundle.putString(BaseConstant.WEB_URL, "http://" + EamApplication.getIp() + ":" + EamApplication.getPort() + Constant.WebUrl.JX_TICKETS + "&date=" + System.currentTimeMillis());
+//                            break;
                         case Constant.HSWorkType.ZZ:
                             goZZApp(menuPopwindowBean);
                             break;
@@ -614,7 +664,8 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
 
     @Override
     public boolean onTouch(MotionEvent ev) {
-        boolean isClickWorkRecycler = inRangeOfView(workRecycler, ev);
+        if (mChildView == null) return false;
+        boolean isClickWorkRecycler = inRangeOfView(mChildView, ev);
         if (!isClickWorkRecycler) {
             menuPopwindow.changeWindowAlfa(1f);
             oldPosition = -1;
@@ -686,7 +737,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
 
     private void getWorkData() {
         presenterRouter.create(WaitDealtAPI.class).getWaitDealt(1, 2, new HashMap<>());
-        presenterRouter.create(EamAnomalyAPI.class).getMainWorkCount(String.valueOf(EamApplication.getAccountInfo().getStaffId()));
+        presenterRouter.create(MainPendingNumAPI.class).getMainWorkCount(String.valueOf(EamApplication.getAccountInfo().getStaffId()));
         isRefreshing = true;
     }
 
@@ -843,12 +894,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         }
         StringBuilder menuOperateCodes = new StringBuilder();
         Flowable.fromIterable(menuAllPopwindows)
-                .filter(menuPopwindowBean -> {
-                    if (!TextUtils.isEmpty(menuPopwindowBean.getMenuOperateCodes())) {
-                        return true;
-                    }
-                    return false;
-                })
+                .filter(menuPopwindowBean -> !TextUtils.isEmpty(menuPopwindowBean.getMenuOperateCodes()))
                 .subscribe(menuPopwindowBean -> menuOperateCodes.append(menuPopwindowBean.getMenuOperateCodes()).append(","), throwable -> {
                 }, () -> {
                     if (!TextUtils.isEmpty(menuOperateCodes)) {

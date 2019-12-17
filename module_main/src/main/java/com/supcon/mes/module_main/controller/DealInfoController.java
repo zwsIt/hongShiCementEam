@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -43,14 +44,17 @@ public class DealInfoController extends BasePresenterController implements DealI
 
     public void getDealInfoList() {
         // 如果单据是在编辑或者派工环节，直接添加流程
-        if (Constant.TableStatus_CH.DISPATCH.equals(processedEntity.prostatus) || Constant.TableStatus_CH.EDIT.equals(processedEntity.prostatus)) {
+        if (Constant.TableStatus_CH.DISPATCH.equals(processedEntity.prostatus) || Constant.TableStatus_CH.EDIT.equals(processedEntity.prostatus) || Constant.TableStatus_CH.SPARE_PART_APPLY.equals(processedEntity.prostatus)
+         || Constant.TableStatus_CH.ELE_ON.equals(processedEntity.prostatus) || Constant.TableStatus_CH.ELE_OFF.equals(processedEntity.prostatus)) {
             List<FlowProcessEntity> flowProcessEntityList = new ArrayList<>();
             genFlowProEntity(flowProcessEntityList);
-            recyclerView.setAdapter(new FlowProcessAdapter(context, flowProcessEntityList));
+            FlowProcessAdapter flowProcessAdapter = new FlowProcessAdapter(context, flowProcessEntityList);
+            recyclerView.setAdapter(flowProcessAdapter);
+            flowProcessAdapter.notifyDataSetChanged();
         } else {
             //eg：openurl = /BEAM2/workList/workRecord/workExecuteEdit.action , /BEAM2/runningState/runningHead/runningStateEdit.action等
-            String[] splitArray = processedEntity.openurl.split("/");
-            presenterRouter.create(DealInfoAPI.class).listDealInfo(splitArray[2], splitArray[3], processedEntity.tableid);
+            String url = processedEntity.openurl.substring(0, processedEntity.openurl.lastIndexOf("/"));
+            presenterRouter.create(DealInfoAPI.class).listDealInfo(url, processedEntity.tableid);
         }
     }
 
@@ -73,54 +77,65 @@ public class DealInfoController extends BasePresenterController implements DealI
         List<Object> initData = (List<Object>) entity.get(0); // 默认添加第一个
         flowProcessEntity.isFinish = true;
         flowProcessEntity.flowProcess = initData.get(0).toString(); // 活动名称
-        flowProcessEntity.time = initData.get(1) == null ? "--" : DateUtil.dateTimeFormat(new BigDecimal((Double)initData.get(1)).longValue()); // 处理时间
+        flowProcessEntity.time = initData.get(1) == null ? "--" : DateUtil.dateTimeFormat(new BigDecimal((Double) initData.get(1)).longValue()); // 处理时间
         flowProcessEntity.dealStaff = initData.get(4).toString(); // 用户
         flowProcessEntityList.add(flowProcessEntity);
 
-        for (int i = 1 ; i < entity.size();i++){
+        for (int i = 1; i < entity.size(); i++) {
             List<Object> data = (List<Object>) entity.get(i);
             if (Constant.TableStatus_CH.RECALL.equals(data.get(0).toString())) continue; // 过滤撤回活动
             int count = 0;
-            for (int j = 0;j < flowProcessEntityList.size();j++){
-                if (!data.get(0).toString().equals(flowProcessEntityList.get(j).flowProcess)){
+            for (int j = 0; j < flowProcessEntityList.size(); j++) {
+                if (!data.get(0).toString().equals(flowProcessEntityList.get(j).flowProcess)) {
                     count++;
-                    if (count == flowProcessEntityList.size()){ // 添加
+                    if (count == flowProcessEntityList.size()) { // 添加
                         flowProcessEntity = new FlowProcessEntity();
                         flowProcessEntity.isFinish = true;
                         flowProcessEntity.flowProcess = data.get(0).toString(); // 活动名称
-                        flowProcessEntity.time = data.get(1) == null ? "--" : DateUtil.dateTimeFormat(new BigDecimal((Double)data.get(1)).longValue()); // 处理时间
+                        flowProcessEntity.time = data.get(1) == null ? "--" : DateUtil.dateTimeFormat(new BigDecimal((Double) data.get(1)).longValue()); // 处理时间
                         flowProcessEntity.dealStaff = data.get(4).toString(); // 用户
                         flowProcessEntityList.add(flowProcessEntity);
                         break;
                     }
-                }else {  // 替换
+                } else {  // 替换
                     flowProcessEntity = flowProcessEntityList.get(j);
                     flowProcessEntity.isFinish = true;
                     flowProcessEntity.flowProcess = data.get(0).toString(); // 活动名称
-                    flowProcessEntity.time = data.get(1) == null ? "--" : DateUtil.dateTimeFormat(new BigDecimal((Double)data.get(1)).longValue()); // 处理时间
+                    flowProcessEntity.time = data.get(1) == null ? "--" : DateUtil.dateTimeFormat(new BigDecimal((Double) data.get(1)).longValue()); // 处理时间
                     flowProcessEntity.dealStaff = data.get(4).toString(); // 用户
                     break;
                 }
             }
         }
-        // 通知状态删除执行只显示通知
-        for (FlowProcessEntity flowProEntity :flowProcessEntityList){
-            if ((Constant.TableStatus_CH.EXECUTE.equals(flowProEntity.flowProcess) && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus))){
-                flowProcessEntityList.remove(flowProEntity);
-                break;
+        // 通知状态删除执行、验收只显示通知
+//        for (FlowProcessEntity flowProEntity :flowProcessEntityList){
+//            if ((Constant.TableStatus_CH.EXECUTE.equals(flowProEntity.flowProcess) && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus))){
+//                flowProcessEntityList.remove(flowProEntity);
+//                break;
+//            }
+//        }
+        Iterator<FlowProcessEntity> iterator = flowProcessEntityList.iterator();
+        FlowProcessEntity flowProcess;
+        while (iterator.hasNext()) {
+            flowProcess = iterator.next();
+            if ((Constant.TableStatus_CH.EXECUTE.equals(flowProcess.flowProcess) || Constant.TableStatus_CH.ACCEPT.equals(flowProcess.flowProcess))
+                    && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus)) {
+                iterator.remove();
             }
         }
         // 过滤驳回后出现的颠倒流程
         List<FlowProcessEntity> flowProcessEntityFilterList = new ArrayList<>();
-        for (FlowProcessEntity processEntity : flowProcessEntityList){
-            if (processEntity.flowProcess.equals(processedEntity.prostatus)){ // 和当前状态则退出循环
+        for (FlowProcessEntity processEntity : flowProcessEntityList) {
+            if (processEntity.flowProcess.equals(processedEntity.prostatus)) { // 和当前状态相同则退出循环
                 break;
-            }else {
+            } else {
                 flowProcessEntityFilterList.add(processEntity); // 不同则添加
             }
         }
         genFlowProEntity(flowProcessEntityFilterList); // 需要添加当前状态
-        recyclerView.setAdapter(new FlowProcessAdapter(context, flowProcessEntityFilterList));
+        FlowProcessAdapter flowProcessAdapter = new FlowProcessAdapter(context, flowProcessEntityFilterList);
+        recyclerView.setAdapter(flowProcessAdapter);
+        flowProcessAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -3,6 +3,7 @@
 
     <string name="device_style1">%1$s (%2$s)</string>
     <string name="device_style2">%1$s\t\t\t\t\t\t\t%2$s</string>
+    <string name="device_style21">%1$s\t%2$s</string>
     <string name="device_style3">%1$s \n[%2$s]</string>
     <string name="device_style4">%1$s [%2$s]</string>
     <string name="device_style5">%1$s (%2$s) [%3$s]</string>
@@ -51,5 +52,6 @@
     <string name="acceptChkStaffCode">验收人编码</string>
     <string name="acceptChkTime">验收时间</string>
     <string name="acceptChkConclusion">验收结论</string>
+    <string name="lub_part">润滑部位</string>
 
 </resources>

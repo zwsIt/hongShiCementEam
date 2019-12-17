@@ -131,7 +131,7 @@ public class OLXJAreaListAdapter extends BaseListDataRecyclerViewAdapter<OLXJAre
             itemAreaName.setText((getAdapterPosition() + 1) + ". " + data.name);
 
             itemAreaFault.setVisibility(View.INVISIBLE);
-            if (TextUtils.isEmpty(data.signedTime)) {
+            if (TextUtils.isEmpty(data.signedTime) && data.workItemEntities.get(0) != null && data.workItemEntities.get(0).getTaskSignID().cardTime == null) {
                 if (TextUtils.isEmpty(data.oldfaultMsg)) {
                     itemAreaDot.setImageDrawable(context.getResources().getDrawable(R.drawable.dot_wait));
                 } else {
@@ -149,7 +149,8 @@ public class OLXJAreaListAdapter extends BaseListDataRecyclerViewAdapter<OLXJAre
             AtomicInteger finishedNum = new AtomicInteger();
             Flowable.fromIterable(data.workItemEntities)
                     .subscribe(xjWorkItemEntity -> {
-                                if (xjWorkItemEntity.isFinished) {
+//                                if (xjWorkItemEntity.isFinished) {
+                                if (OLXJConstant.MobileWiLinkState.FINISHED_STATE.equals(xjWorkItemEntity.getLinkState().id)) {
                                     finishedNum.getAndIncrement();
                                     if (!TextUtils.isEmpty(xjWorkItemEntity.conclusionID) && OLXJConstant.MobileConclusion.AB_NORMAL.equals(xjWorkItemEntity.conclusionID)) {
                                         faultPosition.getAndIncrement();
@@ -171,10 +172,10 @@ public class OLXJAreaListAdapter extends BaseListDataRecyclerViewAdapter<OLXJAre
                                     data.finishType = "1";
                                 } else {
                                     data.finishType = "0";
-                                    itemAreaName.setTextColor(Color.parseColor("#366CBC"));
-                                    itemAreaProgress.setTextColor(Color.parseColor("#366CBC"));
+                                    itemAreaName.setTextColor(context.getResources().getColor(R.color.xjAreaBlue));
+                                    itemAreaProgress.setTextColor(context.getResources().getColor(R.color.xjAreaBlue));
                                 }
-                                if (!TextUtils.isEmpty(data.signedTime)) {
+                                if (!TextUtils.isEmpty(data.signedTime) || data.workItemEntities.get(0).getTaskSignID().cardTime != null) {
                                     if (isFault) {
 //                                        data.faultMsg = faultMsg.toString();
 //                                        itemAreaFault.setVisibility(View.VISIBLE);
@@ -183,7 +184,8 @@ public class OLXJAreaListAdapter extends BaseListDataRecyclerViewAdapter<OLXJAre
                                         itemAreaFault.setVisibility(View.INVISIBLE);
                                         itemAreaDot.setImageDrawable(context.getResources().getDrawable(R.drawable.dot_done));
                                     }
-                                    itemAreaTime.setText(formatter.format(DateUtil.dateFormat(data.signedTime, "yyyy-MM-dd HH:mm:ss")));
+                                    itemAreaTime.setText( !TextUtils.isEmpty(data.signedTime)? data.signedTime : DateUtil.dateFormat(data.workItemEntities.get(0).getTaskSignID().cardTime, "yyyy-MM-dd HH:mm:ss"));
+                                    data.signedTime = itemAreaTime.getText().toString(); // 赋值，用于路线切换时清了缓存后，已签到的区域无需再次签到
                                 }
                             });
         }

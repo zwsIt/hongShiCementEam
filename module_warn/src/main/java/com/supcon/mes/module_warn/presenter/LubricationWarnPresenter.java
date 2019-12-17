@@ -28,7 +28,7 @@ public class LubricationWarnPresenter extends LubricationWarnContract.Presenter 
         }
 
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
         fastQuery.subconds.add(joinSubcondEntity);
         fastQuery.modelAlias = "jWXItem";
 

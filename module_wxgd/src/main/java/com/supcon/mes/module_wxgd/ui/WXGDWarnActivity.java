@@ -301,40 +301,31 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         super.initListener();
 
         leftBtn.setOnClickListener(v -> onBackPressed());
-        refreshController.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Map<String, Object> queryParam = new HashMap<>();
-                queryParam.put(Constant.BAPQuery.TABLE_NO, TextUtils.isEmpty(tmpTableNum) ? mWXGDEntity.tableNo : tmpTableNum);
-                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam);
+        refreshController.setOnRefreshListener(() -> {
+            Map<String, Object> queryParam = new HashMap<>();
+            queryParam.put(Constant.BAPQuery.TABLE_NO, TextUtils.isEmpty(tmpTableNum) ? mWXGDEntity.tableNo : tmpTableNum);
+            presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam);
+        });
+        repairGroup.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWXGDEntity.repairGroup.id = null;
+            } else {
+                if (repairGroupList.size() <= 0) {
+                    ToastUtils.show(context, "维修组列表为空！");
+                    return;
+                }
+                mSinglePickController.list(repairGroupList)
+                        .listener((index, item) -> {
+                            repairGroup.setValue(item.toString());
+                            mWXGDEntity.repairGroup = mRepairGroups.get(index);
+                        }).show(repairGroup.getValue());
             }
         });
-        repairGroup.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1) {
-                    mWXGDEntity.repairGroup.id = null;
-                } else {
-                    if (repairGroupList.size() <= 0) {
-                        ToastUtils.show(context, "维修组列表为空！");
-                        return;
-                    }
-                    mSinglePickController.list(repairGroupList)
-                            .listener((index, item) -> {
-                                repairGroup.setValue(item.toString());
-                                mWXGDEntity.repairGroup = mRepairGroups.get(index);
-                            }).show(repairGroup.getValue());
-                }
-            }
-        });
-        chargeStaff.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1) {
-                    mWXGDEntity.getChargeStaff().id = null;
-                } else {
-                    IntentRouter.go(context, Constant.Router.STAFF);
-                }
+        chargeStaff.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWXGDEntity.getChargeStaff().id = null;
+            } else {
+                IntentRouter.go(context, Constant.Router.STAFF);
             }
         });
 
@@ -375,23 +366,20 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
             }
 
         });
-        transition.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                WorkFlowVar workFlowVar = (WorkFlowVar) obj;
-                switch (action) {
-                    case 0:
-                        doSave();
-                        break;
-                    case 1:
-                        doSubmit(workFlowVar);
-                        break;
-                    case 2:
-                        doSubmit(workFlowVar);
-                        break;
-                    default:
-                        break;
-                }
+        transition.setOnChildViewClickListener((childView, action, obj) -> {
+            WorkFlowVar workFlowVar = (WorkFlowVar) obj;
+            switch (action) {
+                case 0:
+                    doSave();
+                    break;
+                case 1:
+                    doSubmit(workFlowVar);
+                    break;
+                case 2:
+                    doSubmit(workFlowVar);
+                    break;
+                default:
+                    break;
             }
         });
 

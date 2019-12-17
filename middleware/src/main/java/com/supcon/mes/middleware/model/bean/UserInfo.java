@@ -64,17 +64,22 @@ public class UserInfo extends BaseEntity implements CommonSearchEntity {
 
     @Override
     public String getSearchId() {
-        return String.valueOf(staffId);
+        return String.valueOf(id);
     }
 
     @Override
     public String getSearchName() {
-        return  staffName;
+        return  name;
+    }
+
+    @Override
+    public String getSearchCode() {
+        return staffCode;
     }
 
     @Override
     public String getSearchProperty() {
-        return staffCode;
+        return staffName;
     }
 
     @Override

@@ -118,12 +118,12 @@ public class WorkHelper {
 
                 case Constant.WorkType.SBDA:
 
-                    workInfo.iconResId = R.drawable.ic_data_sbda;
+                    workInfo.iconResId = R.drawable.ic_work_sbda;
                     workInfo.router = Constant.Router.SBDA_LIST;
                     break;
                 case Constant.WorkType.SBDA_ONLINE:
 
-                    workInfo.iconResId = R.drawable.ic_data_sbda;
+                    workInfo.iconResId = R.drawable.ic_work_sbda;
                     workInfo.router = Constant.Router.SBDA_ONLINE_LIST;
                     break;
                 case Constant.WorkType.STOP_POLICE:
@@ -198,7 +198,7 @@ public class WorkHelper {
 
                 case Constant.WorkType.TSD_RECORD:
 
-                    workInfo.iconResId = R.drawable.ic_data_sbda;
+                    workInfo.iconResId = R.drawable.ic_work_yxjl;
                     workInfo.router = Constant.Router.TSD_RECORD;
                     break;
                 default:

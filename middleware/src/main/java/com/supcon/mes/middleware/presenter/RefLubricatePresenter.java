@@ -47,7 +47,7 @@ public class RefLubricatePresenter extends RefLubricateContract.Presenter {
         if (queryParam.containsKey(Constant.BAPQuery.NAME)) {
             Map<String, Object> nameParam = new HashMap<>();
             nameParam.put(Constant.BAPQuery.NAME, queryParam.get(Constant.BAPQuery.NAME));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(nameParam, "BEAM_LUBRICATE_OILS,ID,BEAM_JWXITEMS,LUBRICATE_OIL");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(nameParam, "BEAM_LUBRICATE_OILS,ID,BEAM_JWXITEMS,LUBRICATE_OIL");
             fastQueryCondEntity.subconds.add(joinSubcondEntity);
         }
         fastQueryCondEntity.modelAlias = "jWXItem";

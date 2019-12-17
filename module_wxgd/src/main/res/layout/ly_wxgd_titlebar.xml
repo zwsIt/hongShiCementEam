@@ -26,18 +26,16 @@
         android:textColor="@color/white"
         android:textSize="18sp" />
     <TextView
-        android:layout_width="65dp"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="20dp"
         android:id="@+id/workSource"
         android:tag="workSource"
         android:layout_toEndOf="@+id/titleText"
         android:layout_centerInParent="true"
         android:layout_marginStart="@dimen/dp_5"
-        android:text="@string/workSource"
-        android:gravity="center"
-        android:background="@drawable/sh_faultinfo_bg"
-        android:textSize="14sp"
-        android:textColor="@color/white"
-        />
+        android:gravity="center|center_vertical"
+        android:background="@drawable/name_bg_1"
+        android:textSize="12sp"
+        android:textColor="@color/white"/>
 
 </RelativeLayout>

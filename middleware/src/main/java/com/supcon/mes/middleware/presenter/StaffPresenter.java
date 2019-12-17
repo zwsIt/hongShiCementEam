@@ -9,7 +9,7 @@ import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
 public class StaffPresenter extends StaffContract.Presenter {
     @Override
     public void listCommonContractStaff(String staffName, int pageNo) {
-        mCompositeSubscription.add(MiddlewareHttpClient.queryUserInfoList(staffName, pageNo)
+        mCompositeSubscription.add(MiddlewareHttpClient.userRefList(staffName, pageNo)
                 .onErrorReturn(throwable -> {
                     UserInfoListEntity userInfoListEntity = new UserInfoListEntity();
                     userInfoListEntity.errMsg = throwable.toString();

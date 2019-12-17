@@ -19,6 +19,9 @@ public class CommonSearchStaff extends BaseEntity implements CommonSearchEntity 
 
     public Long userId;
 
+    public String department;
+    public String mainPosition;
+
     @Override
     public String getSearchId() {
         return this.id == null ? null : this.id.toString();
@@ -30,8 +33,13 @@ public class CommonSearchStaff extends BaseEntity implements CommonSearchEntity 
     }
 
     @Override
-    public String getSearchProperty() {
+    public String getSearchCode() {
         return code;
+    }
+
+    @Override
+    public String getSearchProperty() {
+        return mainPosition;
     }
 
     @Override

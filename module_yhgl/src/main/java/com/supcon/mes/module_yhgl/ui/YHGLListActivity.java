@@ -40,6 +40,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.FilterHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
@@ -96,8 +97,8 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
 
     YHListAdapter mAdapter;
 
-    @BindByTag("radioGroup1")
-    RadioGroup radioGroup1;
+    @BindByTag("radioGroupFilter")
+    RadioGroup radioGroupFilter;
 
     @BindByTag("listDateFilter")
     CustomFilterView<FilterBean> listDateFilter;
@@ -178,7 +179,7 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
         listYHTypeFilter.setData(YHFilterHelper.createYHTypeFilter());
         listYHPriorityFilter.setData(YHFilterHelper.createPriorityFilter());
 
-        YHFilterHelper.addview(this, radioGroup1, YHFilterHelper.createWorkSource(), 1000);
+        FilterHelper.addView(this, radioGroupFilter, YHFilterHelper.createWorkSource());
     }
 
     @SuppressLint("CheckResult")
@@ -367,7 +368,7 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
 
         });
 
-        radioGroup1.setOnCheckedChangeListener((group, checkedId) -> {
+        radioGroupFilter.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton radioButton = findViewById(group.getCheckedRadioButtonId());
             generateWorkSourceFilter(radioButton.getText().toString());
         });
@@ -392,7 +393,6 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
         yhEntity.findStaffID = EamApplication.me();
         yhEntity.findTime = System.currentTimeMillis();
         yhEntity.cid = SharedPreferencesUtils.getParam(App.getAppContext(), Constant.CID, 0L);
-        yhEntity.id = -1;
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, yhEntity);
         bundle.putSerializable(Constant.IntentKey.DEPLOYMENT_ID, deploymentId);

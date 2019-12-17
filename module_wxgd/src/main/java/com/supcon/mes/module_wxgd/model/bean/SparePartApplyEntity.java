@@ -6,6 +6,8 @@ import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 
+import java.math.BigDecimal;
+
 /**
  * @description SparePartApplyEntity  备件领用申请实体
  * @author zws 2019/9/27
@@ -40,6 +42,7 @@ public class SparePartApplyEntity extends BaseEntity {
     private String tableNo; // 单据编号
     private boolean valid;
     private int version; // 版本
+    private BigDecimal totalPrice; // 总价
 
     public Staff getApplyStaff() {
         return applyStaff;
@@ -145,7 +148,15 @@ public class SparePartApplyEntity extends BaseEntity {
         this.version = version;
     }
 
-    public static class AttrMapBean {
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public static class AttrMapBean extends BaseEntity {
         /**
          * BEAM2_1_0_0_sparePart_sparePartTabsListdg1566822775061_LISTPT_ASSO_bf9db180_6725_42e5_a3a6_6c78e78b4b9a : 户外车贴-食堂清洗池标贴
          * BEAM2_1_0_0_sparePart_sparePartTabsListdg1566822775061_LISTPT_ASSO_87b0a0dd_4a17_429c_9de1_66d35b8f0722 : 02101100054

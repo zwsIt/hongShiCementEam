@@ -63,6 +63,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -112,11 +113,11 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
     /**
      * 单一停机报警列表项刷新请求列表
      */
-    private Map<String, String> singleUpdateQueryParam = new HashMap<>();
     private DatePickController datePickController;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Calendar calendar;
     private StopPoliceAdapter stopPoliceAdapter;
+    private ImageView mDeleteIv;
 
     @Override
     protected IListAdapter createAdapter() {
@@ -147,11 +148,14 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
         searchTitleBar.disableRightBtn();
         searchTitleBar.searchView().setHint("搜索");
         // 红狮特殊处理
-        if (EamApplication.isHongshi()) {
-            listEamTypeFilter.setData(FilterHelper.createEamTypeFilter());
-        } else {
-            eamFilterLl.setVisibility(View.GONE);
-        }
+//        if (EamApplication.isHongshi()) {
+//            listEamTypeFilter.setData(FilterHelper.createEamTypeFilter());
+//        } else {
+//            eamFilterLl.setVisibility(View.GONE);
+//        }
+        // 默认隐藏清空按钮
+        mDeleteIv = listEamTypeFilter.findViewById(R.id.customFilterIcon);
+        mDeleteIv.setVisibility(View.GONE);
 
         timeStart = findViewById(R.id.stopPoliceStartTime);
         timeEnd = findViewById(R.id.stopPoliceStopTime);
@@ -285,7 +289,6 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
                         IntentRouter.go(context, Constant.Router.EAM, bundle);
                     })
                     .bindClickListener(R.id.btn_stop_police_save, v -> {
-                        LogUtil.e("ciruy", paramMap.toString());
                         if (paramMap.containsKey(STOP_POLICE_STAFF_ID) && paramMap.containsKey(STOP_POLICE_ID) && paramMap.containsKey(STOP_POLICE_STOP_TYPE) && paramMap.containsKey(STOP_POLICE_STOP_EXPLAIN)) {
                             onLoading("数据上传中...");
                             presenterRouter.create(StopPoliceAPI.class).updateStopPoliceItem(paramMap);
@@ -384,7 +387,7 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
         });
 
         RxView.clicks(leftBtn)
-                .throttleFirst(2, TimeUnit.SECONDS)
+                .throttleFirst(0, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
 
         searchTitleBar.setOnExpandListener(new OnTitleSearchExpandListener() {
@@ -417,18 +420,36 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
             }
             presenterRouter.create(StopPoliceAPI.class).runningGatherList(queryParam, page);
         });
-        listEamTypeFilter.setFilterSelectChangedListener(new CustomFilterView.FilterSelectChangedListener() {
+//        listEamTypeFilter.setFilterSelectChangedListener(new CustomFilterView.FilterSelectChangedListener() {
+//            @Override
+//            public void onFilterSelected(FilterBean filterBean) {
+//                ScreenEntity entity = (ScreenEntity) filterBean;
+//                if ("全部".equals(entity.name)){
+//                    queryParam.remove(Constant.BAPQuery.EAMTYPE_NAME);
+//                }else {
+//                    queryParam.put(Constant.BAPQuery.EAMTYPE_NAME,entity.name);
+//                }
+//                StopPoliceListActivity.this.doRefresh();
+//            }
+//        });
+
+        // 重写事件
+        listEamTypeFilter.findViewById(R.id.customFilterTv).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFilterSelected(FilterBean filterBean) {
-                ScreenEntity entity = (ScreenEntity) filterBean;
-                if ("全部".equals(entity.name)){
-                    queryParam.remove(Constant.BAPQuery.EAMTYPE_NAME);
-                }else {
-                    queryParam.put(Constant.BAPQuery.EAMTYPE_NAME,entity.name);
-                }
-                StopPoliceListActivity.this.doRefresh();
+            public void onClick(View v) {
+                IntentRouter.go(context,Constant.Router.EAM_TYPE_REF);
             }
         });
+        mDeleteIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EamType eamType = new EamType();
+                eamType.name = "设备类型"; // 默认状态，即全部
+                receiveEamType(eamType);
+            }
+        });
+
+
         timeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -528,6 +549,25 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
     public void onRefresh(RefreshEvent event) {
 
         refreshListController.refreshBegin();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEamType(EamType eamType){
+        FilterBean filterBean = new FilterBean();
+        filterBean.name = eamType.name;
+        List<FilterBean> filterBeanList = new ArrayList<>();
+        filterBeanList.add(filterBean);
+        listEamTypeFilter.setData(filterBeanList);
+        listEamTypeFilter.setCurrentItem(eamType.name);
+
+        if ("设备类型".equals(eamType.name)){
+            queryParam.put(Constant.BAPQuery.EAMTYPE_NAME,"");
+            mDeleteIv.setVisibility(View.GONE);
+        }else {
+            queryParam.put(Constant.BAPQuery.EAMTYPE_NAME,eamType.name);
+            mDeleteIv.setVisibility(View.VISIBLE);
+        }
+        doRefresh();
     }
 
     private boolean compareTime(String start, String stop) {

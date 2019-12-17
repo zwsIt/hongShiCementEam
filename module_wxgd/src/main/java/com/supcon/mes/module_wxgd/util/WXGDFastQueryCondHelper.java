@@ -22,7 +22,7 @@ public class WXGDFastQueryCondHelper {
         if (queryMap.containsKey(Constant.BAPQuery.EAM_NAME)) {
             Map<String, Object> nameParam = new HashMap<>();
             nameParam.put(Constant.BAPQuery.EAM_NAME, Objects.requireNonNull(queryMap.get(Constant.BAPQuery.EAM_NAME)));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(nameParam, "EAM_BaseInfo,EAM_ID,BEAM2_WORK_RECORDS,EAMID");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(nameParam, "EAM_BaseInfo,EAM_ID,BEAM2_WORK_RECORDS,EAMID");
             singleFastQueryCond.subconds.add(joinSubcondEntity);
         }
         if (queryMap.containsKey(Constant.BAPQuery.WXGD_PRIORITY)) {
@@ -37,7 +37,7 @@ public class WXGDFastQueryCondHelper {
         otherMap.remove(Constant.BAPQuery.EAM_NAME);
         otherMap.remove(Constant.BAPQuery.WXGD_PRIORITY);
 
-        List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(otherMap);
+        List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(otherMap);
         singleFastQueryCond.subconds.addAll(baseSubcondEntities);
         return singleFastQueryCond;
     }

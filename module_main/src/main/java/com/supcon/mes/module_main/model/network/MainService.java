@@ -105,12 +105,10 @@ public interface MainService {
     Flowable<CommonBAPListEntity<AnomalyEntity>> getAnomalyList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
-     * 获取隐患处理意见
-     *
-     * @param module 实体编码
-     * @param table 模型即表名
+     * 获取处理意见
+     * @param url
      * @param tableInfoId 表单id
      */
-    @GET("/BEAM2/{module}/{table}/dealInfo-list.action")
-    Flowable<List> getDealInfoList(@Path("module") String moduleName, @Path("table") String tableName, @Query("tableInfoId") Long tableInfoId);
+    @GET("{url}/dealInfo-list.action")
+    Flowable<List> getDealInfoList(@Path(value = "url",encoded = true) String url, @Query("tableInfoId") Long tableInfoId);
 }

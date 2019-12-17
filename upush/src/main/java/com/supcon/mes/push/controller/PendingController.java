@@ -76,7 +76,7 @@ public class PendingController extends BaseDataController implements PendingQuer
         } else if (pendingEntity.deploymentName.contains("停电")) {
 
             String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                    + Constant.WebUrl.TD_LIST;
+                    + Constant.WebUrl.TD_LIST_NEW;
 
             Bundle bundle = new Bundle();
             bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
@@ -88,7 +88,7 @@ public class PendingController extends BaseDataController implements PendingQuer
         } else if (pendingEntity.deploymentName.contains("送电")) {
 
             String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                    + Constant.WebUrl.SD_LIST;
+                    + Constant.WebUrl.SD_LIST_NEW;
 
             Bundle bundle = new Bundle();
             bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());

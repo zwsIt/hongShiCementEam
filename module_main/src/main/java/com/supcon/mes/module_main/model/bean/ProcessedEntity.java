@@ -22,6 +22,7 @@ public class ProcessedEntity extends BaseEntity {
     public Long workcreatetime; // 创建时间，（注：最终统一使用）
     public String worktableno; // 单据编号，（注：最终统一使用）
     public String newUrl;
+    public String summary; // 摘要
 
     public EamType getEamid() {
         if (eamid == null) {

@@ -34,9 +34,8 @@ import java.util.List;
 @Presenter(MaintenancePresenter.class)
 public class MaintenanceController extends BaseViewController implements MaintenanceContract.View, MaintenanceAPI {
     @BindByTag("maintenanceListWidget")
-    CustomListWidget<MaintainEntity> mCustomListWidget;
+    CustomListWidget<MaintainEntity> maintenanceListWidget;
 
-    private long id = -1;
     private List<MaintainEntity> maintenanceEntities = new ArrayList<>();
     private boolean isEditable;
     private YHEntity mYHEntity;
@@ -49,21 +48,18 @@ public class MaintenanceController extends BaseViewController implements Mainten
     public void onInit() {
         super.onInit();
         mYHEntity = (YHEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY);
-        if (mYHEntity != null) {
-            this.id = mYHEntity.id;
-        }
     }
 
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new MaintenanceAdapter(context, false));
+        maintenanceListWidget.setAdapter(new MaintenanceAdapter(context, false));
     }
 
     @Override
     public void initListener() {
         super.initListener();
-        mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
+        maintenanceListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
@@ -97,12 +93,12 @@ public class MaintenanceController extends BaseViewController implements Mainten
     @Override
     public void listMaintenanceSuccess(MaintenanceListEntity entity) {
         maintenanceEntities = entity.result;
-        if (mCustomListWidget != null) {
-            mCustomListWidget.setData(entity.result);
+        if (maintenanceListWidget != null) {
+            maintenanceListWidget.setData(entity.result);
             if (isEditable) {
-                mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
+                maintenanceListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + entity.result.size() + ")");
+                maintenanceListWidget.setShowText("查看 (" + entity.result.size() + ")");
             }
         }
         EventBus.getDefault().post(new ListEvent("maintenance", maintenanceEntities));
@@ -114,19 +110,20 @@ public class MaintenanceController extends BaseViewController implements Mainten
     }
 
     public void setCustomListWidget(CustomListWidget<MaintainEntity> customListWidget) {
-        this.mCustomListWidget = customListWidget;
+        this.maintenanceListWidget = customListWidget;
     }
 
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(MaintenanceAPI.class).listMaintenance(id);
+        if (mYHEntity.id != null){
+            presenterRouter.create(MaintenanceAPI.class).listMaintenance(mYHEntity.id);
+        }
     }
 
     public void setYHEntity(YHEntity mYHEntity) {
         this.mYHEntity = mYHEntity;
-        this.id = mYHEntity.id;
-        presenterRouter.create(MaintenanceAPI.class).listMaintenance(id);
+        presenterRouter.create(MaintenanceAPI.class).listMaintenance(mYHEntity.id);
     }
 
     /**
@@ -152,12 +149,12 @@ public class MaintenanceController extends BaseViewController implements Mainten
         if (list == null)
             return;
         this.maintenanceEntities = list;
-        if (mCustomListWidget != null) {
-            mCustomListWidget.setData(list);
+        if (maintenanceListWidget != null) {
+            maintenanceListWidget.setData(list);
             if (isEditable) {
-                mCustomListWidget.setShowText("编辑 (" + list.size() + ")");
+                maintenanceListWidget.setShowText("编辑 (" + list.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + list.size() + ")");
+                maintenanceListWidget.setShowText("查看 (" + list.size() + ")");
             }
         }
     }
@@ -167,7 +164,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
     }
 
     public void clear() {
-        mCustomListWidget.clear();
+        maintenanceListWidget.clear();
     }
 
     public void upEam(WXGDEam wxgdEam) {

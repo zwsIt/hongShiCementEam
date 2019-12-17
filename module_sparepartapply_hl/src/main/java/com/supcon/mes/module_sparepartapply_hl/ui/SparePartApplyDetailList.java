@@ -15,9 +15,11 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
+import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
@@ -28,6 +30,7 @@ import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
 import com.supcon.mes.middleware.model.event.SparePartAddEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sparepartapply_hl.R;
 import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
 import com.supcon.mes.module_sparepartapply_hl.model.event.SparePartApplyDetailEvent;
@@ -41,6 +44,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +79,9 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
     private boolean editable;
     private String url; // 获取备件领用申请明细PT之url
+    private boolean mIsWork; // 是否来源工单
+    private int mPosition;
+    private boolean modify; // 修改原备件
 
     @Override
     protected void onInit() {
@@ -87,13 +95,14 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
 
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID,0);
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);//放在onInit()中会存在迟于创建Adapter，故setEditable
-
-        sparePartApplyDetailAdapter.setEditable(editable,getIntent().getBooleanExtra(SPAHLConstant.IntentKey.IS_SEND_STATUS,false));
+        mIsWork = getIntent().getBooleanExtra(SPAHLConstant.IntentKey.IS_WORK,false);
+        sparePartReceiveEntityList = GsonUtil.jsonToList(getIntent().getStringExtra(Constant.IntentKey.SPARE_PART_ENTITIES),SparePartReceiveEntity.class);
+        sparePartApplyDetailAdapter.setEditable(mIsWork,editable,getIntent().getBooleanExtra(SPAHLConstant.IntentKey.IS_SEND_STATUS,false));
 
         url = getIntent().getStringExtra(Constant.IntentKey.URL);
 
         refreshListController.setAutoPullDownRefresh(true);
-        refreshListController.setPullDownRefreshEnabled(true);
+        refreshListController.setPullDownRefreshEnabled(false);
     }
 
     @Override
@@ -111,7 +120,7 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
     protected void initView() {
         super.initView();
         titleText.setText("备件申请明细列表");
-        if (editable){
+        if (!mIsWork && editable){
             rightBtn.setVisibility(View.VISIBLE);
         }
         initEmptyView();
@@ -138,21 +147,34 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, false);
-                        // 带入已添加备件，检验重复添加
-                        bundle = genAddDataList(bundle);
-                        IntentRouter.go(context, Constant.Router.SPARE_PART_REF, bundle);
+                        modify = false;
+                        selectSparePart();
                     }
                 });
-        refreshListController.setOnRefreshListener(() -> presenterRouter.create(SparePartApplyDetailAPI.class).listSparePartApplyDetail(url,tableId));
+        refreshListController.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                presenterRouter.create(SparePartApplyDetailAPI.class).listSparePartApplyDetail(url, tableId);
+                refreshListController.refreshComplete(sparePartReceiveEntityList);
+            }
+        });
 
         sparePartApplyDetailAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 String tag = childView.getTag().toString();
                 SparePartReceiveEntity sparePartReceiveEntity = (SparePartReceiveEntity) obj;
+
                 switch (tag){
+                    case "sparePart":
+                        mPosition = position;
+//                        if (action == -1){
+//                            sparePartReceiveEntity.sparePartId = null;
+//                        }else {
+                        modify = true;
+                        selectSparePart();
+//                        }
+                        break;
                     case "itemViewDelBtn":
                         dgDeletedIds.add(sparePartReceiveEntity.id);
                         refreshListController.refreshComplete(sparePartReceiveEntityList);
@@ -165,7 +187,15 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
 
     }
 
-    private Bundle genAddDataList(Bundle bundle) {
+    private void selectSparePart() {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constant.IntentKey.IS_SPARE_PART_REF, false);
+        // 带入已添加备件，检验重复添加
+        bundle = genAddDataList(bundle);
+        IntentRouter.go(context, Constant.Router.SPARE_PART_REF, bundle);
+    }
+
+    public Bundle genAddDataList(Bundle bundle) {
         ArrayList<String> addedSPList = new ArrayList<>();
         for (SparePartReceiveEntity sparePartReceiveEntity : sparePartReceiveEntityList){
             if (sparePartReceiveEntity.sparePartId != null) {
@@ -194,13 +224,19 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
             }
         }
         SparePartReceiveEntity sparePartReceiveEntity = new SparePartReceiveEntity();
-//        sparePartReceiveEntity.origDemandQuity = ;
 //        sparePartReceiveEntity.currDemandQuity = ;
         sparePartReceiveEntity.sparePartId = good;
-//        sparePartReceiveEntity.price =  ;
-//        sparePartReceiveEntity.total = ;
+        sparePartReceiveEntity.origDemandQuity = new BigDecimal(1).setScale(2,BigDecimal.ROUND_HALF_UP);
+        sparePartReceiveEntity.price = good.productCostPrice;
+        sparePartReceiveEntity.total = good.productCostPrice != null ? good.productCostPrice.multiply(sparePartReceiveEntity.origDemandQuity) : new BigDecimal(0);
 
-        sparePartReceiveEntityList.add(sparePartReceiveEntity);
+        if (modify){
+            SparePartReceiveEntity entityOld = sparePartReceiveEntityList.set(mPosition,sparePartReceiveEntity);
+            sparePartReceiveEntity.id = entityOld.id;
+        }else {
+            sparePartReceiveEntityList.add(sparePartReceiveEntity);
+        }
+
         refreshListController.refreshComplete(sparePartReceiveEntityList);
 
     }
@@ -208,6 +244,22 @@ public class SparePartApplyDetailList extends BaseRefreshRecyclerActivity<SpareP
     @Override
     public void listSparePartApplyDetailSuccess(SparePartReceiveListEntity entity) {
         sparePartReceiveEntityList = entity.result;
+        // 控制小数位数4
+        for (SparePartReceiveEntity sparePartReceiveEntity : sparePartReceiveEntityList){
+            if (sparePartReceiveEntity.origDemandQuity != null){
+                sparePartReceiveEntity.origDemandQuity = Util.bigDecimalScale(sparePartReceiveEntity.origDemandQuity,2);
+            }
+            if (sparePartReceiveEntity.currDemandQuity != null){
+                sparePartReceiveEntity.currDemandQuity = Util.bigDecimalScale(sparePartReceiveEntity.currDemandQuity,2);
+            }
+            if (sparePartReceiveEntity.price != null){
+                sparePartReceiveEntity.price = Util.bigDecimalScale(sparePartReceiveEntity.price,2);
+            }
+            if (sparePartReceiveEntity.total != null){
+                sparePartReceiveEntity.total = Util.bigDecimalScale(sparePartReceiveEntity.total,2);
+            }
+
+        }
         refreshListController.refreshComplete(entity.result);
     }
 

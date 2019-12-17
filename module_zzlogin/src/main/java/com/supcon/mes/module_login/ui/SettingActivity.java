@@ -66,6 +66,9 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
     @BindByTag("pwdSettings")
     CustomArrowView pwdSettings;
+    @BindByTag("tvSizeChangeSettings")
+    CustomArrowView tvSizeChangeSettings;
+
 
     private PasswordController mPasswordController;
 
@@ -153,6 +156,7 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
         if (EamApplication.isIsLogin()) {
             pwdSettings.setVisibility(View.VISIBLE);
+            tvSizeChangeSettings.setVisibility(View.VISIBLE);
         }
 
     }
@@ -190,6 +194,7 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
         });
 
         pwdSettings.setOnClickListener(v -> showPwdDialog());
+        tvSizeChangeSettings.setOnClickListener(v -> IntentRouter.go(context, Constant.Router.TEXT_SIZE_SETTING));
 
         SupOSSwitchBtn.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
@@ -430,12 +435,10 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
             if (EamApplication.isHailuo()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hl);
                 bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hl);
-            }
-            else if(EamApplication.isYNSW()){
+            } else if (EamApplication.isYNSW()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_ynsw);
                 bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo);
-            }
-            else if(EamApplication.isHongshi()){
+            } else if (EamApplication.isHongshi()) {
                 bundle.putInt(Constant.IntentKey.LOGIN_BG_ID, R.drawable.bg_login_hs);
                 bundle.putInt(Constant.IntentKey.LOGIN_LOGO_ID, R.drawable.ic_login_logo_hs);
             }

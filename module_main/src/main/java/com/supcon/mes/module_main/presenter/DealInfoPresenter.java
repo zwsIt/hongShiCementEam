@@ -11,9 +11,9 @@ import io.reactivex.functions.Function;
 
 public class DealInfoPresenter extends DealInfoContract.Presenter {
     @Override
-    public void listDealInfo(String moduleName, String tableName, Long tableInfoId) {
+    public void listDealInfo(String url, Long tableInfoId) {
         mCompositeSubscription.add(
-                MainClient.getDealInfoList(moduleName,tableName,tableInfoId)
+                MainClient.getDealInfoList(url,tableInfoId)
                 .onErrorReturn(new Function<Throwable, List>() {
                     @Override
                     public List apply(Throwable throwable) throws Exception {

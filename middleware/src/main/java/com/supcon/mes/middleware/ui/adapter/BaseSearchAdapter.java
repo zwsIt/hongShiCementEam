@@ -2,11 +2,13 @@ package com.supcon.mes.middleware.ui.adapter;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.mbap.view.CustomCheckBox;
 import com.supcon.mes.mbap.view.CustomCircleTextImageView;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -72,8 +74,8 @@ public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSea
         @BindByTag("itemName")
         TextView itemName;
         
-        @BindByTag("itemId")
-        TextView itemId;
+        @BindByTag("itemCode")
+        CustomTextView itemCode;
         
         @BindByTag("itemCheckBox")
         CustomCheckBox itemCheckBox;
@@ -98,7 +100,7 @@ public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSea
             
             itemView.setOnClickListener(v -> onClick(itemView));
             itemName.setOnClickListener(this);
-            itemId.setOnClickListener(this);
+            itemCode.setOnClickListener(this);
             itemProperty.setOnClickListener(this);
             itemCheckBox.setOnCheckedListener(isChecked -> onClick(itemCheckBox));
         }
@@ -107,7 +109,19 @@ public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSea
         protected int layoutId() {
             return R.layout.item_base_search_new;
         }
-        
+
+        @Override
+        protected void initView() {
+            super.initView();
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) itemProperty.getLayoutParams();
+            if (isMulti){
+                layoutParams.setMarginEnd(DisplayUtil.dip2px(40,context));
+            }else {
+                layoutParams.setMarginEnd(0);
+            }
+            itemProperty.setLayoutParams(layoutParams);
+        }
+
         @Override
         protected void update(CommonSearchEntity data) {
             if(data== null) return;
@@ -116,8 +130,8 @@ public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSea
             final int pos = getAdapterPosition();
             
             Objects.requireNonNull(itemName).setText(data.getSearchName());
-            Objects.requireNonNull(itemId).setText(data.getSearchId());
-            Objects.requireNonNull(itemProperty).setValue(data.getSearchProperty());
+            Objects.requireNonNull(itemCode).setContent(data.getSearchCode());
+            Objects.requireNonNull(itemProperty).setContent(data.getSearchProperty());
             
             final String currLetter = data.getHeaderLetter();
             final String lastLetter = pos <= 0 ? null : getItem(pos - 1).getHeaderLetter();

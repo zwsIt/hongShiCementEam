@@ -27,10 +27,12 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.JWXItem;
 import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
+import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
 import com.supcon.mes.middleware.model.bean.RefLubricateEntity;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
+import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.Util;
@@ -76,7 +78,6 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
 
     protected List<LubricateOilsEntity> mEntities = new ArrayList<>();
     protected boolean editable = false, isAdd = false;
-    protected CustomDialog mCustomDialog;
     private String tableStatus;
     private SinglePickController mSinglePickController;
     private List<SystemCodeEntity> oilTypeList = new ArrayList<>();  //加换油
@@ -277,6 +278,16 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
 
         mEntities.add(lubricateOilsEntity);
         refreshListController.refreshComplete(mEntities);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateLubPart(PositionEvent positionEvent){
+        if (positionEvent.getPosition() == -1) return;
+        if (positionEvent.getObj() instanceof LubricatingPartEntity){
+            mLubricateOilsAdapter.getItem(positionEvent.getPosition()).lubricatingPart = ((LubricatingPartEntity)positionEvent.getObj()).getLubPart();
+            mLubricateOilsAdapter.notifyItemChanged(positionEvent.getPosition());
+        }
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

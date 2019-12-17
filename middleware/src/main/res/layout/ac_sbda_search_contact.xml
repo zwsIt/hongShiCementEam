@@ -16,7 +16,6 @@
     <!--<include layout="@layout/ly_search_titlebar"/>-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/white"
         android:layout_weight="1"
         android:layout_height="0dp">
 
@@ -31,7 +30,7 @@
         <com.supcon.mes.middleware.ui.view.PinyinSearchBar
             android:id="@+id/pinyinSearchBar"
             android:layout_width="30dp"
-            android:layout_height="500dp"
+            android:layout_height="match_parent"
             android:background="@color/white"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

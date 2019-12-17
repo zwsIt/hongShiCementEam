@@ -396,7 +396,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
         mViberDialog.bindClickListener(R.id.viberFinishBtn, v -> {
 
             mViberController.stopTest();
-            xjWorkItemEntity.realValue = mViberController.getData();
+            xjWorkItemEntity.result = mViberController.getData();
             mOLXJWorkListAdapter.notifyItemChanged(position);
         }, true).show();
 
@@ -660,7 +660,9 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
             }
             xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
             xjWorkItemEntity.isFinished = true;
-            xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+            SystemCodeEntity linkState = new SystemCodeEntity();
+            linkState.setId(OLXJConstant.MobileWiLinkState.FINISHED_STATE);
+            xjWorkItemEntity.setLinkState(linkState);
             xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
             //处理结论自动判定
             if (xjWorkItemEntity.autoJudge) {
@@ -845,7 +847,9 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
             xjWorkItemEntity.skipReasonName = passReasonInfo.value;
             xjWorkItemEntity.realispass = true;
             xjWorkItemEntity.isFinished = true;
-            xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.SKIP_STATE;//跳检
+            SystemCodeEntity linkState = new SystemCodeEntity();
+            linkState.setId(OLXJConstant.MobileWiLinkState.SKIP_STATE);
+            xjWorkItemEntity.setLinkState(linkState);//跳检
             xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
             xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
             xjWorkItemEntity.conclusionID = null;
@@ -1153,7 +1157,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                     if (workItemEntity.getPrioritySort() == 1) {
                         xjWorkItemTopEntities.add(workItemEntity);
                     } else {
-                        if (eamIdList.contains(workItemEntity.eamID.id) && eamIdList.size() > 1 && !xjWorkItemEntities.get(xjWorkItemEntities.size()-1).eamID.id.equals(workItemEntity.eamID.id)){
+                        if (workItemEntity.eamID != null && eamIdList.contains(workItemEntity.eamID.id) && eamIdList.size() > 1 && !xjWorkItemEntities.get(xjWorkItemEntities.size()-1).eamID.id.equals(workItemEntity.eamID.id)){
                             //若包含已归类的设备标题，则插在改设备归类的下面
                             for (int i = xjWorkItemEntities.size() -1 ;i > 0;i--){
                                 if (xjWorkItemEntities.get(i).eamID != null && xjWorkItemEntities.get(i).eamID.id.equals(workItemEntity.eamID.id)){

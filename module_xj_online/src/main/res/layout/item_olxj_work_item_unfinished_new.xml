@@ -129,7 +129,8 @@
                 android:tag="ufItemDirectDealBtn"
                 android:text="处理"
                 android:textColor="@color/customBlue4"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="gone"/>
             <Button
                 android:id="@+id/ufItemEndBtn"
                 android:layout_width="50dp"

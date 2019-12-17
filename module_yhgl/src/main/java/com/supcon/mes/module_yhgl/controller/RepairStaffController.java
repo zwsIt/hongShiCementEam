@@ -37,15 +37,14 @@ import java.util.List;
  */
 @Presenter(RepairStaffPresenter.class)
 public class RepairStaffController extends BaseViewController implements RepairStaffContract.View, RepairStaffAPI {
-    //    private CustomListWidget<RepairStaffEntity> mCustomListWidget;
+    //    private CustomListWidget<RepairStaffEntity> repairStaffListWidget;
     private List<RepairStaffEntity> staffEntities = new ArrayList<>();
 
-    private long id = -1;
     private boolean isEditable;
     private YHEntity mYHEntity;
 
     @BindByTag("repairStaffListWidget")
-    CustomListWidget<RepairStaffEntity> mCustomListWidget;
+    CustomListWidget<RepairStaffEntity> repairStaffListWidget;
 
     public RepairStaffController(View rootView) {
         super(rootView);
@@ -56,15 +55,12 @@ public class RepairStaffController extends BaseViewController implements RepairS
         super.onInit();
         EventBus.getDefault().register(this);
         mYHEntity = (YHEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY);
-        if (mYHEntity != null) {
-            this.id = mYHEntity.id;
-        }
     }
 
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new RepairStaffAdapter(context, false));
+        repairStaffListWidget.setAdapter(new RepairStaffAdapter(context, false));
     }
 
     @Override
@@ -78,14 +74,14 @@ public class RepairStaffController extends BaseViewController implements RepairS
                 repairStaffEntity.workHour = repairStaffEntity.workHour.setScale(2, BigDecimal.ROUND_HALF_UP);
             }
         }
-        if (mCustomListWidget != null) {
-//            mCustomListWidget.setData(entity.result);
-//            mCustomListWidget.setTotal(entity.result.size());
-            mCustomListWidget.setData(entity.result);
+        if (repairStaffListWidget != null) {
+//            repairStaffListWidget.setData(entity.result);
+//            repairStaffListWidget.setTotal(entity.result.size());
+            repairStaffListWidget.setData(entity.result);
             if (isEditable) {
-                mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
+                repairStaffListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + entity.result.size() + ")");
+                repairStaffListWidget.setShowText("查看 (" + entity.result.size() + ")");
             }
         }
         EventBus.getDefault().post(new ListEvent("repairStaff", staffEntities));
@@ -94,7 +90,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
     @Override
     public void initListener() {
         super.initListener();
-        mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
+        repairStaffListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
@@ -141,7 +137,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
     }
 
     public void setCustomListWidget(CustomListWidget<RepairStaffEntity> customListWidget) {
-        this.mCustomListWidget = customListWidget;
+        this.repairStaffListWidget = customListWidget;
     }
 
 
@@ -153,13 +149,14 @@ public class RepairStaffController extends BaseViewController implements RepairS
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(RepairStaffAPI.class).listRepairStaffList(id);
+        if (mYHEntity.id != null){
+            listRepairStaffList(mYHEntity.id);
+        }
     }
 
     public void setYHEntity(YHEntity mYHEntity) {
         this.mYHEntity = mYHEntity;
-        this.id = mYHEntity.id;
-        presenterRouter.create(RepairStaffAPI.class).listRepairStaffList(id);
+        listRepairStaffList(mYHEntity.id);
     }
 
     @Override
@@ -196,14 +193,14 @@ public class RepairStaffController extends BaseViewController implements RepairS
         if (list == null)
             return;
         this.staffEntities = list;
-        if (mCustomListWidget != null) {
-//            mCustomListWidget.setData(list);
-//            mCustomListWidget.setTotal(list.size());
-            mCustomListWidget.setData(list);
+        if (repairStaffListWidget != null) {
+//            repairStaffListWidget.setData(list);
+//            repairStaffListWidget.setTotal(list.size());
+            repairStaffListWidget.setData(list);
             if (isEditable) {
-                mCustomListWidget.setShowText("编辑 (" + list.size() + ")");
+                repairStaffListWidget.setShowText("编辑 (" + list.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + list.size() + ")");
+                repairStaffListWidget.setShowText("查看 (" + list.size() + ")");
             }
         }
     }
@@ -214,7 +211,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
     }
 
     public void clear() {
-        mCustomListWidget.clear();
+        repairStaffListWidget.clear();
     }
 }
 

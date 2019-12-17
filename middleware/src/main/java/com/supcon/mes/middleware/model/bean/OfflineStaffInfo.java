@@ -18,7 +18,7 @@ public class OfflineStaffInfo extends BaseEntity implements CommonSearchEntity {
     public Long id;
     public String name;
     public String code;
-    public long departmentID;
+    public Long departmentID;
     public String namePinyin;
 
     @Override
@@ -32,8 +32,13 @@ public class OfflineStaffInfo extends BaseEntity implements CommonSearchEntity {
     }
 
     @Override
-    public String getSearchProperty() {
+    public String getSearchCode() {
         return code;
+    }
+
+    @Override
+    public String getSearchProperty() {
+        return String.valueOf(departmentID);
     }
 
     @Override
@@ -43,8 +48,8 @@ public class OfflineStaffInfo extends BaseEntity implements CommonSearchEntity {
 
     public String host = MBapApp.getIp(); //ip 或域名,在初始化时直接使用对应的当前IP进行操作
 
-    @Generated(hash = 1784534272)
-    public OfflineStaffInfo(Long id, String name, String code, long departmentID,
+    @Generated(hash = 2075386714)
+    public OfflineStaffInfo(Long id, String name, String code, Long departmentID,
             String namePinyin, String host) {
         this.id = id;
         this.name = name;
@@ -57,6 +62,7 @@ public class OfflineStaffInfo extends BaseEntity implements CommonSearchEntity {
     @Generated(hash = 183710187)
     public OfflineStaffInfo() {
     }
+    
 
     public Long getId() {
         return this.id;
@@ -82,7 +88,7 @@ public class OfflineStaffInfo extends BaseEntity implements CommonSearchEntity {
         this.code = code;
     }
 
-    public long getDepartmentID() {
+    public Long getDepartmentID() {
         return this.departmentID;
     }
 
@@ -104,6 +110,10 @@ public class OfflineStaffInfo extends BaseEntity implements CommonSearchEntity {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public void setDepartmentID(Long departmentID) {
+        this.departmentID = departmentID;
     }
 
 

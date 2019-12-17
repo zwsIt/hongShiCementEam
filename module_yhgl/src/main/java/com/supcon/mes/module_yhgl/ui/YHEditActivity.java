@@ -22,7 +22,6 @@ import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.mes.mbap.MBapApp;
-import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.beans.LinkEntity;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
@@ -55,7 +54,7 @@ import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.middleware.model.bean.EamType;
+import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
 import com.supcon.mes.middleware.model.bean.Staff;
@@ -65,9 +64,9 @@ import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
+import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
-import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
@@ -95,7 +94,7 @@ import com.supcon.mes.module_yhgl.model.event.RepairStaffEvent;
 import com.supcon.mes.module_yhgl.model.event.SparePartEvent;
 import com.supcon.mes.module_yhgl.presenter.YHListPresenter;
 import com.supcon.mes.module_yhgl.presenter.YHSubmitPresenter;
-import com.supcon.mes.module_yhgl.util.FieldHepler;
+import com.supcon.mes.middleware.util.FieldHelper;
 import com.supcon.mes.module_yhgl.util.YHGLMapManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -207,7 +206,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private Map<String, RepairGroupEntity> mRepairGroups;
 
     private LinkController mLinkController;
-    private List<GalleryBean> pics = new ArrayList<>();
     private boolean isCancel = false;
     private long deploymentId;
     private boolean hits;
@@ -228,7 +226,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private String sparePartListStr;
     private String maintenanceListStr;
     private YHEntity oldYHEntity;
-    private String tableNo;
     private List<SystemCodeEntity> wxTypeEntities;
     private List<SystemCodeEntity> yhPriorityEntity;
     private List<SystemCodeEntity> yhTypeEntities;
@@ -263,9 +260,15 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         EventBus.getDefault().register(this);
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
-        mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY); // 隐患单列表、隐患统计列表传参
-        tableNo = getIntent().getStringExtra(Constant.IntentKey.TABLENO); // 工作提醒待办传参
+        mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY); // 制定、隐患单列表、隐患统计列表、工作提醒待办传参
         deploymentId = getIntent().getLongExtra(DEPLOYMENT_ID, 0L);
+
+        if (TextUtils.isEmpty(mYHEntity.tableNo)) { // 制定时赋值
+            oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
+            iniTransition();
+            yhEditFindStaff.setValue(mYHEntity.findStaffID != null ? mYHEntity.findStaffID.name : "");
+            yhEditFindTime.setDate(mYHEntity.findTime != null ? DateUtil.dateTimeFormat(mYHEntity.findTime) : "");
+        }
 
         mSparePartController = getController(SparePartController.class);
         mSparePartController.setEditable(true);
@@ -324,16 +327,16 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("隐患编辑");
+        mYHEntity.downStream = new SystemCodeEntity();
     }
 
     public void updateInitView() {
         if (mYHEntity == null) return;
         //工作流初始化
         iniTransition();
-
-        mYHEntity.downStream = new SystemCodeEntity();
-//        oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
-
+        if (mYHEntity.downStream == null) {
+            mYHEntity.downStream = new SystemCodeEntity();
+        }
         if (null != mYHEntity.eamID && !mYHEntity.eamID.checkNil()) {
             yhEditArea.setEditable(false);
         }
@@ -362,7 +365,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     /**
      * 加载隐患图片
-     *
      */
     private void initPic() {
         if (mYHEntity != null) {
@@ -374,7 +376,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
                 @Override
                 public void onSuccess(AttachmentListEntity result) {
-                    if (result.result.size() > 0){
+                    if (result.result.size() > 0) {
                         mYHEntity.attachmentEntities = result.result;
                         downloadAttachment(mYHEntity.attachmentEntities);
                     }
@@ -384,7 +386,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     }
 
     private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
-        mAttachmentDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_faultInfo", result -> yhGalleryView.setGalleryBeans(result));
+        mAttachmentDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_faultInfo", result -> {
+            yhGalleryView.setGalleryBeans(result);
+        });
     }
 
     /**
@@ -455,7 +459,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         super.initListener();
 
         RxView.clicks(leftBtn)
-                .throttleFirst(2, TimeUnit.SECONDS)
+                .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
 
         yhEditArea.setOnChildViewClickListener((childView, action, obj) -> {
@@ -582,7 +586,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         yhEditFindTime.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1) {
-                mYHEntity.findTime = 0;
+                mYHEntity.findTime = 0L;
             } else {
                 mDatePickController
                         .listener((year, month, day, hour, minute, second) -> {
@@ -634,7 +638,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 });
 
         RxView.clicks(ysBtn)
-                .throttleFirst(1, TimeUnit.SECONDS)
+                .throttleFirst(2, TimeUnit.SECONDS)
                 .filter(new Predicate<Object>() {
                     @Override
                     public boolean test(Object o) throws Exception {
@@ -681,18 +685,14 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             public void onRefresh() {
                 Map<String, Object> queryParam = new HashMap<>();
 
-                if (!TextUtils.isEmpty(tableNo)) {
-                    queryParam.put(Constant.BAPQuery.TABLE_NO, tableNo);
-                }
-
-                if (mYHEntity != null && !TextUtils.isEmpty(mYHEntity.tableNo)) {
+                if (mYHEntity != null && !TextUtils.isEmpty(mYHEntity.tableNo)) { // 隐患列表、隐患统计列表
                     queryParam.put(Constant.BAPQuery.TABLE_NO, mYHEntity.tableNo);
                 }
 
                 if (queryParam.containsKey(Constant.BAPQuery.TABLE_NO)) {
                     presenterRouter.create(YHListAPI.class).queryYHList(1, queryParam);
                 } else {
-                    refreshController.refreshComplete();
+                    refreshController.refreshComplete(); // 制定单据
                 }
             }
         });
@@ -898,6 +898,16 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         dgDeletedIds_maintenance = event.getDgDeletedIds();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateLubPart(PositionEvent positionEvent) {
+        if (positionEvent.getPosition() == -1) return;
+        if (positionEvent.getObj() instanceof LubricatingPartEntity) {
+            mLubricateOilsController.getLubricateOilsEntities().get(positionEvent.getPosition()).lubricatingPart = ((LubricatingPartEntity) positionEvent.getObj()).getLubPart();
+            mLubricateOilsController.getLubricateOilsAdapter().notifyItemChanged(positionEvent.getPosition());
+        }
+
+    }
+
 
     private void iniTransition() {
 
@@ -915,13 +925,13 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         for (T entity : entities) {
 
-            String name = FieldHepler.getFieldValue(entity.getClass(), entity, "name");
+            String name = FieldHelper.getFieldValue(entity.getClass(), entity, "name");
             if (!TextUtils.isEmpty(name)) {
                 map.put(name, entity);
                 continue;
             }
 
-            String value = FieldHepler.getFieldValue(entity.getClass(), entity, "value");
+            String value = FieldHelper.getFieldValue(entity.getClass(), entity, "value");
             if (!TextUtils.isEmpty(value)) {
                 map.put(value, entity);
             }
@@ -974,37 +984,37 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 //            return false;
 //        }
         if (mYHEntity.findStaffID == null || null == mYHEntity.findStaffID.id) {
-            SnackbarHelper.showError(rootView, "请填写发现人！");
+            ToastUtils.show(context, "请填写发现人！");
             return false;
         }
         if (mYHEntity.findTime == 0) {
-            SnackbarHelper.showError(rootView, "请填写发现时间！");
+            ToastUtils.show(context, "请填写发现时间！");
             return false;
         }
 
         if (mYHEntity.priority == null) {
-            SnackbarHelper.showError(rootView, "请选择优先级！");
+            ToastUtils.show(context, "请选择优先级！");
             return false;
         }
 
         //判断必填字段是否为空
         if (mYHEntity.eamID == null || mYHEntity.eamID.code == null) {
-            SnackbarHelper.showError(rootView, "请选择设备");
+            ToastUtils.show(context, "请选择设备！");
             return false;
         }
 
         if (mYHEntity.faultInfoType == null) {
-            SnackbarHelper.showError(rootView, "请选择隐患类型！");
+            ToastUtils.show(context, "请选择隐患类型！");
             return false;
         }
 
         if (TextUtils.isEmpty(yhEditDescription.getInput())) {
-            SnackbarHelper.showError(rootView, "请填写隐患现象！");
+            ToastUtils.show(context, "请填写隐患现象！");
             return false;
         }
 
         if (mYHEntity.repairType == null) {
-            SnackbarHelper.showError(rootView, "请选择维修类型！");
+            ToastUtils.show(context, "请选择维修类型！");
             return false;
         }
         return true;
@@ -1105,9 +1115,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         if (mYHEntity.remark != null)
             map.put("faultInfo.remark", mYHEntity.remark);
 
-        map.put("linkId", mYHEntity.tableInfoId != 0 ? mYHEntity.tableInfoId : "");
+        map.put("linkId", mYHEntity.tableInfoId != null ? mYHEntity.tableInfoId : "");
 //        map.put("dlTableInfoId",                mYHEntity.tableInfoId);
-        map.put("tableInfoId", mYHEntity.tableInfoId != 0 ? mYHEntity.tableInfoId : "");
+        map.put("tableInfoId", mYHEntity.tableInfoId != null ? mYHEntity.tableInfoId : "");
         if (workFlowEntities != null) {//保存为空
             map.put("workFlowVar.outcomeMapJson", workFlowEntities);
             map.put("workFlowVar.dec", workFlowEntity.dec);
@@ -1283,7 +1293,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Override
     public void queryYHListFailed(String errorMsg) {
-        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
+        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
         refreshController.refreshComplete();
     }
 

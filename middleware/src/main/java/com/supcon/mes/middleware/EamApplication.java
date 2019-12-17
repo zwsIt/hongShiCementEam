@@ -2,6 +2,8 @@ package com.supcon.mes.middleware;
 
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
@@ -35,6 +37,7 @@ public class EamApplication extends MBapApp {
     private static DaoSession daoSession;
     private static AccountInfo accountInfo; //用户信息
     private static Staff me;
+    public static float fontSizeScale;
 
     public static AloneManager getAloneManager() {
         return mAloneManager;
@@ -88,8 +91,12 @@ public class EamApplication extends MBapApp {
         initRouter();
         initUMeng();
         initIP();
+        initTvSize();
     }
 
+    private void initTvSize() {
+        fontSizeScale = SharedPreferencesUtils.getParam(this, Constant.SPKey.TEXT_SIZE_SETTING, 0.0f);
+    }
 
 
     private void initUMeng() {
@@ -279,5 +286,19 @@ public class EamApplication extends MBapApp {
             zzUrl = SharedPreferencesUtils.getParam(getAppContext(), Constant.ZZ.URL, "");
         }
         return zzUrl;
+    }
+
+
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = res.getConfiguration();
+        if (fontSizeScale > 0.5) {
+            config.fontScale = fontSizeScale;
+        } else {
+            config.fontScale= 1;
+        }
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
     }
 }

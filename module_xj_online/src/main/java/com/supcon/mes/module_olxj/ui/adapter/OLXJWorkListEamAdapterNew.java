@@ -30,6 +30,7 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.util.FaultPicHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
@@ -197,7 +198,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                     xjWorkItemEntity.realRemark = ufItemRemark.getInput().trim();
                     xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
                     xjWorkItemEntity.isFinished = true;
-                    xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+                    SystemCodeEntity linkState = new SystemCodeEntity();
+                    linkState.setId(OLXJConstant.MobileWiLinkState.FINISHED_STATE);
+                    xjWorkItemEntity.setLinkState(linkState);
                     xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
 //                    EventBus.getDefault().post(new RefreshEvent());
                     onItemChildViewClick(ufItemEndBtn, 0, xjWorkItemEntity);
@@ -224,7 +227,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                     xjWorkItemEntity.realRemark = ufItemRemark.getInput().trim();
                     xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
                     xjWorkItemEntity.isFinished = true;
-                    xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+                    SystemCodeEntity linkState = new SystemCodeEntity();
+                    linkState.setId(OLXJConstant.MobileWiLinkState.FINISHED_STATE);
+                    xjWorkItemEntity.setLinkState(linkState);
                     xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
                     xjWorkItemEntity.isEffective = true; // 直接处理的巡检项
                     onItemChildViewClick(ufItemDirectDealBtn, 0, xjWorkItemEntity);
@@ -405,12 +410,12 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                     }
                 }
                 if (isExpand) {
-                    ufItemPriority.setText("点击关闭展开");
+                    ufItemPriority.setText("点击关闭");
                     Drawable drawable = context.getResources().getDrawable(R.drawable.ic_sq);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     ufItemPriority.setCompoundDrawables(null, null, drawable, null);
                 } else {
-                    ufItemPriority.setText("点击展开更多");
+                    ufItemPriority.setText("点击展开");
                     Drawable drawable = context.getResources().getDrawable(R.drawable.ic_zk);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     ufItemPriority.setCompoundDrawables(null, null, drawable, null);

@@ -36,7 +36,7 @@ public class OLXJTempTaskListPresenter extends OLXJTempTaskContract.Presenter {
 
         Map<String, Object> paramsName = new HashMap<>();
         paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,MOBILEEAM_POTROL_TASKWFS,RESSTAFFID");
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "base_staff,ID,MOBILEEAM_POTROL_TASKWFS,RESSTAFFID");
         fastQueryCondEntity.subconds.add(joinSubcondEntity);
 
         Map<String, Object> pageQueryParams = new HashMap<>();

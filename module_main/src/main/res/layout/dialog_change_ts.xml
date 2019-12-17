@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shap_fillet_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:text="新的字体发生改变需要重新启动应用才能生效"
+        android:textColor="@color/black"
+        android:textSize="@dimen/fontSize_17sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/blueBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_common"
+            android:text="确定"
+            android:textColor="@color/customBlue4"
+            android:textSize="@dimen/fontSize_16sp" />
+
+        <Button
+            android:id="@+id/grayBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_common"
+            android:text="取消"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/fontSize_16sp" />
+
+    </LinearLayout>
+</LinearLayout>

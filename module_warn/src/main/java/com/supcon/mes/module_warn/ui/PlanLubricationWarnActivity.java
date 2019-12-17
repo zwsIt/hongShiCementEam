@@ -224,6 +224,7 @@ public class PlanLubricationWarnActivity extends BaseRefreshRecyclerActivity<Dai
         ToastUtils.show(this, "(" + code + ")设备无待执行润滑任务!");
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void getLubricationsSuccess(DailyLubricateTaskListEntity entity) {
         if (entity.pageNo == 1) {

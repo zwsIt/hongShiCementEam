@@ -21,6 +21,8 @@ public class Good extends BaseEntity {
     public Unit productBaseUnit;
     public float pieceNum;
     public BigDecimal productCostPrice; // 参考采购价
+    public SystemCodeEntity goodState; // 物品状态
+    public BigDecimal standingCrop; // 现存量
 
     public Unit getProductBaseUnit() {
         if (productBaseUnit == null) {

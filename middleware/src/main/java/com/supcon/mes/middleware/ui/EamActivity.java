@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit;
 @Presenter(value = EamPresenter.class)
 public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity> implements EamContract.View {
     @BindByTag("contentView")
-    RecyclerView recyclerView;
+    RecyclerView contentView;
     /**
      * 顶部模糊搜索栏
      */
@@ -150,11 +150,11 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         titleBar.setTitleText("设备搜索");
         titleBar.disableRightBtn();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(1, context)));
-        recyclerView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
-        recyclerView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-        recyclerView.setScrollBarSize(2);
+        contentView.setLayoutManager(new LinearLayoutManager(context));
+        contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(1, context)));
+        contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
+        contentView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+        contentView.setScrollBarSize(2);
         titleSearchView.setInput(eamCode);
         rightBtn_1.setVisibility(isMulti ? View.VISIBLE : View.GONE);
     }
@@ -246,7 +246,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         pinyinSearchBar.setOnWordsChangeListener(word -> {
             final int pos = mBaseSearchAdapter.getPos(word);
             if (pos != -1) {
-                recyclerView.scrollToPosition(pos);
+                contentView.scrollToPosition(pos);
             }
         });
 

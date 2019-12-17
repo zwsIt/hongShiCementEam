@@ -69,18 +69,8 @@ public interface Constant {
 
         String YXJL_LIST = "YXJLList";
         String YXJL_EDIT = "YXJL_EDIT";
-        String YXJL_LOCAL = "YXJL_LOCAL";
-        String YXJL_VIEW = "YXJL_VIEW";
-        String YXJL_DEVICE = "YXJLDevice";
-        String YXJL_DEVICE_VIEW = "YXJL_DEVICE_VIEW";
 
         String ADD_DEVICE = "AddDevice";
-
-        String QXGL_LIST = "QXGLList";
-        String QXGL_EDIT = "QXGL_EDIT";         //缺陷管理编辑页面
-        String QXGL_APPOVE = "QXGL_APPROVE";    //缺陷管理审批页面，可以编辑
-        String QXGL_LOACL = "QXGL_LOACL";       //缺陷管理本地离线编辑
-        String QXGL_VIEW = "QXGL_VIEW";         //缺陷管理查看页面
 
         String WXGD_LIST = "WXGDList";  //维修工单列表
         String WXGD_STATISTICS = "WXGD_STATISTICS";//工单统计
@@ -117,7 +107,6 @@ public interface Constant {
 
         String SBDA_LIST = "SBDAList";            //设备档案列表页面
         String SBDA_VIEW = "SBDAListView";    //设备档案列表点击进入详细信息界面
-        //        String SBDA_SEARCH_STAFF = "SDBASearchContact"; //搜索联系人列表
         String COMMON_SEARCH = "COMMON_SEARCH";
 
         //参照
@@ -202,6 +191,15 @@ public interface Constant {
         String SPARE_PART_APPLY_SEND_EDIT = "SPARE_PART_APPLY_SEND_EDIT"; // 备件领用申请发货
         String SPARE_PART_APPLY_VIEW = "SPARE_PART_APPLY_VIEW"; // 备件领用申请查看
         String SPARE_PART_APPLY_DETAIL_LIST = "SPARE_PART_APPLY_DETAIL_LIST"; // 备件领用申请明细list
+        String LUBRICATE_PART_REF = "LUBRICATE_PART_REF"; // 润滑部位参照页面
+
+        String TEXT_SIZE_SETTING = "TEXT_SIZE_SETTING";   //字体大小设置
+        String EAM_TYPE_REF = "EAM_TYPE_REF"; // 设备类型参照列表
+
+        String TSD_COMMON = "TSD_COMMON"; // 停送电
+        String OVERHAUL_WORKTICKET_LIST = "OVERHAUL_WORKTICKET_LIST"; // 检修工作票list
+        String OVERHAUL_WORKTICKET_EDIT = "OVERHAUL_WORKTICKET_EDIT"; // 检修工作票编辑
+        String OVERHAUL_WORKTICKET_VIEW = "OVERHAUL_WORKTICKET_VIEW"; // 检修工作票查看
     }
 
 
@@ -326,6 +324,8 @@ public interface Constant {
         String PENDING_ID = "PENDING_ID";
         String STATISTIC_SORCE = "STATISTIC_SORCE"; // 报表统计跳转
         String ADD_DATA_LIST = "ADD_DATA_LIST"; // 已添加数据：备件、润滑、维保
+        String POSITION = "POSITION";
+        String HAZARD_CONTRL_POINT = "HAZARD_CONTRL_POINT"; // 检修工作票：危险源控制点
     }
 
     interface FilterSearchParam {
@@ -391,6 +391,8 @@ public interface Constant {
         int SPARE_PART_RECEIVE = 15;//备件申领
         int TD = 16;//停电
         int SD = 17;//送电
+        int TSD_CANCEL = 18;//停送电作废
+        int TSD_APPROVAL = 19;//停送电审批
 
         int XJ_STATISTICS = 20;  //巡检统计
         int YH_STATISTICS = 21;  //隐患统计
@@ -398,6 +400,8 @@ public interface Constant {
         int STOP_POLICE = 23;  //停机报警
         int SPARE_PART_CONSUME_LEDGER = 24;  //零部件消耗台账
         int SPARE_PART_RECEIVE_RECORD = 25;  //备件领用记录
+        int TSD_STATISTICS = 26;//停送电统计
+        int JX_TICKETS = 27;// 检修作业票
 
         int ZZ = 99;  //知之应用
     }
@@ -446,6 +450,9 @@ public interface Constant {
 
         String JHXJ_TASK_ENTITY = "JHXJ_TASK_ENTITY";
         String LSXJ_TASK_ENTITY = "LSXJ_TASK_ENTITY";
+
+
+        String TEXT_SIZE_SETTING = "TEXT_SIZE_SETTING";
     }
 
 
@@ -521,6 +528,7 @@ public interface Constant {
         String PRODUCT_CODE = "PRODUCT_CODE";
         String PRODUCT_NAME = "PRODUCT_NAME";
         String PRODUCT_SPECIF = "PRODUCT_SPECIF";
+        String PRODUCT_MODEL = "PRODUCT_MODEL";
         String WARE_CODE = "WARE_CODE";
         String WARE_NAME = "WARE_NAME";
         String PLACE_SET_CODE = "PLACE_SET_CODE";
@@ -640,6 +648,10 @@ public interface Constant {
 
         String EAMTYPE_NAME = "EAMTYPE_NAME"; // 设备类型：名称
         String EAMTYPE_CODE = "EAMTYPE_CODE";//设备类型：编码
+        String LUB_PART = "LUB_PART"; // 润滑部位
+
+        String ALL_QUERY = "ALL_QUERY"; // 查询按钮
+        String PENDING_QUERY = "PENDING_QUERY"; // 仅查待办
     }
 
 
@@ -655,6 +667,7 @@ public interface Constant {
         String MOBILE_EAM055 = "mobileEAM055";
         String MOBILE_EAM054 = "mobileEAM054";
         String LINK_STATE = "LinkState";
+        String XJ_END_TASK = "mobileEAM_003"; // 巡检终止原因
 
         //隐患系统编码
         String QX_TYPE = "BEAM029";
@@ -672,6 +685,10 @@ public interface Constant {
         //停机报警
         String TJ_TYPE = "BEAM2009";
         String TJ_REASON = "BEAM2_2012";
+
+        // 检修作业票
+        String RISK_ACCEMENT = "WorkTicket_001"; // 风险评估
+        String HAZARD_CON_POINT = "WorkTicket_002"; // 危险源控制点
 
     }
 
@@ -803,11 +820,25 @@ public interface Constant {
         //        String TD_LIST = "/BEAMEle/onOrOff/onoroff/eleOffList.action?__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX2VsZU9mZkxpc3Rfc2VsZnw_&workFlowMenuCode=BEAMEle_1.0.0_onOrOff_eleOnList&openType=page&clientType=mobile";
         String TD_LIST = "/BEAMEle/onOrOff/onoroff/eleOffList.action?__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX2VsZU9mZkxpc3Rfc2VsZnw_&openType=page&workFlowMenuCode=BEAMEle_1.0.0_onOrOff_eleOffList&clientType=mobile";
         String SD_LIST = "/BEAMEle/onOrOff/onoroff/eleOnList.action?__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX2VsZU9uTGlzdF9zZWxmfA__&workFlowMenuCode=BEAMEle_1.0.0_onOrOff_eleOnList&openType=page&clientType=mobile";
-        String TSD_RECORD = "/BEAMEle/dataStatistic/dataStatistic/statisticList.action?__pc__=QkVBTUVsZV8xLjAuMF9kYXRhU3RhdGlzdGljX3N0YXRpc3RpY0xpc3Rfc2VsZnw_&date=1568618663077&openType=page&workFlowMenuCode=BEAMEle_1.0.0_dataStatistic_statisticList&clientType=mobile";
+        String TSD_RECORD = "/BEAMEle/dataStatistic/dataStatistic/statisticList.action?__pc__=QkVBTUVsZV8xLjAuMF9kYXRhU3RhdGlzdGljX3N0YXRpc3RpY0xpc3Rfc2VsZnw_&openType=page&workFlowMenuCode=BEAMEle_1.0.0_dataStatistic_statisticList&clientType=mobile";
+
+        // 新版停送电视图
+        String TD_LIST_NEW = "/BEAMEle/onOrOff/onoroff/eleOffList.action?__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX2VsZU9mZkxpc3Rfc2VsZnw_&workFlowMenuCode=BEAMEle_1.0.0_onOrOff_eleOffList&openType=page&clientType=mobile";
+        String SD_LIST_NEW = "/BEAMEle/onOrOff/onoroff/eleOnList.action?__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX2VsZU9uTGlzdF9zZWxmfA__&workFlowMenuCode=BEAMEle_1.0.0_onOrOff_eleOnList&openType=page&clientType=mobile";
+
+        // 停送电作废管理
+        String TSD_CANCEL = "/BEAMEle/onOrOff/onoroff/eleReject.action?__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX2VsZVJlamVjdF9zZWxmfA__&openType=page&workFlowMenuCode=BEAMEle_1.0.0_onOrOff_eleReject&clientType=mobile";
+        // 停送电审批管理
+        String TSD_APPROVAL = "/BEAMEle/approvalManage/approvalStaff/approvalList.action?__pc__=QkVBTUVsZV8xLjAuMF9hcHByb3ZhbE1hbmFnZV9hcHByb3ZhbExpc3Rfc2VsZnw_&openType=page&workFlowMenuCode=BEAMEle_1.0.0_approvalManage_approvalList&clientType=mobile";
+        // 停送电情况统计
+        String TSD_STATISTICS = "/BEAMEle/dataStatistic/dataStatistic/statisticList.action?__pc__=QkVBTUVsZV8xLjAuMF9kYXRhU3RhdGlzdGljX3N0YXRpc3RpY0xpc3Rfc2VsZnw_&openType=page&workFlowMenuCode=BEAMEle_1.0.0_dataStatistic_statisticList&clientType=mobile";
+        // 检修作业票测试
+        String JX_TICKETS = "/WorkTicket/workTicket/ohworkticket/workTicketEdit.action?pendingId=1001&__pc__=VGFza0V2ZW50XzBrMzZ1cDh8d29ya1RpY2tldEZX&tableInfoId=1000&entityCode=WorkTicket_8.20.3.03_workTicket&id=1000&clientType=mobile";
 
         String SCORE = "/BEAM/scoreStandard/soring/eamScoreView.action?clientType=mobile&eamID=";
         String XJ = "/mobileEAM/work/work/pointsList.action?taskId=";
         String FLOWVIEW = "/ec/workflow/flowViewH5.action?env=runtime&__res_html=true";
+
     }
 
     interface ZZ {
@@ -835,6 +866,9 @@ public interface Constant {
 
         String EDIT = "编辑";
         String DISPATCH = "派工";
+        String SPARE_PART_APPLY = "领用人申请";
+        String ELE_ON = "送点申请中";
+        String ELE_OFF = "停电申请中";
         String EXECUTE = "执行";
         String EXECUTE_NOTIFY = "执行,通知";
         String NOTIFY = "通知";
@@ -864,6 +898,9 @@ public interface Constant {
         String WORK_ALLOT_NEW_WF = "workAllotNewWF"; // 设备调拨
         String TEMP_WF = "tempWF"; // 临时任务
         String POTROL_TASK_WF = "potrolTaskWF"; // 点巡检任务
+        String ELE_OFF = "EleOnWorkFlow"; // 停电
+        String ELE_ON = "EleOn"; // 送电
+        String WORK_TICKET = "workTicketFW"; // 检修作业票
     }
 
     /**
@@ -877,6 +914,7 @@ public interface Constant {
         String DEAL_FAULT = "BEAM2004/06"; // 直接消缺
 
     }
+
     /**
      * 工单工作流状态
      */
@@ -902,8 +940,17 @@ public interface Constant {
     /**
      * EventBus 发送标识
      */
-    interface EventFlag{
+    interface EventFlag {
         String SPAD = "sparePartApplyDetail"; // 备件领用申请明细PT
+    }
+
+    /**
+     * 备件领用申请单据视图(注：海螺使用)
+     */
+    interface HSWorkTicketView {
+        String EDIT_URL = "/WorkTicket/workTicket/ohworkticket/workTicketEdit.action";// 编辑
+//        String SUBMIT_EDIT_URL = "/BEAM2/sparePart/apply/sparePartSubmitEdit.action"; //
+        String VIEW_URL = "/WorkTicket/workTicket/ohworkticket/workTicketView.action";// 查看
     }
 
 }

@@ -46,7 +46,7 @@ public class OLXJAreaRefController extends BaseDataController implements OLXJAre
 
 
     private void getAreaData(){
-        presenterRouter.create(OLXJAreaAPI.class).getOJXJAreaList(groupId, cuttentAreaPage);
+        presenterRouter.create(OLXJAreaAPI.class).getOJXJAreaList("",groupId, cuttentAreaPage);
     }
 
 

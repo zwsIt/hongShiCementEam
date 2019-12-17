@@ -16,7 +16,7 @@ public class DelayRecordPresenter extends DelayRecordContract.Presenter {
     @Override
     public void delayRecords(String url, Map<String, Object> params) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_DELAY_RECORDS,DELAY_EAM_ID");
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_DELAY_RECORDS,DELAY_EAM_ID");
         fastQuery.subconds.add(joinSubcondEntity);
         fastQuery.modelAlias = "delayRecords";
         mCompositeSubscription.add(EarlyWarnHttpClient.delayRecords(url, fastQuery, params)

@@ -36,7 +36,9 @@ import com.supcon.mes.middleware.util.Util;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,6 +74,7 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
     private boolean isSparePartRef;
     private Long eamID;
     private ArrayList<String> addedSPList; // 已添加数据
+    private String selectType; // 搜索字段
 
     @Override
     protected IListAdapter createAdapter() {
@@ -103,10 +106,15 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
     @Override
     protected void initView() {
         super.initView();
-        searchTitleBar.setTitleText(isSparePartRef?"常用备件参照":"备件参照");
+        searchTitleBar.setTitleText(isSparePartRef ? "常用备件参照" : "备件参照");
         searchTitleBar.disableRightBtn();
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "列表为空"));
         customSearchView.setHint("搜索");
+
+        searchTitleBar.setSelectedTypeEnabled(true);
+        searchTitleBar.setDefaultType("名称");
+        selectType = "备件名称";
+        searchTitleBar.setContentList(Arrays.asList("名称", "规格", "型号"));
     }
 
     @SuppressLint("CheckResult")
@@ -125,7 +133,7 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
         });
         refProductAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
             SparePartRefEntity item = refProductAdapter.getItem(position);
-            if (addedSPList.contains(item.getProductID().id.toString())){
+            if (addedSPList.contains(item.getProductID().id.toString())) {
                 ToastUtils.show(context, "请勿重复添加备件!");
                 return;
             }
@@ -134,11 +142,19 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
         });
         searchTitleBar.setOnExpandListener(isExpand -> {
             if (isExpand) {
-                customSearchView.setHint("备件名称");
-                customSearchView.setInputTextColor(R.color.hintColor);
+                customSearchView.setHint(selectType);
+//                customSearchView.setInputTextColor(R.color.hintColor);
             } else {
                 customSearchView.setHint("搜索");
                 customSearchView.setInputTextColor(R.color.black);
+            }
+        });
+        searchTitleBar.setOnTypeSelectListener(new CustomSearchView.OnTypeSelectListener() {
+            @Override
+            public void onTypeSelect(String type) {
+                selectType = "备件" + type;
+                customSearchView.setHint(selectType);
+                doSearch(customSearchView.getInput().trim());
             }
         });
         RxTextView.textChanges(customSearchView.editText())
@@ -158,18 +174,22 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
      * @author zhangwenshuai1 2018/9/19
      */
     private void doSearch(String searchContent) {
-        if (queryParam.containsKey(Constant.BAPQuery.PRODUCT_NAME)) {
-            queryParam.remove(Constant.BAPQuery.PRODUCT_NAME);
+        queryParam.remove(Constant.BAPQuery.PRODUCT_NAME);
+        queryParam.remove(Constant.BAPQuery.PRODUCT_SPECIF);
+        queryParam.remove(Constant.BAPQuery.PRODUCT_MODEL);
+        switch (selectType) {
+            case "备件名称":
+                queryParam.put(Constant.BAPQuery.PRODUCT_NAME, searchContent);
+                break;
+            case "备件规格":
+                queryParam.put(Constant.BAPQuery.PRODUCT_SPECIF, searchContent);
+                break;
+            case "备件型号":
+                queryParam.put(Constant.BAPQuery.PRODUCT_MODEL, searchContent);
+                break;
+            default:
+                break;
         }
-        if (queryParam.containsKey(Constant.BAPQuery.PRODUCT_SPECIF)) {
-            queryParam.remove(Constant.BAPQuery.PRODUCT_SPECIF);
-        }
-        if (Util.isContainChinese(searchContent)) {
-            queryParam.put(Constant.BAPQuery.PRODUCT_NAME, searchContent);
-        } else {
-            queryParam.put(Constant.BAPQuery.PRODUCT_SPECIF, searchContent);
-        }
-
         refreshListController.refreshBegin();
 
     }
@@ -183,6 +203,7 @@ public class RefProductListActivity extends BaseRefreshRecyclerActivity<SparePar
                 .map(good -> {
                     SparePartRefEntity sparePartRefEntity = new SparePartRefEntity();
                     sparePartRefEntity.setProductID(good);
+                    sparePartRefEntity.setStandingCrop(good.standingCrop); // 通过自定义字段获取现存量
                     return sparePartRefEntity;
                 })
                 .subscribe(sparePartRefEntity -> {

@@ -38,7 +38,7 @@ import java.util.List;
 @Presenter(SparePartPresenter.class)
 public class SparePartController extends BaseViewController implements SparePartContract.View {
 
-    //    private CustomListWidget<SparePartEntity> mCustomListWidget;
+    //    private CustomListWidget<SparePartEntity> sparePartListWidget;
     private long id = -1;
     private ArrayList<SparePartEntity> mSparePartOldEntities = new ArrayList<>();
     private List<SparePartEntity> mSparePartEntities = new ArrayList<>();
@@ -46,7 +46,7 @@ public class SparePartController extends BaseViewController implements SparePart
     private WXGDEntity mWXGDEntity;
 
     @BindByTag("sparePartListWidget")
-    CustomListWidget<SparePartEntity> mCustomListWidget;
+    CustomListWidget<SparePartEntity> sparePartListWidget;
     private boolean iswarn;
 
     public SparePartController(View rootView) {
@@ -67,13 +67,13 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new SparePartAdapter(context, false));
+        sparePartListWidget.setAdapter(new SparePartAdapter(context, false));
     }
 
     @Override
     public void initListener() {
         super.initListener();
-        mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
+        sparePartListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
@@ -98,7 +98,7 @@ public class SparePartController extends BaseViewController implements SparePart
 //                    if (mSparePartEntities != null) {
 //                        bundle.putString(Constant.IntentKey.SPARE_PART_ENTITIES, mSparePartEntities.toString());
 //                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, editable);
-//                        IntentRouter.go(mCustomListWidget.getContext(), Constant.Router.WXGD_SPARE_PART_LIST, bundle);
+//                        IntentRouter.go(sparePartListWidget.getContext(), Constant.Router.WXGD_SPARE_PART_LIST, bundle);
 //                    }
 
             }
@@ -120,12 +120,12 @@ public class SparePartController extends BaseViewController implements SparePart
                 sparePartEntity.actualQuantity = sparePartEntity.actualQuantity.setScale(2, BigDecimal.ROUND_HALF_UP);
             }
         }
-        if (mCustomListWidget != null) {
-            mCustomListWidget.setData(entity.result);
+        if (sparePartListWidget != null) {
+            sparePartListWidget.setData(entity.result);
             if (editable) {
-                mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
+                sparePartListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + entity.result.size() + ")");
+                sparePartListWidget.setShowText("查看 (" + entity.result.size() + ")");
             }
         }
         EventBus.getDefault().post(new ListEvent("sparePart", mSparePartEntities));
@@ -137,7 +137,7 @@ public class SparePartController extends BaseViewController implements SparePart
     }
 
     public void setCustomListWidget(CustomListWidget<SparePartEntity> customListWidget) {
-        this.mCustomListWidget = customListWidget;
+        this.sparePartListWidget = customListWidget;
     }
 
     @Override
@@ -175,14 +175,14 @@ public class SparePartController extends BaseViewController implements SparePart
         if (mSparePartEntities == null)
             return;
         this.mSparePartEntities = mSparePartEntities;
-        if (mCustomListWidget != null) {
-//            mCustomListWidget.setData(mSparePartEntities);
-//            mCustomListWidget.setTotal(mSparePartEntities.size());
-            mCustomListWidget.setData(mSparePartEntities);
+        if (sparePartListWidget != null) {
+//            sparePartListWidget.setData(mSparePartEntities);
+//            sparePartListWidget.setTotal(mSparePartEntities.size());
+            sparePartListWidget.setData(mSparePartEntities);
             if (editable) {
-                mCustomListWidget.setShowText("编辑 (" + mSparePartEntities.size() + ")");
+                sparePartListWidget.setShowText("编辑 (" + mSparePartEntities.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + mSparePartEntities.size() + ")");
+                sparePartListWidget.setShowText("查看 (" + mSparePartEntities.size() + ")");
             }
         }
 
@@ -199,7 +199,7 @@ public class SparePartController extends BaseViewController implements SparePart
     }
 
     public void clear() {
-        mCustomListWidget.clear();
+        sparePartListWidget.clear();
     }
 
 }

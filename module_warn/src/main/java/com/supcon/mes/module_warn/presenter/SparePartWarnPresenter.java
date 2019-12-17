@@ -28,7 +28,7 @@ public class SparePartWarnPresenter extends SparePartWarnContract.Presenter {
             url = "/BEAM/baseInfo/sparePart/data-dg1535424823416.action";
         }
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_SPARE_PARTS,EAMID");
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_SPARE_PARTS,EAMID");
         fastQuery.subconds.add(joinSubcondEntity);
         fastQuery.modelAlias = "sparePart";
 

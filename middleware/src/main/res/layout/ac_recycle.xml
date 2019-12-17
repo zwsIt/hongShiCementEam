@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:tag="searchTitleBar"
         app:title_background_color="@color/themeColor"
-        app:title_text="备件参照列表" />
+        app:title_text="title"/>
 
     <include layout="@layout/ly_recyclerview" />
 </LinearLayout>

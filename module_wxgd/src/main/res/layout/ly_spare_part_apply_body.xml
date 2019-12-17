@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray">
+
+    <include layout="@layout/ly_titlebar_local" />
+    <com.supcon.common.view.ptr.PtrFrameLayout
+        android:id="@+id/refreshFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="refreshFrameLayout"
+        app:ptr_keep_header_when_refresh="true"
+        app:ptr_pull_to_fresh="false"
+        app:ptr_ratio_of_header_height_to_refresh="1.2"
+        app:ptr_resistance="1.7">
+
+        <ScrollView
+            android:id="@+id/contentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="contentView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/applyStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="applyStaff"
+                    app:editable="true"
+                    app:key="领用人"
+                    app:necessary="true"
+                    app:text_size="16" />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/department"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="department"
+                    app:key="部门"
+                    app:text_size="16" />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/position"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="position"
+                    app:key="岗位"
+                    app:text_size="16" />
+                <com.supcon.mes.mbap.view.CustomDateView
+                    android:id="@+id/applyTime"
+                    android:layout_width="match_parent"
+                    android:background="@color/white"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="applyTime"
+                    app:necessary="true"
+                    app:text="申请时间"
+                    app:text_size="16" />
+
+                <include layout="@layout/ly_line_light" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalEditText
+                    android:id="@+id/explain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="explain"
+                    app:edit_hint="请填写使用说明"
+                    app:edit_maxLine="5"
+                    app:text="使用说明"
+                    app:text_height="@dimen/dp_30"
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalEditText
+                    android:id="@+id/remark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:background="@drawable/sh_white"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="remark"
+                    app:edit_hint="填写备注"
+                    app:edit_maxLine="5"
+                    app:text="备注"
+                    app:text_size="16" />
+
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:id="@+id/sparePartListWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:tag="sparePartListWidget"
+                    app:icon_res="@drawable/ic_bj"
+                    app:text_size="14"
+                    app:title_bg_color="@color/white"
+                    app:widget_name="备件" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.supcon.common.view.ptr.PtrFrameLayout>
+
+</LinearLayout>

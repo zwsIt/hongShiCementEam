@@ -102,7 +102,7 @@ public class WXGDSubmitController extends BasePresenterController implements WXG
         submitResult.submitFailed(errorMsg);
     }
 
-    //回掉提交结果
+    //回调提交结果
     public interface OnSubmitResultListener {
 
         void submitSuccess(BapResultEntity entity);

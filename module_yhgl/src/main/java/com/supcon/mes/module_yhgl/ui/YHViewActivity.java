@@ -480,9 +480,9 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
         if (mYHEntity.remark != null)
             map.put("faultInfo.remark", mYHEntity.remark);
 
-        map.put("linkId", mYHEntity.tableInfoId != 0 ? mYHEntity.tableInfoId : "");
+        map.put("linkId", mYHEntity.tableInfoId != null ? mYHEntity.tableInfoId : "");
 //        map.put("dlTableInfoId",                mYHEntity.tableInfoId);
-        map.put("tableInfoId", mYHEntity.tableInfoId != 0 ? mYHEntity.tableInfoId : "");
+        map.put("tableInfoId", mYHEntity.tableInfoId != null ? mYHEntity.tableInfoId : "");
         if (workFlowEntities != null) {//保存为空
             map.put("workFlowVar.outcomeMapJson", workFlowEntities);
             map.put("workFlowVar.dec", workFlowEntity.dec);

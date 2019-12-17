@@ -8,13 +8,16 @@ import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.ContractListEntity;
+import com.supcon.mes.middleware.model.bean.CurrentDeploymentEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
 import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.LinkListEntity;
 import com.supcon.mes.middleware.model.bean.LongResultEntity;
 import com.supcon.mes.middleware.model.bean.LubricateListEntity;
+import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
 import com.supcon.mes.middleware.model.bean.MyInfo;
 import com.supcon.mes.middleware.model.bean.RefLubricateListEntity;
 import com.supcon.mes.middleware.model.bean.RefMaintainListEntity;
@@ -43,6 +46,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
@@ -54,11 +58,11 @@ import retrofit2.http.Url;
 @ApiFactory(name = "MiddlewareHttpClient")
 public interface NetworkAPI {
 
-    @GET("/foundation/staff/list-data.action?&staff.code=&staff.name=&department.name=&position.name=&companyId=1000&cusDepartmentDown=yes&cusPositionDown=yes&pageSize=100000&&records.pageSize=100000&records.maxPageSize=500")
-    Flowable<TxlListEntity> getStaffList(@Query("records.pageNo") int pageNum);
+    @GET("/foundation/staff/list-data.action?&staff.code=&department.name=&position.name=&companyId=1000&cusDepartmentDown=yes&cusPositionDown=yes&pageSize=500&records.pageSize=500&records.maxPageSize=500")
+    Flowable<TxlListEntity> getStaffList(@Query("staff.name") String staffName,@Query("records.pageNo") int pageNum);
 
     /**
-     * 用户列表
+     * 含用户的人员参照列表（按部门）
      */
 //    @GET("/foundation/user/queryList.action")
     @GET("/foundation/user/common/getDepartmentUserList.action")
@@ -72,11 +76,16 @@ public interface NetworkAPI {
     Flowable<MyInfo> getCurrentUserinfo();
 
     /**
-     * 用户列表
+     * 用户列表:from基础设置--用户管理，注：有权限控制
      */
-//    @GET("/foundation/user/queryList.action?pageSize=500&&page.pageSize=500&page.maxPageSize=500")
+    @GET("/foundation/user/queryList.action?pageSize=500&page.pageSize=500&page.maxPageSize=500")
+    Flowable<UserInfoListEntity> queryUserInfoList(@Query("staff.name") String staffName, @Query("page.pageNo") int pageNo, @Query("pageNo") int pageIndex);
+
+    /**
+     * 用户列表：from系统基础模块，一直有权限
+     */
     @GET("/foundation/user/common/userRefList.action?userPage.pageSize=500&pageOrder=DESC")
-    Flowable<UserInfoListEntity> queryUserInfoList(@Query("staff.name") String staffName, @Query("userPage.pageNo") int pageNo);
+    Flowable<UserInfoListEntity> userRefList(@Query("staff.name") String staffName, @Query("userPage.pageNo") int pageNo);
 
     /**
      * 获取系统编码
@@ -147,7 +156,7 @@ public interface NetworkAPI {
      * @param id 附件id
      * @return
      */
-    @GET("/foundation/workbench/download.action")
+    @POST("/foundation/workbench/download.action")
     Flowable<ResponseBody> downloadFile(@Query("id") long id, @Query("entityCode") String entityCode);//BEAM2_1.0.0_faultInfo
 
     /**
@@ -156,7 +165,7 @@ public interface NetworkAPI {
      * @param tableId 单据id
      * @return
      */
-    @GET("/BEAM2/mobile/faultInfo/listAttachFilesPaths.action")
+    @POST("/BEAM2/mobile/faultInfo/listAttachFilesPaths.action")
     Flowable<CommonEntity> listAttachFilesPaths(@Query("tableId") long tableId);
 
     /**
@@ -165,7 +174,7 @@ public interface NetworkAPI {
      * @param tableInfoId 单据id
      * @return
      */
-    @GET("/mobile/mobileCommon/common/listAttachFiles.action")
+    @POST("/mobile/mobileCommon/common/listAttachFiles.action")
     Flowable<AttachmentListEntity> listAttachFiles(@Query("tableInfoId") long tableInfoId);
 
     /**
@@ -173,7 +182,7 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @GET("/BEAM/area/area/areaNoCheckListRef-query.action?page.pageSize=500")
+    @POST("/BEAM/area/area/areaNoCheckListRef-query.action?page.pageSize=500")
     Flowable<AreaListEntity> listArea();
 
     /**
@@ -181,7 +190,7 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @GET("/BEAM/repairGroup/repairGroup/groupList-query.action?page.pageSize=500")
+    @POST("/BEAM/repairGroup/repairGroup/groupList-query.action?page.pageSize=500")
     Flowable<RepairGroupListEntity> listWXGroup();
 
     /**
@@ -190,7 +199,7 @@ public interface NetworkAPI {
      * @param flowKey 工作流名字
      * @return
      */
-    @GET("/mobile/mobileCommon/workflow/getStartTransition.action")
+    @POST("/mobile/mobileCommon/workflow/getStartTransition.action")
     Flowable<LinkListEntity> getStartTransition(@Query("flowKey") String flowKey);
 
 
@@ -200,15 +209,22 @@ public interface NetworkAPI {
      * @param flowKey 工作流名字
      * @return
      */
-    @GET("/mobile/mobileCommon/workflow/getDeploymentId.action")
+    @POST("/mobile/mobileCommon/workflow/getDeploymentId.action")
     Flowable<LongResultEntity> getDeploymentId(@Query("flowKey") String flowKey);
 
     /**
-     * 获取制定PowerCode
+     * 获取deploymentId
+     * @param processKey 工作流key
+     * @return
+     */
+    @POST("/ec/workflow/getCurrentDeployment.action")
+    Flowable<CurrentDeploymentEntity> getCurrentDeployment(@Query("processKey") String processKey);
+    /**
+     * 获取制定PowerCode：__pc__
      *
      * @param deploymentId
      */
-    @GET("/ec/workflow/getStartActivePowerCode.action")
+    @POST("/ec/workflow/getStartActivePowerCode.action")
     Flowable<BapResultEntity> getStartActivePowerCode(@Query("deploymentId") long deploymentId);
 
 
@@ -219,7 +235,7 @@ public interface NetworkAPI {
      * @param processKey 工作流名字
      * @return
      */
-    @GET("/mobile/mobileCommon/workflow/judgeFlowPermission.action")
+    @POST("/mobile/mobileCommon/workflow/judgeFlowPermission.action")
     Flowable<LongResultEntity> checkModulePermission(@Query("userName") String userName, @Query("processKey") String processKey);
 
     /**
@@ -228,7 +244,7 @@ public interface NetworkAPI {
      * @param pendingId 待办id
      * @return
      */
-    @GET("/mobile/mobileCommon/workflow/getCurrentActTransition.action")
+    @POST("/mobile/mobileCommon/workflow/getCurrentActTransition.action")
     Flowable<LinkListEntity> getCurrentActTransition(@Query("pendingId") long pendingId);
 
     /**
@@ -236,7 +252,7 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @GET("/foundation/staff/common/getDepartmentWorkList.action?departmentWorkPage.pageSize=500&pageOrder=DESC")
+    @POST("/foundation/staff/common/getDepartmentWorkList.action?departmentWorkPage.pageSize=500&pageOrder=DESC")
     Flowable<UserInfoListEntity> listCommonContractStaff(@Query("staff.name") String staffName, @Query("departmentWorkPage.pageNo") int pageNo);
 
     /**
@@ -246,7 +262,7 @@ public interface NetworkAPI {
      * @param pageNo
      * @return
      */
-    @GET("/foundation/addressBook/list-data.action?records.pageSize=20&records.maxPageSize=500")
+    @POST("/foundation/addressBook/list-data.action?records.pageSize=20&records.maxPageSize=500")
     Flowable<ContractListEntity> listContract(@Query("addressBookContent") String staffName, @Query("records.pageNo") int pageNo);
 
     /**
@@ -254,14 +270,14 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @GET("/foundation/department/queryList.action?companyId=1000&page.pageSize=500&&page.maxPageSize=500")
+    @POST("/foundation/department/queryList.action?companyId=1000&page.pageSize=500&&page.maxPageSize=500")
     Flowable<DepartmentInfoListEntity> listDepartment(@Query("page.pageNo") int pageNo);
 
 
     /**
      * 获取departmentInfo列表
      */
-    @GET("/foundation/department/queryList.action?a=-1&departmentCode=&departmentName=&departmentId=&managerId=&managerName=&companyId=1000&page.pageSize=500&&page.maxPageSize=500")
+    @POST("/foundation/department/queryList.action?a=-1&departmentCode=&departmentName=&departmentId=&managerId=&managerName=&companyId=1000&page.pageSize=500&&page.maxPageSize=500")
     Flowable<DepartmentInfoListEntity> listDepartmentInfo();
 
 
@@ -277,7 +293,7 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @GET("/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW")
+    @POST("/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW")
     Flowable<CommonBAPListEntity<YHEntity>> queryFaultInfotPending(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
 
@@ -287,13 +303,13 @@ public interface NetworkAPI {
      * @description 获取工单列表
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET("/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList")
+    @POST("/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList")
     Flowable<CommonBAPListEntity<WXGDEntity>> queryWXGDPending(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
     /**
      * @param
      * @return
-     * @description 备件参照列表查询
+     * @description 备件参照列表查询(BEAM)
      * @author zhangwenshuai1 2018/10/23
      */
     @POST("/BEAM/baseInfo/sparePart/sparePartRef-query.action?&permissio.0.0_baseInfo_sparePartRef&crossCompanyFlag=false")
@@ -302,11 +318,20 @@ public interface NetworkAPI {
     /**
      * @param
      * @return
-     * @description 获取备件物品列表
+     * @description 获取备件物品列表（MESBasic）
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET("/MESBasic/product/product/refProduct_sp-query.action?&permissionCode=MESBasic_1_product_refProductLayout_sp&crossCompanyFlag=false")
+    @POST("/MESBasic/product/product/refProduct_sp-query.action?&permissionCode=MESBasic_1_product_refProductLayout_sp&crossCompanyFlag=false")
     Flowable<RefProductListEntity> listRefProduct(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     * @param
+     * @return
+     * @description 获取备件物品列表（BEAM2）
+     * @author zhangwenshuai1 2019/12/3
+     */
+    @POST("/BEAM2/product/productInfo/refProduct_sp-query.action?&permissionCode=BEAM2_1.0.0_product_refProductLayout_sp&crossCompanyFlag=false")
+    Flowable<RefProductListEntity> refProductQuery(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
      * @param
@@ -314,7 +339,7 @@ public interface NetworkAPI {
      * @description 获取润滑列表
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET("/BEAM/lubricateOil/lubricateOil/oilRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
+    @POST("/BEAM/lubricateOil/lubricateOil/oilRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
     Flowable<LubricateListEntity> listLubricate(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
@@ -323,7 +348,7 @@ public interface NetworkAPI {
      * @description 获取润滑参照列表
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET("/BEAM/baseInfo/jWXItem/lubricateBeamRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
+    @POST("/BEAM/baseInfo/jWXItem/lubricateBeamRef-query.action?&permissionCode=BEAM_1.0.0_lubricateOil_oilRef&crossCompanyFlag=false")
     Flowable<RefLubricateListEntity> listRefLubricate(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 
@@ -333,20 +358,20 @@ public interface NetworkAPI {
      * @description 获取维保参照列表
      * @author zhangwenshuai1 2018/8/13
      */
-    @GET("/BEAM/baseInfo/jWXItem/maintainBeamRef-query.action?&permissionCode=BEAM_1.0.0_baseInfo_maintainBeamRef&crossCompanyFlag=")
+    @POST("/BEAM/baseInfo/jWXItem/maintainBeamRef-query.action?&permissionCode=BEAM_1.0.0_baseInfo_maintainBeamRef&crossCompanyFlag=")
     Flowable<RefMaintainListEntity> listRefMaintain(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 
     /**
      * 获取DCS设备数据
      */
-    @GET("/BEAM/baseInfo/baseInfo/getMeasParam.action")
+    @POST("/BEAM/baseInfo/baseInfo/getMeasParam.action")
     Flowable<CommonListEntity<DeviceDCSEntity>> getMeasParam(@Query("eamId") long eamId);
 
     /**
      * 获取设备（档案查看）
      */
-    @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action?1=1&permissionCode=BEAM_1.0.0_baseInfo_baseLayoutForView")
+    @POST("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action?1=1&permissionCode=BEAM_1.0.0_baseInfo_baseLayoutForView")
     Flowable<CommonListEntity<EamEntity>> getEam(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 
@@ -355,23 +380,23 @@ public interface NetworkAPI {
      * @param sparePartCodes
      * @return
      */
-    @GET("/BEAM/baseInfo/baseInfo/getSupOSStandingCrop.action")
+    @POST("/BEAM/baseInfo/baseInfo/getSupOSStandingCrop.action")
     Flowable<CommonListEntity<StandingCropEntity>> updateStandingCrop(@Query("sparePartCodes") String sparePartCodes);
 
     //获取工单,隐患数量
-    @GET
+    @POST
     Flowable<CommonListEntity<WorkCountEntity>> getWorkCount(@Url String url, @QueryMap Map<String, Object> queryMap);
 
     /**
      * 更新隐患单
      */
-    @GET("/BEAM2/faultInfo/faultInfo/closeWorkAndSaveReason.action")
+    @POST("/BEAM2/faultInfo/faultInfo/closeWorkAndSaveReason.action")
     Flowable<ResultEntity> closeWorkAndSaveReason(@Query("id") long id, @Query("closeReason") String reason);
 
     /**
      * 获取菜单权限
      */
-    @GET("/foundation/userPermission/checkUserPower.action")
+    @POST("/foundation/userPermission/checkUserPower.action")
     Flowable<Object> checkUserPower(@Query("companyId") long companyId, @Query("menuOperateCodes") String menuOperateCodes);
 
     /**
@@ -382,4 +407,28 @@ public interface NetworkAPI {
      */
     @POST("/mobile/mobileCommon/foundation/getPc.action")
     Flowable<CommonEntity> getPc(@Query("operateCode") String operateCode, @Query("flowKey") String flowKey);
+
+    /**
+     * 获取润滑部位参照页面
+     * @return
+     */
+    @POST("/BEAM/lubricatingPart/lubricatingPart/partRef-query.action?&permissionCode=BEAM_1.0.0_lubricatingPart_partRef&crossCompanyFlag=")
+    Flowable<CommonBAPListEntity<LubricatingPartEntity>> listLubricatePartRef(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     * 获取设备类型参照页面
+     * @return
+     */
+    @POST("/BEAM/eamType/eamType/typeRef-query.action?&permissionCode=BEAM_1.0.0_eamType_typeRef&crossCompanyFlag=false")
+    Flowable<CommonBAPListEntity<EamType>> listEamTypeRef(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    /**
+     * 获取单据表头信息
+     * @param id
+     * @return
+     */
+    @POST("{url}get.action")
+//    @Multipart
+    Flowable<Object> get(@Path (value = "url", encoded = true) String url, @Query("id") Long id, @QueryMap Map<String,Object> queryMap/*@Part("includes") String includes 丢失返回数据 */);
+
 }

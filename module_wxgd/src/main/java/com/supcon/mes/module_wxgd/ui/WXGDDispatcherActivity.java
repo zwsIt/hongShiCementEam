@@ -48,11 +48,13 @@ import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.controller.YHCloseController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
+import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -843,6 +845,16 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void versionRefresh(VersionRefreshEvent versionRefreshEvent) {
         refreshController.refreshBegin();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateLubPart(PositionEvent positionEvent){
+        if (positionEvent.getPosition() == -1) return;
+        if (positionEvent.getObj() instanceof LubricatingPartEntity){
+            mLubricateOilsController.getLubricateOilsEntities().get(positionEvent.getPosition()).lubricatingPart = ((LubricatingPartEntity)positionEvent.getObj()).getLubPart();
+            mLubricateOilsController.getLubricateOilsAdapter().notifyItemChanged(positionEvent.getPosition());
+        }
+
     }
 
     @Override

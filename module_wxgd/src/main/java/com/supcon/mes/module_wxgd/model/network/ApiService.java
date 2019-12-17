@@ -234,15 +234,6 @@ public interface ApiService {
     Flowable<CommonBAPListEntity<SparePartsConsumeEntity>> sparePartList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
-     * 获取备件领用申请单表头信息
-     * @param id
-     * @return
-     */
-    @POST("/BEAM2/sparePart/apply/get.action")
-//    @Multipart
-    Flowable<SparePartApplyHeaderInfoEntity> get(@Query("id") Long id, @QueryMap Map<String,Object> queryMap/*@Part("includes") String includes 丢失返回数据 */);
-
-    /**
      * @param
      * @return
      * @description 备件领用申请PT明细

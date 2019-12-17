@@ -21,7 +21,7 @@ public class MainRouter implements IRouter {
     private static final String MODULE_DATA_MANAGER_ROUTER = "com.supcon.mes.module_data_manage.IntentRouter";
     private static final String MODULE_LOGIN_ROUTER = "com.supcon.mes.module_login.IntentRouter";
     private static final String MODULE_YH_ROUTER = "com.supcon.mes.module_yhgl.IntentRouter";
-    //    private static final String MODULE_YXJL_ROUTER = "com.supcon.mes.module_yxjl.IntentRouter";
+    private static final String MODULE_OVERHAUL_WORKTICKET_ROUTER = "com.supcon.mes.module_overhaul_workticket.IntentRouter";
     private static final String MODULE_SPAREPART_APPLY_HL_ROUTER = "com.supcon.mes.module_sparepartapply_hl.IntentRouter";
     private static final String MODULE_XJ_ROUTER = "com.supcon.mes.module_xj.IntentRouter";
     private static final String MODULE_OLXJ_ROUTER = "com.supcon.mes.module_olxj.IntentRouter";
@@ -52,7 +52,7 @@ public class MainRouter implements IRouter {
         modules.add(MODULE_DATA_MANAGER_ROUTER);
         modules.add(MODULE_LOGIN_ROUTER);
         modules.add(MODULE_YH_ROUTER);
-//        modules.add(MODULE_YXJL_ROUTER);
+        modules.add(MODULE_OVERHAUL_WORKTICKET_ROUTER);
         modules.add(MODULE_SPAREPART_APPLY_HL_ROUTER);
         modules.add(MODULE_XJ_ROUTER);
         modules.add(MODULE_OLXJ_ROUTER);

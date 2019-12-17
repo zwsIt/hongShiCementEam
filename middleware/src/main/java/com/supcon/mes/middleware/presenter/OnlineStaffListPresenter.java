@@ -17,9 +17,9 @@ import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
  */
 public class OnlineStaffListPresenter extends OnlineStaffListContract.Presenter {
     @Override
-    public void getOnlineStaffList() {
+    public void getOnlineStaffList(int pageNo) {
         mCompositeSubscription.add(
-                MiddlewareHttpClient.getStaffList(0)
+                MiddlewareHttpClient.getStaffList("",pageNo)
                         .onErrorReturn(throwable -> {
                             TxlListEntity txlListEntity = new TxlListEntity();
                             txlListEntity.errMsg = throwable.toString();

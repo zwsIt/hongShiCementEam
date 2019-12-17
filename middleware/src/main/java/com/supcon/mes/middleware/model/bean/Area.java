@@ -47,6 +47,11 @@ public class Area extends BaseEntity implements CommonSearchEntity {
     }
 
     @Override
+    public String getSearchCode() {
+        return code;
+    }
+
+    @Override
     public String getSearchProperty() {
         return code;
     }

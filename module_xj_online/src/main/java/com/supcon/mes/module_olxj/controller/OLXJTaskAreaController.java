@@ -51,6 +51,7 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
 
     private long taskId;
     private long groupID;
+    private String taskTableNo; // 巡检任务单据编号
 
     public OLXJTaskAreaController(Context context, int type) {
         super(context);
@@ -82,6 +83,7 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
         }
         taskId = taskEntity.id;
         groupID = taskEntity.workGroupID.id;
+        taskTableNo = taskEntity.tableNo;
         mOnSuccessListener = listener;
         mOLXJWorkItemEntities.clear();
         mAreaEntities.clear();
@@ -112,7 +114,7 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
     }
 
     private void getAreaData() {
-        presenterRouter.create(OLXJAreaAPI.class).getOJXJAreaList(groupID, cuttentAreaPage);
+        presenterRouter.create(OLXJAreaAPI.class).getOJXJAreaList(taskTableNo, groupID, cuttentAreaPage);
     }
 
     /**
@@ -185,9 +187,9 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
     }
 
     @SuppressLint("CheckResult")
-    private void initArea(List<OLXJAreaEntity> areaEntities) {
+    private void initArea() {
 
-        Flowable.fromIterable(areaEntities)
+        Flowable.fromIterable(mAreaEntities)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new Consumer<OLXJAreaEntity>() {
                     @Override
@@ -226,7 +228,7 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
             cuttentAreaPage++;
             getAreaData();
         } else {
-            initArea(mAreaEntities);
+            initArea();
             getWorkData();
             getAbnormalInspectTaskPart();
         }

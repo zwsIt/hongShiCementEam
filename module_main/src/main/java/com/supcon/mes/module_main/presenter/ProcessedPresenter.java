@@ -27,7 +27,7 @@ public class ProcessedPresenter extends ProcessedContract.Presenter {
         Map<String, Object> paramsName = new HashMap<>();
         paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
         paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(paramsName, "base_staff,ID,ALL_PROCESS_INFO,STAFF");
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "base_staff,ID,ALL_PROCESS_INFO,STAFF");
         fastQueryCond.subconds.add(joinSubcondEntity);
 
         Map<String, Object> pageQueryParams = new HashMap<>();

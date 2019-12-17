@@ -140,7 +140,17 @@
                 android:layout_marginBottom="@dimen/dp_1"
                 android:visibility="gone"
                 />
-
+            <com.supcon.mes.mbap.view.CustomArrowView
+                android:id="@+id/tvSizeChangeSettings"
+                android:tag="tvSizeChangeSettings"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="@dimen/dp_5"
+                custom:arrow_icon="@drawable/ic_user_szzt"
+                custom:arrow_text="设置字体"
+                android:layout_marginBottom="@dimen/dp_1"
+                android:visibility="gone"
+                />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/dp_3"
-    android:paddingBottom="@dimen/dp_3"
     android:background="@drawable/sl_press_no_stroke"
     android:orientation="horizontal">
 
@@ -13,8 +11,8 @@
         android:id="@+id/firstLetter"
         android:layout_width="@dimen/dp_18"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="5dp"
         android:gravity="center"
         android:tag="firstLetter"
         android:text="A"
@@ -32,9 +30,10 @@
     <!--android:visibility="gone" />-->
 
     <LinearLayout
-        android:layout_width="@dimen/dp_60"
-        android:layout_height="@dimen/dp_60"
-        android:padding="12dp">
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
+        android:layout_gravity="center"
+        android:padding="@dimen/dp_5">
 
         <com.supcon.mes.mbap.view.CustomCircleTextImageView
             android:id="@+id/customCircleTextImageView"
@@ -54,52 +53,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/item_bottom"
-        android:padding="5dp"
-        android:paddingStart="@dimen/dp_10">
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/itemName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_40"
-            android:layout_marginStart="10dp"
             android:longClickable="false"
             android:tag="itemName"
             android:textColor="@color/textColorlightblack"
-            android:textSize="@dimen/fontSize_18sp"
             tools:ignore="RelativeOverlap" />
 
-        <TextView
-            android:id="@+id/itemId"
-            android:layout_width="50dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/itemName"
-            android:layout_marginEnd="@dimen/dp_10"
-            android:layout_marginStart="@dimen/dp_10"
             android:layout_marginTop="@dimen/dp_5"
-            android:longClickable="false"
-            android:tag="itemId"
-            android:textColor="@color/hintColor"
-            android:textSize="@dimen/fontSize_14sp"
-            tools:ignore="UnknownIdInLayout" />
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/itemName"
-            android:layout_toEndOf="@+id/itemId"
-            app:key_width="0dp"
-            app:content_color="@color/hintColor"
-            app:text_size="14"
-            android:id="@+id/itemProperty"
-            android:tag="itemProperty"
-            android:layout_marginEnd="@dimen/dp_40"
-            />
+            android:layout_marginBottom="@dimen/dp_5"
+            android:layout_below="@+id/itemName">
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/itemCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:tag="itemCode"
+                app:key_width="0dp"
+                app:content_color="@color/hintColor"
+                app:text_size="13" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:key_width="0dp"
+                app:content_color="@color/hintColor"
+                app:text_size="13"
+                android:id="@+id/itemProperty"
+                android:tag="itemProperty"
+                android:layout_marginEnd="@dimen/dp_40"/>
+        </LinearLayout>
 
         <com.supcon.mes.mbap.view.CustomCheckBox
             android:id="@+id/itemCheckBox"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:tag="itemCheckBox"
             android:visibility="visible" />

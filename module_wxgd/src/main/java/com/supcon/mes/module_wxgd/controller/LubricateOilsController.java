@@ -2,6 +2,7 @@ package com.supcon.mes.module_wxgd.controller;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.app.annotation.BindByTag;
@@ -35,15 +36,16 @@ import java.util.List;
  */
 @Presenter(LubricateOilsPresenter.class)
 public class LubricateOilsController extends BaseViewController implements LubricateOilsContract.View, LubricateOilsAPI {
-    //    private CustomListWidget<LubricateOilsEntity> mCustomListWidget;
+    //    private CustomListWidget<LubricateOilsEntity> lubricateOilsListWidget;
     @BindByTag("lubricateOilsListWidget")
-    CustomListWidget<LubricateOilsEntity> mCustomListWidget;
+    CustomListWidget<LubricateOilsEntity> lubricateOilsListWidget;
 
     private long id = -1;
     private List<LubricateOilsEntity> mLubricateOilsOldEntities = new ArrayList<>();
     private List<LubricateOilsEntity> mLubricateOilsEntities = new ArrayList<>();
     private boolean isEditable;
     private WXGDEntity mWXGDEntity;
+    private LubricateOilsAdapter mLubricateOilsAdapter;
 
     public LubricateOilsController(View rootView) {
         super(rootView);
@@ -62,13 +64,14 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new LubricateOilsAdapter(context, false));
+        mLubricateOilsAdapter = new LubricateOilsAdapter(context, isEditable);
+        lubricateOilsListWidget.setAdapter(mLubricateOilsAdapter);
     }
 
     @Override
     public void initListener() {
         super.initListener();
-        mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
+        lubricateOilsListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
@@ -116,12 +119,12 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                 lubricateOilsEntity.remark = "";
             }
         }
-        if (mCustomListWidget != null) {
-            mCustomListWidget.setData(entity.result);
+        if (lubricateOilsListWidget != null) {
+            lubricateOilsListWidget.setData(entity.result);
             if (isEditable) {
-                mCustomListWidget.setShowText("编辑 (" + entity.result.size() + ")");
+                lubricateOilsListWidget.setShowText("编辑 (" + entity.result.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + entity.result.size() + ")");
+                lubricateOilsListWidget.setShowText("查看 (" + entity.result.size() + ")");
             }
         }
         EventBus.getDefault().post(new ListEvent("lubricateOils", mLubricateOilsEntities));
@@ -133,7 +136,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     }
 
     public void setCustomListWidget(CustomListWidget<LubricateOilsEntity> customListWidget) {
-        this.mCustomListWidget = customListWidget;
+        this.lubricateOilsListWidget = customListWidget;
     }
 
 
@@ -188,12 +191,12 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         if (list == null)
             return;
         this.mLubricateOilsEntities = list;
-        if (mCustomListWidget != null) {
-            mCustomListWidget.setData(list);
+        if (lubricateOilsListWidget != null) {
+            lubricateOilsListWidget.setData(list);
             if (isEditable) {
-                mCustomListWidget.setShowText("编辑 (" + list.size() + ")");
+                lubricateOilsListWidget.setShowText("编辑 (" + list.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + list.size() + ")");
+                lubricateOilsListWidget.setShowText("查看 (" + list.size() + ")");
             }
         }
     }
@@ -209,6 +212,10 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     }
 
     public void clear() {
-        mCustomListWidget.clear();
+        lubricateOilsListWidget.clear();
+    }
+
+    public LubricateOilsAdapter getLubricateOilsAdapter() {
+        return mLubricateOilsAdapter;
     }
 }

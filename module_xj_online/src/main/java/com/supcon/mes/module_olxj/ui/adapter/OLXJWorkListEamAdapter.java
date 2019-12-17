@@ -33,6 +33,7 @@ import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.FaultPicHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -258,7 +259,9 @@ public class OLXJWorkListEamAdapter extends BaseListDataRecyclerViewAdapter<OLXJ
                     xjWorkItemEntity.realRemark = ufItemRemark.getInput().trim();
                     xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
                     xjWorkItemEntity.isFinished = true;
-                    xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+                    SystemCodeEntity linkState = new SystemCodeEntity();
+                    linkState.setId(OLXJConstant.MobileWiLinkState.FINISHED_STATE);
+                    xjWorkItemEntity.setLinkState(linkState);
                     xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
 
                     EventBus.getDefault().post(new RefreshEvent(Constant.RefreshAction.XJ_WORK_END, getAdapterPosition()));

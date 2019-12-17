@@ -140,11 +140,19 @@ public class FlowProcessAdapter extends BaseListDataRecyclerViewAdapter<FlowProc
                 }
             } else {
                 if (data.isFinish) {
-                    itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_other_ed));
+                    if (getAdapterPosition() == 0){
+                        itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_edit_end));
+                    }else {
+                        itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_other_ed));
+                    }
                     itemFlowLineRight.setVisibility(View.VISIBLE);
                     itemFlowTime.setVisibility(View.VISIBLE);
                 }else {
-                    itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_other_ing));
+                    if (getAdapterPosition() == 0){
+                        itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_edit_ing));
+                    }else {
+                        itemFlowDot.setImageDrawable(context.getDrawable(R.drawable.ic_other_ing));
+                    }
                     itemFlowLineRight.setVisibility(View.GONE);
                     itemFlowTime.setVisibility(View.GONE);
                 }

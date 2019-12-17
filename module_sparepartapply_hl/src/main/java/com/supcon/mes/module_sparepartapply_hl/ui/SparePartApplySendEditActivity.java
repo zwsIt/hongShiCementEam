@@ -20,11 +20,11 @@ import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
-import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -37,15 +37,17 @@ import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.SparePartReceiveEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sparepartapply_hl.IntentRouter;
 import com.supcon.mes.module_sparepartapply_hl.R;
 import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
 import com.supcon.mes.module_sparepartapply_hl.controller.SparePartApplyDetailController;
-import com.supcon.mes.module_sparepartapply_hl.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.module_sparepartapply_hl.model.event.SparePartApplyDetailEvent;
 import com.supcon.mes.module_wxgd.model.api.SparePartApplyAPI;
 import com.supcon.mes.module_wxgd.model.bean.SparePartApplyHeaderInfoEntity;
@@ -58,6 +60,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -92,6 +95,8 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
     CustomTextView eamName;
     @BindByTag("applyTime")
     CustomDateView applyTime;
+    @BindByTag("work")
+    CustomTextView work; // 工单
     @BindByTag("explain")
     CustomVerticalEditText explain;
     @BindByTag("remark")
@@ -102,12 +107,12 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
     ScrollView contentView;
     @BindByTag("refreshFrameLayout")
     PtrFrameLayout refreshFrameLayout;
-    @BindByTag("commentInput")
-    CustomEditText commentInput;
     @BindByTag("workFlowView")
     CustomWorkFlowView workFlowView;
     @BindByTag("workFlowBar")
     LinearLayout workFlowBar;
+    @BindByTag("sparePartTotal")
+    CustomTextView sparePartTotal;
 
     private Long tableId; // 单据ID
     private Long pendingId;
@@ -116,6 +121,9 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
     private SparePartApplyHeaderInfoEntity sparePartApplyHeaderInfoEntity;
     private String oldSparePartApplyDetailListStr; // 备件领用申请初始化列表
     private SparePartApplyDetailController sparePartApplyDetailController;
+
+    //dataGrid删除数据id
+    private List<Long> dgDeletedIds_sparePartApplyDetail = new ArrayList<>();
 
     @Override
     protected int getLayoutID() {
@@ -141,7 +149,7 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
         datePickController.textSize(18);
 
         sparePartApplyDetailController = getController(SparePartApplyDetailController.class);
-        sparePartApplyDetailController.setEditable(false,true).setPTUrl("/BEAM2/sparePart/apply/data-dg1569581670417.action");
+        sparePartApplyDetailController.setEditable(false,true).setPTUrl("/BEAM2/sparePart/apply/data-dg1575180449633.action");
     }
 
     @Override
@@ -172,7 +180,7 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
     }
 
     protected void initTableInfoData() {
-        getController(TableInfoController.class).getSparePartApplyTableInfo(tableId, SPAHLConstant.HeaderData.SPAD_DATA_INCLUDES, new OnAPIResultListener() {
+        getController(TableInfoController.class).getTableInfo(SPAHLConstant.URL.PRE_URL,tableId, SPAHLConstant.HeaderData.SPAD_DATA_INCLUDES, new OnAPIResultListener() {
             @Override
             public void onFail(String errorMsg) {
                 refreshController.refreshComplete();
@@ -181,7 +189,8 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
 
             @Override
             public void onSuccess(Object result) {
-                updateSparePartApplyTableInfo((SparePartApplyHeaderInfoEntity) result);
+                SparePartApplyHeaderInfoEntity entity = GsonUtil.gsonToBean(GsonUtil.gsonString(result),SparePartApplyHeaderInfoEntity.class);
+                updateSparePartApplyTableInfo(entity);
                 refreshController.refreshComplete();
             }
         });
@@ -189,13 +198,18 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
 
     public void updateSparePartApplyTableInfo(SparePartApplyHeaderInfoEntity entity){
         this.sparePartApplyHeaderInfoEntity = entity;
+        if (TextUtils.isEmpty(entity.getRepairWork().tableNo)){
+            work.setVisibility(View.GONE);
+        }
         //回填单据表头信息
         applyStaff.setContent(entity.getApplyStaff().name);
         department.setContent(entity.getApplyStaff().getMainPosition().getDepartment().name);
         position.setContent(entity.getApplyStaff().getMainPosition().name);
         eamCode.setContent(entity.getEam().code);
         eamName.setContent(entity.getEam().name);
+        sparePartTotal.setContent(Util.bigDecimal2Str(entity.getTotalPrice(),2));
         applyTime.setContent(DateUtil.dateTimeFormat(entity.getApplyTime()));
+        work.setContent(entity.getRepairWork().tableNo);
         explain.setContent(entity.getExplain());
         remark.setContent(entity.getRemark());
     }
@@ -231,8 +245,6 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
                         doSave();
                         break;
                     case 1:
-                        doSubmit(workFlowVar);
-                        break;
                     case 2:
                         doSubmit(workFlowVar);
                         break;
@@ -297,7 +309,7 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
         } else {
             map.put("operateType", "save");
         }
-        map.put("workFlowVar.comment", commentInput.getInput());
+        map.put("workFlowVar.comment", workFlowView.getComment());
 //        map.put("taskDescription", "BEAM2_1.0.0.sparePartApply.task340");
 //        map.put("activityName", "task340");
         map.put("pendingId",pendingId);
@@ -307,12 +319,13 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
         map.put("apply.applyTime", applyTime.getContent());
         map.put("apply.explain", explain.getContent());
         map.put("apply.remark", remark.getContent());
+        map.put("apply.totalPrice",sparePartTotal.getContent());
         map.put("__file_upload", true);
 
         List list = SparePartReceiveMapManager.dataChange(sparePartApplyDetailController.getSparePartApplyDetailList());
-        map.put("dg1569581670417ModelCode", "BEAM2_1.0.0_sparePart_SparePartApply");
-        map.put("dg1569581670417ListJson", list.toString());
-        map.put("dgLists['dg1569581670417']", list.toString());
+        map.put("dg1575180449633ModelCode", "BEAM2_1.0.0_sparePart_SparePartApply");
+        map.put("dg1575180449633ListJson", list.toString());
+        map.put("dgLists['dg1575180449633']", list.toString());
 
         Map<String, Object> attachmentMap = new HashMap<>();
         getController(OnlineCameraController.class).doSave(attachmentMap);
@@ -415,7 +428,19 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshSparePartApplyDetail(SparePartApplyDetailEvent event){
         sparePartApplyDetailController.updateSparePartEntities(event.getList());
+        dgDeletedIds_sparePartApplyDetail = event.getDgDeletedIds();
 
+        // 计算表头总价
+        BigDecimal total = new BigDecimal(0);
+        for (SparePartReceiveEntity entity : event.getList()){
+            if (entity.total != null){
+                total = total.add(entity.total);
+            }
+        }
+        if (total.compareTo(sparePartApplyHeaderInfoEntity.getTotalPrice()) != 0){
+            sparePartTotal.setContent(total.toString());
+            sparePartApplyHeaderInfoEntity.setTotalPrice(total);
+        }
     }
 
 

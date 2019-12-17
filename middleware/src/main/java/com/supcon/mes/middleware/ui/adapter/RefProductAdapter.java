@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.model.bean.Good;
 import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
@@ -37,12 +38,9 @@ public class RefProductAdapter extends BaseListDataRecyclerViewAdapter<SparePart
         @BindByTag("productName")
         TextView productName;
         @BindByTag("productSpecif")
-        TextView productSpecif;
-        @BindByTag("productCode")
-        TextView productCode;
-
-        @BindByTag("eamIc")
-        ImageView eamIc;
+        CustomTextView productSpecif;
+        @BindByTag("standingCrop")
+        CustomTextView standingCrop;
 
         public RefProductViewHolder(Context context) {
             super(context);
@@ -68,10 +66,10 @@ public class RefProductAdapter extends BaseListDataRecyclerViewAdapter<SparePart
         @Override
         protected void update(SparePartRefEntity data) {
             Good good = data.getProductID();
-            eamIc.setImageResource(R.drawable.ic_sparepart);
-            productName.setText(String.format(context.getResources().getString(R.string.device_style2), "物品名称:", Util.strFormat(good.productName)));
-            productSpecif.setText(String.format(context.getResources().getString(R.string.device_style2), "规格:", Util.strFormat(good.productSpecif)));
-            productCode.setText(String.format(context.getResources().getString(R.string.device_style2), "编码:", Util.strFormat(good.productCode)));
+            if (good == null) return;
+            productName.setText(String.format("名称(编码):        %s(%s)", good.productName, good.productCode));
+            productSpecif.setContent(String.format("规格(型号):        %s(%s)", Util.strFormat(good.productSpecif), Util.strFormat(good.productModel)));
+            standingCrop.setContent(String.format("现存量(单价):    %s(%s)", Util.strFormat(data.getStandingCrop()),Util.strFormat(good.productCostPrice)));
         }
     }
 

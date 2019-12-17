@@ -32,31 +32,31 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
         if (params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {
             Map<String, Object> mainParam = new HashMap();
             mainParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, params.get(Constant.BAPQuery.IS_MAIN_EQUIP));
-            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(mainParam);
+            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.createSubcondEntity(mainParam);
             fastQuery.subconds.addAll(subcondEntities);
         }
         if (params.containsKey(Constant.BAPQuery.EAM_CODE)) {
             Map<String, Object> codeParam = new HashMap();
             codeParam.put(Constant.BAPQuery.EAM_CODE, params.get(Constant.BAPQuery.EAM_CODE));
-            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(codeParam);
+            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(codeParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }
         if (params.containsKey(Constant.BAPQuery.EAM_STATE)) {
             Map<String, Object> stateParam = new HashMap();
             stateParam.put(Constant.BAPQuery.EAM_STATE, params.get(Constant.BAPQuery.EAM_STATE));
-            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(stateParam);
+            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(stateParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }
         if (params.containsKey(Constant.BAPQuery.EAMTYPE_CODE)) {
             Map<String, Object> typeParam = new HashMap();
             typeParam.put(Constant.BAPQuery.EAMTYPE_CODE, params.get(Constant.BAPQuery.EAMTYPE_CODE));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(typeParam, "EAM_EAMTYPE,EAMTYPE_CODE,EAM_BaseInfo,EAM_TYPE");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(typeParam, "EAM_EAMTYPE,EAMTYPE_CODE,EAM_BaseInfo,EAM_TYPE");
             fastQuery.subconds.add(joinSubcondEntity);
         }
         if (params.containsKey(Constant.BAPQuery.EAM_AREA)) {
             Map<String, Object> areaParam = new HashMap();
             areaParam.put(Constant.BAPQuery.EAM_AREA, params.get(Constant.BAPQuery.EAM_AREA));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(areaParam, "BEAM_AREAS,ID,EAM_BaseInfo,INSTALL_PLACE");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(areaParam, "BEAM_AREAS,ID,EAM_BaseInfo,INSTALL_PLACE");
             fastQuery.subconds.add(joinSubcondEntity);
         }
 

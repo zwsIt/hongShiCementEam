@@ -59,7 +59,7 @@ public interface ApiService {
     Flowable<DelayEntity> generateWork(@QueryMap Map<String, Object> pageQueryMap);
 
 
-    //日常润滑
+    //日常润滑（红狮定制视图）
     @GET("/BEAM/baseInfo/jWXItem/data-dg1558678704208.action")
     Flowable<DailyLubricateTaskListEntity> getLubrications(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 

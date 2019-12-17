@@ -52,8 +52,13 @@ public class ContractStaffEntity extends BaseEntity implements CommonSearchEntit
     }
 
     @Override
-    public String getSearchProperty() {
+    public String getSearchCode() {
         return code;
+    }
+
+    @Override
+    public String getSearchProperty() {
+        return picture;
     }
 
     @Override

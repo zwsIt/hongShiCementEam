@@ -7,11 +7,10 @@ import com.supcon.common.com_http.BaseEntity;
  * created by zhangwenshuai1 2018/8/13
  */
 public class EamType extends BaseEntity implements CommonSearchEntity{
-    public long id;
+    public Long id;
     public String code;
     public String name;
-
-    public String model;//设备型号
+    public String remark;
 
     public Department useDept;
 
@@ -31,12 +30,17 @@ public class EamType extends BaseEntity implements CommonSearchEntity{
     }
     @Override
     public String getSearchId() {
-        return code;
+        return String.valueOf(id);
     }
 
     @Override
     public String getSearchName() {
         return name;
+    }
+
+    @Override
+    public String getSearchCode() {
+        return code;
     }
 
     @Override

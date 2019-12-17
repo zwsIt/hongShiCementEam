@@ -54,6 +54,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +163,7 @@ public class SparePartReceiveActivity extends BaseRefreshRecyclerActivity<SpareP
                         .bindClickListener(R.id.redBtn, v12 -> {
                             List<SparePartReceiveEntity> list = sparePartReceiveAdapter.getList();
                             for (SparePartReceiveEntity sparePartReceiveEntity : list) {
-                                if (sparePartReceiveEntity.origDemandQuity == null || sparePartReceiveEntity.origDemandQuity <= 0) {
+                                if (sparePartReceiveEntity.origDemandQuity == null || sparePartReceiveEntity.origDemandQuity.compareTo(new BigDecimal(0)) < 1) {
                                     ToastUtils.show(this, "申请数量必须大于0！");
                                     return;
                                 }

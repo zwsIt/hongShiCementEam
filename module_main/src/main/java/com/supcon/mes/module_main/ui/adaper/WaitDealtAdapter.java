@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.supcon.common.BaseConstant;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.ToastUtils;
@@ -21,6 +22,7 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
@@ -134,18 +136,19 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                     ToastUtils.show(context, "未查询到当前单据状态!");
                                     return;
                                 }
+                                Bundle bundle = new Bundle();
                                 if (!TextUtils.isEmpty(item.istemp) && item.soucretype.equals("巡检提醒")) {
+                                    bundle.putString(Constant.IntentKey.TABLENO, item.workTableno);
                                     if (item.istemp.equals("1")) {
-                                        IntentRouter.go(context, Constant.Router.LSXJ_LIST);
+                                        IntentRouter.go(context, Constant.Router.LSXJ_LIST, bundle);
                                     } else {
-                                        IntentRouter.go(context, Constant.Router.JHXJ_LIST);
+                                        IntentRouter.go(context, Constant.Router.JHXJ_LIST, bundle);
                                     }
                                 } else {
                                     if (item.peroidtype == null) {
                                         ToastUtils.show(context, "未查询到当前单据周期类型!");
                                         return;
                                     }
-                                    Bundle bundle = new Bundle();
                                     bundle.putLong(Constant.IntentKey.WARN_ID, item.dataid);
                                     bundle.putString(Constant.IntentKey.PROPERTY, item.peroidtype.id);
                                     if (item.soucretype.equals("润滑提醒")) {
@@ -160,10 +163,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                             } else {
                                 if (!TextUtils.isEmpty(item.workTableno)) {
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(Constant.IntentKey.TABLENO, item.workTableno);
                                     // 工单跳转
                                     if (Constant.ProcessKey.WORK.equals(item.processkey)) {
                                         if (!TextUtils.isEmpty(item.openurl)) {
+                                            bundle.putString(Constant.IntentKey.TABLENO, item.workTableno);
                                             switch (item.openurl) {
                                                 case Constant.WxgdView.RECEIVE_OPEN_URL:
                                                     IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);
@@ -184,15 +187,22 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                             ToastUtils.show(context, "未查询到工单状态状态!");
                                         }
                                     } else if (Constant.ProcessKey.FAULT_INFO.equals(item.processkey)) {  // 隐患单跳转
+                                        YHEntity yhEntity = new YHEntity();
+                                        yhEntity.tableNo = item.workTableno;
+                                        bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, yhEntity);
                                         IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
-                                    }else if (Constant.ProcessKey.SPARE_PART_APPLY.equals(item.processkey)){ // 备件领用申请跳转
-                                        if (!EamApplication.isHailuo()) return;
+                                    } else if (Constant.ProcessKey.SPARE_PART_APPLY.equals(item.processkey)) { // 备件领用申请跳转
+//                                        if (!EamApplication.isHailuo()) return;
+                                        if (item.pendingid == null) {
+                                            ToastUtils.show(context,"单据待办ID空");
+                                            return;
+                                        }
                                         if (!TextUtils.isEmpty(item.openurl)) {
-                                            bundle.putLong(Constant.IntentKey.TABLE_ID,item.dataid);
-                                            bundle.putLong(Constant.IntentKey.PENDING_ID,item.pendingid);
-                                            switch (item.openurl){
+                                            bundle.putLong(Constant.IntentKey.TABLE_ID, item.dataid);
+                                            bundle.putLong(Constant.IntentKey.PENDING_ID, item.pendingid);
+                                            switch (item.openurl) {
                                                 case Constant.HLSparePartView.EDIT_URL:
-                                                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_EDIT,bundle);
+                                                    IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_EDIT, bundle);
                                                     break;
                                                 case Constant.HLSparePartView.SUBMIT_EDIT_URL:
                                                     IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_SUBMIT_EDIT, bundle);
@@ -201,10 +211,45 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                                     IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_SEND_EDIT, bundle);
                                                     break;
                                                 case Constant.HLSparePartView.VIEW_URL:
+                                                    if (Constant.TableStatus_CH.NOTIFY.equals(item.state)){
+                                                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE,false);
+                                                    }
                                                     IntentRouter.go(context, Constant.Router.SPARE_PART_APPLY_VIEW, bundle);
                                                     break;
                                             }
                                         }
+                                    }else if (Constant.ProcessKey.WORK_TICKET.equals(item.processkey)){ // 检修作业票
+                                        if (!TextUtils.isEmpty(item.openurl)) {
+                                            bundle.putLong(Constant.IntentKey.TABLE_ID, item.dataid);
+                                            bundle.putLong(Constant.IntentKey.PENDING_ID, item.pendingid);
+                                            switch (item.openurl) {
+                                                case Constant.HSWorkTicketView.EDIT_URL:
+                                                    IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_EDIT, bundle);
+                                                    break;
+                                                case Constant.HSWorkTicketView.VIEW_URL:
+                                                    bundle.putBoolean(Constant.IntentKey.IS_EDITABLE,true);
+                                                    IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);
+                                                    break;
+                                            }
+                                        }
+                                    }else if (Constant.ProcessKey.ELE_ON.equals(item.processkey)){ // 送电
+                                        String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+                                                + Constant.WebUrl.SD_LIST_NEW;
+                                        bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                                        bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                                        bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
+                                        bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                                        bundle.putString(BaseConstant.WEB_URL, url);
+                                        IntentRouter.go(context, Constant.Router.SD, bundle);
+                                    }else if (Constant.ProcessKey.ELE_OFF.equals(item.processkey)){  // 停电
+                                        String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+                                                + Constant.WebUrl.TD_LIST_NEW;
+                                        bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                                        bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                                        bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
+                                        bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                                        bundle.putString(BaseConstant.WEB_URL, url);
+                                        IntentRouter.go(context, Constant.Router.TD, bundle);
                                     }
                                 }
                             }
@@ -227,10 +272,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
         @SuppressLint("SetTextI18n")
         @Override
         protected void update(WaitDealtEntity data) {
-            if (Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey)){
+            if (Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey)) {
                 tableNo.setVisibility(View.VISIBLE);
                 tableNo.setContent(data.workTableno);
-            }else {
+            } else {
                 tableNo.setVisibility(View.GONE);
             }
             if (isEdit && !TextUtils.isEmpty(data.state) && (data.state.equals("派工"))) {
@@ -249,10 +294,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
 
             // 隐患单、工单、设备验收单、润滑/维保预警 提供内容
             if (Constant.ProcessKey.FAULT_INFO.equals(data.processkey) || Constant.ProcessKey.WORK.equals(data.processkey) || Constant.ProcessKey.CHECK_APPLY_FW.equals(data.processkey)
-             || "润滑提醒".equals(data.soucretype) || "维保提醒".equals(data.soucretype)){
+                    || "润滑提醒".equals(data.soucretype) || "维保提醒".equals(data.soucretype)) {
                 waitDealtContent.setVisibility(View.VISIBLE);
                 waitDealtContent.setText(String.format(context.getString(R.string.device_style6), "内容:", Util.strFormat(data.content)));
-            }else {
+            } else {
                 waitDealtContent.setVisibility(View.GONE);
             }
             // 工单、隐患单可委托
@@ -269,12 +314,14 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
             }
             if (!TextUtils.isEmpty(data.state)) {
                 waitDealtEamState.setText(data.state);
-                if (data.state.equals("编辑") || data.state.equals("派工")) {
+                if (Constant.TableStatus_CH.EDIT.equals(data.state) || Constant.TableStatus_CH.DISPATCH.equals(data.state)) {
                     waitDealtEamState.setTextColor(context.getResources().getColor(R.color.gray));
-                } else if (data.state.equals("执行")) {
+                } else if (Constant.TableStatus_CH.EXECUTE.equals(data.state) || Constant.TableStatus_CH.NOTIFY.equals(data.state)) {
                     waitDealtEamState.setTextColor(context.getResources().getColor(R.color.yellow));
-                } else if (data.state.equals("验收")) {
+                } else if (Constant.TableStatus_CH.ACCEPT.equals(data.state)) {
                     waitDealtEamState.setTextColor(context.getResources().getColor(R.color.blue));
+                }else {
+                    waitDealtEamState.setTextColor(context.getResources().getColor(R.color.gray));
                 }
             } else {
                 waitDealtEamState.setText("");
@@ -287,10 +334,11 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
             }
 
             if (!"MainActivity".equals(context.getClass().getSimpleName())) {
-                // 只处理工单、隐患单、验收单、运行记录、备件领用申请
+                // 只处理工单、隐患单、验收单、运行记录、备件领用申请、停送电
                 if ((Constant.ProcessKey.WORK.equals(data.processkey) || Constant.ProcessKey.FAULT_INFO.equals(data.processkey))
                         || Constant.ProcessKey.CHECK_APPLY_FW.equals(data.processkey) || Constant.ProcessKey.RUN_STATE_WF.equals(data.processkey)
-                        || Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey) && !TextUtils.isEmpty(data.openurl)) {
+                        || Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processkey) || Constant.ProcessKey.ELE_OFF.equals(data.processkey)
+                        || Constant.ProcessKey.ELE_ON.equals(data.processkey) && !TextUtils.isEmpty(data.openurl)) {
                     ProcessedEntity processedEntity = new ProcessedEntity();
                     processedEntity.prostatus = data.state;
                     processedEntity.openurl = data.openurl;

@@ -42,12 +42,12 @@ ext{
 
     minSdkVersion = 19
     targetSdkVersion = 22
-    versionCode = 38
-    versionName = "8.20.00.38"
+    versionCode = 43
+    versionName = "8.20.05.06"
 
-    ProductCode = "8.20.00"
+    ProductCode = "8.20.05"
     EamCode = "01"
-    MobileCode = "00"  //测试版本，不足一位加“0”补足
+    MobileCode = "06"  //测试版本，不足一位加“0”补足
 
     isAlone  = false
 
@@ -62,9 +62,9 @@ ext{
     aptVersion          = '9.7.29.3'
     annotationVersion   = '9.7.29.3'
     httpVersion         = '9.7.29.3'
-    viewVersion         = '9.7.29.3debug36'
+    viewVersion         = '9.7.29.4debug1' // 3debug9 移动老视图
     routerVersion       = '9.7.29.3'
-    mbapVersion         = '9.7.29.3debug5'
+    mbapVersion         = '9.7.29.3debug16'
 
     vibVersion          = '9.7.29.1'
     sb2Version          = '9.7.29.2debug4'

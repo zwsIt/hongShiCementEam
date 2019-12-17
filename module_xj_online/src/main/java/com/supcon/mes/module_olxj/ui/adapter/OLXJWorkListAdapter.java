@@ -32,6 +32,7 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.FaultPicHelper;
@@ -258,7 +259,9 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
                     xjWorkItemEntity.realRemark = ufItemRemark.getInput().trim();
                     xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
                     xjWorkItemEntity.isFinished = true;
-                    xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+                    SystemCodeEntity linkState = new SystemCodeEntity();
+                    linkState.setId(OLXJConstant.MobileWiLinkState.FINISHED_STATE);
+                    xjWorkItemEntity.setLinkState(linkState);
                     xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
 
                     EventBus.getDefault().post(new RefreshEvent(Constant.RefreshAction.XJ_WORK_END, getAdapterPosition()));
@@ -1014,14 +1017,14 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
             }
             fItemNormalRange.setContent(data.normalRange);
 
-            if ("wiLinkState/02".equals(data.linkState)) {  //免检
+            if ("wiLinkState/02".equals(data.getLinkState().id)) {  //免检
                 fExemption.setVisibility(View.VISIBLE);
                 fSkip.setVisibility(View.GONE);
             } else {
                 fExemption.setVisibility(View.GONE);
             }
 
-            if ("wiLinkState/03".equals(data.linkState)) { //跳检
+            if ("wiLinkState/03".equals(data.getLinkState().id)) { //跳检
                 fSkip.setVisibility(View.VISIBLE);
                 fExemption.setVisibility(View.GONE);
             } else {
@@ -1067,7 +1070,7 @@ public class OLXJWorkListAdapter extends BaseListDataRecyclerViewAdapter<OLXJWor
                 fItemPics.clear();
             }
 
-            if (data.control && !OLXJConstant.MobileWiLinkState.EXEMPTION_STATE.equals(data.linkState)) {
+            if (data.control && !OLXJConstant.MobileWiLinkState.EXEMPTION_STATE.equals(data.getLinkState().id)) {
                 buttonBar.setVisibility(View.VISIBLE);
                 viewDivide.setVisibility(View.VISIBLE);
             } else {

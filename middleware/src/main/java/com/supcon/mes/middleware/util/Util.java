@@ -356,6 +356,25 @@ public class Util {
             return 0D;
         }
     }
+    public static BigDecimal str2BigDecimal(String str){
+        if (TextUtils.isEmpty(str)){
+            return new BigDecimal(0);
+        }
+        return new BigDecimal(str);
+    }
+
+    public static String bigDecimal2Str(BigDecimal bigDecimal, int scale){
+        if (bigDecimal == null){
+            return new BigDecimal(0).toString();
+        }
+        return bigDecimal.setScale(scale,BigDecimal.ROUND_HALF_UP).toString();
+    }
+    public static BigDecimal bigDecimalScale(BigDecimal bigDecimal, int scale){
+        if (bigDecimal == null){
+            return new BigDecimal(0);
+        }
+        return bigDecimal.setScale(scale,BigDecimal.ROUND_HALF_UP);
+    }
 
     /**
      * 浮点型保留两位小数

@@ -301,10 +301,9 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
             if (!Constant.SparePartUseStatus.USEING.equals(data.getUseState().id)) {
                 actualQuantity.getNumViewInput().setText(data.actualQuantity == null ?
                         ((data.useQuantity == null || "0.00".equals(data.useQuantity.toString())) ?
-                                ((data.sum == null || "0.00".equals(data.sum.toString())) ? "" : String.valueOf(data.sum.setScale(2, BigDecimal.ROUND_HALF_UP)))
-                                : String.valueOf(data.useQuantity.setScale(2, BigDecimal.ROUND_HALF_UP)))
-                        : String.valueOf(data.actualQuantity.setScale(2, BigDecimal.ROUND_HALF_UP))
-                );
+                                ((data.sum == null || "0.00".equals(data.sum.toString())) ? "" : Util.bigDecimal2Str(data.sum,2))
+                                : Util.bigDecimal2Str(data.useQuantity,2))
+                        : Util.bigDecimal2Str(data.actualQuantity,2));
             } else {
                 actualQuantity.getNumViewInput().setText(data.actualQuantity == null ?
                         ((data.useQuantity == null || "0.00".equals(data.useQuantity.toString())) ? ""
@@ -312,7 +311,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
                         : String.valueOf(data.actualQuantity.setScale(2, BigDecimal.ROUND_HALF_UP))
                 );
             }
-            standingCrop.setValue(data.standingCrop == null ? "" : String.valueOf(data.standingCrop.setScale(2, BigDecimal.ROUND_HALF_UP)));
+            standingCrop.setValue(data.standingCrop == null ? "" : Util.bigDecimal2Str(data.standingCrop,2));
             useState.setValue(Util.strFormat2(data.getUseState().value));
             remark.setInput(data.remark);
 

@@ -14,20 +14,20 @@ public class YHEntity extends BaseEntity {
     public Area areaInstall;
     public Staff findStaffID;
     public Staff chargeStaff;//负责人
-    public long cid;
+    public Long cid;
     public String describe;
     public WXGDEam eamID;
     public SystemCodeEntity faultInfoType; // 隐患类型:
     public SystemCodeEntity faultState; // 隐患状态
     public SystemCodeEntity downStream; // 处理方式
     public SystemCodeEntity sourceType; // 隐患来源
-    public long findTime;
-    public long id;
+    public Long findTime;
+    public Long id;
     public PendingEntity pending;
     public String remark;
     public SystemCodeEntity repairType;
     public String tableNo;
-    public long tableInfoId;
+    public Long tableInfoId;
     public int status;
     public SystemCodeEntity priority;
     public RepairGroupEntity repiarGroup;

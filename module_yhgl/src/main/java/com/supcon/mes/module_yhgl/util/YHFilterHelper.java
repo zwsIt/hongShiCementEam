@@ -166,52 +166,35 @@ public class YHFilterHelper {
     }
 
     //工作流状态
-    public static List<String> createWorkSource() {
-        List<String> list = new ArrayList<>();
-        list.add("不限");
-        list.add(Constant.WorkSource_CN.patrolcheck);
-        list.add(Constant.WorkSource_CN.lubrication);
-        list.add(Constant.WorkSource_CN.maintenance);
-        list.add(Constant.WorkSource_CN.sparepart);
-        list.add(Constant.WorkSource_CN.other);
+    public static List<FilterBean> createWorkSource() {
+        List<FilterBean> list = new ArrayList<>();
+
+        FilterBean filterBean;
+
+        filterBean = new FilterBean();
+        filterBean.name = "不限";
+        filterBean.type = 1099;
+        list.add(filterBean);
+        filterBean = new FilterBean();
+        filterBean.name = Constant.WorkSource_CN.patrolcheck;
+        filterBean.type = 1000;
+        list.add(filterBean);
+        filterBean = new FilterBean();
+        filterBean.name = Constant.WorkSource_CN.lubrication;
+        filterBean.type = 1001;
+        list.add(filterBean);
+        filterBean = new FilterBean();
+        filterBean.name = Constant.WorkSource_CN.maintenance;
+        filterBean.type = 1002;
+        list.add(filterBean);
+        filterBean = new FilterBean();
+        filterBean.name = Constant.WorkSource_CN.sparepart;
+        filterBean.type = 1003;
+        list.add(filterBean);
+        filterBean = new FilterBean();
+        filterBean.name = Constant.WorkSource_CN.other;
+        filterBean.type = 1004;
+        list.add(filterBean);
         return list;
-    }
-
-    //动态添加视图
-    public static void addview(Activity activity, RadioGroup radiogroup, List<String> str, int id) {
-        int index = 0;
-        for (String ss : str) {
-            RadioButton button = new RadioButton(activity);
-            if (index == 0) {
-                button.setChecked(true);
-            }
-            setRaidBtnAttribute(activity, button, ss, Integer.parseInt(String.valueOf(id) + index));
-            radiogroup.addView(button);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) button
-                    .getLayoutParams();
-            layoutParams.setMargins(com.supcon.mes.middleware.util.Util.dpToPx(activity, 5), 0, 0, 0);//4个参数按顺序分别是左上右下
-            button.setLayoutParams(layoutParams);
-            index++;
-        }
-
-
-    }
-
-
-    @SuppressLint("ResourceType")
-    private static void setRaidBtnAttribute(Activity activity, final RadioButton codeBtn, String btnContent, int id) {
-        if (null == codeBtn) {
-            return;
-        }
-        codeBtn.setBackgroundResource(R.drawable.sh_filter_gray);
-        codeBtn.setTextColor(activity.getResources().getColorStateList(R.drawable.tvbg_tag_item));
-        codeBtn.setButtonDrawable(new ColorDrawable(Color.TRANSPARENT));
-        codeBtn.setId(id);
-        codeBtn.setText(btnContent);
-        codeBtn.setTextSize(14);
-        codeBtn.setGravity(Gravity.CENTER);
-        codeBtn.setPadding(com.supcon.mes.middleware.util.Util.dpToPx(activity, 10), com.supcon.mes.middleware.util.Util.dpToPx(activity, 2), com.supcon.mes.middleware.util.Util.dpToPx(activity, 10), Util.dpToPx(activity, 2));
-        LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        codeBtn.setLayoutParams(rlp);
     }
 }

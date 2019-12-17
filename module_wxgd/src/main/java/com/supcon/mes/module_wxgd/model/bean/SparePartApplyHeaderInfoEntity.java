@@ -6,6 +6,8 @@ import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 
+import java.math.BigDecimal;
+
 /**
  * @description SparePartApplyHeaderInfoEntity 备件领用申请单表头实体
  * @author  2019/9/27
@@ -30,8 +32,10 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
     private Long createTime;
     private Long deploymentId;
     private Long tableInfoId;
+    private String tableNo;
     private int version;
     private EamEntity eam; // 设备
+    private BigDecimal totalPrice; // 总价
 
     public Long getTableInfoId() {
         return tableInfoId;
@@ -75,7 +79,7 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
 
     public Staff getApplyStaff() {
         if (applyStaff == null){
-            return new Staff();
+            return applyStaff = new Staff();
         }
         return applyStaff;
     }
@@ -86,7 +90,7 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
 
     public Long getApplyTime() {
         if (applyTime == null){
-            return System.currentTimeMillis();
+            return applyTime = System.currentTimeMillis();
         }
         return applyTime;
     }
@@ -121,7 +125,7 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
 
     public WXGDEntity getRepairWork() {
         if (repairWork == null){
-            return new WXGDEntity();
+            repairWork = new WXGDEntity();
         }
         return repairWork;
     }
@@ -132,12 +136,29 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
 
     public EamEntity getEam() {
         if (eam == null){
-            return new EamEntity();
+            return eam = new EamEntity();
         }
         return eam;
     }
 
     public void setEam(EamEntity eam) {
         this.eam = eam;
+    }
+
+    public BigDecimal getTotalPrice() {
+        if (totalPrice == null) return totalPrice = new BigDecimal(0);
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getTableNo() {
+        return tableNo;
+    }
+
+    public void setTableNo(String tableNo) {
+        this.tableNo = tableNo;
     }
 }

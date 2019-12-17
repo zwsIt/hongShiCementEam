@@ -396,7 +396,9 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
         mViberDialog.bindClickListener(R.id.viberFinishBtn, v -> {
 
             mViberController.stopTest();
-            xjWorkItemEntity.realValue = mViberController.getData();
+//            SystemCodeEntity realValue = new SystemCodeEntity();
+//            realValue.setId();
+            xjWorkItemEntity.result = mViberController.getData();
             mOLXJWorkListAdapter.notifyItemChanged(position);
         }, true).show();
 
@@ -604,7 +606,9 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
             }
             xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
             xjWorkItemEntity.isFinished = true;
-            xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+            SystemCodeEntity linkState = new SystemCodeEntity();
+            linkState.setId(OLXJConstant.MobileWiLinkState.FINISHED_STATE);
+            xjWorkItemEntity.setLinkState(linkState);
             xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
             //处理结论自动判定
             if (xjWorkItemEntity.autoJudge) {
@@ -788,7 +792,9 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
             xjWorkItemEntity.skipReasonName = passReasonInfo.value;
             xjWorkItemEntity.realispass = true;
             xjWorkItemEntity.isFinished = true;
-            xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.SKIP_STATE;//跳检
+            SystemCodeEntity linkState = new SystemCodeEntity();
+            linkState.setId(OLXJConstant.MobileWiLinkState.SKIP_STATE);
+            xjWorkItemEntity.setLinkState(linkState);//跳检
             xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
             xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
             xjWorkItemEntity.conclusionID = null;
@@ -1158,7 +1164,6 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
                         }else {
                             showWorkItems(mAreaEntities.get(0));
                         }
-
 
                     }
                 } else {

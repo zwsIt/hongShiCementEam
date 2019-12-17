@@ -92,7 +92,6 @@ public class RankingActivity extends BaseRefreshRecyclerActivity implements Scor
         super.onInit();
         ranking = getIntent().getIntExtra(Constant.IntentKey.RANKING, -1);
         type = getIntent().getStringExtra(Constant.IntentKey.TYPE);
-        rankingAdapter.setRank(ranking);
     }
 
     @Override
@@ -126,7 +125,7 @@ public class RankingActivity extends BaseRefreshRecyclerActivity implements Scor
     protected void initListener() {
         super.initListener();
         RxView.clicks(leftBtn)
-                .throttleFirst(2, TimeUnit.SECONDS)
+//                .throttleFirst(0, TimeUnit.SECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {

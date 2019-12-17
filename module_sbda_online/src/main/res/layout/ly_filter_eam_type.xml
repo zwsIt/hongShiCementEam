@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:gravity="center_vertical"
         android:tag="listEamTypeFilter"
-        app:icon_res="@drawable/ic_choose_white2"
+        app:icon_res="@drawable/ic_clear_small"
         app:text="设备类型"
         app:text_color="@color/white"
         app:text_size="14" />

@@ -326,12 +326,17 @@ public class CommonDeviceEntity extends BaseEntity implements CommonSearchEntity
 
     @Override
     public String getSearchId() {
-        return eamCode;
+        return String.valueOf(eamId);
     }
 
     @Override
     public String getSearchName() {
         return eamName;
+    }
+
+    @Override
+    public String getSearchCode() {
+        return eamCode;
     }
 
     @Override

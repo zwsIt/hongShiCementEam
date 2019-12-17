@@ -33,20 +33,20 @@ public class ScoreStaffListPresenter extends ScoreStaffListContract.Presenter {
             Map<String, Object> timeParam = new HashMap<>();
             timeParam.put(Constant.BAPQuery.SCORE_DATA_START, param.get(Constant.BAPQuery.SCORE_DATA_START));
             timeParam.put(Constant.BAPQuery.SCORE_DATA_STOP, param.get(Constant.BAPQuery.SCORE_DATA_STOP));
-            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(timeParam);
+            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.createSubcondEntity(timeParam);
             fastQuery.subconds.addAll(subcondEntities);
         }
         if (param.containsKey(Constant.BAPQuery.SCORE_DAILY_START) || param.containsKey(Constant.BAPQuery.SCORE_DAILY_STOP)) {
             Map<String, Object> timeParam = new HashMap<>();
             timeParam.put(Constant.BAPQuery.SCORE_DAILY_START, param.get(Constant.BAPQuery.SCORE_DAILY_START));
             timeParam.put(Constant.BAPQuery.SCORE_DAILY_STOP, param.get(Constant.BAPQuery.SCORE_DAILY_STOP));
-            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(timeParam);
+            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.createSubcondEntity(timeParam);
             fastQuery.subconds.addAll(subcondEntities);
         }
         if (param.containsKey(Constant.BAPQuery.NAME)) {
             Map<String, Object> eamParam = new HashMap<>();
             eamParam.put(Constant.BAPQuery.NAME, param.get(Constant.BAPQuery.NAME));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(eamParam, "base_staff,ID,BEAM_WORKER_SCORE_HEADS,PATROL_WORKER");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(eamParam, "base_staff,ID,BEAM_WORKER_SCORE_HEADS,PATROL_WORKER");
             fastQuery.subconds.add(joinSubcondEntity);
         }
         fastQuery.modelAlias = "workerScoreHead";

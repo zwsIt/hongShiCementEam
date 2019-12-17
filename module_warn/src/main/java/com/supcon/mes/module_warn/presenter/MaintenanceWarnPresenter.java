@@ -27,7 +27,7 @@ public class MaintenanceWarnPresenter extends MaintenanceWarnContract.Presenter 
             url = "/BEAM/baseInfo/jWXItem/data-dg1531171100751.action";
         }
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
         fastQuery.subconds.add(joinSubcondEntity);
         fastQuery.modelAlias = "jWXItem";
 

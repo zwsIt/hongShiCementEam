@@ -34,7 +34,7 @@ public class SystemCodeManager extends BaseController {
 
    @SuppressLint("CheckResult")
    public void setSystemCodeList(List<SystemCodeEntity> systemCodeList){
-
+       EamApplication.dao().getSystemCodeEntityDao().deleteAll();
        EamApplication.dao().getSystemCodeEntityDao().insertOrReplaceInTx(systemCodeList);
 
    }

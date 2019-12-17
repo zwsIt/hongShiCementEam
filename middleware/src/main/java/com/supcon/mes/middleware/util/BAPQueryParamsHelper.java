@@ -36,7 +36,7 @@ public class BAPQueryParamsHelper {
 
         FastQueryCondEntity fastQueryCondEntity = new FastQueryCondEntity();
 
-        List<BaseSubcondEntity> subcondEntities = crateSubcondEntity(queryMap);
+        List<BaseSubcondEntity> subcondEntities = createSubcondEntity(queryMap);
         fastQueryCondEntity.subconds = subcondEntities;
 
         return fastQueryCondEntity;
@@ -83,7 +83,7 @@ public class BAPQueryParamsHelper {
     }
 
     //获取SubcondEntity对象
-    public static List<BaseSubcondEntity> crateSubcondEntity(Map<String, Object> queryMap) {
+    public static List<BaseSubcondEntity> createSubcondEntity(Map<String, Object> queryMap) {
         List<BaseSubcondEntity> subcondEntitys = new LinkedList<>();
         for (String key : queryMap.keySet()) {
             if (queryMap.get(key) == null) {
@@ -98,7 +98,7 @@ public class BAPQueryParamsHelper {
     }
 
     //获取JoinSubcondEntity对象
-    public static JoinSubcondEntity crateJoinSubcondEntity(Map<String, Object> queryMap, String joinInfo) {
+    public static JoinSubcondEntity createJoinSubcondEntity(Map<String, Object> queryMap, String joinInfo) {
         JoinSubcondEntity joinSubcondEntity = new JoinSubcondEntity();
         joinSubcondEntity.type = TYPE_JOIN;
         joinSubcondEntity.joinInfo = joinInfo;
@@ -130,70 +130,20 @@ public class BAPQueryParamsHelper {
                 subcondEntity.value = String.valueOf(value);
                 break;
             case Constant.BAPQuery.NAME:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = key;
-                subcondEntity.dbColumnType = TEXT;
-                subcondEntity.operator = LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-                break;
-            case Constant.BAPQuery.CONTENT:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = key;
-                subcondEntity.dbColumnType = TEXT;
-                subcondEntity.operator = LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-                break;
             case Constant.BAPQuery.SPECIFY:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = key;
-                subcondEntity.dbColumnType = TEXT;
-                subcondEntity.operator = LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-                break;
+            case Constant.BAPQuery.CONTENT:
             case Constant.BAPQuery.PRODUCT_NAME:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = key;
-                subcondEntity.dbColumnType = TEXT;
-                subcondEntity.operator = LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-                break;
             case Constant.BAPQuery.PRODUCT_SPECIF:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = key;
-                subcondEntity.dbColumnType = TEXT;
-                subcondEntity.operator = LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-                break;
+            case Constant.BAPQuery.PRODUCT_MODEL:
             case Constant.BAPQuery.PLACE_SET_CODE:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = Constant.BAPQuery.PLACE_SET_CODE;
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
-                subcondEntity.operator = LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-
-                break;
-
             case Constant.BAPQuery.PLACE_SET_NAME:
                 subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = Constant.BAPQuery.PLACE_SET_NAME;
                 subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
+                subcondEntity.columnName = key;
+                subcondEntity.dbColumnType = TEXT;
                 subcondEntity.operator = LIKE;
                 subcondEntity.paramStr = LIKE_OPT_BLUR;
                 subcondEntity.value = String.valueOf(value);
-
                 break;
 
             case Constant.BAPQuery.BATCH_TEXT:
@@ -373,14 +323,6 @@ public class BAPQueryParamsHelper {
                 subcondEntity.value = String.valueOf(value);
                 break;
             case Constant.BAPQuery.PRODUCT_CODE:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.columnName = key;
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
-                subcondEntity.operator = Constant.BAPQuery.LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
-                subcondEntity.value = String.valueOf(value);
-                break;
             case Constant.BAPQuery.EAM_NAME:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = key;
@@ -400,13 +342,21 @@ public class BAPQueryParamsHelper {
                 subcondEntity.value = String.valueOf(value);
                 break;
             case Constant.BAPQuery.EAMTYPE_CODE:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = key;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
+                subcondEntity.operator = BE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
             case Constant.BAPQuery.EAMTYPE_NAME:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = key;
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
-                subcondEntity.operator = Constant.BAPQuery.BE;
-                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.operator = LIKE;
+                subcondEntity.paramStr = LIKE_OPT_BLUR;
                 subcondEntity.value = String.valueOf(value);
                 break;
             case Constant.BAPQuery.EAM_AREANAME:
@@ -580,6 +530,15 @@ public class BAPQueryParamsHelper {
                 subcondEntity.paramStr = LIKE_OPT_BLUR;
                 subcondEntity.value = String.valueOf(value);
                 break;
+            case Constant.BAPQuery.LUB_PART:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = key;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = TEXT;
+                subcondEntity.operator = Constant.BAPQuery.LIKE;
+                subcondEntity.paramStr = LIKE_OPT_BLUR;
+                subcondEntity.value = String.valueOf(value);
+                break;
         }
 
         return subcondEntity;
@@ -614,7 +573,6 @@ public class BAPQueryParamsHelper {
                 subcondEntity = generateSubcond(Constant.BAPQuery.EAM_NAME, value);
                 joinSubcondEntity.subconds.add(subcondEntity);
                 return joinSubcondEntity;
-
             case Constant.BAPQuery.WXGD_REPAIR_TYPE:
 
             case Constant.BAPQuery.WXGD_PRIORITY:
@@ -650,7 +608,6 @@ public class BAPQueryParamsHelper {
         subcondEntity.operator = LIKE;
         subcondEntity.paramStr = LIKE_OPT_BLUR;
         subcondEntity.value = String.valueOf(value);
-
 
         return subcondEntity;
     }

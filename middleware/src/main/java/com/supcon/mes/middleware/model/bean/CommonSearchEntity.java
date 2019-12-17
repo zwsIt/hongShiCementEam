@@ -29,6 +29,13 @@ public interface CommonSearchEntity {
     String getSearchName();
 
     /**
+     * 获取搜索列表中所需要的code值,必须不为null
+     *
+     * @return code
+     */
+    String getSearchCode();
+
+    /**
      * 获取搜索列表中所需要的某个字段值(自定义),必须不为null
      *
      * @return property值

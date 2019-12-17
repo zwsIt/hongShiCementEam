@@ -58,7 +58,7 @@ import com.supcon.mes.module_yhgl.R;
 import com.supcon.mes.module_yhgl.model.api.OfflineYHSubmitAPI;
 import com.supcon.mes.module_yhgl.model.contract.OfflineYHSubmitContract;
 import com.supcon.mes.module_yhgl.presenter.OfflineYHSubmitPresenter;
-import com.supcon.mes.module_yhgl.util.FieldHepler;
+import com.supcon.mes.middleware.util.FieldHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -251,13 +251,13 @@ public class OfflineYHEditActivity extends BaseRefreshActivity implements Offlin
 
         for (T entity : entities) {
 
-            String name = FieldHepler.getFieldValue(entity.getClass(), entity, "name");
+            String name = FieldHelper.getFieldValue(entity.getClass(), entity, "name");
             if (!TextUtils.isEmpty(name)) {
                 map.put(name, entity);
                 continue;
             }
 
-            String value = FieldHepler.getFieldValue(entity.getClass(), entity, "value");
+            String value = FieldHelper.getFieldValue(entity.getClass(), entity, "value");
             if (!TextUtils.isEmpty(value)) {
                 map.put(value, entity);
             }

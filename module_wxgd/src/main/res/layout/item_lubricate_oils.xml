@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_5"
                 android:paddingBottom="@dimen/dp_5">
 
                 <com.supcon.mes.mbap.view.CustomVerticalTextView
@@ -45,7 +45,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="@dimen/dp_10"
+                    android:paddingStart="@dimen/dp_5"
                     android:tag="oilCode"
                     app:editable="false"
                     app:key="@string/oilCode"
@@ -59,7 +59,7 @@
                 android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_5"
                 android:paddingBottom="@dimen/dp_5">
 
                 <com.supcon.mes.mbap.view.CustomVerticalTextView
@@ -80,7 +80,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="@dimen/dp_10"
+                    android:paddingStart="@dimen/dp_5"
                     android:tag="sparePartId"
                     app:content_hint="--"
                     app:editable="false"
@@ -89,13 +89,26 @@
                     app:text_size="15" />
             </LinearLayout>
 
+            <com.supcon.mes.mbap.view.CustomEditText
+                android:id="@+id/lubricatingPart"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:padding="@dimen/dp_5"
+                android:tag="lubricatingPart"
+                app:icon_visible="true"
+                app:text="润滑部位:"
+                app:edit_hint="请输入润滑部位"/>
             <com.supcon.mes.mbap.view.CustomNumView
                 android:id="@+id/sum"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
-                android:padding="@dimen/dp_5"
+                android:paddingEnd="@dimen/dp_5"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
                 android:tag="sum"
                 app:editable="true"
                 app:text="用量:" />
@@ -107,7 +120,7 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_5"
                 android:paddingEnd="@dimen/dp_5">
 
                 <com.supcon.mes.mbap.view.CustomSpinner

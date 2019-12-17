@@ -41,14 +41,14 @@
             android:visibility="gone"/>
         <ImageView
             android:id="@+id/itemFlowDot"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_other_ed"
             android:tag="itemFlowDot" />
         <View
             android:id="@+id/itemFlowLineRight"
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:layout_height="2dp"
             android:background="@color/red"
             android:tag="itemFlowLineRight"/>

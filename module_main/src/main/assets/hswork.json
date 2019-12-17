@@ -152,19 +152,28 @@
       "menuOperateCodes": "BEAMEle_1.0.0_onOrOff_eleOnList_self"
     },
     {
-      "name": "关联表单",
+      "name": "停送电作废",
       "viewType": 0,
       "num": 0,
       "type": 18,
-      "isPower": false,
-      "menuOperateCodes": ""
+      "isPower": true,
+      "menuOperateCodes": "BEAMEle_1.0.0_onOrOff_eleReject_self"
     },
     {
-      "name": "维修手册",
+      "name": "停送电审批",
       "viewType": 0,
       "tag": "",
       "num": 0,
       "type": 19,
+      "isPower": true,
+      "menuOperateCodes": "BEAMEle_1.0.0_approvalManage_approvalList_self"
+    },
+    {
+      "name": "检修作业票",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 27,
       "isPower": false,
       "menuOperateCodes": ""
     }
@@ -223,6 +232,15 @@
       "type": 25,
       "isPower": true,
       "menuOperateCodes": "BEAM2_1.0.0_workList_sparePartList_self"
+    },
+    {
+      "name": "停送电统计",
+      "viewType": 0,
+      "tag": "",
+      "num": 0,
+      "type": 26,
+      "isPower": true,
+      "menuOperateCodes": "BEAMEle_1.0.0_dataStatistic_statisticList_self"
     }
   ]
 }

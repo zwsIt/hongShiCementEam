@@ -2,8 +2,10 @@ package com.supcon.mes.module_tsd.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JsResult;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -49,11 +51,11 @@ public class TDListActivity extends BaseWebViewActivity {
     @Override
     protected void initView() {
         super.initView();
-
-        if(!EamApplication.isDev()){
-            ((ViewGroup)findViewById(R.id.leftBtn).getParent()).setBackgroundResource(R.color.mobileValueColor);
-            StatusBarUtils.setWindowStatusBarColor(this, R.color.mobileValueColor);
-        }
+        webView.setWebChromeClient(new CustomInnerChromeClient());
+//        if(!EamApplication.isDev()){
+            ((ViewGroup)findViewById(R.id.leftBtn).getParent()).setBackgroundResource(R.color.h5Theme);
+            StatusBarUtils.setWindowStatusBarColor(this, R.color.h5Theme);
+//        }
 
         titleText.setText("停电申请");
     }
@@ -240,6 +242,19 @@ public class TDListActivity extends BaseWebViewActivity {
             }
         }, file);
 
+    }
+
+    /**
+     * TSDCommonActivity
+     * created by zhangwenshuai1 2019/11/27
+     *  内部类：为解决加载bar隐藏
+     */
+    private class CustomInnerChromeClient extends DefaultWebChromeClient {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            super.onProgressChanged(view, newProgress);
+            pbProgress.setVisibility(View.GONE);
+        }
     }
 
 }

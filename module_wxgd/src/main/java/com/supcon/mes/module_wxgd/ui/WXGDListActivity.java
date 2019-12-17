@@ -17,13 +17,11 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.com_http.util.RxSchedulers;
-import com.supcon.common.view.App;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.LogUtil;
-import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.adapter.RecyclerEmptyAdapter;
@@ -51,6 +49,7 @@ import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.EmptyViewHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.FilterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -61,7 +60,7 @@ import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
 import com.supcon.mes.module_wxgd.ui.adapter.WXGDListAdapter;
-import com.supcon.mes.module_wxgd.util.FilterHelper;
+import com.supcon.mes.module_wxgd.util.WorkFilterHelper;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -117,8 +116,8 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     @BindByTag("listWorkflowFilter")
     CustomFilterView<ScreenEntity> listWorkflowFilter;
 
-    @BindByTag("radioGroup1")
-    RadioGroup radioGroup1;
+    @BindByTag("radioGroupFilter")
+    RadioGroup radioGroupFilter;
 
     private WXGDListAdapter wxgdListAdapter;
     private RecyclerEmptyAdapter mRecyclerEmptyAdapter;
@@ -165,7 +164,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
 
         customSearchView.setHint("搜索");
         rightBtn.setImageResource(R.drawable.add);
-        searchTitleBar.disableRightBtn();
+//        searchTitleBar.disableRightBtn();
         initFilter();
         initEmpty();
     }
@@ -204,10 +203,10 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
      * @author zhangwenshuai1 2018/8/14
      */
     private void initFilter() {
-        listWorkSourceFilter.setData(FilterHelper.createWorkSourceList());
-        listRepairTypeFilter.setData(FilterHelper.createRepairTypeList());
-        listPriorityFilter.setData(FilterHelper.createPriorityList());
-        FilterHelper.addview(this, radioGroup1, FilterHelper.createWorkflowList(), 1000);
+        listWorkSourceFilter.setData(WorkFilterHelper.createWorkSourceList());
+        listRepairTypeFilter.setData(WorkFilterHelper.createRepairTypeList());
+        listPriorityFilter.setData(WorkFilterHelper.createPriorityList());
+        FilterHelper.addView(this, radioGroupFilter, WorkFilterHelper.createWorkflowList());
     }
 
     @SuppressLint("CheckResult")
@@ -237,7 +236,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
                 setRadioEnable(false);
             }
         });
-        radioGroup1.setOnCheckedChangeListener((group, checkedId) -> {
+        radioGroupFilter.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton radioButton = findViewById(group.getCheckedRadioButtonId());
             generateFilterWorkflow(radioButton.getText().toString());
         });
@@ -319,18 +318,16 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         });
     }
 
-    //创建隐患大
+    //创建隐患单
     private void createYH() {
         YHEntity yhEntity = new YHEntity();
         yhEntity.findStaffID = EamApplication.me();
         yhEntity.findTime = System.currentTimeMillis();
-        yhEntity.cid = SharedPreferencesUtils.getParam(App.getAppContext(), Constant.CID, 0L);
-        yhEntity.id = -1;
+        yhEntity.cid = EamApplication.getAccountInfo().cid;
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, yhEntity);
         bundle.putSerializable(Constant.IntentKey.DEPLOYMENT_ID, deploymentId);
         IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
-
     }
 
     /**
@@ -540,8 +537,8 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     }
 
     public void setRadioEnable(boolean enable) {
-        for (int i = 0; i < radioGroup1.getChildCount(); i++) {
-            radioGroup1.getChildAt(i).setEnabled(enable);
+        for (int i = 0; i < radioGroupFilter.getChildCount(); i++) {
+            radioGroupFilter.getChildAt(i).setEnabled(enable);
         }
     }
 

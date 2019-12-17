@@ -18,7 +18,7 @@ import org.greenrobot.greendao.annotation.Id;
  * @Desc
  */
 @Entity
-public class TxlEntity extends BaseEntity implements ITxlEntity {
+public class TxlEntity extends BaseEntity implements ITxlEntity,CommonSearchEntity {
     /*{
         PICTURE: "bap-workspace/uploads\2019\10\21\1001_20191021155431424\1.png",
                 STAFFID: 1001,
@@ -326,5 +326,25 @@ public class TxlEntity extends BaseEntity implements ITxlEntity {
 
     public void setCODE(String CODE) {
         this.CODE = CODE;
+    }
+
+    @Override
+    public String getSearchId() {
+        return String.valueOf(STAFFID);
+    }
+
+    @Override
+    public String getSearchName() {
+        return NAME;
+    }
+
+    @Override
+    public String getSearchCode() {
+        return CODE;
+    }
+
+    @Override
+    public String getSearchProperty() {
+        return DEPARTMENTNAME;
     }
 }

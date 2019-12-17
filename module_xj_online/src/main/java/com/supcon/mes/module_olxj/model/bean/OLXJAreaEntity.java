@@ -2,14 +2,11 @@ package com.supcon.mes.module_olxj.model.bean;
 
 import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
-import com.supcon.mes.mbap.MBapApp;
-import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.AttachmentEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by wangshizhan on 2019/4/1
@@ -78,4 +75,5 @@ public class OLXJAreaEntity extends BaseEntity {
     //    public String faultMsg;//新故障信息拼接  本地拼接的
     @Expose
     public String oldfaultMsg;//旧故障信息拼接
+
 }

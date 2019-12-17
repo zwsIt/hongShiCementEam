@@ -25,7 +25,7 @@ public class EamPresenter extends EamContract.Presenter {
         if (params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {
             Map<String, Object> mainParam = new HashMap();
             mainParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, params.get(Constant.BAPQuery.IS_MAIN_EQUIP));
-            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.crateSubcondEntity(mainParam);
+            List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.createSubcondEntity(mainParam);
             fastQuery.subconds.addAll(subcondEntities);
         }
 
@@ -38,13 +38,13 @@ public class EamPresenter extends EamContract.Presenter {
                 codeParam.put(Constant.BAPQuery.EAM_CODE, params.get(Constant.BAPQuery.EAM_CODE));
             }
             codeParam.put(Constant.BAPQuery.EAM_NAME, params.get(Constant.BAPQuery.EAM_NAME));
-            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.crateSubcondEntity(codeParam);
+            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(codeParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }
         if (params.containsKey(Constant.BAPQuery.EAM_AREANAME)) {
             Map<String, Object> areaParam = new HashMap();
             areaParam.put(Constant.BAPQuery.EAM_AREANAME, params.get(Constant.BAPQuery.EAM_AREANAME));
-            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.crateJoinSubcondEntity(areaParam, "BEAM_AREAS,ID,EAM_BaseInfo,INSTALL_PLACE");
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(areaParam, "BEAM_AREAS,ID,EAM_BaseInfo,INSTALL_PLACE");
             fastQuery.subconds.add(joinSubcondEntity);
         }
         fastQuery.modelAlias = "baseInfo";

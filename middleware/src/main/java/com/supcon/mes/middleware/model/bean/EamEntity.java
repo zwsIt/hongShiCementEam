@@ -127,8 +127,13 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     }
 
     @Override
-    public String getSearchProperty() {
+    public String getSearchCode() {
         return code;
+    }
+
+    @Override
+    public String getSearchProperty() {
+        return getInstallPlace().name;
     }
 
     public class ScoreMerity extends BaseEntity{

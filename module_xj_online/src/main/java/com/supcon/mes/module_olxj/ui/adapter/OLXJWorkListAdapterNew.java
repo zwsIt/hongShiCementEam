@@ -30,6 +30,7 @@ import com.supcon.mes.mbap.view.CustomSwitchButton;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.util.FaultPicHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
@@ -195,7 +196,7 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                     SnackbarHelper.showError(itemView, "请填写结果");
                     return;
                 }
-                if (xjWorkItemEntity.conclusionID != null && OLXJConstant.MobileConclusion.AB_NORMAL.equals(xjWorkItemEntity.conclusionID)
+                if (OLXJConstant.MobileConclusion.AB_NORMAL.equals(xjWorkItemEntity.conclusionID)
                         && xjWorkItemEntity.isphone && !xjWorkItemEntity.isPhonere) {
                     SnackbarHelper.showError(itemView, "该巡检项要求拍照");
                     return;
@@ -205,7 +206,9 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                     xjWorkItemEntity.realRemark = ufItemRemark.getInput().trim();
                     xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
                     xjWorkItemEntity.isFinished = true;
-                    xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+                    SystemCodeEntity linkState = new SystemCodeEntity();
+                    linkState.setId(OLXJConstant.MobileWiLinkState.FINISHED_STATE);
+                    xjWorkItemEntity.setLinkState(linkState);
                     xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
                     onItemChildViewClick(ufItemEndBtn, 0, xjWorkItemEntity);
                 } catch (Exception e) {
@@ -220,7 +223,7 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                     SnackbarHelper.showError(itemView, "请填写结果");
                     return;
                 }
-                if (xjWorkItemEntity.conclusionID != null && OLXJConstant.MobileConclusion.AB_NORMAL.equals(xjWorkItemEntity.conclusionID)
+                if (OLXJConstant.MobileConclusion.AB_NORMAL.equals(xjWorkItemEntity.conclusionID)
                         && xjWorkItemEntity.isphone && !xjWorkItemEntity.isPhonere) {
                     SnackbarHelper.showError(itemView, "该巡检项要求拍照");
                     return;
@@ -230,7 +233,9 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                     xjWorkItemEntity.realRemark = ufItemRemark.getInput().trim();
                     xjWorkItemEntity.endTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
                     xjWorkItemEntity.isFinished = true;
-                    xjWorkItemEntity.linkState = OLXJConstant.MobileWiLinkState.FINISHED_STATE;
+                    SystemCodeEntity linkState = new SystemCodeEntity();
+                    linkState.setId(OLXJConstant.MobileWiLinkState.FINISHED_STATE);
+                    xjWorkItemEntity.setLinkState(linkState);
                     xjWorkItemEntity.staffId = EamApplication.getAccountInfo().staffId;
                     xjWorkItemEntity.isEffective = true; // 直接处理的巡检项
                     onItemChildViewClick(ufItemDirectDealBtn, 0, xjWorkItemEntity);
@@ -366,7 +371,6 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                         ufItemPriority.setCompoundDrawables(null, null, drawable, null);
                         getList().removeAll(workItemEntities);
                         notifyItemRangeRemoved(getAdapterPosition() + 1, workItemEntities.size());
-                        notifyItemRangeChanged(getAdapterPosition() + 1, workItemEntities.size());
                     } else {
                         ufItemPriority.setText("点击关闭");
                         Drawable drawable = context.getResources().getDrawable(R.drawable.ic_sq);
@@ -375,6 +379,7 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                         getList().addAll(getAdapterPosition() + 1, workItemEntities);
                         notifyItemRangeInserted(getAdapterPosition() + 1, workItemEntities.size());
                     }
+                    notifyItemRangeChanged(getAdapterPosition() + 1, workItemEntities.size());
                     isExpand = !isExpand;
                 }
             });
@@ -410,12 +415,12 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                     }
                 }
                 if (isExpand) {
-                    ufItemPriority.setText("点击关闭展开");
+                    ufItemPriority.setText("点击关闭");
                     Drawable drawable = context.getResources().getDrawable(R.drawable.ic_sq);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     ufItemPriority.setCompoundDrawables(null, null, drawable, null);
                 } else {
-                    ufItemPriority.setText("点击展开更多");
+                    ufItemPriority.setText("点击展开");
                     Drawable drawable = context.getResources().getDrawable(R.drawable.ic_zk);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     ufItemPriority.setCompoundDrawables(null, null, drawable, null);
@@ -529,10 +534,12 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                 ufBtnLayout.setVisibility(View.VISIBLE);
                 ufContentLine.setVisibility(View.VISIBLE);
                 ufItemPics.setVisibility(View.VISIBLE);
+                ufItemDirectDealBtn.setVisibility(View.VISIBLE);
             } else {
                 ufBtnLayout.setVisibility(View.GONE);
                 ufContentLine.setVisibility(View.GONE);
                 ufItemPics.setVisibility(View.GONE);
+                ufItemDirectDealBtn.setVisibility(View.GONE);
                 ufItemPics.clear();
                 xjWorkItemEntity.xjImgUrl = "";
             }
