@@ -400,7 +400,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("faultInfo.createPositionId", EamApplication.getAccountInfo().positionId);
 
 
-        if (mYHEntity.id != 0) {
+        if (mYHEntity.id != null) {
             map.put("id", mYHEntity.id);
             map.put("faultInfo.id", mYHEntity.id);
         } else {

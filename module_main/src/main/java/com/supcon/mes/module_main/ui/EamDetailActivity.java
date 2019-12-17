@@ -17,11 +17,13 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.supcon.common.BaseConstant;
 import com.supcon.common.view.base.activity.BaseControllerActivity;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.LoginEvent;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
@@ -161,6 +163,12 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
                         IntentRouter.go(EamDetailActivity.this, Constant.Router.ACCEPTANCE_LIST, bundle);
                         break;
                     case 3:
+                        bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                        bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                        bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
+                        bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                        bundle.putString(BaseConstant.WEB_URL, "http://" + EamApplication.getIp() + ":" + EamApplication.getPort() + Constant.WebUrl.TSD_STATISTICS + "&date=" + System.currentTimeMillis());
+                        IntentRouter.go(context, Constant.Router.TSD_COMMON, bundle);
                         break;
                 }
             }

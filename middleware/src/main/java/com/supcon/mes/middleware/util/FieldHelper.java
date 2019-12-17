@@ -1,5 +1,7 @@
 package com.supcon.mes.middleware.util;
 
+import com.supcon.mes.mbap.beans.SheetEntity;
+import com.supcon.mes.middleware.model.bean.SonSheetEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
 import java.lang.reflect.Field;
@@ -38,6 +40,21 @@ public class FieldHelper {
         }
         for (SystemCodeEntity systemCodeEntity : systemCodeEntityList){
             list.add(systemCodeEntity.value);
+        }
+        return list;
+    }
+
+    public static List<SonSheetEntity> getSheetEntityList(List<SystemCodeEntity> systemCodeEntityList){
+        List<SonSheetEntity> list = new ArrayList<>();
+        if (systemCodeEntityList == null || systemCodeEntityList.size() <= 0){
+            return list;
+        }
+        SonSheetEntity sonSheetEntity;
+        for (SystemCodeEntity systemCodeEntity : systemCodeEntityList){
+            sonSheetEntity = new SonSheetEntity();
+            sonSheetEntity.name = systemCodeEntity.value;
+            sonSheetEntity.id = systemCodeEntity.id;
+            list.add(sonSheetEntity);
         }
         return list;
     }

@@ -15,14 +15,17 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.picker.SinglePicker;
+import com.supcon.mes.mbap.beans.SheetEntity;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.mbap.view.CustomSheetDialog;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
@@ -33,6 +36,7 @@ import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.SonSheetEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
@@ -51,6 +55,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -263,18 +268,22 @@ public class WorkTicketEditActivity extends BaseRefreshActivity {
                         ToastUtils.show(context, "危险源控制点列表数据为空,请重新加载页面！");
                         return;
                     }
-
-                    mSinglePickController
-                            .list(FieldHelper.getSystemCodeValue(mHazardList))
-                            .listener(new SinglePicker.OnItemPickListener() {
+                    new CustomSheetDialog(context).multiSheet("危险源控制点",FieldHelper.getSheetEntityList(mHazardList),null)
+                            .setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
                                 @Override
-                                public void onItemPicked(int index, Object item) {
-                                    hazardCtrlPoint.setContent(item.toString());
-//                                    mWorkTicketEntity.setRiskAssessment(mHazardList.get(index));
-//                                    mWorkTicketEntity.setHazardsourContrpoint(item.toString());
-//                                    mWorkTicketEntity.setHazardsourContrpointForDisplay(item.toString());
+                                public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                                    List<SonSheetEntity> sonSheetEntityList = GsonUtil.jsonToList(obj.toString(), SonSheetEntity.class);
+                                    StringBuilder value = new StringBuilder();
+                                    StringBuilder id = new StringBuilder();
+                                    for (SonSheetEntity sonSheetEntity : sonSheetEntityList){
+                                        value.append(sonSheetEntity.name).append(",");
+                                        id.append(sonSheetEntity.id).append(",");
+                                    }
+                                    hazardCtrlPoint.setContent(value.toString());
+                                    mWorkTicketEntity.setHazardsourContrpoint(id.toString());
+                                    mWorkTicketEntity.setHazardsourContrpointForDisplay(value.toString());
                                 }
-                            }).show(hazardCtrlPoint.getContent());
+                            }).show();
                 }
             }
         });

@@ -1052,8 +1052,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("faultInfo.findTime", DateUtil.dateTimeFormat(mYHEntity.findTime));
         map.put("faultInfo.createPositionId", EamApplication.getAccountInfo().positionId);
         map.put("viewselect", "faultInfoEdit");
-        map.put("id", mYHEntity.id != -1 ? mYHEntity.id : "");
-        map.put("faultInfo.id", mYHEntity.id != -1 ? mYHEntity.id : "");
+        map.put("id", mYHEntity.id != null ? mYHEntity.id : "");
+        map.put("faultInfo.id", mYHEntity.id != null ? mYHEntity.id : "");
 
         map.put("faultInfo.sourceType.id", mYHEntity.sourceType != null ? mYHEntity.sourceType.id : "BEAM2006/02");
         map.put("faultInfo.sourceType.value", mYHEntity.sourceType != null ? mYHEntity.sourceType.value : "其他");

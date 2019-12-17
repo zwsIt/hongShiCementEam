@@ -174,7 +174,7 @@
       "tag": "",
       "num": 0,
       "type": 27,
-      "isPower": false,
+      "isPower": true,
       "menuOperateCodes": ""
     }
   ],
