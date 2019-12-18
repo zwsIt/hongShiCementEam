@@ -167,7 +167,16 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
                         bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
                         bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
                         bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
-                        bundle.putString(BaseConstant.WEB_URL, "http://" + EamApplication.getIp() + ":" + EamApplication.getPort() + Constant.WebUrl.TSD_STATISTICS + "&date=" + System.currentTimeMillis());
+//                        bundle.putString(BaseConstant.WEB_URL, "http://officetest.supcon.com/wv/wordviewerframe.aspx?WOPISrc=http://officetest.supcon.com:8080/wopi/files/1234.doc");
+                        bundle.putString(BaseConstant.WEB_URL,"http://192.168.91.60:8080/msService/baseService/workbench/fileViewUrl?id=1197&type=pdf");
+//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.91.60:8080/greenDill/static/foundation/PDF/web/viewer.html?file=%2FmsService%2FbaseService%2Faspose%2FpdfStreamHandeler%3FfilePath%3DC%3A%2FVxBAP%2Fbap-cloud-server%2Ftools%2Finit%2F..%2F..%2F..%2Fbap-server%2Fbap-workspace%2Fstatic%2FbaseService%2Faspose%2FtempFile%2Fpptx%25E6%2596%2587%25E4%25BB%25B6%25E7%25B1%25BB%25E5%259E%258B.pdf");
+//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.90.134:8979/aspose/tempFile/preview?" +
+//                                "path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE3XDEwMDBfMjAxOTEyMTcyMTQwMjg3OTRc5p2t5bee5biC6IGM56ew57O757uf6LWE5paZ5aGr5YaZ5pON5L2c5Y-C6ICDLnBkZg&type=pdf");
+//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.90.134:8979/aspose/tempFile/preview?" +
+//                                "path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE4XDEwMDBfMjAxOTEyMTgxMDA4MzQ3NzNc5Yi25oiQ5LiJ57q_5beh5qOA6KGoVjIuMC5kb2N4&type=pdf");
+//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.90.134:8979/aspose/tempFile/preview?" +
+//                                "path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE4XDEwMDBfMjAxOTEyMTgxMDA4MzQ3NzVc5beh5qOA5Yy65Z-fX-W3oeajgOWMuuWfny54bHM&type=pdf");
+//                        bundle.putString(BaseConstant.WEB_URL,"http://192.168.90.134:8979/aspose/tempFile/preview?path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE4XDEwMDBfMjAxOTEyMTgxMTE0NDY1ODJcd3d3d-aIkS54bHN4&type=html");
                         IntentRouter.go(context, Constant.Router.TSD_COMMON, bundle);
                         break;
                 }

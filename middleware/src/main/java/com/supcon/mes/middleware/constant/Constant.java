@@ -953,4 +953,8 @@ public interface Constant {
         String VIEW_URL = "/WorkTicket/workTicket/ohworkticket/workTicketView.action";// 查看
     }
 
+    interface FileView {
+        String fileUrl = "/foundation/workbench/fileViewUrl.action?id=";
+    }
+
 }

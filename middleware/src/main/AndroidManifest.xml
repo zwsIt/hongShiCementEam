@@ -46,7 +46,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-        <service android:name=".service.KeepService" android:process=":live"/>
+<!--        <service android:name=".service.KeepService" android:process=":live"/>-->
+<!--        <service android:name=".service.KeepService"/>-->
         <activity android:name=".ui.MultiDepartSelectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"

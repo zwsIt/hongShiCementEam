@@ -90,7 +90,7 @@ public class TSDCommonActivity extends BaseWebViewActivity {
     @Override
     protected void initData() {
         super.initData();
-
+//        webView.loadUrl("http://mozilla.github.io/pdf.js/web/viewer.html?file=" + getIntent().getStringExtra(BaseConstant.WEB_URL));
     }
 
     @Override
