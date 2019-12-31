@@ -311,7 +311,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                 mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_GDPATH);
             }
 
-            mDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_workList",
+            mDownloadController.downloadPic(attachmentEntities, "BEAM2_1.0.0_workList",
                     result -> itemGalleryView.setGalleryBeans(result));
         }
 

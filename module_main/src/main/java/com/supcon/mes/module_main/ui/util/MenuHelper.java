@@ -5,7 +5,6 @@ import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.Util;
-import com.supcon.mes.module_login.model.bean.WorkInfo;
 import com.supcon.mes.module_main.ui.view.MenuPopwindowBean;
 
 import org.json.JSONArray;
@@ -98,7 +97,13 @@ public class MenuHelper {
                         }
                         break;
                     case Constant.HSWorkType.TD:
-                        menuPopwindowBean.setRouter(Constant.Router.TD);
+                        if (EamApplication.isHongshi()) { // 红狮跳转
+                            menuPopwindowBean.setRouter(Constant.Router.HS_TD_LIST);
+                            menuPopwindowBean.setType(Constant.HSWorkType.HS_TD);
+                        }else {
+                            //移动视图
+                            menuPopwindowBean.setRouter(Constant.Router.TD);
+                        }
                         break;
                     case Constant.HSWorkType.SD:
                         menuPopwindowBean.setRouter(Constant.Router.SD);
@@ -107,7 +112,7 @@ public class MenuHelper {
                     case Constant.HSWorkType.TSD_APPROVAL:
                         menuPopwindowBean.setRouter(Constant.Router.TSD_COMMON);
                         break;
-                    case Constant.HSWorkType.JX_TICKETS:
+                    case Constant.HSWorkType.HS_JX_TICKETS:
                         menuPopwindowBean.setRouter(Constant.Router.OVERHAUL_WORKTICKET_LIST);
                         break;
                     default:

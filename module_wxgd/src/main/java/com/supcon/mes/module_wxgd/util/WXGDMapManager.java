@@ -82,6 +82,10 @@ public class WXGDMapManager {
         map.put("__file_upload", true);
 
         map.put("workRecord.dispatcher.id", mWXGDEntity.getDispatcher().id != null ? mWXGDEntity.getDispatcher().id : EamApplication.getAccountInfo().staffId);
+        map.put("workRecord.isOffApply",mWXGDEntity.isOffApply);
+        map.put("workRecord.offApply.id",mWXGDEntity.offApply == null ? "" : mWXGDEntity.offApply.id);
+        map.put("workRecord.ohWorkTicket.id",mWXGDEntity.ohWorkTicket == null ? "" : mWXGDEntity.ohWorkTicket.id);
+
         return map;
     }
 

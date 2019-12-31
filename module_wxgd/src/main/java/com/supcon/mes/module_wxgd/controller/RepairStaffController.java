@@ -18,7 +18,7 @@ import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.module_wxgd.model.bean.RepairStaffListEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.module_wxgd.model.contract.RepairStaffContract;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.presenter.RepairStaffPresenter;
 import com.supcon.mes.module_wxgd.ui.adapter.RepairStaffAdapter;
 

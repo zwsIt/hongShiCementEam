@@ -1,8 +1,11 @@
 package com.supcon.mes.module_sbda_online.model.network;
 
 import com.app.annotation.apt.ApiFactory;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.module_sbda_online.model.bean.EamFileEntity;
+import com.supcon.mes.module_sbda_online.model.bean.EamFileViewUrlEntity;
 import com.supcon.mes.module_sbda_online.model.bean.LubriListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.MaintenanceListEntity;
 import com.supcon.mes.module_sbda_online.model.bean.ParamListEntity;
@@ -92,5 +95,12 @@ public interface ApiService {
     @POST("/BEAM2/runningGather/runningGathers/runningGatherList-query.action?1=1&permissionCode=BEAM2_1.0.0_runningGather_runningGatherList")
     Flowable<StopPoliceListEntity> runningGatherList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
+    //设备文档list(设备档案页签)
+    @GET("/BEAM/baseInfo/baseInfo/data-dg1461551623969.action?datagridCode=BEAM_1.0.0_baseInfo_beamEditdg1461551623969&rt=json")
+    Flowable<CommonBAPListEntity<EamFileEntity>> getEamFileList(@QueryMap Map<String, Object> pageQueryMap);
+
+    //获取设备文档预览url
+    @GET("/foundation/workbench/fileViewUrl.action")
+    Flowable<EamFileViewUrlEntity> getEamFileViewUrl(@Query(value = "id") Long id);
 
 }

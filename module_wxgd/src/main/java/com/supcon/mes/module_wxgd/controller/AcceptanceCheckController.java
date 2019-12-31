@@ -17,7 +17,7 @@ import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.model.api.AcceptanceCheckAPI;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckListEntity;
 import com.supcon.mes.module_wxgd.model.contract.AcceptanceCheckContract;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.presenter.AcceptanceCheckPresenter;
 import com.supcon.mes.module_wxgd.ui.adapter.AcceptanceCheckAdapter;
 

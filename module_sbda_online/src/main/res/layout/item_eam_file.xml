@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10">
+
+    <ImageView
+        android:id="@+id/fileIv"
+        android:tag="fileIv"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_centerVertical="true"
+        android:paddingStart="@dimen/dp_10"
+        android:src="@drawable/ic_file" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/fileIv"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/dp_10"
+        android:paddingStart="@dimen/dp_10">
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="name"
+            app:editable="false"
+            app:text_width="0dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:gravity="center"
+            android:text="预览"
+            android:textColor="@color/customBlue4"/>
+
+        <com.supcon.mes.mbap.view.CustomTextView
+            android:id="@+id/remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="remark"
+            app:editable="false"
+            app:text="@string/remark"
+            app:text_size="15"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</RelativeLayout>

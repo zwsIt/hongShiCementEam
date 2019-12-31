@@ -12,14 +12,13 @@ import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.event.BaseEvent;
-import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.model.api.SparePartAPI;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.module_wxgd.model.bean.SparePartListEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.module_wxgd.model.contract.SparePartContract;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.presenter.SparePartPresenter;
 import com.supcon.mes.module_wxgd.ui.adapter.SparePartAdapter;
 

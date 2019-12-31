@@ -69,6 +69,7 @@ dependencies {
     implementation 'com.carmelo:keeplive:1.0.0'
 
     annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
+//    compile project(path: ':module_hs_tsd')
 //    implementation project(':upush')
 
 }

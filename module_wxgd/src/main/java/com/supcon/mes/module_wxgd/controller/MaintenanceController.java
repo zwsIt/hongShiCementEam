@@ -17,7 +17,7 @@ import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.model.api.MaintenanceAPI;
 import com.supcon.mes.module_wxgd.model.bean.MaintenanceListEntity;
 import com.supcon.mes.module_wxgd.model.contract.MaintenanceContract;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.presenter.MaintenancePresenter;
 import com.supcon.mes.module_wxgd.ui.adapter.MaintenanceAdapter;
 

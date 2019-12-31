@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,17 +12,15 @@ import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.module_overhaul_workticket.IntentRouter;
 import com.supcon.mes.module_overhaul_workticket.R;
-import com.supcon.mes.module_overhaul_workticket.constant.OperateType;
-import com.supcon.mes.module_overhaul_workticket.model.bean.SafetyMeasuresEntity;
 import com.supcon.mes.module_overhaul_workticket.model.bean.WorkTicketEntity;
 
 import java.util.concurrent.TimeUnit;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * ClassName
@@ -75,21 +72,33 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
                     .throttleFirst(500, TimeUnit.MILLISECONDS)
                     .subscribe(o -> {
                         WorkTicketEntity workTicketEntity = getItem(getAdapterPosition());
+                        PendingEntity pendingEntity = workTicketEntity.getPending();
+                        if (pendingEntity == null){
+                            ToastUtils.show(context,"代办为空,请刷新");
+                            return;
+                        }
                         Bundle bundle = new Bundle();
                         bundle.putLong(Constant.IntentKey.TABLE_ID, workTicketEntity.getId());
-                        bundle.putLong(Constant.IntentKey.PENDING_ID, workTicketEntity.getPending().id);
+                        bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, workTicketEntity.getOffApplyTableinfoid() == null ? -1 :workTicketEntity.getOffApplyTableinfoid()); // 停电作业票tableInfoId
                         bundle.putString(Constant.IntentKey.HAZARD_CONTRL_POINT,workTicketEntity.getHazardsourContrpointForDisplay());
-                        switch (workTicketEntity.getPending().taskDescription) {
-                            case Constant.TableStatus_CH.EDIT:
-                                IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_EDIT,bundle);
-                                break;
-                            case Constant.TableStatus_CH.REVIEW:
-                                bundle.putBoolean(Constant.IntentKey.IS_EDITABLE,true);
-                            case Constant.TableStatus_CH.TAKE_EFFECT:
-                            default:
-                                IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_VIEW,bundle);
-                                break;
+                        if (workTicketEntity.getPending().id == null){ // 无代办、生效
+                            IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_VIEW,bundle);
+                        }else {
+                            bundle.putLong(Constant.IntentKey.PENDING_ID, workTicketEntity.getPending().id);
+                            switch (workTicketEntity.getPending().taskDescription) {
+                                case Constant.TableStatus_CH.EDIT:
+                                    IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_EDIT,bundle);
+                                    break;
+                                case Constant.TableStatus_CH.REVIEW:
+                                case Constant.TableStatus_CH.REVIEW1:
+                                    bundle.putBoolean(Constant.IntentKey.IS_EDITABLE,true);
+                                case Constant.TableStatus_CH.TAKE_EFFECT:
+                                default:
+                                    IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_VIEW,bundle);
+                                    break;
+                            }
                         }
+
                     });
         }
 

@@ -3,23 +3,17 @@ package com.supcon.mes.middleware.controller;
 import android.annotation.SuppressLint;
 
 import com.app.annotation.Presenter;
-import com.google.gson.Gson;
 import com.supcon.common.view.base.controller.BasePresenterController;
 import com.supcon.common.view.util.LogUtil;
-import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.api.SystemCodeAPI;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
-import com.supcon.mes.middleware.model.bean.SystemCodeListEntity;
 import com.supcon.mes.middleware.model.contract.SystemCodeContract;
 import com.supcon.mes.middleware.presenter.SystemCodePresenter;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by wangshizhan on 2018/8/1
@@ -58,7 +52,7 @@ public class SystemCodeController extends BasePresenterController implements Sys
         entityCodes.add(Constant.SystemCode.TJ_REASON);
 
         // 检修作业票
-        entityCodes.add(Constant.SystemCode.RISK_ACCEMENT);
+        entityCodes.add(Constant.SystemCode.RISK_ASSESSMENT);
         entityCodes.add(Constant.SystemCode.HAZARD_CON_POINT);
     }
 

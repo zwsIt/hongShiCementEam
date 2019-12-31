@@ -3,6 +3,7 @@ package com.supcon.mes.module_wxgd.ui;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -100,6 +101,11 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
 
     @BindByTag("workContext")
     CustomVerticalTextView workContext;
+
+    @BindByTag("eleOffChkBox")
+    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOff")
+    CustomTextView eleOff;
 
 
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
@@ -226,6 +232,14 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
+        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
+            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
+//            eleOffChkBox.setBackgroundResource(R.drawable.ic_checked);
+        }else {
+            eleOffChkBox.setButtonDrawable(null);
+        }
+        eleOffChkBox.setClickable(false);
+        eleOffChkBox.setChecked(mWXGDEntity.isOffApply);
     }
 
     @Override

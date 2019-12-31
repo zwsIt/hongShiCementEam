@@ -2,10 +2,11 @@ package com.supcon.mes.module_wxgd.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -75,7 +76,7 @@ import com.supcon.mes.module_wxgd.model.dto.LubricateOilsEntityDto;
 import com.supcon.mes.module_wxgd.model.dto.MaintainDto;
 import com.supcon.mes.module_wxgd.model.dto.RepairStaffDto;
 import com.supcon.mes.module_wxgd.model.dto.SparePartEntityDto;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.model.event.LubricateOilsEvent;
 import com.supcon.mes.module_wxgd.model.event.MaintenanceEvent;
 import com.supcon.mes.module_wxgd.model.event.RepairStaffEvent;
@@ -97,7 +98,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
@@ -167,6 +167,11 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
     @BindByTag("workContext")
     CustomVerticalTextView workContext;
+
+    @BindByTag("eleOffChkBox")
+    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOff")
+    CustomTextView eleOff;
 
     private LinkController mLinkController;
 
@@ -350,6 +355,16 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
+        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
+//            eleOffChkBox.setVisibility(View.GONE);
+            eleOffChkBox.setClickable(false);
+            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
+//            eleOffChkBox.setBackgroundResource(R.drawable.ic_checked);
+        }else {
+            eleOffChkBox.setClickable(true);
+            eleOffChkBox.setButtonDrawable(R.drawable.sl_checkbox_selector_small);
+        }
+        eleOffChkBox.setChecked(mWXGDEntity.isOffApply);
     }
 
     @SuppressLint("CheckResult")
@@ -504,25 +519,13 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                         mWXGDEntity.repairAdvise = charSequence.toString();
                     }
                 });
-//        transition.setOnChildViewClickListener(new OnChildViewClickListener() {
-//            @Override
-//            public void onChildViewClick(View childView, int action, Object obj) {
-//                String tag = (String) childView.getTag();
-//                Transition currentTransition = transition.currentTransition();
-//                switch (tag) {
-//                    case Constant.Transition.SUBMIT_BTN:
-//                        doSubmit(currentTransition);
-//                        break;
-//                    case Constant.Transition.SAVE:
-//                        doSave();
-//                        break;
-//                }
-//            }
-//        });
 
         eamName.getCustomValue().setOnClickListener(v -> goSBDA());
         eamIc.setOnClickListener(v -> goSBDA());
         eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
+
+        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mWXGDEntity.isOffApply = isChecked);
+
     }
 
     String closeReason; // 关闭原因

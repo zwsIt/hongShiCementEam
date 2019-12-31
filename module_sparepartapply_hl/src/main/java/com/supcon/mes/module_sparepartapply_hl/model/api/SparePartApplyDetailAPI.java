@@ -1,4 +1,4 @@
-package com.supcon.mes.module_wxgd.model.api;
+package com.supcon.mes.module_sparepartapply_hl.model.api;
 
 import com.app.annotation.apt.ContractFactory;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveListEntity;

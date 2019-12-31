@@ -2,7 +2,6 @@ package com.supcon.mes.module_wxgd.controller;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.app.annotation.BindByTag;
@@ -19,7 +18,7 @@ import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.model.api.LubricateOilsAPI;
 import com.supcon.mes.module_wxgd.model.bean.LubricateOilsListEntity;
 import com.supcon.mes.module_wxgd.model.contract.LubricateOilsContract;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.presenter.LubricateOilsPresenter;
 import com.supcon.mes.module_wxgd.ui.adapter.LubricateOilsAdapter;
 

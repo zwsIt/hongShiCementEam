@@ -29,15 +29,13 @@ import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.ui.view.TrapezoidView;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
-import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_login.model.bean.WorkInfo;
-import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
+import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.model.api.AnomalyAPI;
 import com.supcon.mes.module_main.model.api.EamDetailAPI;
 import com.supcon.mes.module_main.model.contract.AnomalyContract;
@@ -59,6 +57,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.functions.Consumer;
+
+
 
 /**
  * @author yangfei.cao
@@ -163,12 +163,14 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
                         IntentRouter.go(EamDetailActivity.this, Constant.Router.ACCEPTANCE_LIST, bundle);
                         break;
                     case 3:
-                        bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
-                        bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
-                        bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
-                        bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
-//                        bundle.putString(BaseConstant.WEB_URL, "http://officetest.supcon.com/wv/wordviewerframe.aspx?WOPISrc=http://officetest.supcon.com:8080/wopi/files/1234.doc");
-                        bundle.putString(BaseConstant.WEB_URL,"http://192.168.91.60:8080/msService/baseService/workbench/fileViewUrl?id=1197&type=pdf");
+                        bundle.putLong(Constant.IntentKey.EAM_ID,mEamEntity.id);
+                        IntentRouter.go(context, Constant.Router.EAM_FILE_LIST, bundle);
+//                        bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+//                        bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+//                        bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
+//                        bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.6.50:8979/aspose/tempFile/preview?path=ZDpcVnhCQVBcQkFQLVNFfjFcYmFwLXdvcmtzcGFjZS91cGxvYWRzXDIwMTlcMTJcMjFcMTA3NV8yMDE5MTIyMTEwMTgxMzU0M1zpl6jmiLfpl67popjmlbTnkIYuZG9jeA&type=pdf");
+//                        bundle.putString(BaseConstant.WEB_URL,"http://192.168.91.60:8080/msService/baseService/workbench/fileViewUrl?id=1197&type=pdf");
 //                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.91.60:8080/greenDill/static/foundation/PDF/web/viewer.html?file=%2FmsService%2FbaseService%2Faspose%2FpdfStreamHandeler%3FfilePath%3DC%3A%2FVxBAP%2Fbap-cloud-server%2Ftools%2Finit%2F..%2F..%2F..%2Fbap-server%2Fbap-workspace%2Fstatic%2FbaseService%2Faspose%2FtempFile%2Fpptx%25E6%2596%2587%25E4%25BB%25B6%25E7%25B1%25BB%25E5%259E%258B.pdf");
 //                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.90.134:8979/aspose/tempFile/preview?" +
 //                                "path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE3XDEwMDBfMjAxOTEyMTcyMTQwMjg3OTRc5p2t5bee5biC6IGM56ew57O757uf6LWE5paZ5aGr5YaZ5pON5L2c5Y-C6ICDLnBkZg&type=pdf");
@@ -177,7 +179,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
 //                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.90.134:8979/aspose/tempFile/preview?" +
 //                                "path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE4XDEwMDBfMjAxOTEyMTgxMDA4MzQ3NzVc5beh5qOA5Yy65Z-fX-W3oeajgOWMuuWfny54bHM&type=pdf");
 //                        bundle.putString(BaseConstant.WEB_URL,"http://192.168.90.134:8979/aspose/tempFile/preview?path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE4XDEwMDBfMjAxOTEyMTgxMTE0NDY1ODJcd3d3d-aIkS54bHN4&type=html");
-                        IntentRouter.go(context, Constant.Router.TSD_COMMON, bundle);
+//                        IntentRouter.go(context, Constant.Router.FILE_VIEW, bundle);
                         break;
                 }
             }

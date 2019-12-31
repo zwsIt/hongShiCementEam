@@ -121,7 +121,7 @@ import static com.supcon.mes.middleware.constant.Constant.IntentKey.DEPLOYMENT_I
 @Router(Constant.Router.YH_EDIT)
 @Presenter(value = {YHSubmitPresenter.class, YHListPresenter.class})
 @Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class, MaintenanceController.class, OnlineCameraController.class,
-        AttachmentController.class, AttachmentDownloadController.class})
+        AttachmentController.class})
 public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContract.View, YHListContract.View {
 
     @BindByTag("leftBtn")
@@ -386,7 +386,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     }
 
     private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
-        mAttachmentDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_faultInfo", result -> {
+        mAttachmentDownloadController.downloadPic(attachmentEntities, "BEAM2_1.0.0_faultInfo", result -> {
             yhGalleryView.setGalleryBeans(result);
         });
     }
@@ -1201,7 +1201,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 //        }
         getController(OnlineCameraController.class).doSave(attachmentMap);
         if (attachmentMap.size() != 0) {
-            attachmentMap.put("linkId", String.valueOf(mYHEntity.tableInfoId));
+            attachmentMap.put("linkId", mYHEntity.tableInfoId == null ? "" : String.valueOf(mYHEntity.tableInfoId));
         }
 
         LogUtil.d(GsonUtil.gsonString(map));

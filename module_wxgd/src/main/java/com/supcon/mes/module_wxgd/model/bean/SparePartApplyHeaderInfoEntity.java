@@ -1,6 +1,5 @@
 package com.supcon.mes.module_wxgd.model.bean;
 
-import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
@@ -123,7 +122,7 @@ public class SparePartApplyHeaderInfoEntity extends ResultEntity {
         this.remark = remark;
     }
 
-    public WXGDEntity getRepairWork() {
+    public WXGDEntity   getRepairWork() {
         if (repairWork == null){
             repairWork = new WXGDEntity();
         }

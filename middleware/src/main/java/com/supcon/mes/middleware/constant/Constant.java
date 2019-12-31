@@ -25,6 +25,8 @@ public interface Constant {
     String CID = "cid";
     String CNAME = "cname";
     String XJ_GUIDE_IMGPATH = FILE_PATH + "eamInspectionGuideImage" + File.separator; //设备巡检指导图片路径
+    String IMAGE_SAVE_WORKTICKETPATH = FILE_PATH + "workTicket" + File.separator + "pics" + File.separator;   //检修工作票的图片路径
+    String IMAGE_SAVE_ELE_PATH = FILE_PATH + "electricity" + File.separator + "pics" + File.separator;   //停送电的图片路径
 
     interface CAMERA_ACT {
         int ACT_GALLERY = 0;
@@ -200,6 +202,13 @@ public interface Constant {
         String OVERHAUL_WORKTICKET_LIST = "OVERHAUL_WORKTICKET_LIST"; // 检修工作票list
         String OVERHAUL_WORKTICKET_EDIT = "OVERHAUL_WORKTICKET_EDIT"; // 检修工作票编辑
         String OVERHAUL_WORKTICKET_VIEW = "OVERHAUL_WORKTICKET_VIEW"; // 检修工作票查看
+
+        String FILE_VIEW = "FILE_VIEW"; // 文档预览
+        String HS_TD_LIST = "HS_TD_LIST"; // 红狮停电list
+        String HS_ELE_OFF_EDIT = "HS_ELE_OFF_EDIT"; // 停电票编辑
+        String HS_ELE_OFF_VIEW = "HS_ELE_OFF_VIEW"; // 停电票查看
+        String ELE_OFF_TEMPLATE = "ELE_OFF_TEMPLATE"; // 停电模板
+        String EAM_FILE_LIST = "EAM_FILE_LIST"; // 设备文档list
     }
 
 
@@ -326,6 +335,9 @@ public interface Constant {
         String ADD_DATA_LIST = "ADD_DATA_LIST"; // 已添加数据：备件、润滑、维保
         String POSITION = "POSITION";
         String HAZARD_CONTRL_POINT = "HAZARD_CONTRL_POINT"; // 检修工作票：危险源控制点
+        String ELE_OFF_ON = "ELE_OFF_ON"; // 停送电模板
+        String ElE_OFF_ID = "ElE_OFF_ID"; // 停电票id
+        String ElE_OFF_TABLE_INFO_ID = "ElE_OFF_TABLE_INFO_ID"; // 停电票tableInfoId
     }
 
     interface FilterSearchParam {
@@ -401,7 +413,9 @@ public interface Constant {
         int SPARE_PART_CONSUME_LEDGER = 24;  //零部件消耗台账
         int SPARE_PART_RECEIVE_RECORD = 25;  //备件领用记录
         int TSD_STATISTICS = 26;//停送电统计
-        int JX_TICKETS = 27;// 检修作业票
+        int HS_JX_TICKETS = 27;// 红狮检修作业票
+        int HS_TD = 28;// 红狮停电
+        int HS_SD = 29;// 红狮送电
 
         int ZZ = 99;  //知之应用
     }
@@ -503,8 +517,9 @@ public interface Constant {
     }
 
     interface PicType {
-        String YHLR_PIC = "createRecord";
-        String YHFC_PIC = "reviewRecord";
+        String WORK_TICKET_PIC = "workTicketRecord";
+        String ELE_OFF_PIC = "eleOffRecord";
+        String ELE_ON_PIC = "eleOnRecord";
         String XJ_PIC = "xjRecord";
         String YH_PIC = "yhRecord";
         String GD_PIC = "workRecord";
@@ -687,7 +702,7 @@ public interface Constant {
         String TJ_REASON = "BEAM2_2012";
 
         // 检修作业票
-        String RISK_ACCEMENT = "WorkTicket_001"; // 风险评估
+        String RISK_ASSESSMENT = "WorkTicket_001"; // 风险评估
         String HAZARD_CON_POINT = "WorkTicket_002"; // 危险源控制点
 
     }
@@ -867,7 +882,7 @@ public interface Constant {
         String EDIT = "编辑";
         String DISPATCH = "派工";
         String SPARE_PART_APPLY = "领用人申请";
-        String ELE_ON = "送点申请中";
+        String ELE_ON = "送电申请中";
         String ELE_OFF = "停电申请中";
         String EXECUTE = "执行";
         String EXECUTE_NOTIFY = "执行,通知";
@@ -875,6 +890,7 @@ public interface Constant {
         String ACCEPT = "验收";
         String RECALL = "撤回";
         String REVIEW = "审核";
+        String REVIEW1 = "审批";
         String CONFIRM = "接单(确认)";
         String OVER = "结束";
         String TAKE_EFFECT = "生效";
@@ -942,10 +958,11 @@ public interface Constant {
      */
     interface EventFlag {
         String SPAD = "sparePartApplyDetail"; // 备件领用申请明细PT
+        String WORK_TICKET_PT = "workTicketDetail"; // 检修工作票明细PT
     }
 
     /**
-     * 备件领用申请单据视图(注：海螺使用)
+     * 检修作业票单据视图(注：红狮)
      */
     interface HSWorkTicketView {
         String EDIT_URL = "/WorkTicket/workTicket/ohworkticket/workTicketEdit.action";// 编辑

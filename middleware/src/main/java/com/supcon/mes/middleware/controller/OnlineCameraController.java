@@ -78,7 +78,7 @@ public class OnlineCameraController extends BaseCameraController {
             mDownloadController = new AttachmentDownloadController(dir);
         }
 
-        mDownloadController.downloadYHPic(attachmentEntities, entityCode, new OnSuccessListener<List<GalleryBean>>() {
+        mDownloadController.downloadPic(attachmentEntities, entityCode, new OnSuccessListener<List<GalleryBean>>() {
             @Override
             public void onSuccess(List<GalleryBean> result) {
                 yhGalleryView.setGalleryBeans(result);
@@ -206,6 +206,9 @@ public class OnlineCameraController extends BaseCameraController {
                 galleryBean.url = result;
                 yhGalleryView.addGalleryBean(galleryBean);
                 pics.add(galleryBean);
+                if(mOnSuccessListener!= null){
+                    mOnSuccessListener.onSuccess(file);
+                }
 
             }
         }, file);

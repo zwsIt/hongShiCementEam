@@ -22,7 +22,7 @@ public class EamPresenter extends EamContract.Presenter {
     public void getEam(Map<String, Object> params, int page) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
 
-        if (params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {
+        if (EamApplication.isHongshi() && params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {
             Map<String, Object> mainParam = new HashMap();
             mainParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, params.get(Constant.BAPQuery.IS_MAIN_EQUIP));
             List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.createSubcondEntity(mainParam);

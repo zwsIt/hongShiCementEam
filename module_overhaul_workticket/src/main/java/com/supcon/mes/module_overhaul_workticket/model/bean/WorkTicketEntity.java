@@ -2,7 +2,6 @@ package com.supcon.mes.module_overhaul_workticket.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.Department;
-import com.supcon.mes.middleware.model.bean.DepartmentInfo;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
@@ -26,10 +25,15 @@ public class WorkTicketEntity extends BaseEntity {
     private String hazardsourContrpointForDisplay; // 危险源控制点:值
     private SystemCodeEntity riskAssessment; // 风险评估
     private WXGDEntity workList; // 工单
-    private DepartmentInfo workShop; // 车间
+    private Department workShop; // 车间
+    private Long offApplyId; // 停电作业票ID
+    private Long offApplyTableinfoid; // 停电作业票tableInfoId
+    private String offApplyTableno; // 停电作业票单据编号
+    private String remark;
 
     private Long cid;
     private Staff createStaff;
+    private Long createStaffId;
     private Long createTime;
     private Long id;
     private PendingEntity pending;
@@ -101,14 +105,14 @@ public class WorkTicketEntity extends BaseEntity {
         this.workList = workList;
     }
 
-    public DepartmentInfo getWorkShop() {
+    public Department getWorkShop() {
         if (workShop == null){
-            workShop = new DepartmentInfo();
+            workShop = new Department();
         }
         return workShop;
     }
 
-    public void setWorkShop(DepartmentInfo workShop) {
+    public void setWorkShop(Department workShop) {
         this.workShop = workShop;
     }
 
@@ -206,5 +210,45 @@ public class WorkTicketEntity extends BaseEntity {
 
     public void setDeploymentId(Long deploymentId) {
         this.deploymentId = deploymentId;
+    }
+
+    public Long getCreateStaffId() {
+        return createStaffId;
+    }
+
+    public void setCreateStaffId(Long createStaffId) {
+        this.createStaffId = createStaffId;
+    }
+
+    public Long getOffApplyId() {
+        return offApplyId;
+    }
+
+    public void setOffApplyId(Long offApplyId) {
+        this.offApplyId = offApplyId;
+    }
+
+    public String getOffApplyTableno() {
+        return offApplyTableno;
+    }
+
+    public void setOffApplyTableno(String offApplyTableno) {
+        this.offApplyTableno = offApplyTableno;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Long getOffApplyTableinfoid() {
+        return offApplyTableinfoid;
+    }
+
+    public void setOffApplyTableinfoid(Long offApplyTableinfoid) {
+        this.offApplyTableinfoid = offApplyTableinfoid;
     }
 }

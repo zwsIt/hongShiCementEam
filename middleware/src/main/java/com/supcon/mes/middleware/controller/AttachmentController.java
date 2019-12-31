@@ -98,9 +98,9 @@ public class AttachmentController extends BasePresenterController implements Att
     }
 
 
-    public void refreshGalleryView(OnAPIResultListener<AttachmentListEntity> onAPIListener, long tableId){
+    public void refreshGalleryView(OnAPIResultListener<AttachmentListEntity> onAPIListener, long tableInfoId){
         this.onAPIListener = onAPIListener;
-        presenterRouter.create(AttachmentAPI.class).queryAttachments(tableId);
+        presenterRouter.create(AttachmentAPI.class).queryAttachments(tableInfoId);
 
     }
 

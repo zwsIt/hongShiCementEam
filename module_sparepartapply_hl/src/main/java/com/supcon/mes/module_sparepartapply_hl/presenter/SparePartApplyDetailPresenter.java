@@ -1,11 +1,8 @@
 package com.supcon.mes.module_sparepartapply_hl.presenter;
 
 import com.supcon.mes.middleware.model.bean.SparePartReceiveListEntity;
-import com.supcon.mes.module_wxgd.model.contract.SparePartApplyDetailContract;
+import com.supcon.mes.module_sparepartapply_hl.model.contract.SparePartApplyDetailContract;
 import com.supcon.mes.module_wxgd.model.network.HttpClient;
-
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
 public class SparePartApplyDetailPresenter extends SparePartApplyDetailContract.Presenter {
     @Override

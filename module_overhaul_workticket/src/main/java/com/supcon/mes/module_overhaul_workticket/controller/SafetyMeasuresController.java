@@ -12,15 +12,20 @@ import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_overhaul_workticket.R;
-import com.supcon.mes.module_overhaul_workticket.constant.OperateType;
+import com.supcon.mes.module_overhaul_workticket.constant.SafetyMeasureDetails;
 import com.supcon.mes.module_overhaul_workticket.model.api.SafetyMeasuresAPI;
 import com.supcon.mes.module_overhaul_workticket.model.bean.SafetyMeasuresEntity;
 import com.supcon.mes.module_overhaul_workticket.model.bean.SafetyMeasuresList;
 import com.supcon.mes.module_overhaul_workticket.model.contract.SafetyMeasuresContract;
 import com.supcon.mes.module_overhaul_workticket.presenter.SafetyMeasuresPresenter;
 import com.supcon.mes.module_overhaul_workticket.ui.adapter.SafetyMeasuresAdapter;
+import com.supcon.mes.module_overhaul_workticket.ui.adapter.SafetyMeasuresViewAdapter;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,18 +38,27 @@ import java.util.List;
 public class SafetyMeasuresController extends BaseViewController implements SafetyMeasuresContract.View {
 
     private Long tableId; // 单据ID
+    private Long eleOffTableInfoId; // 停电票tableInfoId
 
     @BindByTag("safetyMeasuresWidget")
     CustomListWidget<SafetyMeasuresEntity> safetyMeasuresWidget;
+    private List<SafetyMeasuresEntity> safetyMeasuresEntityList = new ArrayList<>();
+    private boolean editable;
 
     public SafetyMeasuresController(View rootView) {
         super(rootView);
     }
 
+    public SafetyMeasuresController setEditable(boolean editable){
+        this.editable = editable;
+        return this;
+    }
+
     @Override
     public void onInit() {
         super.onInit();
-        tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID,1008);
+        tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID,-1);
+        eleOffTableInfoId = getIntent().getLongExtra(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID,-1);
     }
 
     @Override
@@ -55,42 +69,81 @@ public class SafetyMeasuresController extends BaseViewController implements Safe
         contentView.setBackgroundColor(context.getResources().getColor(R.color.line_gray));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(3, context)));
 
-        safetyMeasuresWidget.setAdapter(new SafetyMeasuresAdapter(context));
+        if (editable){
+            SafetyMeasuresAdapter safetyMeasuresAdapter = new SafetyMeasuresAdapter(context);
+            safetyMeasuresWidget.setAdapter(safetyMeasuresAdapter);
+            safetyMeasuresAdapter.initCamera();
+            safetyMeasuresAdapter.setEleOffTableInfoId(eleOffTableInfoId);
+        }else {
+            SafetyMeasuresViewAdapter adapter= new SafetyMeasuresViewAdapter(context);
+            adapter.initCamera();
+            adapter.setEleOffTableInfoId(eleOffTableInfoId);
+            safetyMeasuresWidget.setAdapter(adapter);
+        }
+
     }
 
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(SafetyMeasuresAPI.class).listSafetyMeasures(tableId);
+        if (tableId == -1){
+            initSafetyMeasuresDetails();
+        }else {
+            presenterRouter.create(SafetyMeasuresAPI.class).listSafetyMeasures(tableId);
+        }
+    }
+
+    private void initSafetyMeasuresDetails() {
+        SafetyMeasuresList entity = new SafetyMeasuresList();
+        List<SafetyMeasuresEntity> safetyMeasuresEntityList = new ArrayList<>();
+        SafetyMeasuresEntity safetyMeasuresEntity;
+        for (SafetyMeasureDetails detail :SafetyMeasureDetails.values()){
+            safetyMeasuresEntity = new SafetyMeasuresEntity();
+            safetyMeasuresEntity.setSafetyMeasure(detail.getValue());
+            safetyMeasuresEntity.setOperateType(detail.getOperateType());
+            safetyMeasuresEntityList.add(safetyMeasuresEntity);
+        }
+        entity.result = safetyMeasuresEntityList;
+        listSafetyMeasuresSuccess(entity);
+    }
+
+    @Override
+    public void initListener() {
+        super.initListener();
+//        safetyMeasuresAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+//            @Override
+//            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+//                String tag = (String) childView.getTag();
+//                switch(tag){
+//                    case "videoIv":
+////                        onlineCameraController.startVideo();
+//                        break;
+//                    case "":
+//                        break;
+//                }
+//            }
+//        });
     }
 
     @Override
     public void listSafetyMeasuresSuccess(SafetyMeasuresList entity) {
-        // 数据特殊处理
-        List<SafetyMeasuresEntity> safetyMeasuresEntityList = entity.result;
-        if (safetyMeasuresEntityList.size() > 0){
-            if (safetyMeasuresEntityList.get(0) != null){
-                safetyMeasuresEntityList.get(0).setType(OperateType.VIDEO.getType());
-            }
-            if (safetyMeasuresEntityList.get(2) != null){
-                safetyMeasuresEntityList.get(2).setType(OperateType.NFC.getType());
-            }
-            if (safetyMeasuresEntityList.get(4) != null){
-                safetyMeasuresEntityList.get(4).setType(OperateType.PHOTO.getType());
-            }
-            if (safetyMeasuresEntityList.get(5) != null){
-                safetyMeasuresEntityList.get(5).setType(OperateType.PHOTO.getType());
-            }
-            if (safetyMeasuresEntityList.get(7) != null){
-                safetyMeasuresEntityList.get(7).setType(OperateType.PHOTO.getType());
-            }
-            safetyMeasuresWidget.setData(safetyMeasuresEntityList);
-        }
+        safetyMeasuresEntityList = entity.result;
+        safetyMeasuresWidget.setData(safetyMeasuresEntityList);
+        EventBus.getDefault().post(new ListEvent(Constant.EventFlag.WORK_TICKET_PT, safetyMeasuresEntityList));
 
     }
 
     @Override
     public void listSafetyMeasuresFailed(String errorMsg) {
         LogUtil.w(errorMsg);
+    }
+
+    public List<SafetyMeasuresEntity> getSafetyMeasuresEntityList() {
+        return safetyMeasuresEntityList;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

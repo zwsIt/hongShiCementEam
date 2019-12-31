@@ -25,6 +25,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
@@ -63,7 +64,8 @@ public class AttachmentDownloadController extends BasePresenterController {
                         String path = dir;
                         if (attachment.name.contains(".jpg") || attachment.name.contains(".png") || attachment.name.contains(".PNG")) {
 
-                        } else if (attachment.name.contains(".txt") || attachment.name.contains(".doc")) {
+                        } else if (attachment.name.contains(".txt") || attachment.name.contains(".doc")
+                                || attachment.name.contains(".pdf") || attachment.name.contains(".xls") || attachment.name.contains(".ppt")) {
 
                         } else if (attachment.name.contains(".mp4") || attachment.name.contains(".adv")) {
                             galleryBean.fileType = FILE_TYPE_VIDEO;
@@ -95,6 +97,7 @@ public class AttachmentDownloadController extends BasePresenterController {
                                             public File apply(ResponseBody responseBody) throws Exception {
                                                 File file = PicUtil.writeToDisk(attachment.name, finalPath, responseBody);
                                                 return file;
+
                                             }
                                         });
                             } else {
@@ -102,6 +105,14 @@ public class AttachmentDownloadController extends BasePresenterController {
                                 return null;
                             }
                         }
+                    }
+                })
+                .filter(new Predicate<File>() {
+                    @Override
+                    public boolean test(File file) throws Exception {
+                        // 过滤文档
+                        return file != null && !file.getName().contains(".txt") && !file.getName().contains(".doc")
+                                && !file.getName().contains(".pdf") && !file.getName().contains(".xls") && !file.getName().contains(".ppt");
                     }
                 })
                 .flatMap(new Function<File, Publisher<GalleryBean>>() {
@@ -208,7 +219,7 @@ public class AttachmentDownloadController extends BasePresenterController {
 
 
     @SuppressLint("CheckResult")
-    public void downloadYHPic(List<AttachmentEntity> attachmentEntities, String entityCode, OnSuccessListener<List<GalleryBean>> successListener) {
+    public void downloadPic(List<AttachmentEntity> attachmentEntities, String entityCode, OnSuccessListener<List<GalleryBean>> successListener) {
 
         downloadGalleryPics(attachmentEntities, entityCode, successListener);
 

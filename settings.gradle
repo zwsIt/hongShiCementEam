@@ -1,4 +1,4 @@
-include ':middleware', ':module_score', ':module_sparepartapply_hl', ':module_overhaul_workticket',
+include ':middleware', ':module_score', ':module_sparepartapply_hl', ':module_overhaul_workticket', ':module_hs_tsd',
         ':module_main', /*':shell', */ ':hsShell',
         /*':module_login',*/ ':module_zzlogin',
         ':module_data_manage', ':module_sbda',

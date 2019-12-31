@@ -3,5 +3,5 @@
     <!-- 没有焦点时的背景图片 -->
     <item android:color="@color/textColorlightblack" android:state_checked="false" />
 
-    <item android:color="@color/filterTextBlue" android:state_checked="true" />
+    <item android:color="@color/white" android:state_checked="true" />
 </selector>

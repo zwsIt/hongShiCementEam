@@ -28,7 +28,6 @@ import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.FaultPicHelper;
-import com.supcon.mes.middleware.util.PicUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -62,7 +61,7 @@ public class BaseCameraController extends BaseViewController{
     protected List<GalleryBean> pics = new ArrayList<>();
     protected String picName;
     protected String dir;
-    private OnSuccessListener<File> mOnSuccessListener;
+    protected OnSuccessListener<File> mOnSuccessListener;
     private int lastAction = -1;
 //    protected Map<Integer, CustomGalleryView> mViewMap = new HashMap<>();
     protected int actionPosition;
@@ -218,7 +217,7 @@ public class BaseCameraController extends BaseViewController{
         intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);// 设置视频的质量，值为0-1，
         intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 8);// 设置视频的录制长度，s为单位
-        intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 16 * 1024 * 1024L);// 设置视频文件大小，字节为单位
+        intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 48 * 1024 * 1024L);// 设置视频文件大小，字节为单位
         activity.startActivityForResult(intent, ACT_VIDEO);// 设置请求码，在onActivityResult()方法中接收结果
         lastAction = ACT_VIDEO;
     }

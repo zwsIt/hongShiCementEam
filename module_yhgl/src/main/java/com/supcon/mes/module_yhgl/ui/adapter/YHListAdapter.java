@@ -271,7 +271,7 @@ public class YHListAdapter extends BaseListDataRecyclerViewAdapter<YHEntity> {
                 mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_YHPATH);
             }
 
-            mDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_faultInfo",
+            mDownloadController.downloadPic(attachmentEntities, "BEAM2_1.0.0_faultInfo",
                             result -> itemGalleryView.setGalleryBeans(result));
         }
 

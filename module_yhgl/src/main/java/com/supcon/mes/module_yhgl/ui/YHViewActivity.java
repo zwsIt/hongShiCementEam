@@ -177,7 +177,7 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
         //初始化附件
         if (mYHEntity.attachmentEntities != null) {
             AttachmentDownloadController attachmentDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_YHPATH);
-            attachmentDownloadController.downloadYHPic(mYHEntity.attachmentEntities, "BEAM2_1.0.0_faultInfo", new OnSuccessListener<List<GalleryBean>>() {
+            attachmentDownloadController.downloadPic(mYHEntity.attachmentEntities, "BEAM2_1.0.0_faultInfo", new OnSuccessListener<List<GalleryBean>>() {
                 @Override
                 public void onSuccess(List<GalleryBean> result) {
                     yhGalleryView.setGalleryBeans(result);

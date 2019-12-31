@@ -1,4 +1,4 @@
-package com.supcon.mes.module_wxgd.model.event;
+package com.supcon.mes.middleware.model.event;
 
 import java.util.List;
 

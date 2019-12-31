@@ -1,7 +1,6 @@
 package com.supcon.mes.module_wxgd.ui.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -27,10 +26,6 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.controller.AutoRefreshSPStandingCropController;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
-import com.supcon.mes.module_wxgd.ui.WXGDDispatcherActivity;
-import com.supcon.mes.module_wxgd.ui.WXGDExecuteActivity;
-import com.supcon.mes.module_wxgd.ui.WXGDSparePartListActivity;
 
 import org.greenrobot.eventbus.EventBus;
 

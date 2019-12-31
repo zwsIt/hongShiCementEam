@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray">
+
+    <include layout="@layout/ly_titlebar"/>
+
+    <com.supcon.common.view.ptr.PtrFrameLayout
+        android:id="@+id/refreshFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="refreshFrameLayout"
+        app:ptr_keep_header_when_refresh="true"
+        app:ptr_pull_to_fresh="false"
+        app:ptr_ratio_of_header_height_to_refresh="1.2"
+        app:ptr_resistance="1.7">
+        <!--ScrollView一定要添加id：contentView 否则上拉后下拉失效，RefreshController使用此id-->
+        <ScrollView
+            android:id="@+id/contentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="contentView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/workListTableNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="workListTableNo"
+                    app:content_size="13"
+                    app:key="工单编号"
+                    app:key_size="14" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/applyStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="applyStaff"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="发令人"
+                    app:key_size="14"
+                    app:necessary="true" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/department"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="department"
+                    app:content_size="13"
+                    app:key="部门"
+                    app:key_size="14" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/eamName"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="eamName"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="设备名称"
+                    app:key_size="14"
+                    app:necessary="true" />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/eamCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="eamCode"
+                    app:content_size="13"
+                    app:key="设备编码"
+                    app:key_size="14" />
+                <com.supcon.mes.mbap.view.CustomDateView
+                    android:id="@+id/applyDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="applyDate"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="申请时间"
+                    app:key_size="14"
+                    app:necessary="true" />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/operateStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="operateStaff"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="操作人"
+                    app:key_size="14"
+                    app:necessary="true" />
+
+                <com.supcon.mes.mbap.view.CustomVerticalEditText
+                    android:id="@+id/workTask"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="workTask"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="工作任务"
+                    app:key_size="14"
+                    app:necessary="true"/>
+                <com.supcon.mes.mbap.view.CustomGalleryView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp_30"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:id="@+id/galleryView"
+                    android:tag="galleryView"
+                    android:background="@color/white"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_10"
+                    app:text="照片"
+                    app:text_size="15"
+                    app:columns="3"
+                    app:icon_visible="true"
+                    app:editable="true"/>
+
+                <com.supcon.mes.mbap.view.CustomListWidget
+                    android:id="@+id/operateItemWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:tag="operateItemWidget"
+                    app:icon_res="@drawable/ic_widget"
+                    app:is_addable="false"
+                    app:is_editable="false"
+                    app:text_size="14"
+                    app:title_bg_color="@color/customBlue"
+                    app:widget_name="操作项" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.supcon.common.view.ptr.PtrFrameLayout>
+
+</LinearLayout>

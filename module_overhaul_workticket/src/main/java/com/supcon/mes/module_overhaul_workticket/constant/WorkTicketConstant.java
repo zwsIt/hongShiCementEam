@@ -1,7 +1,7 @@
 package com.supcon.mes.module_overhaul_workticket.constant;
 
 /**
- * WXGDConstant
+ * WorkTicketConstant
  * created by zhangwenshuai1 2019/10/30
  */
 public interface WorkTicketConstant {
@@ -12,7 +12,8 @@ public interface WorkTicketConstant {
     interface HeaderData{
         String HEADER_DATA_INCLUDES = "id,createStaffId,createTime,version,deploymentId,tableInfoId,tableNo,remark,chargeStaff.id,chargeStaff.code,chargeStaff.name," +
                 "chargeStaff.mainPosition.name,chargeStaff.mainPosition.department.id,chargeStaff.mainPosition.department.name," +
-                "workShop.id,workShop.name,workShop.code,workList.id,workList.tableNo,workList.content,workList.eamID.name,workList.eamID.code,eamId.id,eamId.code,eamId.name,hazardsourContrpoint,value,riskAssessment.id,riskAssessment.value";
+                "workShop.id,workShop.name,workShop.code,workList.id,workList.tableNo,workList.content,workList.eamID.name,workList.eamID.code,eamId.id,eamId.code,eamId.name," +
+                "hazardsourContrpoint,value,riskAssessment.id,riskAssessment.value,offApplyId,offApplyTableinfoid,offApplyTableno";
     }
 
     interface URL{

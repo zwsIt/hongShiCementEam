@@ -37,6 +37,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
+import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
@@ -51,14 +52,13 @@ import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sparepartapply_hl.IntentRouter;
 import com.supcon.mes.module_sparepartapply_hl.R;
 import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
-import com.supcon.mes.module_sparepartapply_hl.model.event.SparePartApplyDetailEvent;
 import com.supcon.mes.module_sparepartapply_hl.controller.SparePartApplyDetailController;
-import com.supcon.mes.middleware.controller.TableInfoController;
-import com.supcon.mes.module_wxgd.model.api.SparePartApplyAPI;
-import com.supcon.mes.module_wxgd.model.bean.SparePartApplyHeaderInfoEntity;
-import com.supcon.mes.module_wxgd.model.contract.SparePartApplyContract;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.module_sparepartapply_hl.model.api.SparePartApplyAPI;
+import com.supcon.mes.module_sparepartapply_hl.model.contract.SparePartApplyContract;
+import com.supcon.mes.module_sparepartapply_hl.model.event.SparePartApplyDetailEvent;
 import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyPresenter;
+import com.supcon.mes.module_wxgd.model.bean.SparePartApplyHeaderInfoEntity;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.util.SparePartReceiveMapManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -329,7 +329,7 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
                     String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                     applyTime.setContent(dateStr);
                     sparePartApplyHeaderInfoEntity.setApplyTime(DateUtil.dateFormat(dateStr,Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC));
-                }).show(TextUtils.isEmpty(applyTime.getContent()) ? new Date().getTime() : DateUtil.dateFormat(applyTime.getContent(),Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC));
+                }).show(TextUtils.isEmpty(applyTime.getContent()) ? new Date().getTime() : sparePartApplyHeaderInfoEntity.getApplyTime());
             }
 
         });
@@ -439,6 +439,9 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
             map.put("workFlowVar.dec", workFlowEntity.dec);
             map.put("workFlowVar.outcome", workFlowEntity.outcome);
             map.put("operateType", "submit");
+            if (Constant.Transition.CANCEL_CN.equals(workFlowEntity.dec)) {
+                map.put("workFlowVarStatus",Constant.Transition.CANCEL);
+            }
         } else {
             map.put("operateType", "save");
         }
@@ -450,7 +453,7 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
         }
         //表头信息,取修改后最新数据
         map.put("apply.applyStaff.id", sparePartApplyHeaderInfoEntity.getApplyStaff().id);
-        map.put("apply.repairWork.id", Util.strFormat(sparePartApplyHeaderInfoEntity.getRepairWork().id));
+        map.put("apply.repairWork.id", Util.strFormat2(sparePartApplyHeaderInfoEntity.getRepairWork().id));
         map.put("apply.eam.id",sparePartApplyHeaderInfoEntity.getEam().id);
         map.put("apply.applyTime", applyTime.getContent());
         map.put("apply.explain", explain.getContent());

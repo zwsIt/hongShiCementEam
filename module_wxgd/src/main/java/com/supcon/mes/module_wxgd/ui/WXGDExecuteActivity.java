@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,7 +53,6 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
-import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
@@ -69,7 +69,7 @@ import com.supcon.mes.module_wxgd.model.dto.LubricateOilsEntityDto;
 import com.supcon.mes.module_wxgd.model.dto.MaintainDto;
 import com.supcon.mes.module_wxgd.model.dto.RepairStaffDto;
 import com.supcon.mes.module_wxgd.model.dto.SparePartEntityDto;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.model.event.LubricateOilsEvent;
 import com.supcon.mes.module_wxgd.model.event.MaintenanceEvent;
 import com.supcon.mes.module_wxgd.model.event.RepairStaffEvent;
@@ -84,10 +84,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -168,6 +166,11 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     LinearLayout workFlowBar;
     @BindByTag("repairLl")
     LinearLayout repairLl;
+
+    @BindByTag("eleOffChkBox")
+    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOff")
+    CustomTextView eleOff;
 
     private RepairStaffController mRepairStaffController;
     private SparePartController mSparePartController;
@@ -351,6 +354,14 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         realEndTime.setDate(DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
+        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
+            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
+//            eleOffChkBox.setBackgroundResource(R.drawable.ic_checked);
+        }else {
+            eleOffChkBox.setButtonDrawable(null);
+        }
+        eleOffChkBox.setClickable(false);
+        eleOffChkBox.setChecked(mWXGDEntity.isOffApply);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

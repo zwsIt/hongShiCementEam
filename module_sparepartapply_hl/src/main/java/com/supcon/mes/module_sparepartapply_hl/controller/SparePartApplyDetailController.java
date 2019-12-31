@@ -7,7 +7,6 @@ import android.view.View;
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.controller.BaseViewController;
-import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
@@ -15,22 +14,18 @@ import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveEntity;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveListEntity;
-import com.supcon.mes.middleware.model.event.BaseEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sparepartapply_hl.R;
 import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
+import com.supcon.mes.module_sparepartapply_hl.model.api.SparePartApplyDetailAPI;
+import com.supcon.mes.module_sparepartapply_hl.model.contract.SparePartApplyDetailContract;
+import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyDetailPresenter;
 import com.supcon.mes.module_sparepartapply_hl.ui.adapter.SparePartApplyDetailAdapter;
 import com.supcon.mes.module_wxgd.IntentRouter;
-import com.supcon.mes.module_wxgd.model.api.SparePartApplyDetailAPI;
-import com.supcon.mes.module_wxgd.model.contract.SparePartApplyDetailContract;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
-import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyDetailPresenter;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +70,6 @@ public class SparePartApplyDetailController extends BaseViewController implement
     @Override
     public void onInit() {
         super.onInit();
-        EventBus.getDefault().register(this);
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID, -1);
     }
 
@@ -120,15 +114,9 @@ public class SparePartApplyDetailController extends BaseViewController implement
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(BaseEvent baseEvent) {
-
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override

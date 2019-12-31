@@ -33,19 +33,17 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sparepartapply_hl.R;
 import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
+import com.supcon.mes.module_sparepartapply_hl.model.contract.SparePartApplyDetailContract;
 import com.supcon.mes.module_sparepartapply_hl.model.event.SparePartApplyDetailEvent;
+import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyDetailPresenter;
 import com.supcon.mes.module_sparepartapply_hl.ui.adapter.SparePartApplyDetailAdapter;
 import com.supcon.mes.module_wxgd.IntentRouter;
-import com.supcon.mes.module_wxgd.model.api.SparePartApplyDetailAPI;
-import com.supcon.mes.module_wxgd.model.contract.SparePartApplyDetailContract;
-import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyDetailPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

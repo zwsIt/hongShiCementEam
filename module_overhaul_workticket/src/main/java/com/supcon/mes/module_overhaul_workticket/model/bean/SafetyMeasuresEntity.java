@@ -1,8 +1,9 @@
 package com.supcon.mes.module_overhaul_workticket.model.bean;
 
-import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
-import com.supcon.mes.module_overhaul_workticket.constant.OperateType;
+import com.supcon.mes.middleware.model.bean.AttachmentEntity;
+
+import java.util.List;
 
 /**
  * ClassName
@@ -13,6 +14,8 @@ import com.supcon.mes.module_overhaul_workticket.constant.OperateType;
 public class SafetyMeasuresEntity extends BaseEntity {
 
     /**
+     * attachFileMultiFileIds: "1685"
+     * attachFileMultiFileNames: "检修作业票.jpg"
      * headId : {"id":1000}
      * id : 1000
      * isExecuted : false
@@ -27,8 +30,16 @@ public class SafetyMeasuresEntity extends BaseEntity {
     private int sort;
     private int version;
 
-    // 自定义字段
-    private int type = OperateType.CONFIRM.getType(); // 操作类型：视频、拍照、nfc、确认; 默认确认
+    //附件
+    private String attachFileMultiFileIds;
+    private String attachFileMultiFileNames;
+    private String attachFileFileAddPaths; // 存储路径
+    private String attachFileFileDeleteIds; // 附件删除ids
+
+    private int operateType/* = OperateType.CONFIRM.getType()*/; // 操作类型：视频、拍照、nfc、确认; 默认确认
+
+    //停电照片附件
+    private List<AttachmentEntity> eleOffAttachmentEntityList;
 
     public WorkTicketEntity getHeadId() {
         return headId;
@@ -78,11 +89,51 @@ public class SafetyMeasuresEntity extends BaseEntity {
         this.version = version;
     }
 
-    public int getType() {
-        return type;
+    public int getOperateType() {
+        return operateType;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setOperateType(int operateType) {
+        this.operateType = operateType;
+    }
+
+    public String getAttachFileMultiFileIds() {
+        return attachFileMultiFileIds;
+    }
+
+    public void setAttachFileMultiFileIds(String attachFileMultiFileIds) {
+        this.attachFileMultiFileIds = attachFileMultiFileIds;
+    }
+
+    public String getAttachFileMultiFileNames() {
+        return attachFileMultiFileNames;
+    }
+
+    public void setAttachFileMultiFileNames(String attachFileMultiFileNames) {
+        this.attachFileMultiFileNames = attachFileMultiFileNames;
+    }
+
+    public String getAttachFileFileAddPaths() {
+        return attachFileFileAddPaths;
+    }
+
+    public void setAttachFileFileAddPaths(String attachFileFileAddPaths) {
+        this.attachFileFileAddPaths = attachFileFileAddPaths;
+    }
+
+    public String getAttachFileFileDeleteIds() {
+        return attachFileFileDeleteIds;
+    }
+
+    public void setAttachFileFileDeleteIds(String attachFileFileDeleteIds) {
+        this.attachFileFileDeleteIds = attachFileFileDeleteIds;
+    }
+
+    public List<AttachmentEntity> getEleOffAttachmentEntityList() {
+        return eleOffAttachmentEntityList;
+    }
+
+    public void setEleOffAttachmentEntityList(List<AttachmentEntity> eleOffAttachmentEntityList) {
+        this.eleOffAttachmentEntityList = eleOffAttachmentEntityList;
     }
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="@dimen/dp_10"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/index"
+        android:tag="index"
+        android:layout_width="@dimen/dp_25"
+        android:layout_height="@dimen/dp_25"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:text="0"
+        android:background="@drawable/sh_index_bg"
+        android:visibility="gone"/>
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_weight="1"
+        android:tag="content"
+        app:editable="false"
+        app:key_width="0dp"
+        app:max_lines="3" />
+
+    <CheckBox
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:id="@+id/chkBox"
+        android:tag="chkBox"
+        android:button="@drawable/sl_checkbox_selector_small"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

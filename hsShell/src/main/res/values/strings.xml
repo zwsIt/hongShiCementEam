@@ -2,4 +2,5 @@
     <string name="app_name">设备健康管理</string>
     <string name="hs_app_name">红狮移动设备</string>
     <string name="hl_app_name">海螺移动设备</string>
+    <string name="test_hl_app_name">测试版海螺</string>
 </resources>

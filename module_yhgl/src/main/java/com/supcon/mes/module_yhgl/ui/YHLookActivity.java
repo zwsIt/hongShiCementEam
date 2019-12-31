@@ -37,8 +37,10 @@ import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.Module;
+import com.supcon.mes.middleware.controller.AttachmentController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
+import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
@@ -48,6 +50,7 @@ import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.DeviceAddEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_yhgl.IntentRouter;
@@ -77,7 +80,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Router(Constant.Router.YH_LOOK)
 @Presenter(YHSubmitPresenter.class)
-@Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class, MaintenanceController.class, OnlineCameraController.class})
+@Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class, MaintenanceController.class, OnlineCameraController.class, AttachmentController.class})
 public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -138,6 +141,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     LinearLayout yhDealBar;
 
     private YHEntity mYHEntity, mOriginalEntity;
+    private AttachmentController mAttachmentController;
 
     @Override
     protected int getLayoutID() {
@@ -151,6 +155,9 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         refreshController.setPullDownRefreshEnabled(false);
         mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY);
         mOriginalEntity = mYHEntity;
+
+        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
+        mAttachmentController = getController(AttachmentController.class);
 
     }
 
@@ -182,10 +189,8 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         if (!TextUtils.isEmpty(mYHEntity.describe)) {
             yhViewDescription.setContent(mYHEntity.describe);
         }
-        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
-        if (mYHEntity.attachmentEntities != null) {
-            getController(OnlineCameraController.class).setPicData(mYHEntity.attachmentEntities,"BEAM2_1.0.0_faultInfo");
-        }
+
+        initPic();
 
         if (!TextUtils.isEmpty(mYHEntity.remark)) {
             yhViewMemo.setInput(mYHEntity.remark);
@@ -195,6 +200,28 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
 //        layoutParams.bottomMargin = 0;
 //        refreshFrameLayout.setLayoutParams(layoutParams);
 //        yhDealBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * 加载隐患图片
+     */
+    private void initPic() {
+        if (mYHEntity != null) {
+            mAttachmentController.refreshGalleryView(new OnAPIResultListener<AttachmentListEntity>() {
+                @Override
+                public void onFail(String errorMsg) {
+
+                }
+
+                @Override
+                public void onSuccess(AttachmentListEntity result) {
+                    if (result.result.size() > 0) {
+                        mYHEntity.attachmentEntities = result.result;
+                        getController(OnlineCameraController.class).setPicData(mYHEntity.attachmentEntities,"BEAM2_1.0.0_faultInfo");
+                    }
+                }
+            }, mYHEntity.tableInfoId);
+        }
     }
 
     @SuppressLint("CheckResult")

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -77,7 +78,7 @@ import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.contract.GenerateAcceptanceContract;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.model.dto.AcceptanceCheckEntityDto;
-import com.supcon.mes.module_wxgd.model.event.ListEvent;
+import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.presenter.GenerateAcceptancePresenter;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
@@ -174,6 +175,11 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
     @BindByTag("yhGalleryView")
     CustomGalleryView yhGalleryView;
+
+    @BindByTag("eleOffChkBox")
+    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOff")
+    CustomTextView eleOff;
 
     private AcceptanceCheckController mAcceptanceCheckController;
     private RepairStaffController mRepairStaffController;
@@ -354,6 +360,14 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
+        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
+            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
+//            eleOffChkBox.setBackgroundResource(R.drawable.ic_checked);
+        }else {
+            eleOffChkBox.setButtonDrawable(null);
+        }
+        eleOffChkBox.setClickable(false);
+        eleOffChkBox.setChecked(mWXGDEntity.isOffApply);
     }
 
     @Override
@@ -775,7 +789,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
      */
     private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
         AttachmentDownloadController mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_GDPATH);
-        mDownloadController.downloadYHPic(attachmentEntities, "BEAM2_1.0.0_workList",
+        mDownloadController.downloadPic(attachmentEntities, "BEAM2_1.0.0_workList",
                 new OnSuccessListener<List<GalleryBean>>() {
                     @Override
                     public void onSuccess(List<GalleryBean> result) {

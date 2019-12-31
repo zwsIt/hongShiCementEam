@@ -24,7 +24,6 @@ import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
-import com.supcon.mes.mbap.adapter.RecyclerEmptyAdapter;
 import com.supcon.mes.mbap.beans.FilterBean;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
@@ -47,7 +46,6 @@ import com.supcon.mes.middleware.model.event.LoginValidEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
-import com.supcon.mes.middleware.util.EmptyViewHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -60,8 +58,8 @@ import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
 import com.supcon.mes.module_wxgd.ui.adapter.WXGDListAdapter;
-import com.supcon.mes.module_wxgd.util.WorkFilterHelper;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
+import com.supcon.mes.module_wxgd.util.WorkFilterHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -120,7 +118,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     RadioGroup radioGroupFilter;
 
     private WXGDListAdapter wxgdListAdapter;
-    private RecyclerEmptyAdapter mRecyclerEmptyAdapter;
+//    private RecyclerEmptyAdapter mRecyclerEmptyAdapter;
 
     Map<String, Object> queryParam = new HashMap<>();
     private WXGDSubmitController wxgdSubmitController;
@@ -166,7 +164,6 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         rightBtn.setImageResource(R.drawable.add);
 //        searchTitleBar.disableRightBtn();
         initFilter();
-        initEmpty();
     }
 
     @Override
@@ -519,12 +516,12 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
      * @description 初始化无数据
      * @author zhangwenshuai1 2018/8/9
      */
-    private void initEmpty() {
-        mRecyclerEmptyAdapter = new RecyclerEmptyAdapter(context);
-        mRecyclerEmptyAdapter.addData(EmptyViewHelper.createEmptyEntity());
-        refreshListController.setEmpterAdapter(mRecyclerEmptyAdapter);
-
-    }
+//    private void initEmpty() {
+//        mRecyclerEmptyAdapter = new RecyclerEmptyAdapter(context);
+//        mRecyclerEmptyAdapter.addData(EmptyViewHelper.createEmptyEntity());
+//        refreshListController.setEmpterAdapter(mRecyclerEmptyAdapter);
+//
+//    }
 
     @Override
     public void submitSuccess(BapResultEntity entity) {

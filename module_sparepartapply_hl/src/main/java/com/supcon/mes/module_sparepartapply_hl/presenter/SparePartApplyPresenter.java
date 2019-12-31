@@ -2,7 +2,7 @@ package com.supcon.mes.module_sparepartapply_hl.presenter;
 
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.util.FormDataHelper;
-import com.supcon.mes.module_wxgd.model.contract.SparePartApplyContract;
+import com.supcon.mes.module_sparepartapply_hl.model.contract.SparePartApplyContract;
 import com.supcon.mes.module_wxgd.model.network.HttpClient;
 
 import java.util.List;

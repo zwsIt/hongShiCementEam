@@ -242,14 +242,21 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                         bundle.putString(BaseConstant.WEB_URL, url);
                                         IntentRouter.go(context, Constant.Router.SD, bundle);
                                     }else if (Constant.ProcessKey.ELE_OFF.equals(item.processkey)){  // 停电
-                                        String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                                                + Constant.WebUrl.TD_LIST_NEW;
-                                        bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
-                                        bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
-                                        bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
-                                        bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
-                                        bundle.putString(BaseConstant.WEB_URL, url);
-                                        IntentRouter.go(context, Constant.Router.TD, bundle);
+
+                                        if (EamApplication.isHongshi()){
+                                            bundle.putLong(Constant.IntentKey.TABLE_ID, item.dataid);
+                                            bundle.putLong(Constant.IntentKey.PENDING_ID, item.pendingid);
+                                            IntentRouter.go(context, Constant.Router.HS_ELE_OFF_EDIT, bundle);
+                                        }else {
+                                            String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+                                                    + Constant.WebUrl.TD_LIST_NEW;
+                                            bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                                            bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                                            bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
+                                            bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                                            bundle.putString(BaseConstant.WEB_URL, url);
+                                            IntentRouter.go(context, Constant.Router.TD, bundle);
+                                        }
                                     }
                                 }
                             }

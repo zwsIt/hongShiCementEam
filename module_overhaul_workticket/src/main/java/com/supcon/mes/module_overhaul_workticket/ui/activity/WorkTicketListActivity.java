@@ -6,8 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
@@ -15,42 +13,35 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.supcon.common.view.base.activity.BaseRefreshActivity;
-import com.supcon.common.view.base.activity.BaseRefreshListActivity;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
-import com.supcon.mes.mbap.listener.OnTitleSearchExpandListener;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
-import com.supcon.mes.mbap.view.CustomSpinner;
-import com.supcon.mes.mbap.view.CustomTextView;
-import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.QueryBtnType;
-import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
-import com.supcon.mes.middleware.controller.PcController;
-import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
-import com.supcon.mes.middleware.model.listener.OnSuccessListener;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
 import com.supcon.mes.module_overhaul_workticket.IntentRouter;
 import com.supcon.mes.module_overhaul_workticket.R;
-import com.supcon.mes.module_overhaul_workticket.controller.SafetyMeasuresController;
 import com.supcon.mes.module_overhaul_workticket.model.api.WorkTicketListAPI;
 import com.supcon.mes.module_overhaul_workticket.model.bean.WorkTicketEntity;
 import com.supcon.mes.module_overhaul_workticket.model.bean.WorkTicketList;
 import com.supcon.mes.module_overhaul_workticket.model.contract.WorkTicketListContract;
 import com.supcon.mes.module_overhaul_workticket.presenter.WorkTicketListPresenter;
 import com.supcon.mes.module_overhaul_workticket.ui.adapter.WorkTicketAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +53,7 @@ import io.reactivex.functions.Consumer;
  * ClassName
  * Created by zhangwenshuai1 on 2019/12/10
  * Email zhangwenshuai1@supcon.com
- * Desc
+ * Desc 检修票列表
  */
 @Router(value = Constant.Router.OVERHAUL_WORKTICKET_LIST)
 @Controller(value = {ModulePermissonCheckController.class})
@@ -92,6 +83,7 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
     protected void onInit() {
         super.onInit();
         StatusBarUtils.setWindowStatusBarColor(this,R.color.themeColor);
+        EventBus.getDefault().register(this);
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
@@ -182,11 +174,17 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refresh(RefreshEvent event){
+        refreshListController.refreshBegin();
     }
 
     @Override

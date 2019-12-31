@@ -57,9 +57,9 @@ public class AttachmentPresenter extends AttachmentContract.Presenter {
     }
 
     @Override
-    public void queryAttachments(long tableId) {
+    public void queryAttachments(long tableInfoId) {
         mCompositeSubscription.add(
-                MiddlewareHttpClient.listAttachFiles(tableId)
+                MiddlewareHttpClient.listAttachFiles(tableInfoId)
                         .onErrorReturn(new Function<Throwable, AttachmentListEntity>() {
                             @Override
                             public AttachmentListEntity apply(Throwable throwable) throws Exception {

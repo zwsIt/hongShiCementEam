@@ -49,6 +49,8 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
 
     public ScoreMerity scoreMerity;//设备评分
 
+    public String eamAssetcode; // 设备资产编号
+
     public ScoreMerity getScoreMerity() {
         if (scoreMerity == null) {
             scoreMerity = new ScoreMerity();

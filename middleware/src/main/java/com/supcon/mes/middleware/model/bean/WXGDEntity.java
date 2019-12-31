@@ -105,6 +105,10 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public SystemCodeEntity workState; // 工单工作流状态
 
+    public OffApplyBean offApply; // 停电申请
+    public WorkTicketBean ohWorkTicket; // 检修作业票
+    public boolean isOffApply; // 是否需要停电
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -130,4 +134,26 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
         }
         return dispatcher;
     }
+
+    public class OffApplyBean extends BaseEntity {
+
+        /**
+         * id : 1124
+         * tableNo : onOrOff_20191229_007
+         */
+
+        public Long id;
+        public String tableNo;
+    }
+    public class WorkTicketBean extends BaseEntity {
+
+        /**
+         * id : 1124
+         * tableNo : onOrOff_20191229_007
+         */
+
+        public Long id;
+        public String tableNo;
+    }
+
 }

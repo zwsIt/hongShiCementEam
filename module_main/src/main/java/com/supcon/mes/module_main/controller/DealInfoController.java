@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.controller.BasePresenterController;
@@ -20,14 +19,8 @@ import com.supcon.mes.module_main.ui.adaper.FlowProcessAdapter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.function.Function;
 
 @Presenter(value = {DealInfoPresenter.class})
 public class DealInfoController extends BasePresenterController implements DealInfoContract.View {
