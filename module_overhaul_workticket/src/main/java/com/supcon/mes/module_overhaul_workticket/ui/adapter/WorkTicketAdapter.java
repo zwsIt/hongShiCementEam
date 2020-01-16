@@ -12,6 +12,7 @@ import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
@@ -52,8 +53,8 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
         TextView itemEam;
         @BindByTag("itemChargeStaff")
         TextView itemChargeStaff;
-        @BindByTag("itemPersonLayout")
-        LinearLayout itemPersonLayout;
+        @BindByTag("itemRiskAssessment")
+        TextView itemRiskAssessment;
 
         public WorkTicketViewHolder(Context context) {
             super(context);
@@ -73,30 +74,45 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
                     .subscribe(o -> {
                         WorkTicketEntity workTicketEntity = getItem(getAdapterPosition());
                         PendingEntity pendingEntity = workTicketEntity.getPending();
-                        if (pendingEntity == null){
-                            ToastUtils.show(context,"代办为空,请刷新");
+                        if (pendingEntity == null) {
+                            ToastUtils.show(context, "代办为空,请刷新");
                             return;
                         }
                         Bundle bundle = new Bundle();
                         bundle.putLong(Constant.IntentKey.TABLE_ID, workTicketEntity.getId());
-                        bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, workTicketEntity.getOffApplyTableinfoid() == null ? -1 :workTicketEntity.getOffApplyTableinfoid()); // 停电作业票tableInfoId
-                        bundle.putString(Constant.IntentKey.HAZARD_CONTRL_POINT,workTicketEntity.getHazardsourContrpointForDisplay());
-                        if (workTicketEntity.getPending().id == null){ // 无代办、生效
-                            IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_VIEW,bundle);
-                        }else {
+                        bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, workTicketEntity.getOffApplyTableInfoId() == null ? -1 : workTicketEntity.getOffApplyTableInfoId()); // 停电作业票tableInfoId
+//                        bundle.putString(Constant.IntentKey.HAZARD_CONTRL_POINT, workTicketEntity.getHazardsourContrpointForDisplay());// 非编辑视图展示
+
+                        if (workTicketEntity.getPending().id == null) { // 无代办、生效
+                            IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);
+                        } else {
                             bundle.putLong(Constant.IntentKey.PENDING_ID, workTicketEntity.getPending().id);
-                            switch (workTicketEntity.getPending().taskDescription) {
+                            switch (workTicketEntity.getPending().openUrl) {
+                                case Constant.HSWorkTicketView.EDIT_URL:
+                                    IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_EDIT, bundle);
+                                    break;
+                                default:
+                                    if (workTicketEntity.getPending().id != null) {
+                                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
+                                    }
+                                    IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);
+                            }
+                            /*switch (workTicketEntity.getPending().taskDescription) {
                                 case Constant.TableStatus_CH.EDIT:
                                     IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_EDIT,bundle);
                                     break;
                                 case Constant.TableStatus_CH.REVIEW:
                                 case Constant.TableStatus_CH.REVIEW1:
+                                case "中控室审批":
+                                case "安全员审批":
+                                case "领导审批":
+                                case Constant.TableStatus_CH.NOTIFY:
+                                case Constant.TableStatus_CH.NOTIFY_TAKE_EFFECT:
                                     bundle.putBoolean(Constant.IntentKey.IS_EDITABLE,true);
                                 case Constant.TableStatus_CH.TAKE_EFFECT:
                                 default:
                                     IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_VIEW,bundle);
-                                    break;
-                            }
+                            }*/
                         }
 
                     });
@@ -108,6 +124,7 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
             itemTableStatus.setText(data.getPending().taskDescription);
             itemEam.setText(TextUtils.isEmpty(data.getEamId().name) ? "" : String.format("%s(%s)", data.getEamId().name, data.getEamId().code));
             itemChargeStaff.setText(data.getChargeStaff().name);
+            itemRiskAssessment.setText(data.getRiskAssessment().value);
             itemTableStatus.setTextColor(context.getResources().getColor(R.color.white));
             if (Constant.TableStatus_CH.EDIT.equals(data.getPending().taskDescription)) {
                 itemTableStatus.setBackground(context.getResources().getDrawable(R.drawable.sh_edit_bg));

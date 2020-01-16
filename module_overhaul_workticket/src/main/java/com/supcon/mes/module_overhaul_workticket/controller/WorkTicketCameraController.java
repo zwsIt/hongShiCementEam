@@ -194,7 +194,7 @@ public class WorkTicketCameraController extends BaseCameraController {
                 galleryBean.localPath = file.getAbsolutePath();
                 galleryBean.url = result;
                 CustomGalleryView videoGalleryView = galleryViewHashMap.get(String.valueOf(currAdapterPosition));
-                videoGalleryView.clear(); // 支持单个
+//                videoGalleryView.clear(); // 支持单个
                 videoGalleryView.addGalleryBean(galleryBean);
 //                galleryView.addGalleryBean(galleryBean);
                 pics.add(galleryBean);
@@ -222,7 +222,7 @@ public class WorkTicketCameraController extends BaseCameraController {
 //                galleryBean.thumbnailPath = thumbnail.getAbsolutePath();
                 galleryBean.url = result;
                 CustomGalleryView videoGalleryView = galleryViewHashMap.get(String.valueOf(currAdapterPosition));
-                videoGalleryView.clear(); // 支持单个
+//                videoGalleryView.clear(); // 支持单个
                 videoGalleryView.addGalleryBean(galleryBean);
 //                galleryView.addGalleryBean(galleryBean);
                 pics.add(galleryBean);

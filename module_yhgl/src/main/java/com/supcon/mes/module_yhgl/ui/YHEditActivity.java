@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -193,6 +194,11 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     @BindByTag("ysBtn")
     Button ysBtn;
 
+    @BindByTag("eleOffChkBox")
+    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOff")
+    CustomTextView eleOff;
+
 
     private YHEntity mYHEntity;
 
@@ -264,10 +270,11 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         deploymentId = getIntent().getLongExtra(DEPLOYMENT_ID, 0L);
 
         if (TextUtils.isEmpty(mYHEntity.tableNo)) { // 制定时赋值
-            oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
+            mYHEntity.isOffApply = true;
             iniTransition();
             yhEditFindStaff.setValue(mYHEntity.findStaffID != null ? mYHEntity.findStaffID.name : "");
             yhEditFindTime.setDate(mYHEntity.findTime != null ? DateUtil.dateTimeFormat(mYHEntity.findTime) : "");
+            oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
         }
 
         mSparePartController = getController(SparePartController.class);
@@ -353,14 +360,17 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         if (!TextUtils.isEmpty(mYHEntity.describe)) {
             yhEditDescription.setInput(mYHEntity.describe);
         }
-        // 加载图片
-        initPic();
 
         if (!TextUtils.isEmpty(mYHEntity.remark)) {
             yhEditMemo.setInput(mYHEntity.remark);
         }
 
+        mYHEntity.isOffApply = true;
+        eleOffChkBox.setChecked(true); // 默认true
+
         initCheckView();
+        // 加载图片
+        initPic();
     }
 
     /**
@@ -509,7 +519,10 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 if (action == -1) {
                     mYHEntity.chargeStaff = null;
                 } else {
-                    IntentRouter.go(context, Constant.Router.STAFF);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }
             }
         });
@@ -630,6 +643,10 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(gdBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
+                    if (mYHEntity.isOffApply && mYHEntity.chargeStaff == null){
+                        ToastUtils.show(context,"勾选生成停电票时，请选择负责人");
+                        return;
+                    }
                     mYHEntity.downStream.id = "BEAM2_2013/02";
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
                     if (checkBeforeSubmit() && linkEntities.size() > 0) {
@@ -676,7 +693,10 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             if (action == -1) {
                 mYHEntity.findStaffID = null;
             } else {
-                IntentRouter.go(context, Constant.Router.STAFF);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
 
@@ -741,10 +761,15 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                     acceptChkStaffCode.setValue(null);
                 } else {
                     staffType = CHECK_STAFF;
-                    IntentRouter.go(context, Constant.Router.STAFF);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }
             }
         });
+
+        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mYHEntity.isOffApply = isChecked);
 
     }
 
@@ -785,25 +810,23 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             return;
         }
         EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
-        if (eamEntity != null) {
-            yhEditEamName.setValue(eamEntity.name);
-            yhEditEamCode.setValue(eamEntity.code);
+        yhEditEamName.setValue(eamEntity.name);
+        yhEditEamCode.setValue(eamEntity.code);
 //            yhEditEamModel.setValue(eamType.model);
-            WXGDEam wxgdEam = new WXGDEam();
-            wxgdEam.name = eamEntity.name;
-            wxgdEam.code = eamEntity.code;
-            wxgdEam.model = eamEntity.model;
-            wxgdEam.id = eamEntity.id;
-            mYHEntity.eamID = wxgdEam;
-            mSparePartController.upEam(wxgdEam);
-            mLubricateOilsController.upEam(wxgdEam);
-            maintenanceController.upEam(wxgdEam);
+        WXGDEam wxgdEam = new WXGDEam();
+        wxgdEam.name = eamEntity.name;
+        wxgdEam.code = eamEntity.code;
+        wxgdEam.model = eamEntity.model;
+        wxgdEam.id = eamEntity.id;
+        mYHEntity.eamID = wxgdEam;
+        mSparePartController.upEam(wxgdEam);
+        mLubricateOilsController.upEam(wxgdEam);
+        maintenanceController.upEam(wxgdEam);
 
-            //处理区域位置
-            yhEditArea.setEditable(false);
-            yhEditArea.setSpinner(eamEntity.getInstallPlace().name);
-            mYHEntity.areaInstall = eamEntity.getInstallPlace();
-        }
+        //处理区域位置
+        yhEditArea.setEditable(false);
+        yhEditArea.setSpinner(eamEntity.getInstallPlace().name);
+        mYHEntity.areaInstall = eamEntity.getInstallPlace();
 
     }
 
@@ -1059,6 +1082,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("faultInfo.sourceType.value", mYHEntity.sourceType != null ? mYHEntity.sourceType.value : "其他");
 
         map.put("faultInfo.chargeStaff.id", mYHEntity.chargeStaff == null ? "" : Util.strFormat2(mYHEntity.chargeStaff.id));
+        map.put("faultInfo.isOffApply",mYHEntity.isOffApply);
 
         if (mYHEntity.pending != null && mYHEntity.pending.id != null) {
             map.put("pendingId", Util.strFormat2(mYHEntity.pending.id));
@@ -1110,8 +1134,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             map.put("faultInfo.repairType.id", "");
         }
 
-        if (mYHEntity.describe != null)
-            map.put("faultInfo.describe", mYHEntity.describe);
+        map.put("faultInfo.describe", Util.strFormat2(mYHEntity.describe));
         if (mYHEntity.remark != null)
             map.put("faultInfo.remark", mYHEntity.remark);
 
@@ -1255,7 +1278,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     //检查是否变化
     public boolean doCheckChange() {
-        if (!oldYHEntity.toString().equals(mYHEntity.toString())) {
+        if (mYHEntity != null && oldYHEntity != null && !oldYHEntity.toString().equals(mYHEntity.toString())) {
             return true;
         }
         if (!TextUtils.isEmpty(repairStaffListStr) && !repairStaffListStr.equals(mRepairStaffController.getRepairStaffEntities().toString())) {

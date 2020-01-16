@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.text.TextUtils;
 
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.utils.CameraUtil;
 import com.supcon.mes.middleware.constant.Constant;
 
@@ -108,7 +109,6 @@ public class PicUtil {
             fos.close();
             bis.close();
             is.close();
-
             return file;
         } catch (IOException e) {
             e.printStackTrace();

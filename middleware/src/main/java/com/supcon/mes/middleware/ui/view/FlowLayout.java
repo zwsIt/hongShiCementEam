@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 
+import com.supcon.common.view.listener.OnChildViewClickListener;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.ui.view.logic.CommonLogic;
 import com.supcon.mes.middleware.ui.view.logic.ConfigDefinition;
@@ -21,7 +23,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlowLayout extends ViewGroup {
+public class FlowLayout extends ViewGroup implements OnChildViewClickListener {
 
     private final ConfigDefinition config;
     List<LineDefinition> lines = new ArrayList<>();
@@ -167,6 +169,15 @@ public class FlowLayout extends ViewGroup {
                         this.getPaddingLeft() + line.getX() + child.getInlineX() + lp.leftMargin + child.getWidth(),
                         this.getPaddingTop() + line.getY() + child.getInlineY() + lp.topMargin + child.getHeight()
                 );
+
+                // 点击事件
+                int finalJ = j;
+                view.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onChildViewClick(v, finalJ,null);
+                    }
+                });
             }
         }
     }
@@ -345,6 +356,19 @@ public class FlowLayout extends ViewGroup {
     public void setMaxLines(int maxLines) {
         this.config.setMaxLines(maxLines);
         this.requestLayout();
+    }
+
+    @Override
+    public void onChildViewClick(View childView, int action, Object obj) {
+        if (onChildViewClickListener != null){
+            onChildViewClickListener.onChildViewClick(childView,action,obj);
+        }
+    }
+
+    private OnChildViewClickListener onChildViewClickListener;
+
+    public void setOnChildViewClickListener(OnChildViewClickListener onChildViewClickListener){
+        this.onChildViewClickListener = onChildViewClickListener;
     }
 
     public static class LayoutParams extends MarginLayoutParams {

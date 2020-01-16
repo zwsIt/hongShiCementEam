@@ -4,9 +4,9 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -29,7 +29,6 @@ import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
-import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
@@ -127,7 +126,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     CustomGalleryView yhGalleryView;
 
     @BindByTag("yhViewMemo")
-    CustomEditText yhViewMemo;
+    CustomVerticalEditText yhViewMemo;
 
     @BindByTag("yhViewCommentInput")
     CustomEditText yhViewCommentInput;
@@ -139,6 +138,11 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     PtrFrameLayout refreshFrameLayout;
     @BindByTag("yhDealBar")
     LinearLayout yhDealBar;
+
+    @BindByTag("eleOffChkBox")
+    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOff")
+    CustomTextView eleOff;
 
     private YHEntity mYHEntity, mOriginalEntity;
     private AttachmentController mAttachmentController;
@@ -190,11 +194,18 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
             yhViewDescription.setContent(mYHEntity.describe);
         }
 
-        initPic();
+        eleOffChkBox.setClickable(false);
+        if (mYHEntity.isOffApply){
+            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
+        }else {
+            eleOffChkBox.setButtonDrawable(null);
+        }
 
         if (!TextUtils.isEmpty(mYHEntity.remark)) {
             yhViewMemo.setInput(mYHEntity.remark);
         }
+
+        initPic();
 
 //        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) refreshFrameLayout.getLayoutParams();
 //        layoutParams.bottomMargin = 0;
@@ -302,7 +313,10 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         yhViewFindStaff.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(context, Constant.Router.STAFF);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
     }

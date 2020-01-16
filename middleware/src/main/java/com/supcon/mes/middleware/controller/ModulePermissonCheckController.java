@@ -44,6 +44,9 @@ public class ModulePermissonCheckController extends BasePresenterController impl
         if(addBtn!=null){
             addBtn.setVisibility(View.INVISIBLE);
         }
+        if(mOnSuccessListener!=null){
+            mOnSuccessListener.onSuccess(null);
+        }
     }
 
     public void checkModulePermission(String userName, String processKey, OnSuccessListener<Long> onSuccessListener, View addBtn){

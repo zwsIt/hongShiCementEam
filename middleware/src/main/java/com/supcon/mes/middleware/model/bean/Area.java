@@ -56,7 +56,6 @@ public class Area extends BaseEntity implements CommonSearchEntity {
         return code;
     }
 
-    @Override
     public String getSearchPinyin() {
         return PinYinUtils.getHeaderLetter(pinyin == null? name:pinyin)+"";
     }

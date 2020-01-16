@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/sl_transparent_press_no_stroke"
     tools:ignore="MissingDefaultResource"
+    android:paddingBottom="@dimen/dp_10"
     >
 
     <ImageView
@@ -23,7 +24,7 @@
         android:layout_marginTop="55dp"
         android:tag="workName"
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="12sp"
         tools:text="巡检预警" />
 
     <TextView

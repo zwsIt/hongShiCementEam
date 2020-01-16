@@ -41,7 +41,6 @@ import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
@@ -288,7 +287,11 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             if (action == -1) {
                 acceptanceEntity.checkStaff = null;
             }
-            IntentRouter.go(AcceptanceEditActivity.this, Constant.Router.STAFF);
+//            IntentRouter.go(AcceptanceEditActivity.this, Constant.Router.STAFF);
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+            bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+            IntentRouter.go(AcceptanceEditActivity.this, Constant.Router.CONTACT_SELECT, bundle);
         });
     }
 

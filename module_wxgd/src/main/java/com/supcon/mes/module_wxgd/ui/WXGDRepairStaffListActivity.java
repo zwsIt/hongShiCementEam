@@ -87,8 +87,11 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
         isAdd = getIntent().getBooleanExtra(Constant.IntentKey.IS_ADD, false);
         if (isAdd) {
-        IntentRouter.go(context, Constant.Router.STAFF);
-    }
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+            bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+            IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+        }
         repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
         mRepairStaffAdapter.setEditable(editable);
@@ -151,8 +154,9 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
                     @Override
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
-                        bundle = genAddDataList(bundle);
-                        IntentRouter.go(context, Constant.Router.STAFF,bundle);
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                     }
                 });
 

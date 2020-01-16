@@ -28,9 +28,11 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomGalleryView;
+import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
@@ -120,12 +122,12 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     @BindByTag("eamArea")
     CustomTextView eamArea;
     @BindByTag("discoverer")
-    CustomVerticalTextView discoverer;
+    CustomTextView discoverer;
 
     @BindByTag("faultInfoType")
-    CustomVerticalTextView faultInfoType;
+    CustomTextView faultInfoType;
     @BindByTag("repairType")
-    CustomVerticalSpinner repairType;
+    CustomSpinner repairType;
     @BindByTag("priority")
     CustomTextView priority;
     @BindByTag("faultInfoDescribe")
@@ -139,15 +141,15 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     CustomTextView content;
 
     @BindByTag("repairGroup")
-    CustomVerticalTextView repairGroup;
+    CustomTextView repairGroup;
     @BindByTag("chargeStaff")
-    CustomVerticalTextView chargeStaff;
+    CustomTextView chargeStaff;
     @BindByTag("wosource")
-    CustomVerticalTextView wosource;
+    CustomTextView wosource;
     @BindByTag("planStartTime")
-    CustomVerticalDateView planStartTime;
+    CustomDateView planStartTime;
     @BindByTag("planEndTime")
-    CustomVerticalDateView planEndTime;
+    CustomDateView planEndTime;
     @BindByTag("realEndTime")
     CustomVerticalDateView realEndTime;
     @BindByTag("dispatcherStaff")
@@ -367,7 +369,6 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
             eleOffChkBox.setButtonDrawable(null);
         }
         eleOffChkBox.setClickable(false);
-        eleOffChkBox.setChecked(mWXGDEntity.isOffApply);
     }
 
     @Override
@@ -397,7 +398,10 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
                     currentAcceptChkEntity.checkStaff = null;
                     acceptChkStaffCode.setValue(null);
                 } else {
-                    IntentRouter.go(context, Constant.Router.STAFF);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }
             }
         });

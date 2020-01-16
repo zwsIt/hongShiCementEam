@@ -49,7 +49,6 @@ import com.supcon.mes.middleware.model.bean.XJHistoryEntity;
 import com.supcon.mes.middleware.model.bean.XJHistoryEntityDao;
 import com.supcon.mes.middleware.model.contract.DeviceDCSParamQueryContract;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
-import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.presenter.DeviceDCSParamQueryPresenter;
 import com.supcon.mes.middleware.ui.view.CustomRadioSheetDialog;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -83,7 +82,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.reactivestreams.Publisher;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;

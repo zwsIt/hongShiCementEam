@@ -18,6 +18,10 @@ import com.supcon.mes.module_olxj.model.bean.OLXJWorkItemEntity;
 import com.supcon.mes.module_olxj.model.contract.OLXJWorkSubmitContract;
 import com.supcon.mes.module_olxj.model.network.OLXJClient;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +46,6 @@ public class OLXJWorkSubmitPresenter extends OLXJWorkSubmitContract.Presenter{
 
         for (OLXJWorkItemEntity xjWorkItemEntity : areaEntity.workItemEntities) {
             String imgUrl = xjWorkItemEntity.xjImgUrl;
-
             if (!TextUtils.isEmpty(imgUrl)) {
                 imgUrl = imgUrl.replaceAll("/storage/emulated/0/eam/xj/pics/", "");
                 if (imgUrl.contains(",")) {
@@ -53,7 +56,32 @@ public class OLXJWorkSubmitPresenter extends OLXJWorkSubmitContract.Presenter{
             }
         }
         File xjJsonFile = new File(Constant.XJ_PATH, "xj_upload.json");
-        String result =  areaEntity.toString().replaceAll("/storage/emulated/0/eam/xj/pics/", "");
+
+
+        String tempResult = areaEntity.toString().replaceAll("/storage/emulated/0/eam/xj/pics/", "");
+        String result = "";
+
+        try {
+            JSONObject jsonObject = new JSONObject(tempResult);
+
+            JSONArray jsonArray =  jsonObject.getJSONArray("workItemEntities");
+
+            for(int i = 0;i<jsonArray.length();i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+                JSONObject workItem = item.getJSONObject("linkState");
+                String linkStateStr = workItem.getString("id");
+                item.remove("linkState");
+                item.put("linkState",linkStateStr);
+            }
+            result = jsonObject.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(TextUtils.isEmpty(result)){
+            return;
+        }
+
         FileUtil.write2File(xjJsonFile.getAbsolutePath(), result);
         LogUtil.i("xj upload:" + result);
         try {

@@ -149,6 +149,7 @@ public class OnlineCameraController extends BaseCameraController {
 
         String picPath = galleryBean.url;
 
+        // 删除已保存单据的附件、新拍未保存单据的已上传附件不做处理
         if (attachmentEntities != null)
             for (AttachmentEntity attachmentEntity : attachmentEntities) {
                 if (attachmentEntity.path.equals(picPath)) {

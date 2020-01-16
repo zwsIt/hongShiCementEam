@@ -127,19 +127,18 @@
                     app:necessary="true" />
 
                 <com.supcon.mes.mbap.view.CustomVerticalEditText
-                    android:id="@+id/workTask"
+                    android:id="@+id/remark"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_80"
                     android:layout_marginBottom="@dimen/dp_1"
                     android:background="@color/white"
                     android:paddingStart="@dimen/dp_10"
                     android:paddingEnd="@dimen/dp_10"
-                    android:tag="workTask"
+                    android:tag="remark"
                     app:content_size="13"
                     app:editable="true"
-                    app:key="工作任务"
-                    app:key_size="14"
-                    app:necessary="true"/>
+                    app:key="备注"
+                    app:key_size="14"/>
                 <com.supcon.mes.mbap.view.CustomGalleryView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -156,7 +155,8 @@
                     app:text_size="15"
                     app:columns="3"
                     app:icon_visible="true"
-                    app:editable="true"/>
+                    app:editable="true"
+                    app:necessary="true"/>
 
                 <com.supcon.mes.mbap.view.CustomListWidget
                     android:id="@+id/operateItemWidget"

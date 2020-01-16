@@ -12,6 +12,7 @@ public class CommonBAPListEntity<T extends BaseEntity> extends CommonListEntity<
     public boolean hasNext;
     public int pageNo;
     public int pageSize;
+    public int nextPage;
 
 
     public int totalCount;

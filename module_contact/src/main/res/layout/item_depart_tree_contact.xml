@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/areaIconContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:tag="areaIconContainer">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.supcon.mes.mbap.view.CustomCircleTextImageView
+                android:id="@+id/userIcon"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone"
+                app:citv_text_text="你好"
+                app:citv_text_color="@color/white"
+                app:citv_fill_color="@color/themeColor"
+                android:src="@drawable/bg_user_item"
+                android:tag="userIcon" />
+
+            <ImageView
+                android:id="@+id/spaceView"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center_vertical"
+                android:padding="@dimen/dp_3"
+                android:src="@null"
+                android:tag="spaceView" />
+            <ImageView
+                android:id="@+id/areaIcon"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center_vertical"
+                android:padding="@dimen/dp_5"
+                android:src="@drawable/ic_multi_add"
+                android:tag="areaIcon" />
+
+            <TextView
+                android:id="@+id/areaName"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:tag="areaName"
+                android:textSize="@dimen/fontSize_16sp"
+                tools:text="测试用例" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/detailInfo"
+                android:gravity="center_vertical"
+                android:textColor="@color/gray"
+                android:tag="detailInfo"
+                android:textSize="@dimen/fontSize_12sp"
+                android:layout_height="@dimen/dp_30" />
+        </LinearLayout>
+        <include layout="@layout/ly_line_light"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.supcon.mes.module_main.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -43,7 +44,6 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
-import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
@@ -261,8 +261,8 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
                             faultPendingIds.append(waitDealtEntity.pendingid).append(",");
                             faultIds.append(waitDealtEntity.dataid).append(",");
                         } else */if (waitDealtEntity.state.equals("派工")) {
-                            workPendingIds.append(waitDealtEntity.pendingid).append(",");
-                            workIds.append(waitDealtEntity.dataid).append(",");
+                            workPendingIds.append(waitDealtEntity.pendingId).append(",");
+                            workIds.append(waitDealtEntity.tableId).append(",");
                         }
                     }, throwable -> {
                     }, () -> {
@@ -324,7 +324,10 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
                         if (action == -1) {
                             searchStaff = null;
                         }
-                        IntentRouter.go(context, Constant.Router.STAFF);
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                     }
                 })
                 .bindClickListener(R.id.blueBtn, new View.OnClickListener() {
@@ -370,7 +373,10 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
                         if (action == -1) {
                             searchStaff = null;
                         }
-                        IntentRouter.go(context, Constant.Router.STAFF);
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                     }
                 })
                 .bindTextChangeListener(R.id.proxyReason, new OnTextListener() {
@@ -386,12 +392,12 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
                             ToastUtils.show(WaitDealtActivity.this, "请选择委托人");
                             return;
                         }
-                        if (waitDealtEntity.pendingid == null) {
+                        if (waitDealtEntity.pendingId == null) {
                             ToastUtils.show(WaitDealtActivity.this, "未获取当前代办信息");
                             return;
                         }
                         onLoading("正在委托...");
-                        presenterRouter.create(WaitDealtAPI.class).proxyPending(waitDealtEntity.pendingid, searchStaff.userId, reason);
+                        presenterRouter.create(WaitDealtAPI.class).proxyPending(waitDealtEntity.pendingId, searchStaff.userId, reason);
                         proxyDialog.dismiss();
                     }
                 }, false)

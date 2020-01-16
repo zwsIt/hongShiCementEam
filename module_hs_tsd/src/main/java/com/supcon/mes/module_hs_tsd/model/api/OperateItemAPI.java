@@ -11,5 +11,5 @@ import com.supcon.mes.module_hs_tsd.model.bean.OperateItemListEntity;
  */
 @ContractFactory(entites = {OperateItemListEntity.class})
 public interface OperateItemAPI {
-    void listOperateItems(Long tableId);
+    void listOperateItems(String url,Long tableId);
 }

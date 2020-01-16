@@ -35,6 +35,7 @@ public class MainRouter implements IRouter {
     private static final String MODULE_SCORE = "com.supcon.mes.module_score.IntentRouter";
     private static final String MODULE_ACCEPTANCE = "com.supcon.mes.module_acceptance.IntentRouter";
     private static final String MODULE_MAIN = "com.supcon.mes.module_main.IntentRouter";
+    private static final String MODULE_CONTACT = "com.supcon.mes.module_contact.IntentRouter";
 
     private static class MainRouterHolder {
         private static MainRouter instance = new MainRouter();
@@ -67,6 +68,7 @@ public class MainRouter implements IRouter {
         modules.add(MODULE_SCORE);
         modules.add(MODULE_ACCEPTANCE);
         modules.add(MODULE_MAIN);
+        modules.add(MODULE_CONTACT);
     }
 
 

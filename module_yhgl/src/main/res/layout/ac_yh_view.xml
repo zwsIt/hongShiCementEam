@@ -140,6 +140,10 @@
                         app:text_size="16"
                         />
                 </LinearLayout>
+                <include layout="@layout/ly_ele_off_apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_1"/>
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

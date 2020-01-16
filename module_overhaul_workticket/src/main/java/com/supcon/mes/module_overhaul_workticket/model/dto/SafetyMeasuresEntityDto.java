@@ -13,6 +13,7 @@ public class SafetyMeasuresEntityDto extends BaseEntity {
     public String id;
     public String isExecuted; // 是否执行
     public String safetyMeasure; // 安全措施
+    public String operateType; // 操作类型:参照枚举类OperateType
     public String sort;
     public String version;
     public String rowIndex;

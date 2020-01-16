@@ -13,10 +13,7 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.supcon.common.view.base.activity.BaseControllerActivity;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
-import com.supcon.common.view.listener.OnChildViewClickListener;
-import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LinkEntity;
@@ -28,8 +25,10 @@ import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
@@ -45,7 +44,6 @@ import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
-import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -70,7 +68,6 @@ import com.supcon.mes.module_wxgd.model.event.LubricateOilsEvent;
 import com.supcon.mes.module_wxgd.model.event.MaintenanceEvent;
 import com.supcon.mes.module_wxgd.model.event.RepairStaffEvent;
 import com.supcon.mes.module_wxgd.model.event.SparePartEvent;
-import com.supcon.mes.module_wxgd.model.event.VersionRefreshEvent;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
 
@@ -116,17 +113,17 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
     CustomTextView eamArea;
 
     @BindByTag("repairGroup")
-    CustomVerticalTextView repairGroup;
+    CustomTextView repairGroup;
     @BindByTag("chargeStaff")
-    CustomVerticalTextView chargeStaff;
+    CustomTextView chargeStaff;
     @BindByTag("wosource")
-    CustomVerticalTextView wosource;
+    CustomTextView wosource;
     @BindByTag("repairType")
-    CustomVerticalSpinner repairType;
+    CustomSpinner repairType;
     @BindByTag("planStartTime")
-    CustomVerticalDateView planStartTime;
+    CustomDateView planStartTime;
     @BindByTag("planEndTime")
-    CustomVerticalDateView planEndTime;
+    CustomDateView planEndTime;
     @BindByTag("realEndTime")
     CustomVerticalDateView realEndTime;
     @BindByTag("repairAdvise")
@@ -325,7 +322,10 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
             if (action == -1) {
                 mWXGDEntity.getChargeStaff().id = null;
             } else {
-                IntentRouter.go(context, Constant.Router.STAFF);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
 

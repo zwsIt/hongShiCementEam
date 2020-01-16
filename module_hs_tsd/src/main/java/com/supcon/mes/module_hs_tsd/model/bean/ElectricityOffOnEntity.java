@@ -1,12 +1,15 @@
 package com.supcon.mes.module_hs_tsd.model.bean;
 
+import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.Department;
 import com.supcon.mes.middleware.model.bean.DepartmentInfo;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -22,13 +25,16 @@ public class ElectricityOffOnEntity extends BaseEntity {
     private Staff applyStaff; // 申请人(发令人)
     private EamEntity eamID; // 设备
     private Long workRecordId; // 关联工单ID
-    private String workRecordTableno; // 关联工单单据编号
+    @SerializedName(value = "workRecordTableno")
+    private String workRecordTableNo; // 关联工单单据编号
     private Long applyDate; // 申请时间(停电时间)
+    private Long operateDate; // 操作时间
     private Department applyCurrentDept; // 申请部门
     private Staff operateStaff; // 操作人
     private String workTask; // 工作任务
     private String remark;
     private EleOffOnTemplate eleTemplateId; // 停送电模板
+    private SystemCodeEntity applyType; // 申请类型：BEAMEle001/01：停电；BEAMEle001/02：送电
 
     private Long cid;
     private Staff createStaff;
@@ -82,12 +88,12 @@ public class ElectricityOffOnEntity extends BaseEntity {
         this.workRecordId = workRecordId;
     }
 
-    public String getWorkRecordTableno() {
-        return workRecordTableno;
+    public String getWorkRecordTableNo() {
+        return workRecordTableNo;
     }
 
-    public void setWorkRecordTableno(String workRecordTableno) {
-        this.workRecordTableno = workRecordTableno;
+    public void setWorkRecordTableNo(String workRecordTableNo) {
+        this.workRecordTableNo = workRecordTableNo;
     }
 
     public Long getApplyDate() {
@@ -101,6 +107,9 @@ public class ElectricityOffOnEntity extends BaseEntity {
     public Staff getOperateStaff() {
         if (operateStaff == null){
             operateStaff = new Staff();
+            operateStaff.id = EamApplication.getAccountInfo().staffId;
+            operateStaff.code = EamApplication.getAccountInfo().staffCode;
+            operateStaff.name = EamApplication.getAccountInfo().staffName;
         }
         return operateStaff;
     }
@@ -238,5 +247,21 @@ public class ElectricityOffOnEntity extends BaseEntity {
 
     public void setEleTemplateId(EleOffOnTemplate eleTemplateId) {
         this.eleTemplateId = eleTemplateId;
+    }
+
+    public Long getOperateDate() {
+        return operateDate;
+    }
+
+    public void setOperateDate(Long operateDate) {
+        this.operateDate = operateDate;
+    }
+
+    public SystemCodeEntity getApplyType() {
+        return applyType;
+    }
+
+    public void setApplyType(SystemCodeEntity applyType) {
+        this.applyType = applyType;
     }
 }

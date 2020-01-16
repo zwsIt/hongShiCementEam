@@ -28,6 +28,15 @@ public interface Constant {
     String IMAGE_SAVE_WORKTICKETPATH = FILE_PATH + "workTicket" + File.separator + "pics" + File.separator;   //检修工作票的图片路径
     String IMAGE_SAVE_ELE_PATH = FILE_PATH + "electricity" + File.separator + "pics" + File.separator;   //停送电的图片路径
 
+    /**
+     * fir.im相关信息
+     */
+    interface Fir{
+        String API_TOKEN = "1ce8d7b6ac5ecef81e3a6c0dfaafb7e3"; // https://fir.im/apps提供，切勿在网站点击重新生成，否则已有app 不能检查更新
+        String HAI_LUO_APP_ID = "5ddb955cb2eb46487e3ccee8";
+        String HONG_SHI_APP_ID = "5ddb877423389f4559ae8303";
+    }
+
     interface CAMERA_ACT {
         int ACT_GALLERY = 0;
         int ACT_CAMERA = 1;
@@ -59,6 +68,13 @@ public interface Constant {
         String WEB = "web";
         String IMAGE_VIEW = "IMAGE_VIEW";
         String ABOUT = "ABOUT";
+
+        String CONTACT_SELECT = "CONTACT_SELECT";
+        String CONTACT_DEPART_TREE_SELECT = "CONTACT_DEPART_TREE_SELECT";
+        String CONTACT_POSITION_TREE_SELECT = "CONTACT_POSITION_TREE_SELECT";
+        String CONTACT_VIEW = "CONTACT_VIEW";
+        String CONTACT_SEARCH_WITH_HEADER = "CONTACT_SEARCH_WITH_HEADER";
+        String SEARCH = "SEARCH";
 
         String PROCESSED = "PROCESSED";//已处理
         String WAIT_DEALT = "WAIT_DEALT";//待办
@@ -209,6 +225,9 @@ public interface Constant {
         String HS_ELE_OFF_VIEW = "HS_ELE_OFF_VIEW"; // 停电票查看
         String ELE_OFF_TEMPLATE = "ELE_OFF_TEMPLATE"; // 停电模板
         String EAM_FILE_LIST = "EAM_FILE_LIST"; // 设备文档list
+        String HS_SD_LIST = "HS_SD_LIST"; // 红狮送电list
+        String HS_ELE_ON_EDIT = "HS_ELE_ON_EDIT"; // 送电票编辑
+        String HS_ELE_ON_VIEW = "HS_ELE_ON_VIEW"; // 送电票查看
     }
 
 
@@ -220,6 +239,9 @@ public interface Constant {
         String MODULE = "MODULE";
         String URL = "URL";
         String DEPLOYMENT_ID = "DEPLOYMENT_ID";
+        String CONTACT_ENTITY = "CONTACT_ENTITY";
+        String SEARCH_CONTENT = "SEARCH_CONTENT";
+        String IS_SELECT_STAFF = "IS_SELECT_STAFF";
 
         String SBDA_ONLINE_EAMCODE = "SBDA_ONLINE_EAMCODE";
         String SBDA_ONLINE_EAMID = "SBDA_ONLINE_EAMID";
@@ -335,7 +357,7 @@ public interface Constant {
         String ADD_DATA_LIST = "ADD_DATA_LIST"; // 已添加数据：备件、润滑、维保
         String POSITION = "POSITION";
         String HAZARD_CONTRL_POINT = "HAZARD_CONTRL_POINT"; // 检修工作票：危险源控制点
-        String ELE_OFF_ON = "ELE_OFF_ON"; // 停送电模板
+        String ELE_OFF_ON_TEMPLATE = "ELE_OFF_ON_TEMPLATE"; // 停送电模板
         String ElE_OFF_ID = "ElE_OFF_ID"; // 停电票id
         String ElE_OFF_TABLE_INFO_ID = "ElE_OFF_TABLE_INFO_ID"; // 停电票tableInfoId
     }
@@ -894,6 +916,7 @@ public interface Constant {
         String CONFIRM = "接单(确认)";
         String OVER = "结束";
         String TAKE_EFFECT = "生效";
+        String NOTIFY_TAKE_EFFECT = "通知,生效";
 
     }
 
@@ -966,12 +989,24 @@ public interface Constant {
      */
     interface HSWorkTicketView {
         String EDIT_URL = "/WorkTicket/workTicket/ohworkticket/workTicketEdit.action";// 编辑
-//        String SUBMIT_EDIT_URL = "/BEAM2/sparePart/apply/sparePartSubmitEdit.action"; //
         String VIEW_URL = "/WorkTicket/workTicket/ohworkticket/workTicketView.action";// 查看
     }
 
-    interface FileView {
-        String fileUrl = "/foundation/workbench/fileViewUrl.action?id=";
+    /**
+     * 停电票单据视图(注：红狮)
+     */
+    interface HSEleOffView {
+        String EDIT_URL = "/BEAMEle/onOrOff/onoroff/eleOffEdit.action";// 编辑
+        String PREVIEW_URL = "";// 审核
+        String VIEW_URL = "/BEAMEle/onOrOff/onoroff/eleOffMainView.action";// 查看
+    }
+    /**
+     * 送电票单据视图(注：红狮)
+     */
+    interface HSEleOnView {
+        String EDIT_URL = "/BEAMEle/onOrOff/onoroff/eleOnEdit.action";// 编辑
+        String PREVIEW_URL = "";// 审核
+        String VIEW_URL = "/BEAMEle/onOrOff/onoroff/eleOnWorkFlow.action"; // 查看
     }
 
 }

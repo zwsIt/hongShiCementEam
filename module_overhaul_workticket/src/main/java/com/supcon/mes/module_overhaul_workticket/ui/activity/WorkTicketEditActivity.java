@@ -4,9 +4,13 @@ import android.annotation.SuppressLint;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.annotation.MainThread;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.text.format.Time;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -25,6 +29,10 @@ import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.common.view.view.picker.SinglePicker;
+import com.supcon.mes.mbap.beans.SheetEntity;
+import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
@@ -46,7 +54,9 @@ import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
+import com.supcon.mes.middleware.ui.view.FlowLayout;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.FieldHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
@@ -73,8 +83,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.concurrent.TimeUnit;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import io.reactivex.functions.Consumer;
 
 /**
  * ClassName
@@ -95,6 +106,8 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     ImageButton rightBtn;
     @BindByTag("workListTableNo")
     CustomTextView workListTableNo;
+    @BindByTag("eleOffTableNo")
+    CustomTextView eleOffTableNo;
     @BindByTag("chargeStaff")
     CustomTextView chargeStaff;
     @BindByTag("workShop")
@@ -113,14 +126,14 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     CustomWorkFlowView workFlowView;
     @BindByTag("riskAssessmentRadioGroup")
     RadioGroup riskAssessmentRadioGroup;
-//    @BindByTag("riskAssessmentRadioGroup")
-//    RadioGroup riskAssessmentRadioGroup;
 
     @BindByTag("drawer_layout")
     DrawerLayout drawer_layout;
-
     @BindByTag("hazardRecyclerView")
     RecyclerView hazardRecyclerView;
+
+    @BindByTag("hazardCtrlPointFlowLy")
+    FlowLayout hazardCtrlPointFlowLy;
 
 
     private String __pc__;
@@ -145,7 +158,6 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID, -1);
         pendingId = getIntent().getLongExtra(Constant.IntentKey.PENDING_ID, -1);
-//        hazardContrlPointValue = getIntent().getStringExtra(Constant.IntentKey.HAZARD_CONTRL_POINT);
         // 手工制定无需刷新
         if (!tableId.equals(-1L) && !pendingId.equals(-1L)) {
             refreshController.setAutoPullDownRefresh(true);
@@ -186,10 +198,10 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             getController(LinkController.class).initPendingTransition(workFlowView, pendingId);
         }
         //初始化危险控制源
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        hazardRecyclerView.setLayoutManager(linearLayoutManager); // 水平线性布局
-        hazardPointAdapter = new HazardPointAdapter(context);
-        hazardRecyclerView.setAdapter(hazardPointAdapter);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+//        hazardRecyclerView.setLayoutManager(linearLayoutManager); // 水平线性布局
+//        hazardPointAdapter = new HazardPointAdapter(context);
+//        hazardRecyclerView.setAdapter(hazardPointAdapter);
 
     }
 
@@ -249,7 +261,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             @Override
             public void onRefresh() {
                 initTableInfoData();
-                safetyMeasuresController.initData();
+                safetyMeasuresController.listSafetyMeas();
             }
         });
 
@@ -259,7 +271,11 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                 mWorkTicketEntity.getWorkShop().id = null;
                 workShop.setContent(null);
             } else {
-                IntentRouter.go(context, Constant.Router.STAFF);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, chargeStaff.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
         eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -282,96 +298,95 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             }
         });
 
-//        riskAssessment.setOnChildViewClickListener(new OnChildViewClickListener() {
+        hazardCtrlPointFlowLy.setOnChildViewClickListener(new OnChildViewClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onChildViewClick(View childView, int action, Object obj) {
+                StringBuilder sbValue = new StringBuilder();
+                StringBuilder sbIds = new StringBuilder();
+                for (int i = 0 ;i < hazardCtrlPointFlowLy.getChildCount() ;i++){
+                    CheckBox checkBox = (CheckBox) hazardCtrlPointFlowLy.getChildAt(i);
+                    if (checkBox.isChecked()){
+                        sbValue.append(checkBox.getText()).append(",");
+                        sbIds.append(mHazardList.get(checkBox.getId() % 1000).id).append(",");
+                    }
+                }
+                mWorkTicketEntity.setHazardsourContrpoint(sbIds.length() > 0 ? sbIds.substring(0, sbIds.length() - 1) : "");
+                mWorkTicketEntity.setHazardsourContrpointForDisplay(sbValue.length() > 0 ? sbValue.substring(0, sbValue.length() - 1) : "");
+            }
+        });
+
+//        hazardPointAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+//            @Override
+//            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+//                List<HazardPointEntity> hazardPointEntityList = (List<HazardPointEntity>) obj;
+//                StringBuilder sbValue = new StringBuilder();
+//                StringBuilder sbIds = new StringBuilder();
+//                for (HazardPointEntity entity : hazardPointEntityList) {
+//                    if (entity.checked) {
+//                        sbValue.append(entity.value).append(",");
+//                        sbIds.append(entity.id).append(",");
+//                    }
+//                }
+//                hazardCtrlPoint.setSpinner(sbValue.length() > 0 ? sbValue.substring(0, sbValue.length() - 1) : "");
+//                hazardCtrlPoint.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+//                mWorkTicketEntity.setHazardsourContrpoint(sbIds.length() > 0 ? sbIds.substring(0, sbIds.length() - 1) : "");
+//                mWorkTicketEntity.setHazardsourContrpointForDisplay(hazardCtrlPoint.getContent());
+//            }
+//        });
+//        hazardCtrlPoint.setOnChildViewClickListener(new OnChildViewClickListener() {
 //            @Override
 //            public void onChildViewClick(View childView, int action, Object obj) {
-//                if (action == -1){
-//                    mWorkTicketEntity.getRiskAssessment().id = null;
-//                }else {
-//                    if (mRiskAssessmentList.size() <= 0){
-//                        ToastUtils.show(context, "风险评估列表数据为空,请重新加载页面！");
-//                        return;
-//                    }
+//                drawer_layout.openDrawer(Gravity.START);
 //
-//                    mSinglePickController
-//                    .list(FieldHelper.getSystemCodeValue(mRiskAssessmentList))
-//                    .listener(new SinglePicker.OnItemPickListener() {
-//                        @Override
-//                        public void onItemPicked(int index, Object item) {
-//                            riskAssessment.setContent(item.toString());
-//                            mWorkTicketEntity.setRiskAssessment(mRiskAssessmentList.get(index));
-//                        }
-//                    }).show(riskAssessment.getContent());
-//                }
+////                if (action == -1){
+////                    mWorkTicketEntity.setHazardsourContrpoint(null);
+////                    mWorkTicketEntity.setHazardsourContrpointForDisplay(null);
+////                }else {
+////                    if (mHazardList.size() <= 0){
+////                        ToastUtils.show(context, "危险源控制点列表数据为空,请重新加载页面！");
+////                        return;
+////                    }
+////                    new CustomSheetDialog(context).multiSheet("危险源控制点",FieldHelper.getSheetEntityList(mHazardList),null)
+////                            .setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+////                                @Override
+////                                public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+////                                    List<SonSheetEntity> sonSheetEntityList = GsonUtil.jsonToList(obj.toString(), SonSheetEntity.class);
+////                                    StringBuilder value = new StringBuilder();
+////                                    StringBuilder id = new StringBuilder();
+////                                    for (SonSheetEntity sonSheetEntity : sonSheetEntityList){
+////                                        value.append(sonSheetEntity.name).append(",");
+////                                        id.append(sonSheetEntity.id).append(",");
+////                                    }
+////                                    hazardCtrlPoint.setContent(value.toString());
+////                                    mWorkTicketEntity.setHazardsourContrpoint(id.toString());
+////                                    mWorkTicketEntity.setHazardsourContrpointForDisplay(value.toString());
+////                                }
+////                            }).show();
+////                }
 //            }
 //        });
 
-        hazardPointAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-            @Override
-            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                List<HazardPointEntity> hazardPointEntityList = (List<HazardPointEntity>) obj;
-                StringBuilder sbValue = new StringBuilder();
-                StringBuilder sbIds = new StringBuilder();
-                for (HazardPointEntity entity : hazardPointEntityList) {
-                    if (entity.checked) {
-                        sbValue.append(entity.value).append(",");
-                        sbIds.append(entity.id).append(",");
-                    }
-                }
-                hazardCtrlPoint.setSpinner(sbValue.length() > 0 ? sbValue.substring(0, sbValue.length() - 1) : "");
-                hazardCtrlPoint.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-                mWorkTicketEntity.setHazardsourContrpoint(sbIds.length() > 0 ? sbIds.substring(0, sbIds.length() - 1) : "");
-                mWorkTicketEntity.setHazardsourContrpointForDisplay(hazardCtrlPoint.getContent());
+        workFlowView.setOnChildViewClickListener((childView, action, obj) -> {
+            if ("selectPeopleInput".equals(childView.getTag())) {//选人
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "selectPeopleInput");
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+                return;
             }
-        });
-        hazardCtrlPoint.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                drawer_layout.openDrawer(Gravity.START);
-
-//                if (action == -1){
-//                    mWorkTicketEntity.setHazardsourContrpoint(null);
-//                    mWorkTicketEntity.setHazardsourContrpointForDisplay(null);
-//                }else {
-//                    if (mHazardList.size() <= 0){
-//                        ToastUtils.show(context, "危险源控制点列表数据为空,请重新加载页面！");
-//                        return;
-//                    }
-//                    new CustomSheetDialog(context).multiSheet("危险源控制点",FieldHelper.getSheetEntityList(mHazardList),null)
-//                            .setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-//                                @Override
-//                                public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-//                                    List<SonSheetEntity> sonSheetEntityList = GsonUtil.jsonToList(obj.toString(), SonSheetEntity.class);
-//                                    StringBuilder value = new StringBuilder();
-//                                    StringBuilder id = new StringBuilder();
-//                                    for (SonSheetEntity sonSheetEntity : sonSheetEntityList){
-//                                        value.append(sonSheetEntity.name).append(",");
-//                                        id.append(sonSheetEntity.id).append(",");
-//                                    }
-//                                    hazardCtrlPoint.setContent(value.toString());
-//                                    mWorkTicketEntity.setHazardsourContrpoint(id.toString());
-//                                    mWorkTicketEntity.setHazardsourContrpointForDisplay(value.toString());
-//                                }
-//                            }).show();
-//                }
-            }
-        });
-
-        workFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                WorkFlowVar workFlowVar = (WorkFlowVar) obj;
-                switch (action) {
-                    case 0:
-                        doSave();
-                        break;
-                    case 1:
-                    case 2:
-                        doSubmit(workFlowVar);
-                        break;
-                    default:
-                        break;
-                }
+            WorkFlowVar workFlowVar = (WorkFlowVar) obj;
+            switch (action) {
+                case 0:
+                    doSave();
+                    break;
+                case 1:
+                case 2:
+                    doSubmit(workFlowVar);
+                    break;
+                default:
+                    break;
             }
         });
 
@@ -476,10 +491,10 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             ToastUtils.show(context, "风险评估不允许为空！");
             return true;
         }
-        if (TextUtils.isEmpty(hazardCtrlPoint.getContent())) {
-            ToastUtils.show(context, "危险源控制点不允许为空！");
-            return true;
-        }
+//        if (TextUtils.isEmpty(mWorkTicketEntity.getHazardsourContrpoint())) {
+//            ToastUtils.show(context, "危险源控制点不允许为空！");
+//            return true;
+//        }
         return false;
     }
 
@@ -502,30 +517,39 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
     public void updateTableInfo(WorkTicketEntity entity) {
         this.mWorkTicketEntity = entity;
-        //初始化危险控制源
-        hazardPointAdapter.setList(WorkTicketHelper.getHazardPointBySystemCode(mHazardList, mWorkTicketEntity.getHazardsourContrpoint()));
-        hazardPointAdapter.notifyDataSetChanged();
 
         // 工单来源不可编辑
         if (!TextUtils.isEmpty(entity.getWorkList().tableNo)) {
-//            chargeStaff.setEditable(false);
             eamName.setEditable(false);
-//            workShop.setEditable(false);
         } else {
             workListTableNo.setVisibility(View.GONE);
         }
+        // 停电隐藏
+        if (TextUtils.isEmpty(entity.getOffApplyTableNo())) {
+            eleOffTableNo.setVisibility(View.GONE);
+        }
+
         //回填单据表头信息
         workListTableNo.setContent(entity.getWorkList().tableNo);
+        eleOffTableNo.setContent(entity.getOffApplyTableNo());
         chargeStaff.setContent(entity.getChargeStaff().name);
         workShop.setContent(entity.getWorkShop().name);
         eamName.setContent(entity.getEamId().name);
         eamCode.setContent(entity.getEamId().code);
 
         //初始化风险评估
-        if (riskAssessmentRadioGroup.getChildCount() <= 0){
+//        if (riskAssessmentRadioGroup.getChildCount() <= 0){
+            riskAssessmentRadioGroup.removeAllViews();
             FilterHelper.addRadioView(this, riskAssessmentRadioGroup,
-                    FilterHelper.createFilterBySystemCode(Constant.SystemCode.RISK_ASSESSMENT,mWorkTicketEntity.getRiskAssessment().id), 50, WRAP_CONTENT);
-        }
+                    FilterHelper.createFilterBySystemCode(Constant.SystemCode.RISK_ASSESSMENT,mWorkTicketEntity.getRiskAssessment().id,false), 50, WRAP_CONTENT);
+//        }
+
+        // 初始化危险源控制点
+//        if (hazardCtrlPointFlowLy.getChildCount() <= 0){
+            hazardCtrlPointFlowLy.removeAllViews();
+            FilterHelper.addCheckBoxView(this, hazardCtrlPointFlowLy,
+                    FilterHelper.createFilterBySystemCode(Constant.SystemCode.HAZARD_CON_POINT,mWorkTicketEntity.getHazardsourContrpoint(),true), WRAP_CONTENT, WRAP_CONTENT);
+//        }
 
         mWorkTicketEntityOld = GsonUtil.gsonToBean(mWorkTicketEntity.toString(), WorkTicketEntity.class);
     }
@@ -538,9 +562,9 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
     @Override
     public void onBackPressed() {
-        if (drawer_layout.isDrawerOpen(Gravity.START)) {
-            drawer_layout.closeDrawers();
-        } else {
+//        if (drawer_layout.isDrawerOpen(Gravity.START)) {
+//            drawer_layout.closeDrawers();
+//        } else {
             if (isUpdated()){
                 CustomDialog customDialog = new CustomDialog(context);
                 customDialog.getDialog().setCanceledOnTouchOutside(true);
@@ -565,7 +589,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                 finish();
                 EventBus.getDefault().post(new RefreshEvent());
             }
-        }
+//        }
     }
 
     /**
@@ -573,7 +597,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
      * @return
      */
     private boolean isUpdated() {
-        if (!mWorkTicketEntityOld.toString().equals(mWorkTicketEntity.toString())){
+        if (mWorkTicketEntityOld != null && mWorkTicketEntity != null && !mWorkTicketEntityOld.toString().equals(mWorkTicketEntity.toString())){
             return true;
         }
         if (!TextUtils.isEmpty(oldSafetyMeasDetailListStr) && !oldSafetyMeasDetailListStr.equals(safetyMeasuresController.getSafetyMeasuresEntityList().toString())){
@@ -586,12 +610,17 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     public void receiveStaff(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
             CommonSearchStaff staff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
-            chargeStaff.setContent(staff.name);
-            workShop.setContent(staff.department);
 
-            mWorkTicketEntity.getChargeStaff().id = staff.id;
-            mWorkTicketEntity.getChargeStaff().name = staff.name;
-            mWorkTicketEntity.getChargeStaff().code = staff.code;
+            if (chargeStaff.getTag().toString().equals(commonSearchEvent.flag)){
+                chargeStaff.setContent(staff.name);
+                workShop.setContent(staff.department);
+
+                mWorkTicketEntity.getChargeStaff().id = staff.id;
+                mWorkTicketEntity.getChargeStaff().name = staff.name;
+                mWorkTicketEntity.getChargeStaff().code = staff.code;
+            } else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
+                workFlowView.addStaff(staff.name,staff.id);
+            }
         }
     }
 

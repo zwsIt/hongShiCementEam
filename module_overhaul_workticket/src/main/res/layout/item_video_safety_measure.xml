@@ -55,7 +55,11 @@
 
         </LinearLayout>
     </LinearLayout>
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_25"
+        android:layout_gravity="center"
+        android:id="@+id/gifIv"/>
     <com.supcon.mes.mbap.view.CustomGalleryView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

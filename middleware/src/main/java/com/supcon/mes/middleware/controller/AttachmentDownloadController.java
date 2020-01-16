@@ -52,14 +52,13 @@ public class AttachmentDownloadController extends BasePresenterController {
             return;
         }
 
-
         List<GalleryBean> galleryBeans = new ArrayList<>();
         Flowable.fromIterable(attachmentEntities)
                 .subscribeOn(Schedulers.newThread())
                 .filter(attachmentEntity -> attachmentEntity.deploymentId != 0)
-                .flatMap(new Function<AttachmentEntity, Publisher<File>>() {
+                .flatMap(new Function<AttachmentEntity, Publisher<GalleryBean>>() {
                     @Override
-                    public Publisher<File> apply(AttachmentEntity attachment) throws Exception {
+                    public Publisher<GalleryBean> apply(AttachmentEntity attachment) throws Exception {
                         GalleryBean galleryBean = new GalleryBean();
                         String path = dir;
                         if (attachment.name.contains(".jpg") || attachment.name.contains(".png") || attachment.name.contains(".PNG")) {
@@ -75,9 +74,9 @@ public class AttachmentDownloadController extends BasePresenterController {
                         galleryBean.url = attachment.path;
                         String suffix = attachment.name;
                         File pic = new File(path, suffix);
-
                         if (pic.exists()) {
-                            return Flowable.just(pic);
+                            galleryBean.localPath = pic.getAbsolutePath();
+                            return Flowable.just(galleryBean);
                         } else {
                             String finalPath = path;
                             String key = entityCode + attachment.id;
@@ -92,11 +91,12 @@ public class AttachmentDownloadController extends BasePresenterController {
                                             }
                                         })
                                         .subscribeOn(Schedulers.newThread())
-                                        .map(new Function<ResponseBody, File>() {
+                                        .map(new Function<ResponseBody, GalleryBean>() {
                                             @Override
-                                            public File apply(ResponseBody responseBody) throws Exception {
-                                                File file = PicUtil.writeToDisk(attachment.name, finalPath, responseBody);
-                                                return file;
+                                            public GalleryBean apply(ResponseBody responseBody) throws Exception {
+                                                File file = PicUtil.writeToDisk(attachment.name, finalPath, responseBody); // 存储本地
+                                                galleryBean.localPath = file.getAbsolutePath();
+                                                return galleryBean;
 
                                             }
                                         });
@@ -107,15 +107,15 @@ public class AttachmentDownloadController extends BasePresenterController {
                         }
                     }
                 })
-                .filter(new Predicate<File>() {
+                .filter(new Predicate<GalleryBean>() {
                     @Override
-                    public boolean test(File file) throws Exception {
+                    public boolean test(GalleryBean galleryBean) throws Exception {
                         // 过滤文档
-                        return file != null && !file.getName().contains(".txt") && !file.getName().contains(".doc")
-                                && !file.getName().contains(".pdf") && !file.getName().contains(".xls") && !file.getName().contains(".ppt");
+                        return galleryBean != null && !galleryBean.localPath.contains(".txt") && !galleryBean.localPath.contains(".doc")
+                                && !galleryBean.localPath.contains(".pdf") && !galleryBean.localPath.contains(".xls") && !galleryBean.localPath.contains(".ppt");
                     }
                 })
-                .flatMap(new Function<File, Publisher<GalleryBean>>() {
+                /*.flatMap(new Function<File, Publisher<GalleryBean>>() {
                     @Override
                     public Publisher<GalleryBean> apply(File file) throws Exception {
                         GalleryBean galleryBean = new GalleryBean();
@@ -126,7 +126,7 @@ public class AttachmentDownloadController extends BasePresenterController {
                         galleryBean.localPath = file.getAbsolutePath();
                         return Flowable.just(galleryBean);
                     }
-                })
+                })*/
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<GalleryBean>() {
                     @Override

@@ -1,8 +1,8 @@
 include ':middleware', ':module_score', ':module_sparepartapply_hl', ':module_overhaul_workticket', ':module_hs_tsd',
         ':module_main', /*':shell', */ ':hsShell',
         /*':module_login',*/ ':module_zzlogin',
-        ':module_data_manage', ':module_sbda',
+        ':module_data_manage', ':module_sbda', ':module_contact',
         ':module_wxgd', ':module_warn'/*, ':module_xj'*/,
         ':module_yhgl', 'module_tsd', ':module_xj_online',
         /*':module_zz',*/ ':module_sbda_online'/*, ':mogu_viber',':hlShell'*/,
-        ':upush', ':module_acceptance', ':module_txl', ':module_zz_new'/*, ':vibLib'*/
+        ':upush', ':module_acceptance', /*':module_txl' , */ ':module_zz_new'/*, ':vibLib'*/

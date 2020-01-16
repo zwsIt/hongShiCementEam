@@ -17,9 +17,9 @@ import io.reactivex.functions.Function;
  */
 public class OperateItemPresenter extends OperateItemContract.Presenter {
     @Override
-    public void listOperateItems(Long tableId) {
+    public void listOperateItems(String url, Long tableId) {
         mCompositeSubscription.add(
-                HttpClient.listOperateItem(tableId)
+                HttpClient.listOperateItem(url,tableId)
                 .onErrorReturn(new Function<Throwable, OperateItemListEntity>() {
                     @Override
                     public OperateItemListEntity apply(Throwable throwable) throws Exception {

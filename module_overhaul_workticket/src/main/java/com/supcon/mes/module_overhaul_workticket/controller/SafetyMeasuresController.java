@@ -3,9 +3,13 @@ package com.supcon.mes.module_overhaul_workticket.controller;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.supcon.common.view.base.controller.BaseViewController;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
@@ -39,6 +43,7 @@ public class SafetyMeasuresController extends BaseViewController implements Safe
 
     private Long tableId; // 单据ID
     private Long eleOffTableInfoId; // 停电票tableInfoId
+    private ImageView customListWidgetEdit;
 
     @BindByTag("safetyMeasuresWidget")
     CustomListWidget<SafetyMeasuresEntity> safetyMeasuresWidget;
@@ -65,6 +70,8 @@ public class SafetyMeasuresController extends BaseViewController implements Safe
     public void initView() {
         super.initView();
         safetyMeasuresWidget.setTitleBgColor(Color.parseColor("#F9F9F9"));
+        safetyMeasuresWidget.setShowText("");
+        customListWidgetEdit = safetyMeasuresWidget.findViewById(R.id.customListWidgetEdit);  // 换做加载icon
         RecyclerView contentView = safetyMeasuresWidget.findViewById(R.id.contentView);
         contentView.setBackgroundColor(context.getResources().getColor(R.color.line_gray));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(3, context)));
@@ -88,9 +95,12 @@ public class SafetyMeasuresController extends BaseViewController implements Safe
         super.initData();
         if (tableId == -1){
             initSafetyMeasuresDetails();
-        }else {
-            presenterRouter.create(SafetyMeasuresAPI.class).listSafetyMeasures(tableId);
         }
+    }
+
+    public void listSafetyMeas(){
+        Glide.with(context).asGif().load(R.drawable.preloader_1).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL)).into(customListWidgetEdit);
+        presenterRouter.create(SafetyMeasuresAPI.class).listSafetyMeasures(tableId);
     }
 
     private void initSafetyMeasuresDetails() {
@@ -131,11 +141,14 @@ public class SafetyMeasuresController extends BaseViewController implements Safe
         safetyMeasuresWidget.setData(safetyMeasuresEntityList);
         EventBus.getDefault().post(new ListEvent(Constant.EventFlag.WORK_TICKET_PT, safetyMeasuresEntityList));
 
+        customListWidgetEdit.setVisibility(View.GONE);
+
     }
 
     @Override
     public void listSafetyMeasuresFailed(String errorMsg) {
         LogUtil.w(errorMsg);
+        customListWidgetEdit.setImageResource(R.drawable.ic_error);
     }
 
     public List<SafetyMeasuresEntity> getSafetyMeasuresEntityList() {

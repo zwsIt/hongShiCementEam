@@ -181,7 +181,7 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
             linkState = new SystemCodeEntity();
             linkState.setId(OLXJConstant.MobileWiLinkState.WAIT_STATE);
         }
-        return linkState;
+        return  linkState;
     }
 
     public void setLinkState(SystemCodeEntity linkState) {

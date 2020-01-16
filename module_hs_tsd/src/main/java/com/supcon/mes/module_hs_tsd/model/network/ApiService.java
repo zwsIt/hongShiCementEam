@@ -33,21 +33,21 @@ import retrofit2.http.Url;
 public interface ApiService {
 
     /**
-     * 获取停电工作票安全措施list
+     * 获取停送电工作票安全措施list
      * @param tableId
      * @return
      */
-    @POST("/BEAMEle/onOrOff/onoroff/data-dg1545361488690.action?datagridCode=BEAMEle_1.0.0_onOrOff_eleOffEditdg1545361488690&rt=json")
-    Flowable<OperateItemListEntity> listOperateItem(@Query(value = "onoroff.id") Long tableId);
+    @POST()
+    Flowable<OperateItemListEntity> listOperateItem(@Url String url,@Query(value = "onoroff.id") Long tableId);
 
     /**
-     * 停电作业票list
+     * 停送电作业票list
      * @param url
      * @param pageQueryMap
      * @return
      */
     @POST()
-    Flowable<ElectricityOffOnListEntity> eleOffList(@Url String url, @QueryMap Map<String, Object> pageQueryMap);
+    Flowable<ElectricityOffOnListEntity> eleOffOnList(@Url String url, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
      * 停电作业票submit

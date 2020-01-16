@@ -16,8 +16,10 @@ import com.supcon.mes.mbap.network.Api;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AreaController;
+import com.supcon.mes.middleware.controller.BuildVersionController;
 import com.supcon.mes.middleware.controller.DepartmentController;
 import com.supcon.mes.middleware.controller.OnlineStaffListController;
+import com.supcon.mes.middleware.controller.PositionController;
 import com.supcon.mes.middleware.controller.RepairGroupController;
 import com.supcon.mes.middleware.controller.SystemCodeController;
 import com.supcon.mes.middleware.controller.UserInfoListController;
@@ -30,6 +32,7 @@ import com.supcon.mes.middleware.util.DeviceManager;
 import com.supcon.mes.middleware.util.NFCHelper;
 import com.supcon.mes.middleware.util.ProcessHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.module_contact.ui.fragment.ContactFragment;
 import com.supcon.mes.module_login.controller.SilentLoginController;
 import com.supcon.mes.module_login.service.HeartBeatService;
 import com.supcon.mes.module_main.BuildConfig;
@@ -38,7 +41,6 @@ import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.ui.fragment.EamFragment;
 import com.supcon.mes.module_main.ui.fragment.MineFragment;
 import com.supcon.mes.module_main.ui.fragment.WorkFragment;
-import com.supcon.mes.module_txl.ui.fragment.TxlListFragment;
 import com.supcon.mes.push.controller.DeviceTokenController;
 import com.supcon.mes.push.controller.PendingController;
 import com.umeng.analytics.MobclickAgent;
@@ -57,10 +59,11 @@ import java.util.List;
  */
 
 @Router(Constant.Router.MAIN_REDLION)
-@Controller(value = {
+@Controller(value = {BuildVersionController.class,
         SystemCodeController.class, AreaController.class, RepairGroupController.class,
         UserInfoListController.class, DepartmentController.class, DeviceTokenController.class,
-        SilentLoginController.class, PendingController.class, OnlineStaffListController.class})
+        SilentLoginController.class, PendingController.class, OnlineStaffListController.class,
+        PositionController.class})
 public class MainActivity extends BaseMultiFragmentActivity {
 
     @BindByTag("tabRadioGroup")
@@ -135,12 +138,13 @@ public class MainActivity extends BaseMultiFragmentActivity {
     @Override
     public void createFragments() {
         workFragment = new WorkFragment();
-        TxlListFragment txlListFragment = new TxlListFragment();
-        txlListFragment.fitInstatusBarEnable(true);
+//        TxlListFragment txlListFragment = new TxlListFragment();
+//        txlListFragment.fitInstatusBarEnable(true);
+        ContactFragment contactFragment = new ContactFragment();
         EamFragment eamFragment = new EamFragment();
         MineFragment mineFragment = new MineFragment();
         fragments.add(workFragment);
-        fragments.add(txlListFragment);
+        fragments.add(contactFragment);
         fragments.add(eamFragment);
         fragments.add(mineFragment);
     }
@@ -157,16 +161,13 @@ public class MainActivity extends BaseMultiFragmentActivity {
         showFragment(0);
         if (EamApplication.isHailuo()) {
             logo.setImageResource(R.drawable.tabbar_logo_hl);
-        }else if(EamApplication.isHongshi()){
+        } else if (EamApplication.isHongshi()) {
             logo.setImageResource(R.drawable.tabbar_logo_hs);
-        }
-        else if("zs".equals(ChannelUtil.getUMengChannel())){
+        } else if ("zs".equals(ChannelUtil.getUMengChannel())) {
             logo.setImageResource(R.drawable.tabbar_logo_zs);
-        }
-        else if("beiliu".equals(ChannelUtil.getUMengChannel())){
+        } else if ("beiliu".equals(ChannelUtil.getUMengChannel())) {
             logo.setImageResource(R.drawable.tabbar_logo_bl);
-        }
-        else{
+        } else {
             logo.setImageResource(R.drawable.tabbar_logo);
         }
     }
@@ -178,6 +179,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
             getController(SystemCodeController.class).onInit();
             getController(AreaController.class).onInit();
             getController(DepartmentController.class).onInit();
+            getController(PositionController.class).onInit();
             getController(RepairGroupController.class).onInit();
             getController(UserInfoListController.class).onInit();
         }
@@ -209,7 +211,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
                 }
             }
         });
-        
+
     }
 
     @Override
@@ -257,12 +259,12 @@ public class MainActivity extends BaseMultiFragmentActivity {
     public interface WorkOnTouchListener {
         boolean onTouch(MotionEvent ev);
     }
-    
+
     @Override
     public void showFragment(int selectIndex) {
-        if(selectIndex ==0) StatusBarUtils.setWindowStatusBarColor(this,R.color.transparent);
-        else StatusBarUtils.setWindowStatusBarColor(this,R.color.themeColor);
+        if (selectIndex == 0) StatusBarUtils.setWindowStatusBarColor(this, R.color.transparent);
+        else StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         super.showFragment(selectIndex);
     }
-    
+
 }

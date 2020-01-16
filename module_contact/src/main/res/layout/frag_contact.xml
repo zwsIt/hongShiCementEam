@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/themeColor"
+        android:paddingTop="@dimen/dp_10">
+
+        <include layout="@layout/ly_titlebar_local" />
+    </LinearLayout>
+
+
+    <com.supcon.mes.mbap.view.CustomSearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@color/white"
+        android:tag="searchView"
+        android:visibility="visible"
+        app:search_hint="姓名、号码、邮件、部门或岗位" />
+
+    <include layout="@layout/ly_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout style="@style/xl_select_linear">
+
+            <ImageView
+                android:id="@+id/ivSameDepart"
+                style="@style/txl_select_icon"
+                android:src="@drawable/ic_txl_same_depart"
+                android:tag="ivSameDepart" />
+
+            <TextView
+                android:id="@+id/sameDepart"
+                style="@style/txl_select_text"
+
+                android:tag="sameDepart"
+                android:text="同部门" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <ImageView
+                android:id="@+id/ivDepartInfos"
+                style="@style/txl_select_icon"
+                android:src="@drawable/ic_txl_depart_struct"
+                android:tag="ivDepartInfos" />
+
+            <TextView
+                android:id="@+id/departInfos"
+                style="@style/txl_select_text"
+                android:tag="departInfos"
+                android:text="组织" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line" />
+
+        <LinearLayout style="@style/xl_select_linear">
+
+            <ImageView
+                android:id="@+id/ivPosition"
+                style="@style/txl_select_icon"
+                android:src="@drawable/ic_txl_sub_staff"
+                android:tag="ivPosition" />
+
+            <TextView
+                android:id="@+id/position"
+                style="@style/txl_select_text"
+                android:tag="position"
+                android:text="岗位" />
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <ImageView
+                android:id="@+id/ivAllStaff"
+                style="@style/txl_select_icon"
+                android:src="@drawable/ic_txl_all_staff"
+                android:tag="ivAllStaff" />
+
+            <TextView
+                android:id="@+id/allStaff"
+                style="@style/txl_select_text"
+                android:tag="allStaff"
+                android:text="所有人" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:background="@color/line_gray"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_10"
+        android:text="最近"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/fontSize_16sp" />
+
+    <include layout="@layout/ly_recyclerview_with_scrollbar" />
+</LinearLayout>

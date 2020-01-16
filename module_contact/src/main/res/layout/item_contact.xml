@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingRight="@dimen/dp_10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5">
+
+        <com.supcon.mes.mbap.view.CustomCircleTextImageView
+            android:id="@+id/userIcon"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_15"
+            android:tag="userIcon"
+            app:citv_text_color="@color/white"
+            app:citv_text_size="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginBottom="@dimen/dp_3"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/userName"
+                    style="@style/txl_list_item_text"
+                    android:layout_weight="4"
+                    android:gravity="center_vertical"
+                    android:tag="userName"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/fontSize_17sp"
+                    tool:text="用户名" />
+
+                <TextView
+                    android:id="@+id/userJob"
+                    style="@style/txl_list_item_text"
+                    android:layout_weight="6"
+                    android:gravity="center_vertical"
+                    android:tag="userJob"
+                    android:textSize="@dimen/fontSize_14sp"
+                    tool:text="用户名" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/userCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:tag="userCode"
+                android:textColor="@color/hintColor"
+                android:textSize="@dimen/fontSize_12sp"
+                tool:text="默认公司" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/company"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:gravity="center_vertical"
+                    android:tag="company"
+                    android:textSize="@dimen/fontSize_12sp"
+                    tool:text="默认公司" />
+
+                <TextView
+                    android:id="@+id/department"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:gravity="center_vertical"
+                    android:tag="department"
+                    android:textSize="@dimen/fontSize_12sp"
+                    tool:text="用户名" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_check_no"
+            android:tag="checkBox"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <include
+        layout="@layout/ly_line_light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginLeft="@dimen/dp_20" />
+</LinearLayout>

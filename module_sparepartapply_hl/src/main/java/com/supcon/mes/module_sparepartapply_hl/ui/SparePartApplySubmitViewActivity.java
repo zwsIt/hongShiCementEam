@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sparepartapply_hl.ui;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -50,6 +51,7 @@ import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
 import com.supcon.mes.module_sparepartapply_hl.controller.SparePartApplyDetailController;
 import com.supcon.mes.module_sparepartapply_hl.model.api.SparePartApplyAPI;
 import com.supcon.mes.module_sparepartapply_hl.model.contract.SparePartApplyContract;
+import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.module_sparepartapply_hl.model.event.SparePartApplyDetailEvent;
 import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyPresenter;
 import com.supcon.mes.module_wxgd.model.bean.SparePartApplyHeaderInfoEntity;
@@ -238,7 +240,10 @@ public class SparePartApplySubmitViewActivity extends BaseRefreshActivity implem
         applyStaff.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1) {
             } else {
-                IntentRouter.go(context, Constant.Router.STAFF);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
         applyTime.setOnChildViewClickListener((childView, action, obj) -> {

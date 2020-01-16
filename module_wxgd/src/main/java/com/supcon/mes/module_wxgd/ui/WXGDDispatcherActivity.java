@@ -33,8 +33,10 @@ import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
@@ -129,9 +131,9 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @BindByTag("eamArea")
     CustomTextView eamArea;
     @BindByTag("discoverer")
-    CustomVerticalTextView discoverer;
+    CustomTextView discoverer;
     @BindByTag("faultInfoType")
-    CustomVerticalTextView faultInfoType;
+    CustomTextView faultInfoType;
     @BindByTag("priority")
     CustomTextView priority;
     @BindByTag("faultInfoDescribe")
@@ -142,17 +144,17 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @BindByTag("repairLl")
     LinearLayout repairLl;
     @BindByTag("repairGroup")
-    CustomVerticalTextView repairGroup;
+    CustomTextView repairGroup;
     @BindByTag("chargeStaff")
-    CustomVerticalTextView chargeStaff;
+    CustomTextView chargeStaff;
     @BindByTag("wosource")
-    CustomVerticalTextView wosource;
+    CustomTextView wosource;
     @BindByTag("repairType")
-    CustomVerticalSpinner repairType;
+    CustomSpinner repairType;
     @BindByTag("planStartTime")
-    CustomVerticalDateView planStartTime;
+    CustomDateView planStartTime;
     @BindByTag("planEndTime")
-    CustomVerticalDateView planEndTime;
+    CustomDateView planEndTime;
     @BindByTag("realEndTime")
     CustomVerticalDateView realEndTime;
     @BindByTag("repairAdvise")
@@ -356,15 +358,14 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
         workContext.setContent(mWXGDEntity.workOrderContext);
         if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
-//            eleOffChkBox.setVisibility(View.GONE);
             eleOffChkBox.setClickable(false);
             eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
-//            eleOffChkBox.setBackgroundResource(R.drawable.ic_checked);
         }else {
             eleOffChkBox.setClickable(true);
             eleOffChkBox.setButtonDrawable(R.drawable.sl_checkbox_selector_small);
         }
-        eleOffChkBox.setChecked(mWXGDEntity.isOffApply);
+        mWXGDEntity.isOffApply = true;
+        eleOffChkBox.setChecked(true); // 默认true
     }
 
     @SuppressLint("CheckResult")
@@ -442,7 +443,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                 if (action == -1) {
                     mWXGDEntity.getChargeStaff().id = null;
                 } else {
-                    IntentRouter.go(context, Constant.Router.STAFF);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }
             }
         });

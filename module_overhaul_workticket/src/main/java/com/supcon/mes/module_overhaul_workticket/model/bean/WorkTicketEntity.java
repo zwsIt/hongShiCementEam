@@ -1,5 +1,6 @@
 package com.supcon.mes.module_overhaul_workticket.model.bean;
 
+import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.Department;
 import com.supcon.mes.middleware.model.bean.EamEntity;
@@ -27,9 +28,16 @@ public class WorkTicketEntity extends BaseEntity {
     private WXGDEntity workList; // 工单
     private Department workShop; // 车间
     private Long offApplyId; // 停电作业票ID
-    private Long offApplyTableinfoid; // 停电作业票tableInfoId
-    private String offApplyTableno; // 停电作业票单据编号
+    @SerializedName(value = "offApplyTableinfoid")
+    private Long offApplyTableInfoId; // 停电作业票tableInfoId
+    @SerializedName(value = "offApplyTableno")
+    private String offApplyTableNo; // 停电作业票单据编号
     private String remark;
+    private Staff centContRoom; // 中控室人员
+    private Staff contrDirectorStaff; // 调度室主任
+    private Staff securityChiefStaff; // 安保科科长
+    private Staff securityStaff; // 安全员
+    private SystemCodeEntity flowStatus; // 工作流状态：WorkTicket_003/01：编辑；WorkTicket_003/02：中控室确认；WorkTicket_003/03：安全员审核；WorkTicket_003/04：领导审批；WorkTicket_003/05：生效；WorkTicket_003/06：作废；
 
     private Long cid;
     private Staff createStaff;
@@ -228,12 +236,12 @@ public class WorkTicketEntity extends BaseEntity {
         this.offApplyId = offApplyId;
     }
 
-    public String getOffApplyTableno() {
-        return offApplyTableno;
+    public String getOffApplyTableNo() {
+        return offApplyTableNo;
     }
 
-    public void setOffApplyTableno(String offApplyTableno) {
-        this.offApplyTableno = offApplyTableno;
+    public void setOffApplyTableNo(String offApplyTableNo) {
+        this.offApplyTableNo = offApplyTableNo;
     }
 
     public String getRemark() {
@@ -244,11 +252,63 @@ public class WorkTicketEntity extends BaseEntity {
         this.remark = remark;
     }
 
-    public Long getOffApplyTableinfoid() {
-        return offApplyTableinfoid;
+    public Long getOffApplyTableInfoId() {
+        return offApplyTableInfoId;
     }
 
-    public void setOffApplyTableinfoid(Long offApplyTableinfoid) {
-        this.offApplyTableinfoid = offApplyTableinfoid;
+    public void setOffApplyTableInfoId(Long offApplyTableInfoId) {
+        this.offApplyTableInfoId = offApplyTableInfoId;
+    }
+
+    public Staff getCentContRoom() {
+        if (centContRoom == null){
+            centContRoom = new Staff();
+        }
+        return centContRoom;
+    }
+
+    public void setCentContRoom(Staff centContRoom) {
+        this.centContRoom = centContRoom;
+    }
+
+    public Staff getContrDirectorStaff() {
+        if (contrDirectorStaff == null){
+            contrDirectorStaff = new Staff();
+        }
+        return contrDirectorStaff;
+    }
+
+    public void setContrDirectorStaff(Staff contrDirectorStaff) {
+        this.contrDirectorStaff = contrDirectorStaff;
+    }
+
+    public Staff getSecurityChiefStaff() {
+        if (securityChiefStaff == null){
+            securityChiefStaff = new Staff();
+        }
+        return securityChiefStaff;
+    }
+
+    public void setSecurityChiefStaff(Staff securityChiefStaff) {
+        this.securityChiefStaff = securityChiefStaff;
+    }
+
+    public Staff getSecurityStaff() {
+        if (securityStaff == null){
+            securityStaff = new Staff();
+        }
+        return securityStaff;
+    }
+
+    public void setSecurityStaff(Staff securityStaff) {
+        this.securityStaff = securityStaff;
+    }
+
+    public SystemCodeEntity getFlowStatus() {
+        return flowStatus;
+    }
+
+    public void setFlowStatus(SystemCodeEntity flowStatus) {
+        this.flowStatus = flowStatus;
     }
 }

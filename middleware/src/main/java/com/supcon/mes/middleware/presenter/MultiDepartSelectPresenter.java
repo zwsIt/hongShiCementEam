@@ -81,7 +81,7 @@ public class MultiDepartSelectPresenter extends MultiDepartSelectContract.Presen
                     AreaMultiStageEntity directNodeClone = directNode.clone();
                     directNodeClone.setFatherNode(directNode);
                     DepartmentInfo cloneDepartInfo = directNodeClone.currentEntity.clone();
-                    cloneDepartInfo.userInfo = txlEntity;
+//                    cloneDepartInfo.userInfo = txlEntity;
                     directNodeClone.setCurrentEntity(cloneDepartInfo);
                     directNode.getActualChildNodeList().add(directNodeClone);
 //                    AreaMultiStageEntity cloneSSCurrent = currentNode.getActualChildNodeList().get(0).clone();

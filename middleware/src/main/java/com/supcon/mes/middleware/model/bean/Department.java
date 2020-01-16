@@ -3,8 +3,8 @@ package com.supcon.mes.middleware.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 /**
  * Created by wangshizhan on 2018/7/12

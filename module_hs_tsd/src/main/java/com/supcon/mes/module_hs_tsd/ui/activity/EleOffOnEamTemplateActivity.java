@@ -88,7 +88,7 @@ public class EleOffOnEamTemplateActivity extends BaseRefreshRecyclerActivity<Ele
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(3, context)));
 
-        eleOffOn = getIntent().getBooleanExtra(Constant.IntentKey.ELE_OFF_ON,false);
+        eleOffOn = getIntent().getBooleanExtra(Constant.IntentKey.ELE_OFF_ON_TEMPLATE,false);
     }
 
     @Override

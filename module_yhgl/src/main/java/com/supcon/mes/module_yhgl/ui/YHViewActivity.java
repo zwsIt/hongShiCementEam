@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -36,12 +37,10 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.Module;
 import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.LinkController;
-import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.Staff;
-import com.supcon.mes.middleware.model.bean.UserInfo;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
@@ -128,6 +127,11 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
     @BindByTag("yhViewTransition")
     CustomWorkFlowView yhViewTransition;
 
+    @BindByTag("eleOffChkBox")
+    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOff")
+    CustomTextView eleOff;
+
     private YHEntity mYHEntity, mOriginalEntity;
 
 
@@ -171,9 +175,17 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
         yhViewType.setSpinner(mYHEntity.faultInfoType != null ? mYHEntity.faultInfoType.value : "");
         yhViewWXType.setSpinner(mYHEntity.repairType != null ? mYHEntity.repairType.value : "");
         yhViewWXGroup.setSpinner(mYHEntity.repiarGroup != null ? mYHEntity.repiarGroup.name : "");
+        
+        eleOffChkBox.setClickable(false);
+        if (mYHEntity.isOffApply){
+            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
+        }else {
+            eleOffChkBox.setButtonDrawable(null);
+        }
         if (!TextUtils.isEmpty(mYHEntity.describe)) {
             yhViewDescription.setContent(mYHEntity.describe);
         }
+
         //初始化附件
         if (mYHEntity.attachmentEntities != null) {
             AttachmentDownloadController attachmentDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_YHPATH);
@@ -293,7 +305,10 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
         yhViewFindStaff.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                IntentRouter.go(context, Constant.Router.STAFF);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
     }

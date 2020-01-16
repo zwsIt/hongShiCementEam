@@ -2,7 +2,6 @@ package com.supcon.mes.module_main.ui.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,8 +30,6 @@ import com.supcon.mes.module_login.model.contract.MineContract;
 import com.supcon.mes.module_login.presenter.MinePresenter;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
-
-import static com.supcon.mes.middleware.EamApplication.fontSizeScale;
 
 
 /**
@@ -100,8 +97,8 @@ public class MineFragment extends BaseControllerFragment implements MineContract
 
         logout.setOnClickListener(v -> {
             onLoading("正在登出...");
-            presenterRouter.create(MineAPI.class).logout();
 
+            presenterRouter.create(MineAPI.class).logout();
         });
 
         mineClear.setOnClickListener(this);
@@ -202,6 +199,7 @@ public class MineFragment extends BaseControllerFragment implements MineContract
 //        EamApplication.setAccountInfo(null);
 //        HeartBeatService.stopLoginLoop(getContext());
 //        DeviceManager.getInstance().release();
+        EamApplication.dao().getContactEntityDao().deleteAll();
         onLoadSuccessAndExit("登出成功！", () -> {
             Bundle bundle = new Bundle();
             if (EamApplication.isHailuo()) {

@@ -35,6 +35,7 @@ public class WorkTicketHelper {
             dto.id = Util.strFormat2(entity.getId());
             dto.isExecuted = Util.strFormat2(entity.isIsExecuted());
             dto.safetyMeasure = Util.strFormat2(entity.getSafetyMeasure());
+            dto.operateType = Util.strFormat2(entity.getOperateType());
             dto.attachFileFileAddPaths = Util.strFormat2(entity.getAttachFileFileAddPaths());
             dto.attachFileMultiFileIds = Util.strFormat2(entity.getAttachFileMultiFileIds());
             dto.attachFileFileDeleteIds = Util.strFormat2(entity.getAttachFileFileDeleteIds());

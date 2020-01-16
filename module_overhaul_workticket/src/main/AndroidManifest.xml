@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.supcon.mes.module_overhaul_workticket" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application>
         <activity android:name=".ui.activity.WorkTicketEditActivity"
             android:screenOrientation="portrait"

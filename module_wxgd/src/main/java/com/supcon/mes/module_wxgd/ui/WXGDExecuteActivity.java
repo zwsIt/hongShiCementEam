@@ -30,8 +30,10 @@ import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
@@ -122,9 +124,9 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     CustomTextView eamArea;
 
     @BindByTag("discoverer")
-    CustomVerticalTextView discoverer;
+    CustomTextView discoverer;
     @BindByTag("faultInfoType")
-    CustomVerticalTextView faultInfoType;
+    CustomTextView faultInfoType;
     @BindByTag("priority")
     CustomTextView priority;
     @BindByTag("faultInfoDescribe")
@@ -133,17 +135,17 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     LinearLayout faultInfo;
 
     @BindByTag("repairGroup")
-    CustomVerticalTextView repairGroup;
+    CustomTextView repairGroup;
     @BindByTag("chargeStaff")
-    CustomVerticalTextView chargeStaff;
+    CustomTextView chargeStaff;
     @BindByTag("wosource")
-    CustomVerticalTextView wosource;
+    CustomTextView wosource;
     @BindByTag("repairType")
-    CustomVerticalSpinner repairType;
+    CustomSpinner repairType;
     @BindByTag("planStartTime")
-    CustomVerticalDateView planStartTime;
+    CustomDateView planStartTime;
     @BindByTag("planEndTime")
-    CustomVerticalDateView planEndTime;
+    CustomDateView planEndTime;
     @BindByTag("realEndTime")
     CustomVerticalDateView realEndTime;
     @BindByTag("commentInput")
@@ -361,7 +363,6 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             eleOffChkBox.setButtonDrawable(null);
         }
         eleOffChkBox.setClickable(false);
-        eleOffChkBox.setChecked(mWXGDEntity.isOffApply);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -25,7 +25,9 @@ import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
@@ -101,13 +103,13 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     CustomTextView eamArea;
 
     @BindByTag("discoverer")
-    CustomVerticalTextView discoverer;
+    CustomTextView discoverer;
     @BindByTag("faultInfoType")
-    CustomVerticalTextView faultInfoType;
+    CustomTextView faultInfoType;
     @BindByTag("wosource")
-    CustomVerticalTextView wosource;
+    CustomTextView wosource;
     @BindByTag("repairType")
-    CustomVerticalSpinner repairType;
+    CustomSpinner repairType;
     @BindByTag("priority")
     CustomTextView priority;
     @BindByTag("faultInfoDescribe")
@@ -120,13 +122,13 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     CustomVerticalEditText repairAdvise;
 
     @BindByTag("repairGroup")
-    CustomVerticalTextView repairGroup;
+    CustomTextView repairGroup;
     @BindByTag("chargeStaff")
-    CustomVerticalTextView chargeStaff;
+    CustomTextView chargeStaff;
     @BindByTag("planStartTime")
-    CustomVerticalDateView planStartTime;
+    CustomDateView planStartTime;
     @BindByTag("planEndTime")
-    CustomVerticalDateView planEndTime;
+    CustomDateView planEndTime;
     @BindByTag("commentInput")
     CustomEditText commentInput;
     @BindByTag("transition")

@@ -1,6 +1,7 @@
 package com.supcon.mes.module_score.ui;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
@@ -189,7 +190,10 @@ public class ScoreInspectorStaffDailyPerformanceActivity extends BaseRefreshRecy
                     scoreStaffEntity.patrolWorker = null;
                     scoreStaffEntity.id = -1;
                 }
-                IntentRouter.go(ScoreInspectorStaffDailyPerformanceActivity.this, Constant.Router.STAFF);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                IntentRouter.go(ScoreInspectorStaffDailyPerformanceActivity.this, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
 

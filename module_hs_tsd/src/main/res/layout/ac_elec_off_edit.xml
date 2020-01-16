@@ -10,7 +10,17 @@
         layout="@layout/ly_ele_off_head_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/workFlowView" />
+        android:layout_above="@+id/finishBtn" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/finishBtn"
+        android:tag="finishBtn"
+        android:layout_alignParentBottom="true"
+        android:background="@color/themeColor"
+        android:text="完  成"
+        android:textColor="@color/white"/>
 
     <com.supcon.mes.mbap.view.CustomWorkFlowView
         android:id="@+id/workFlowView"
@@ -18,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:tag="workFlowView"
-        app:commentable="true" />
+        app:commentable="true"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

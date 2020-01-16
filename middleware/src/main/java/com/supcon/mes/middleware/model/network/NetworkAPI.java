@@ -4,6 +4,7 @@ import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.AreaListEntity;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.BuildVersionEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
@@ -19,6 +20,7 @@ import com.supcon.mes.middleware.model.bean.LongResultEntity;
 import com.supcon.mes.middleware.model.bean.LubricateListEntity;
 import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
 import com.supcon.mes.middleware.model.bean.MyInfo;
+import com.supcon.mes.middleware.model.bean.PositionEntityListEntity;
 import com.supcon.mes.middleware.model.bean.RefLubricateListEntity;
 import com.supcon.mes.middleware.model.bean.RefMaintainListEntity;
 import com.supcon.mes.middleware.model.bean.RefProductListEntity;
@@ -59,7 +61,7 @@ import retrofit2.http.Url;
 public interface NetworkAPI {
 
     @GET("/foundation/staff/list-data.action?&staff.code=&department.name=&position.name=&companyId=1000&cusDepartmentDown=yes&cusPositionDown=yes&pageSize=500&records.pageSize=500&records.maxPageSize=500")
-    Flowable<TxlListEntity> getStaffList(@Query("staff.name") String staffName,@Query("records.pageNo") int pageNum);
+    Flowable<TxlListEntity> getStaffList(@Query("staff.name") String staffName, @Query("records.pageNo") int pageNum);
 
     /**
      * 含用户的人员参照列表（按部门）
@@ -214,11 +216,13 @@ public interface NetworkAPI {
 
     /**
      * 获取deploymentId
+     *
      * @param processKey 工作流key
      * @return
      */
     @POST("/ec/workflow/getCurrentDeployment.action")
     Flowable<CurrentDeploymentEntity> getCurrentDeployment(@Query("processKey") String processKey);
+
     /**
      * 获取制定PowerCode：__pc__
      *
@@ -273,13 +277,14 @@ public interface NetworkAPI {
     @POST("/foundation/department/queryList.action?companyId=1000&page.pageSize=500&&page.maxPageSize=500")
     Flowable<DepartmentInfoListEntity> listDepartment(@Query("page.pageNo") int pageNo);
 
+    @POST("/foundation/position/queryList.action??companyId=1000&page.pageSize=500&&page.maxPageSize=500")
+    Flowable<PositionEntityListEntity> listPosition(@Query("page.pageNo") int pageNo);
 
     /**
      * 获取departmentInfo列表
      */
     @POST("/foundation/department/queryList.action?a=-1&departmentCode=&departmentName=&departmentId=&managerId=&managerName=&companyId=1000&page.pageSize=500&&page.maxPageSize=500")
     Flowable<DepartmentInfoListEntity> listDepartmentInfo();
-
 
     /**
      * 发送device token
@@ -377,6 +382,7 @@ public interface NetworkAPI {
 
     /**
      * 通过SupOS获取现存量
+     *
      * @param sparePartCodes
      * @return
      */
@@ -401,6 +407,7 @@ public interface NetworkAPI {
 
     /**
      * 获取单据提交的__pc__
+     *
      * @param operateCode
      * @param flowKey
      * @return
@@ -410,6 +417,7 @@ public interface NetworkAPI {
 
     /**
      * 获取润滑部位参照页面
+     *
      * @return
      */
     @POST("/BEAM/lubricatingPart/lubricatingPart/partRef-query.action?&permissionCode=BEAM_1.0.0_lubricatingPart_partRef&crossCompanyFlag=")
@@ -417,6 +425,7 @@ public interface NetworkAPI {
 
     /**
      * 获取设备类型参照页面
+     *
      * @return
      */
     @POST("/BEAM/eamType/eamType/typeRef-query.action?&permissionCode=BEAM_1.0.0_eamType_typeRef&crossCompanyFlag=false")
@@ -424,11 +433,21 @@ public interface NetworkAPI {
 
     /**
      * 获取单据表头信息
+     *
      * @param id
      * @return
      */
     @POST("{url}get.action")
 //    @Multipart
-    Flowable<Object> get(@Path (value = "url", encoded = true) String url, @Query("id") Long id, @QueryMap Map<String,Object> queryMap/*@Part("includes") String includes 丢失返回数据 */);
+    Flowable<Object> get(@Path(value = "url", encoded = true) String url, @Query("id") Long id, @QueryMap Map<String, Object> queryMap/*@Part("includes") String includes 丢失返回数据 */);
+
+    /**
+     * app检测更新api
+     * @param appId
+     * @param queryMap
+     * @return
+     */
+    @GET("http://api.fir.im/apps/latest/{appId}")
+    Flowable<BuildVersionEntity> findLatestVersion(@Path("appId") String appId, @QueryMap Map<String, Object> queryMap);
 
 }

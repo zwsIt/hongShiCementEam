@@ -37,8 +37,8 @@ public class DealInfoController extends BasePresenterController implements DealI
 
     public void getDealInfoList() {
         // 如果单据是在编辑或者派工环节，直接添加流程
-        if (Constant.TableStatus_CH.DISPATCH.equals(processedEntity.prostatus) || Constant.TableStatus_CH.EDIT.equals(processedEntity.prostatus) || Constant.TableStatus_CH.SPARE_PART_APPLY.equals(processedEntity.prostatus)
-         || Constant.TableStatus_CH.ELE_ON.equals(processedEntity.prostatus) || Constant.TableStatus_CH.ELE_OFF.equals(processedEntity.prostatus)) {
+        if (Constant.TableStatus_CH.DISPATCH.equals(processedEntity.proStatus) || Constant.TableStatus_CH.EDIT.equals(processedEntity.proStatus) || Constant.TableStatus_CH.SPARE_PART_APPLY.equals(processedEntity.proStatus)
+         || Constant.TableStatus_CH.ELE_ON.equals(processedEntity.proStatus) || Constant.TableStatus_CH.ELE_OFF.equals(processedEntity.proStatus)) {
             List<FlowProcessEntity> flowProcessEntityList = new ArrayList<>();
             genFlowProEntity(flowProcessEntityList);
             FlowProcessAdapter flowProcessAdapter = new FlowProcessAdapter(context, flowProcessEntityList);
@@ -46,17 +46,17 @@ public class DealInfoController extends BasePresenterController implements DealI
             flowProcessAdapter.notifyDataSetChanged();
         } else {
             //eg：openurl = /BEAM2/workList/workRecord/workExecuteEdit.action , /BEAM2/runningState/runningHead/runningStateEdit.action等
-            String url = processedEntity.openurl.substring(0, processedEntity.openurl.lastIndexOf("/"));
-            presenterRouter.create(DealInfoAPI.class).listDealInfo(url, processedEntity.tableid);
+            String url = processedEntity.openUrl.substring(0, processedEntity.openUrl.lastIndexOf("/"));
+            presenterRouter.create(DealInfoAPI.class).listDealInfo(url, processedEntity.tableInfoId);
         }
     }
 
     private void genFlowProEntity(List<FlowProcessEntity> flowProcessEntityList) {
         FlowProcessEntity flowProcessEntity = new FlowProcessEntity();
         flowProcessEntity.isFinish = false;
-        flowProcessEntity.flowProcess = processedEntity.prostatus;
+        flowProcessEntity.flowProcess = processedEntity.proStatus;
         flowProcessEntity.time = processedEntity.createTime == null ? "--" : DateUtil.dateTimeFormat(processedEntity.createTime);
-        flowProcessEntity.dealStaff = processedEntity.staffname;
+        flowProcessEntity.dealStaff = processedEntity.staffName;
         flowProcessEntityList.add(flowProcessEntity);
     }
 
@@ -112,14 +112,14 @@ public class DealInfoController extends BasePresenterController implements DealI
         while (iterator.hasNext()) {
             flowProcess = iterator.next();
             if ((Constant.TableStatus_CH.EXECUTE.equals(flowProcess.flowProcess) || Constant.TableStatus_CH.ACCEPT.equals(flowProcess.flowProcess))
-                    && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.prostatus)) {
+                    && Constant.TableStatus_CH.NOTIFY.equals(processedEntity.proStatus)) {
                 iterator.remove();
             }
         }
         // 过滤驳回后出现的颠倒流程
         List<FlowProcessEntity> flowProcessEntityFilterList = new ArrayList<>();
         for (FlowProcessEntity processEntity : flowProcessEntityList) {
-            if (processEntity.flowProcess.equals(processedEntity.prostatus)) { // 和当前状态相同则退出循环
+            if (processEntity.flowProcess.equals(processedEntity.proStatus)) { // 和当前状态相同则退出循环
                 break;
             } else {
                 flowProcessEntityFilterList.add(processEntity); // 不同则添加

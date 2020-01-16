@@ -41,6 +41,9 @@ public class SafetyMeasuresEntity extends BaseEntity {
     //停电照片附件
     private List<AttachmentEntity> eleOffAttachmentEntityList;
 
+    //照片/视频附件
+    private List<AttachmentEntity> attachmentEntityList;
+
     public WorkTicketEntity getHeadId() {
         return headId;
     }
@@ -135,5 +138,13 @@ public class SafetyMeasuresEntity extends BaseEntity {
 
     public void setEleOffAttachmentEntityList(List<AttachmentEntity> eleOffAttachmentEntityList) {
         this.eleOffAttachmentEntityList = eleOffAttachmentEntityList;
+    }
+
+    public List<AttachmentEntity> getAttachmentEntityList() {
+        return attachmentEntityList;
+    }
+
+    public void setAttachmentEntityList(List<AttachmentEntity> attachmentEntityList) {
+        this.attachmentEntityList = attachmentEntityList;
     }
 }

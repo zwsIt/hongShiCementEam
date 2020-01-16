@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/bgGray2">
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/ly_titlebar_local" />
+    <com.supcon.mes.mbap.view.CustomSearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@color/white"
+        android:visibility="visible"
+        android:tag="searchView"
+        app:search_hint="姓名、号码、邮件、部门或岗位"
+        android:layout_marginTop="@dimen/dp_50"
+        />
+    <include layout="@layout/ly_line" android:layout_marginTop="50dp" android:layout_height="@dimen/dp_1" android:layout_width="match_parent"/>
+    <FrameLayout
+        android:id="@+id/fragmentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="fragmentLayout"
+        android:layout_marginTop="91dp"
+        />
+
+</RelativeLayout>

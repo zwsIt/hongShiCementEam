@@ -106,7 +106,13 @@ public class MenuHelper {
                         }
                         break;
                     case Constant.HSWorkType.SD:
-                        menuPopwindowBean.setRouter(Constant.Router.SD);
+                        if (EamApplication.isHongshi()) { // 红狮跳转
+                            menuPopwindowBean.setRouter(Constant.Router.HS_SD_LIST);
+                            menuPopwindowBean.setType(Constant.HSWorkType.HS_SD);
+                        }else {
+                            //移动视图
+                            menuPopwindowBean.setRouter(Constant.Router.SD);
+                        }
                         break;
                     case Constant.HSWorkType.TSD_CANCEL:
                     case Constant.HSWorkType.TSD_APPROVAL:

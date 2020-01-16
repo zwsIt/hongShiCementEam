@@ -27,9 +27,9 @@ import java.util.concurrent.TimeUnit;
  * Email zhangwenshuai1@supcon.com
  * Desc
  */
-public class ElectricityOffListAdapter extends BaseListDataRecyclerViewAdapter<ElectricityOffOnEntity> {
+public class ElectricityOffOnListAdapter extends BaseListDataRecyclerViewAdapter<ElectricityOffOnEntity> {
 
-    public ElectricityOffListAdapter(Context context) {
+    public ElectricityOffOnListAdapter(Context context) {
         super(context);
     }
 
@@ -68,31 +68,8 @@ public class ElectricityOffListAdapter extends BaseListDataRecyclerViewAdapter<E
             RxView.clicks(itemView)
                     .throttleFirst(500, TimeUnit.MILLISECONDS)
                     .subscribe(o -> {
-                        ElectricityOffOnEntity workTicketEntity = getItem(getAdapterPosition());
-                        PendingEntity pendingEntity = workTicketEntity.getPending();
-                        if (pendingEntity == null){
-                            ToastUtils.show(context,"代办为空,请刷新");
-                            return;
-                        }
-                        Bundle bundle = new Bundle();
-                        bundle.putLong(Constant.IntentKey.TABLE_ID, workTicketEntity.getId());
-                        if (workTicketEntity.getPending().id == null){ // 无代办、生效
-                            IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
-                        }else {
-                            bundle.putLong(Constant.IntentKey.PENDING_ID, workTicketEntity.getPending().id);
-                            switch (workTicketEntity.getPending().taskDescription) {
-                                case Constant.TableStatus_CH.ELE_OFF:
-                                    IntentRouter.go(context,Constant.Router.HS_ELE_OFF_EDIT,bundle);
-                                    break;
-                                case Constant.TableStatus_CH.REVIEW:
-                                case Constant.TableStatus_CH.REVIEW1:
-                                    bundle.putBoolean(Constant.IntentKey.IS_EDITABLE,true);
-                                case Constant.TableStatus_CH.TAKE_EFFECT:
-                                default:
-                                    IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
-                                    break;
-                            }
-                        }
+                        ElectricityOffOnEntity electricityOffOnEntity = getItem(getAdapterPosition());
+                        onItemChildViewClick(itemView,getAdapterPosition(),electricityOffOnEntity);
 
                     });
         }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5">
+
+        <com.supcon.mes.mbap.view.CustomCircleTextImageView
+            android:id="@+id/userIcon"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_15"
+
+            android:src="@drawable/ic_staff_online" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_25"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginBottom="@dimen/dp_3"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/userName"
+                    style="@style/txl_list_item_text"
+                    android:layout_weight="4"
+                    android:gravity="center_vertical"
+                    android:tag="userName"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/fontSize_17sp"
+                    android:textStyle="bold"
+                    tool:text="用户名" />
+
+                <TextView
+
+                    android:id="@+id/userJob"
+                    style="@style/txl_list_item_text"
+                    android:layout_weight="6"
+                    android:gravity="center_vertical"
+                    android:tag="userJob"
+                    android:textSize="@dimen/fontSize_14sp"
+                    tool:text="用户名" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp_3"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/company"
+                    style="@style/txl_list_item_text"
+                    android:layout_weight="4"
+                    android:gravity="center_vertical"
+                    android:tag="company"
+                    android:textSize="@dimen/fontSize_14sp"
+                    tool:text="用户名" />
+
+                <TextView
+                    android:id="@+id/department"
+                    style="@style/txl_list_item_text"
+                    android:layout_weight="6"
+                    android:gravity="center_vertical"
+                    android:tag="department"
+                    android:textSize="@dimen/fontSize_14sp"
+                    tool:text="用户名" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        layout="@layout/ly_line_light"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginLeft="@dimen/dp_20" />
+</LinearLayout>

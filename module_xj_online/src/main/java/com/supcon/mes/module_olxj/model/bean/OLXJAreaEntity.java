@@ -3,7 +3,6 @@ package com.supcon.mes.module_olxj.model.bean;
 import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.AttachmentEntity;
-import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
 import java.util.LinkedList;

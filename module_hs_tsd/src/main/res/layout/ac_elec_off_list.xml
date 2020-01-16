@@ -12,7 +12,6 @@
         app:title_background_color="@color/themeColor"
         android:id="@+id/searchTitleBar"
         android:tag="searchTitleBar"
-        app:title_text="停电票"
         app:title_right_btn_need="false"/>
 
     <include layout="@layout/ly_scroll_filter" />

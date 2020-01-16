@@ -49,7 +49,6 @@ public class FileViewActivity extends BaseWebViewActivity {
     @Override
     protected void initView() {
         super.initView();
-//        webView.setWebChromeClient(new CustomInnerChromeClient());
         webView.setWebViewClient(new CustomWebViewClient(webView));
         ((ViewGroup) findViewById(R.id.leftBtn).getParent()).setBackgroundResource(R.color.h5Theme);
         StatusBarUtils.setWindowStatusBarColor(this, R.color.h5Theme);
@@ -91,7 +90,6 @@ public class FileViewActivity extends BaseWebViewActivity {
     @Override
     protected void initData() {
         super.initData();
-//        webView.loadUrl("http://mozilla.github.io/pdf.js/web/viewer.html?file=" + getIntent().getStringExtra(BaseConstant.WEB_URL));
     }
 
     @Override
@@ -119,7 +117,6 @@ public class FileViewActivity extends BaseWebViewActivity {
 
     @Override
     public void goNext(String url) {
-
 
 //        String firstUrl = url.substring(0,url.indexOf("file=") +5);
 //        String encodeUrl = url.substring(url.indexOf("file=") +5);
@@ -175,19 +172,5 @@ public class FileViewActivity extends BaseWebViewActivity {
             return false;// WebView加载该Url
         }
     }
-
-
-    /**
-     * TSDCommonActivity
-     * created by zhangwenshuai1 2019/11/27
-     * 内部类：为解决加载bar隐藏
-     */
-//    private class CustomInnerChromeClient extends DefaultWebChromeClient {
-//        @Override
-//        public void onProgressChanged(WebView view, int newProgress) {
-//            super.onProgressChanged(view, newProgress);
-//            pbProgress.setVisibility(View.GONE);
-//        }
-//    }
 
 }

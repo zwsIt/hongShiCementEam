@@ -42,7 +42,18 @@
                     app:content_size="13"
                     app:key="工单编号"
                     app:key_size="14" />
-
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/eleOffTableNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="eleOffTableNo"
+                    app:content_size="13"
+                    app:key="停电票编号"
+                    app:key_size="14" />
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/chargeStaff"
                     android:layout_width="match_parent"
@@ -167,10 +178,34 @@
                     android:tag="hazardCtrlPoint"
                     app:bold="true"
                     app:content_size="13"
-                    app:editable="true"
-                    app:key="危控点"
+                    app:editable="false"
+                    app:key="危险源控制点"
                     app:key_size="14"
-                    app:necessary="true"/>
+                    app:text_width="@dimen/dp_120"/>
+                <com.supcon.mes.middleware.ui.view.FlowLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:id="@+id/hazardCtrlPointFlowLy"
+                    android:tag="hazardCtrlPointFlowLy"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10">
+                    <!--<CheckBox
+                        android:id="@+id/chkBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:padding="@dimen/dp_5"
+                        android:button="@null"
+                        android:background="@drawable/sl_radio_check"
+                        android:textColor="@drawable/tvbg_tag_item"
+                        android:text="防爆炸"
+                        android:tag="chkBox"
+                        android:checked="false"/>-->
+
+                </com.supcon.mes.middleware.ui.view.FlowLayout>
 
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/hazardCtrlPointView"
@@ -184,8 +219,69 @@
                     android:visibility="gone"
                     app:bold="true"
                     app:content_size="13"
-                    app:key="危控点"
-                    app:key_size="14" />
+                    app:key="危险源控制点"
+                    app:key_size="14"
+                    app:key_width="@dimen/dp_120"
+                    />
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/centralControlRoom"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="centralControlRoom"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:key="中控室"
+                    app:key_size="14"
+                    android:visibility="gone"/>
+
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/securityStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="securityStaff"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:key="安全员"
+                    app:key_size="14"
+                    android:visibility="gone"/>
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/securityChiefStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="securityChiefStaff"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:key="安保科科长"
+                    app:key_size="14"
+                    android:visibility="gone"/>
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/controlDirectorStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="controlDirectorStaff"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:key="调度室主任"
+                    app:key_size="14"
+                    android:visibility="gone"/>
 
                 <com.supcon.mes.mbap.view.CustomListWidget
                     android:id="@+id/safetyMeasuresWidget"
@@ -195,7 +291,7 @@
                     android:tag="safetyMeasuresWidget"
                     app:icon_res="@drawable/ic_widget"
                     app:is_addable="false"
-                    app:is_editable="false"
+                    app:is_editable="true"
                     app:text_size="14"
                     app:title_bg_color="@color/customBlue"
                     app:widget_name="安全措施" />

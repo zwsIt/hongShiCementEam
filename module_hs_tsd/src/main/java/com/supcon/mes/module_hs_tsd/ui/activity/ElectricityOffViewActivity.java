@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -26,7 +27,6 @@ import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
-import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -42,7 +42,6 @@ import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
-import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -52,7 +51,7 @@ import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_hs_tsd.IntentRouter;
 import com.supcon.mes.module_hs_tsd.R;
 import com.supcon.mes.module_hs_tsd.constant.ElectricityConstant;
-import com.supcon.mes.module_hs_tsd.controller.OperateItemController;
+import com.supcon.mes.module_hs_tsd.controller.OperateItemOffController;
 import com.supcon.mes.module_hs_tsd.model.api.ElectricitySubmitAPI;
 import com.supcon.mes.module_hs_tsd.model.bean.EleOffOnTemplate;
 import com.supcon.mes.module_hs_tsd.model.bean.ElectricityOffOnEntity;
@@ -81,7 +80,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Router(value = Constant.Router.HS_ELE_OFF_VIEW)
 @Presenter(value = {ElectricityOffSubmitPresenter.class})
-@Controller(value = {OperateItemController.class, LinkController.class, PcController.class, TableInfoController.class, OnlineCameraController.class, AttachmentController.class})
+@Controller(value = {OperateItemOffController.class, LinkController.class, PcController.class, TableInfoController.class, OnlineCameraController.class, AttachmentController.class})
 public class ElectricityOffViewActivity extends BaseRefreshActivity implements ElectricitySubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -90,8 +89,6 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     TextView titleText;
     @BindByTag("rightBtn")
     ImageButton rightBtn;
-    @BindByTag("titleBarLayout")
-    RelativeLayout titleBarLayout;
     @BindByTag("workListTableNo")
     CustomTextView workListTableNo;
     @BindByTag("applyStaff")
@@ -106,8 +103,8 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     CustomDateView applyDate;
     @BindByTag("operateStaff")
     CustomTextView operateStaff;
-    @BindByTag("workTask")
-    CustomVerticalEditText workTask;
+    @BindByTag("remark")
+    CustomVerticalEditText remark;
     @BindByTag("galleryView")
     CustomGalleryView galleryView;
     @BindByTag("operateItemWidget")
@@ -118,6 +115,8 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     PtrFrameLayout refreshFrameLayout;
     @BindByTag("workFlowView")
     CustomWorkFlowView workFlowView;
+    @BindByTag("finishBtn")
+    Button finishBtn;
 
     private String __pc__;
     private Long tableId; // 单据ID
@@ -126,7 +125,6 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     private ElectricityOffOnEntity mElectricityOffOnEntityOld;
     private DatePickController mDatePickController;
     private String name = ""; // 当前活动名称
-    private OperateItemController operateItemController;
 
     @Override
     protected void onInit() {
@@ -157,13 +155,14 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     protected void initView() {
         super.initView();
         titleText.setText("停电申请查看");
+        finishBtn.setVisibility(View.GONE);
         workFlowView.setVisibility(View.GONE);
 
         applyStaff.setEditable(false);
         eamName.setEditable(false);
         applyDate.setEditable(false);
         operateStaff.setEditable(false);
-        workTask.setEditable(false);
+        remark.setEditable(false);
         galleryView.setEditable(false);
         galleryView.setIconVisibility(false);
 
@@ -212,7 +211,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         leftBtn.setOnClickListener(v -> onBackPressed());
         refreshController.setOnRefreshListener(() -> {
             initTableInfoData();
-            getController(OperateItemController.class).initData();
+            getController(OperateItemOffController.class).listOperateItems();
         });
 
         applyStaff.setOnChildViewClickListener((childView, action, obj) -> {
@@ -233,7 +232,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
                     eamCode.setContent(null);
                 } else {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constant.IntentKey.ELE_OFF_ON,false); // 停电模板
+                    bundle.putBoolean(Constant.IntentKey.ELE_OFF_ON_TEMPLATE,false); // 停电模板
                     IntentRouter.go(context, Constant.Router.ELE_OFF_TEMPLATE,bundle);
                 }
             }
@@ -261,7 +260,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
                 IntentRouter.go(context, Constant.Router.STAFF,bundle);
             }
         });
-        RxTextView.textChanges(workTask.editText()).skipInitialValue()
+        RxTextView.textChanges(remark.editText()).skipInitialValue()
                .subscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(new Consumer<CharSequence>() {
@@ -274,6 +273,14 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         workFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if ("selectPeopleInput".equals(childView.getTag())) {//选人
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "selectPeopleInput");
+                    IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+                    return;
+                }
                 WorkFlowVar workFlowVar = (WorkFlowVar) obj;
                 switch (action) {
                     case 0:
@@ -355,7 +362,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         map.put("onoroff.eleTemplateId.id",Util.strFormat2(mElectricityOffOnEntity.getEleTemplateId().id));
         map.put("onoroff.operateStaff.id",Util.strFormat2(mElectricityOffOnEntity.getOperateStaff().id));
         map.put("onoroff.applyDate",applyDate.getContent());
-        map.put("onoroff.workTask",workTask.getContent());
+        map.put("onoroff.remark",remark.getContent());
         map.put("__file_upload", true);
 
         // 表单
@@ -372,7 +379,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         }
 
         onLoading("单据处理中...");
-        presenterRouter.create(ElectricitySubmitAPI.class).submit("eleOffEdit",map, attachmentMap,__pc__);
+        presenterRouter.create(ElectricitySubmitAPI.class).submit("eleOffMainView",map, attachmentMap,__pc__);
     }
 
     private boolean checkTableBlank() {
@@ -385,7 +392,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
             return true;
         }
         if (TextUtils.isEmpty(applyDate.getContent())) {
-            ToastUtils.show(context, "停电时间不允许为空！");
+            ToastUtils.show(context, "申请时间不允许为空！");
             return true;
         }
         if (TextUtils.isEmpty(operateStaff.getValue())) {
@@ -419,14 +426,14 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
             workListTableNo.setVisibility(View.GONE);
         }
         //回填单据表头信息
-        workListTableNo.setContent(entity.getWorkRecordTableno());
+        workListTableNo.setContent(entity.getWorkRecordTableNo());
         applyStaff.setContent(entity.getApplyStaff().name);
         department.setContent(entity.getApplyStaff().getMainPosition().getDepartment().name);
         eamName.setContent(entity.getEamID().name);
         eamCode.setContent(entity.getEamID().code);
         applyDate.setContent(entity.getApplyDate() == null ? "" : DateUtil.dateTimeFormat(entity.getApplyDate()));
         operateStaff.setContent(entity.getOperateStaff().name);
-        workTask.setContent(entity.getWorkTask());
+        remark.setContent(entity.getRemark());
 
         mElectricityOffOnEntityOld = GsonUtil.gsonToBean(mElectricityOffOnEntity.toString(), ElectricityOffOnEntity.class);
 
@@ -482,6 +489,8 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
                 mElectricityOffOnEntity.getOperateStaff().id = staff.id;
                 mElectricityOffOnEntity.getOperateStaff().name = staff.name;
                 mElectricityOffOnEntity.getOperateStaff().code = staff.code;
+            }else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
+                workFlowView.addStaff(staff.name,staff.id);
             }
         }
     }

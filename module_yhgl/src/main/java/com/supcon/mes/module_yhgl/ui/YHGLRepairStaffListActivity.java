@@ -26,7 +26,6 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
-import com.supcon.mes.middleware.model.bean.UserInfo;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -145,8 +144,9 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
                     @Override
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
-                        bundle = genAddDataList(bundle);
-                        IntentRouter.go(context, Constant.Router.STAFF,bundle);
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                     }
                 });
 

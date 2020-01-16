@@ -70,7 +70,7 @@
 
     <LinearLayout
         android:id="@+id/itemPersonLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/eamLl"
         android:layout_marginTop="@dimen/dp_2"
@@ -85,7 +85,7 @@
             style="@style/DetailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_staff_yellow"
+            android:drawableStart="@drawable/ic_staff_yellow1"
             android:drawablePadding="@dimen/dp_3"
             android:paddingTop="@dimen/dp_3"
             android:paddingBottom="@dimen/dp_3"

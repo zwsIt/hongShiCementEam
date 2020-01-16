@@ -165,22 +165,11 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
                     case 3:
                         bundle.putLong(Constant.IntentKey.EAM_ID,mEamEntity.id);
                         IntentRouter.go(context, Constant.Router.EAM_FILE_LIST, bundle);
-//                        bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
-//                        bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
-//                        bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, false);
-//                        bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
-//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.6.50:8979/aspose/tempFile/preview?path=ZDpcVnhCQVBcQkFQLVNFfjFcYmFwLXdvcmtzcGFjZS91cGxvYWRzXDIwMTlcMTJcMjFcMTA3NV8yMDE5MTIyMTEwMTgxMzU0M1zpl6jmiLfpl67popjmlbTnkIYuZG9jeA&type=pdf");
-//                        bundle.putString(BaseConstant.WEB_URL,"http://192.168.91.60:8080/msService/baseService/workbench/fileViewUrl?id=1197&type=pdf");
-//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.91.60:8080/greenDill/static/foundation/PDF/web/viewer.html?file=%2FmsService%2FbaseService%2Faspose%2FpdfStreamHandeler%3FfilePath%3DC%3A%2FVxBAP%2Fbap-cloud-server%2Ftools%2Finit%2F..%2F..%2F..%2Fbap-server%2Fbap-workspace%2Fstatic%2FbaseService%2Faspose%2FtempFile%2Fpptx%25E6%2596%2587%25E4%25BB%25B6%25E7%25B1%25BB%25E5%259E%258B.pdf");
-//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.90.134:8979/aspose/tempFile/preview?" +
-//                                "path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE3XDEwMDBfMjAxOTEyMTcyMTQwMjg3OTRc5p2t5bee5biC6IGM56ew57O757uf6LWE5paZ5aGr5YaZ5pON5L2c5Y-C6ICDLnBkZg&type=pdf");
-//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.90.134:8979/aspose/tempFile/preview?" +
-//                                "path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE4XDEwMDBfMjAxOTEyMTgxMDA4MzQ3NzNc5Yi25oiQ5LiJ57q_5beh5qOA6KGoVjIuMC5kb2N4&type=pdf");
-//                        bundle.putString(BaseConstant.WEB_URL, "http://192.168.90.134:8979/aspose/tempFile/preview?" +
-//                                "path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE4XDEwMDBfMjAxOTEyMTgxMDA4MzQ3NzVc5beh5qOA5Yy65Z-fX-W3oeajgOWMuuWfny54bHM&type=pdf");
-//                        bundle.putString(BaseConstant.WEB_URL,"http://192.168.90.134:8979/aspose/tempFile/preview?path=RDpcQkFQXEJBUC1TRX4xXGJhcC13b3Jrc3BhY2UvdXBsb2Fkc1wyMDE5XDEyXDE4XDEwMDBfMjAxOTEyMTgxMTE0NDY1ODJcd3d3d-aIkS54bHN4&type=html");
-//                        IntentRouter.go(context, Constant.Router.FILE_VIEW, bundle);
                         break;
+                    case 4:
+                        IntentRouter.go(context,Constant.Router.HS_TD_LIST,bundle);
+                        break;
+                        default:
                 }
             }
         });
@@ -223,6 +212,10 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         workInfo4.name = "文档记录";
         workInfo4.iconResId = R.drawable.menu_print_selector;
         workInfos.add(workInfo4);
+        WorkInfo workInfo5 = new WorkInfo();
+        workInfo5.name = "停电申请";
+        workInfo5.iconResId = R.drawable.ic_work_td;
+        workInfos.add(workInfo5);
         workAdapter.setList(workInfos);
         workAdapter.notifyDataSetChanged();
 

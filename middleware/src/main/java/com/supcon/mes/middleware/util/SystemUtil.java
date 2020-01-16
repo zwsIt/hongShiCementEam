@@ -42,4 +42,27 @@ public class SystemUtil {
         Intent intentMessage = new Intent(Intent.ACTION_VIEW,uri);
         context.startActivity(intentMessage);
     }
+
+    public static void sendEmail(Context context, String email){
+        String[] emails = {email}; // 需要注意，email必须以数组形式传入
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822"); // 设置邮件格式
+        intent.putExtra(Intent.EXTRA_EMAIL, email); // 接收人
+        intent.putExtra(Intent.EXTRA_CC, email); // 抄送人
+        intent.putExtra(Intent.EXTRA_SUBJECT, "这是邮件的主题部分"); // 主题
+        intent.putExtra(Intent.EXTRA_TEXT, "这是邮件的正文部分"); // 正文
+        context.startActivity(Intent.createChooser(intent, "请选择邮件类应用"));
+    }
+
+    public static void openBrowser(Context context, String url){
+//        Intent intent = new Intent();
+//        intent.setData(Uri.parse(url));//Url 就是你要打开的网址
+//        intent.setAction(Intent.ACTION_VIEW);
+//        context.startActivity(intent); //启动浏览器
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri content_url = Uri.parse(url);
+        intent.setData(content_url);
+        context.startActivity(intent);
+    }
 }

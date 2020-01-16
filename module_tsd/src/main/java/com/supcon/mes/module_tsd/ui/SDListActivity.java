@@ -51,11 +51,13 @@ public class SDListActivity extends BaseWebViewActivity {
     @Override
     protected void initView() {
         super.initView();
+
         webView.setWebChromeClient(new CustomInnerChromeClient());
 //        if(!EamApplication.isDev()) {
             ((ViewGroup) findViewById(R.id.leftBtn).getParent()).setBackgroundResource(R.color.h5Theme);
             StatusBarUtils.setWindowStatusBarColor(this, R.color.h5Theme);
 //        }
+
         titleText.setText("送电申请");
     }
 

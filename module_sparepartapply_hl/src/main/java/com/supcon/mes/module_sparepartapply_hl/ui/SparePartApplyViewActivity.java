@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sparepartapply_hl.ui;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -43,7 +44,6 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.Util;
-import com.supcon.mes.module_sparepartapply_hl.IntentRouter;
 import com.supcon.mes.module_sparepartapply_hl.R;
 import com.supcon.mes.module_sparepartapply_hl.constant.SPAHLConstant;
 import com.supcon.mes.module_sparepartapply_hl.controller.SparePartApplyDetailController;
@@ -54,6 +54,7 @@ import com.supcon.mes.module_sparepartapply_hl.presenter.SparePartApplyPresenter
 import com.supcon.mes.module_wxgd.model.bean.SparePartApplyHeaderInfoEntity;
 import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.util.SparePartReceiveMapManager;
+import com.supcon.mes.viber_mogu.IntentRouter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -244,7 +245,10 @@ public class SparePartApplyViewActivity extends BaseRefreshActivity implements S
         applyStaff.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1) {
             } else {
-                IntentRouter.go(context, Constant.Router.STAFF);
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
         applyTime.setOnChildViewClickListener((childView, action, obj) -> {

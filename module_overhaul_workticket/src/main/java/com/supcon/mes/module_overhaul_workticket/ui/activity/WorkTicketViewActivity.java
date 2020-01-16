@@ -1,6 +1,9 @@
 package com.supcon.mes.module_overhaul_workticket.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -40,6 +43,7 @@ import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
+import com.supcon.mes.middleware.ui.view.FlowLayout;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
@@ -64,6 +68,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * ClassName
@@ -84,6 +90,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     ImageButton rightBtn;
     @BindByTag("workListTableNo")
     CustomTextView workListTableNo;
+    @BindByTag("eleOffTableNo")
+    CustomTextView eleOffTableNo;
     @BindByTag("chargeStaff")
     CustomTextView chargeStaff;
     @BindByTag("workShop")
@@ -98,12 +106,22 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     CustomTextView riskAssessmentView;
     @BindByTag("hazardCtrlPoint")
     CustomSpinner hazardCtrlPoint;
-    @BindByTag("refreshFrameLayout")
-    PtrFrameLayout refreshFrameLayout;
+    @BindByTag("hazardCtrlPointView")
+    CustomTextView hazardCtrlPointView;
+    @BindByTag("hazardCtrlPointFlowLy")
+    FlowLayout hazardCtrlPointFlowLy;
     @BindByTag("workFlowView")
     CustomWorkFlowView workFlowView;
     @BindByTag("riskAssessmentRadioGroup")
     RadioGroup riskAssessmentRadioGroup;
+    @BindByTag("centralControlRoom")
+    CustomTextView centralControlRoom;
+    @BindByTag("securityStaff")
+    CustomTextView securityStaff;
+    @BindByTag("securityChiefStaff")
+    CustomTextView securityChiefStaff;
+    @BindByTag("controlDirectorStaff")
+    CustomTextView controlDirectorStaff;
 
     @BindByTag("hazardRecyclerView")
     RecyclerView hazardRecyclerView;
@@ -132,7 +150,6 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         pendingId = getIntent().getLongExtra(Constant.IntentKey.PENDING_ID, -1);
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
 
-//        hazardContrlPointValue = getIntent().getStringExtra(Constant.IntentKey.HAZARD_CONTRL_POINT);
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
 
@@ -159,6 +176,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         riskAssessmentLl.setVisibility(View.GONE);
         riskAssessmentView.setVisibility(View.VISIBLE);
 
+        hazardCtrlPointFlowLy.setVisibility(View.GONE);
+
         if (editable) {
             getController(LinkController.class).setCancelShow(true);
             getController(LinkController.class).setOnSuccessListener(result -> {
@@ -171,12 +190,6 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         } else {
             workFlowView.setVisibility(View.GONE);
         }
-
-        //初始化危险控制源
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-//        hazardRecyclerView.setLayoutManager(linearLayoutManager); // 水平线性布局
-//        hazardPointAdapter = new HazardPointAdapter(context);
-//        hazardRecyclerView.setAdapter(hazardPointAdapter);
 
     }
 
@@ -217,7 +230,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             @Override
             public void onRefresh() {
                 initTableInfoData();
-                getController(SafetyMeasuresController.class).initData();
+                getController(SafetyMeasuresController.class).listSafetyMeas();
             }
         });
 
@@ -250,52 +263,17 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             }
         });
 
-//        riskAssessment.setOnChildViewClickListener(new OnChildViewClickListener() {
-//            @Override
-//            public void onChildViewClick(View childView, int action, Object obj) {
-//                if (action == -1){
-//                    mWorkTicketEntity.getRiskAssessment().id = null;
-//                }else {
-//                    if (mRiskAssessmentList.size() <= 0){
-//                        ToastUtils.show(context, "风险评估列表数据为空,请重新加载页面！");
-//                        return;
-//                    }
-//
-//                    mSinglePickController
-//                    .list(FieldHelper.getSystemCodeValue(mRiskAssessmentList))
-//                    .listener(new SinglePicker.OnItemPickListener() {
-//                        @Override
-//                        public void onItemPicked(int index, Object item) {
-//                            riskAssessment.setContent(item.toString());
-//                            mWorkTicketEntity.setRiskAssessment(mRiskAssessmentList.get(index));
-//                        }
-//                    }).show(riskAssessment.getContent());
-//                }
-//            }
-//        });
-
-//        hazardPointAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-//            @Override
-//            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-//                List<HazardPointEntity> hazardPointEntityList = (List<HazardPointEntity>) obj;
-//                StringBuilder sbValue = new StringBuilder();
-//                StringBuilder sbIds = new StringBuilder();
-//                for (HazardPointEntity entity : hazardPointEntityList) {
-//                    if (entity.checked) {
-//                        sbValue.append(entity.value).append(",");
-//                        sbIds.append(entity.id).append(",");
-//                    }
-//                }
-//                hazardCtrlPoint.setSpinner(sbValue.length() > 0 ? sbValue.substring(0, sbValue.length() - 1) : "");
-//                hazardCtrlPoint.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-//                mWorkTicketEntity.setHazardsourContrpoint(sbIds.length() > 0 ? sbIds.substring(0, sbIds.length() - 1) : "");
-//                mWorkTicketEntity.setHazardsourContrpointForDisplay(hazardCtrlPoint.getContent());
-//            }
-//        });
-
         workFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if ("selectPeopleInput".equals(childView.getTag())) {//选人
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "selectPeopleInput");
+                    IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+                    return;
+                }
                 WorkFlowVar workFlowVar = (WorkFlowVar) obj;
                 switch (action) {
                     case 0:
@@ -413,7 +391,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             ToastUtils.show(context, "风险评估不允许为空！");
             return true;
         }
-        if (TextUtils.isEmpty(hazardCtrlPoint.getContent())) {
+        if (TextUtils.isEmpty(mWorkTicketEntity.getHazardsourContrpoint())) {
             ToastUtils.show(context, "危险源控制点不允许为空！");
             return true;
         }
@@ -439,28 +417,55 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
 
     public void updateTableInfo(WorkTicketEntity entity) {
         this.mWorkTicketEntity = entity;
-        //初始化危险控制源
-//        hazardPointAdapter.setList(WorkTicketHelper.getHazardPointBySystemCode(mHazardList, mWorkTicketEntity.getHazardsourContrpoint()));
-//        hazardPointAdapter.notifyDataSetChanged();
 
-        // 工单来源不可编辑
+        // 工单、停电隐藏
         if (TextUtils.isEmpty(entity.getWorkList().tableNo)) {
             workListTableNo.setVisibility(View.GONE);
         }
+        if (TextUtils.isEmpty(entity.getOffApplyTableNo())) {
+            eleOffTableNo.setVisibility(View.GONE);
+        }
+//        String flowStatus = Optional.ofNullable(entity.getFlowStatus()).map(new Function<SystemCodeEntity, String>() {
+//            @Override
+//            public String apply(SystemCodeEntity systemCodeEntity) {
+//                return systemCodeEntity.id;
+//            }
+//        }).orElse("");
+        String flowStatus = entity.getFlowStatus() == null? "" : entity.getFlowStatus().id;
+        if (flowStatus.equals("WorkTicket_003/03")){ // 安全员审核
+            centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
+        }else if (flowStatus.equals("WorkTicket_003/04")){ // 领导审批
+            centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
+            securityStaff.setVisibility(View.VISIBLE); // 显示安全员
+        }else if (flowStatus.equals("WorkTicket_003/05")){ // 生效
+            centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
+            securityStaff.setVisibility(View.VISIBLE); // 显示安全员
+            securityChiefStaff.setVisibility(View.VISIBLE); // 显示安保科科长
+            controlDirectorStaff.setVisibility(View.VISIBLE); // 显示调度室主任
+        }else {
+
+        }
+
         //回填单据表头信息
         workListTableNo.setContent(entity.getWorkList().tableNo);
+        eleOffTableNo.setContent(entity.getOffApplyTableNo());
         chargeStaff.setContent(entity.getChargeStaff().name);
         workShop.setContent(entity.getWorkShop().name);
         eamName.setContent(entity.getEamId().name);
         eamCode.setContent(entity.getEamId().code);
         riskAssessmentView.setContent(entity.getRiskAssessment().value);
-        hazardCtrlPoint.setSpinner(getIntent().getStringExtra(Constant.IntentKey.HAZARD_CONTRL_POINT));
+        hazardContrlPointValue = "";
+        for (SystemCodeEntity systemCodeEntity : mHazardList) {
+            if (!TextUtils.isEmpty(entity.getHazardsourContrpoint()) && entity.getHazardsourContrpoint().contains(systemCodeEntity.id)){
+                hazardContrlPointValue = hazardContrlPointValue + systemCodeEntity.value + ",";
+            }
+        }
+        hazardCtrlPoint.setSpinner(hazardContrlPointValue.length() > 0 ? hazardContrlPointValue.substring(0,hazardContrlPointValue.length()-1) : "");
+        centralControlRoom.setContent(entity.getCentContRoom().name);
+        securityStaff.setContent(entity.getSecurityStaff().name);
+        securityChiefStaff.setContent(entity.getSecurityChiefStaff().name);
+        controlDirectorStaff.setContent(entity.getContrDirectorStaff().name);
 
-        //初始化风险评估
-//        FilterHelper.addRadioView(this, riskAssessmentRadioGroup,
-//                FilterHelper.createFilterBySystemCode(Constant.SystemCode.RISK_ASSESSMENT,mWorkTicketEntity.getRiskAssessment().id), 50, WRAP_CONTENT);
-
-//        mWorkTicketEntityOld = GsonUtil.gsonToBean(mWorkTicketEntity.toString(), WorkTicketEntity.class);
     }
 
     @Override
@@ -479,12 +484,17 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     public void receiveStaff(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
             CommonSearchStaff staff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
-            chargeStaff.setContent(staff.name);
-            workShop.setContent(staff.department);
 
-            mWorkTicketEntity.getChargeStaff().id = staff.id;
-            mWorkTicketEntity.getChargeStaff().name = staff.name;
-            mWorkTicketEntity.getChargeStaff().code = staff.code;
+            if (chargeStaff.getTag().toString().equals(commonSearchEvent.flag)){
+                chargeStaff.setContent(staff.name);
+                workShop.setContent(staff.department);
+
+                mWorkTicketEntity.getChargeStaff().id = staff.id;
+                mWorkTicketEntity.getChargeStaff().name = staff.name;
+                mWorkTicketEntity.getChargeStaff().code = staff.code;
+            } else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
+                workFlowView.addStaff(staff.name,staff.id);
+            }
         }
     }
 

@@ -323,11 +323,12 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         // supos质量管理 开放到主页级别
         for (OwnMinAppItem ownMinAppItem : list) {
             if (ownMinAppItem.getCreateType() == 2) {
-                WorkInfo workInfo6 = new WorkInfo();
-                workInfo6.name = ownMinAppItem.getAppname();
-                workInfo6.iconResId = R.drawable.ic_work_quality;
-                workInfo6.appItem = ownMinAppItem;
-                workInfos.add(workInfo6);
+                WorkInfo workInfoSupOS = new WorkInfo();
+                workInfoSupOS.name = ownMinAppItem.getAppname();
+//                workInfoSupOS.iconResId = R.drawable.ic_work_quality;
+                workInfoSupOS.iconUrl = ownMinAppItem.getAppiconurl(); // 动态获取icon
+                workInfoSupOS.appItem = ownMinAppItem;
+                workInfos.add(workInfoSupOS);
             }
         }
         workAdapter.setList(workInfos);
@@ -611,8 +612,10 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                             proxyStaff = null;
                         }
                         Bundle bundle = new Bundle();
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
                         bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "Main");
-                        IntentRouter.go(context, Constant.Router.STAFF, bundle);
+                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                     }
                 })
                 .bindTextChangeListener(R.id.proxyReason, new OnTextListener() {
@@ -628,12 +631,12 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                             ToastUtils.show(getActivity(), "请选择委托人");
                             return;
                         }
-                        if (waitDealtEntity.pendingid == null) {
+                        if (waitDealtEntity.pendingId == null) {
                             ToastUtils.show(getActivity(), "未获取当前代办信息");
                             return;
                         }
                         onLoading("正在委托...");
-                        presenterRouter.create(WaitDealtAPI.class).proxyPending(waitDealtEntity.pendingid, proxyStaff.userId, reason);
+                        presenterRouter.create(WaitDealtAPI.class).proxyPending(waitDealtEntity.pendingId, proxyStaff.userId, reason);
                         customDialog.dismiss();
                     }
                 }, false)

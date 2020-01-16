@@ -13,7 +13,7 @@ import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_hs_tsd.R;
-import com.supcon.mes.module_hs_tsd.constant.OperateItemEnum;
+import com.supcon.mes.module_hs_tsd.constant.OperateItemOffEnum;
 import com.supcon.mes.module_hs_tsd.model.api.OperateItemAPI;
 import com.supcon.mes.module_hs_tsd.model.bean.OperateItemEntity;
 import com.supcon.mes.module_hs_tsd.model.bean.OperateItemListEntity;
@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 停送电pt: 注:目前非动态加载模板
+ * 停送电pt: 注:目前非根据设备动态加载模板
  */
 @Presenter(value = {OperateItemPresenter.class})
-public class OperateItemController extends BaseViewController implements OperateItemContract.View {
+public class OperateItemOffController extends BaseViewController implements OperateItemContract.View {
 
     @BindByTag("operateItemWidget")
     CustomListWidget<OperateItemEntity> operateItemWidget;
@@ -41,7 +41,7 @@ public class OperateItemController extends BaseViewController implements Operate
 
     private List<OperateItemEntity> operateItemEntityList = new ArrayList<>();
 
-    public OperateItemController(View rootView) {
+    public OperateItemOffController(View rootView) {
         super(rootView);
     }
 
@@ -55,6 +55,7 @@ public class OperateItemController extends BaseViewController implements Operate
     public void initView() {
         super.initView();
         operateItemWidget.setTitleBgColor(Color.parseColor("#F9F9F9"));
+        operateItemWidget.setShowText("");
         RecyclerView contentView = operateItemWidget.findViewById(R.id.contentView);
         contentView.setBackgroundColor(context.getResources().getColor(R.color.line_gray));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(3, context)));
@@ -67,16 +68,20 @@ public class OperateItemController extends BaseViewController implements Operate
         super.initData();
         if (tableId == -1){
             initOperateItemEntityList();
-        }else {
-            presenterRouter.create(OperateItemAPI.class).listOperateItems(tableId);
         }
+    }
+
+    public void listOperateItems(){
+//        Glide.with(context).asGif().load(R.drawable.preloader_1).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL)).into(customListWidgetEdit);
+        String url = "/BEAMEle/onOrOff/onoroff/data-dg1545361488690.action?datagridCode=BEAMEle_1.0.0_onOrOff_eleOffEditdg1545361488690&rt=json";
+        presenterRouter.create(OperateItemAPI.class).listOperateItems(url,tableId);
     }
 
     private void initOperateItemEntityList() {
         OperateItemListEntity entity = new OperateItemListEntity();
         List<OperateItemEntity> operateItemEntityList = new ArrayList<>();
         OperateItemEntity operateItemEntity;
-        for (OperateItemEnum detail : OperateItemEnum.values()){
+        for (OperateItemOffEnum detail : OperateItemOffEnum.values()){
             operateItemEntity = new OperateItemEntity();
             operateItemEntity.setCaution(detail.getValue());
             operateItemEntityList.add(operateItemEntity);

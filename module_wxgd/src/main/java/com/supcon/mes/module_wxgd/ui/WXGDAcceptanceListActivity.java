@@ -2,6 +2,7 @@ package com.supcon.mes.module_wxgd.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -167,7 +168,10 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
                 switch (tag) {
                     case "acceptanceStaffCode":
                     case "acceptanceStaffName":
-                        IntentRouter.go(context, Constant.Router.STAFF);
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                         break;
                     case "acceptanceTime":
                         mDatePickController.listener((year, month, day, hour, minute, second) -> {

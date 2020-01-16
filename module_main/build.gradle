@@ -65,6 +65,7 @@ dependencies {
     implementation project(':module_zz_new')
     annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-    implementation project(':module_txl')
+//    implementation project(':module_txl')
+    implementation project(':module_contact')
 }
 
