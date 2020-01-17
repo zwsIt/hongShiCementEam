@@ -150,6 +150,7 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
         /**
          * id : 1124
          * tableNo : onOrOff_20191229_007
+         *
          */
 
         public Long id;

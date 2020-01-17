@@ -215,7 +215,7 @@ public class ElectricityOnListActivity extends BaseRefreshRecyclerActivity<Elect
         }
         Bundle bundle = new Bundle();
         bundle.putLong(Constant.IntentKey.TABLE_ID, electricityOffOnEntity.getId());
-        if (electricityOffOnEntity.getPending().id == null){ // 无代办、生效
+        if (electricityOffOnEntity.getPending().id == null || electricityOffOnEntity.getPending().openUrl == null){ // 无代办、生效
             IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
         }else {
             bundle.putLong(Constant.IntentKey.PENDING_ID, electricityOffOnEntity.getPending().id);

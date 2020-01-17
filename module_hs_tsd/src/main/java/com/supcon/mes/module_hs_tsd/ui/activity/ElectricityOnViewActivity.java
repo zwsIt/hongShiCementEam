@@ -158,12 +158,12 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         applyDate.setEditable(false);
         operateStaff.setEditable(false);
         remark.setEditable(false);
-//        galleryView.setEditable(false);
-//        galleryView.setIconVisibility(false);
 
-        if (pendingId == -1){
+        if (pendingId == -1) {
+            galleryView.setEditable(false);
+            galleryView.setIconVisibility(false);
             workFlowView.setVisibility(View.GONE);
-        }else {
+        } else {
             getController(LinkController.class).setCancelShow(true);
             getController(LinkController.class).setOnSuccessListener(result -> {
                 //获取__pc__
@@ -173,8 +173,8 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
             getController(LinkController.class).initPendingTransition(workFlowView, pendingId);
         }
 
-        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_ELE_PATH,Constant.PicType.ELE_ON_PIC);
-        getController(OnlineCameraController.class).addGalleryView(0,galleryView);
+        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_ELE_PATH, Constant.PicType.ELE_ON_PIC);
+        getController(OnlineCameraController.class).addGalleryView(0, galleryView);
 
     }
 
@@ -219,8 +219,8 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
                 department.setContent(null);
             } else {
                 Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,applyStaff.getTag().toString());
-                IntentRouter.go(context, Constant.Router.STAFF,bundle);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, applyStaff.getTag().toString());
+                IntentRouter.go(context, Constant.Router.STAFF, bundle);
             }
         });
         eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -231,21 +231,21 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
                     eamCode.setContent(null);
                 } else {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constant.IntentKey.ELE_OFF_ON_TEMPLATE,true); // 送电模板
-                    IntentRouter.go(context, Constant.Router.ELE_OFF_TEMPLATE,bundle);
+                    bundle.putBoolean(Constant.IntentKey.ELE_OFF_ON_TEMPLATE, true); // 送电模板
+                    IntentRouter.go(context, Constant.Router.ELE_OFF_TEMPLATE, bundle);
                 }
             }
         });
         applyDate.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if (action == -1){
+                if (action == -1) {
                     mElectricityOffOnEntity.setApplyDate(null);
-                }else {
+                } else {
                     mDatePickController.listener((year, month, day, hour, minute, second) -> {
                         String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
                         applyDate.setContent(dateStr);
-                        mElectricityOffOnEntity.setApplyDate(DateUtil.dateFormat(dateStr,Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC));
+                        mElectricityOffOnEntity.setApplyDate(DateUtil.dateFormat(dateStr, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC));
                     }).show(TextUtils.isEmpty(applyDate.getContent()) ? new Date().getTime() : mElectricityOffOnEntity.getApplyDate());
                 }
             }
@@ -255,19 +255,19 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
                 mElectricityOffOnEntity.getOperateStaff().id = null;
             } else {
                 Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,operateStaff.getTag().toString());
-                IntentRouter.go(context, Constant.Router.STAFF,bundle);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, operateStaff.getTag().toString());
+                IntentRouter.go(context, Constant.Router.STAFF, bundle);
             }
         });
         RxTextView.textChanges(remark.editText()).skipInitialValue()
-               .subscribeOn(Schedulers.io())
-               .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(new Consumer<CharSequence>() {
-                   @Override
-                   public void accept(CharSequence charSequence) throws Exception {
-                       mElectricityOffOnEntity.setWorkTask(charSequence.toString());
-                   }
-               });
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        mElectricityOffOnEntity.setWorkTask(charSequence.toString());
+                    }
+                });
 
         workFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
@@ -317,6 +317,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
 
     /**
      * 提交参数
+     *
      * @param workFlowEntities
      */
     private void submit(List<WorkFlowEntity> workFlowEntities) {
@@ -335,7 +336,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         map.put("modelName", "Onoroff");
         map.put("datagridKey", "BEAMEle_onOrOff_onoroff_eleOnEdit_datagrids");
         map.put("viewselect", "eleOnEdit");
-        map.put("id", tableId.equals(-1L)? "" : tableId);
+        map.put("id", tableId.equals(-1L) ? "" : tableId);
         map.put("deploymentId", mElectricityOffOnEntity.getDeploymentId());
         map.put("onoroff.version", mElectricityOffOnEntity.getVersion());
         if (workFlowEntities != null) {//保存为空
@@ -344,7 +345,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
             map.put("workFlowVar.outcome", workFlowEntity.outcome);
             map.put("operateType", "submit");
             if (Constant.Transition.CANCEL_CN.equals(workFlowEntity.dec)) {
-                map.put("workFlowVarStatus",Constant.Transition.CANCEL);
+                map.put("workFlowVarStatus", Constant.Transition.CANCEL);
             }
         } else {
             map.put("operateType", "save");
@@ -352,16 +353,16 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         map.put("workFlowVar.comment", Util.strFormat2(workFlowView.getComment()));
 //        map.put("taskDescription", "WorkTicket_8.20.3.03.workflow.randon1575618721430.flag");
         map.put("activityName", name);
-        if (!pendingId.equals(-1L)){
-            map.put("pendingId",pendingId);
+        if (!pendingId.equals(-1L)) {
+            map.put("pendingId", pendingId);
         }
         //表头信息,取修改后最新数据
         map.put("onoroff.applyStaff.id", Util.strFormat2(mElectricityOffOnEntity.getApplyStaff().id));
-        map.put("onoroff.eamID.id",Util.strFormat2(mElectricityOffOnEntity.getEamID().id));
-        map.put("onoroff.eleTemplateId.id",Util.strFormat2(mElectricityOffOnEntity.getEleTemplateId().id));
-        map.put("onoroff.operateStaff.id",Util.strFormat2(mElectricityOffOnEntity.getOperateStaff().id));
-        map.put("onoroff.applyDate",applyDate.getContent());
-        map.put("onoroff.remark",remark.getContent());
+        map.put("onoroff.eamID.id", Util.strFormat2(mElectricityOffOnEntity.getEamID().id));
+        map.put("onoroff.eleTemplateId.id", Util.strFormat2(mElectricityOffOnEntity.getEleTemplateId().id));
+        map.put("onoroff.operateStaff.id", Util.strFormat2(mElectricityOffOnEntity.getOperateStaff().id));
+        map.put("onoroff.applyDate", applyDate.getContent());
+        map.put("onoroff.remark", remark.getContent());
         map.put("__file_upload", true);
 
         // 表单
@@ -378,7 +379,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         }
 
         onLoading("单据处理中...");
-        presenterRouter.create(ElectricitySubmitAPI.class).submit("eleOnWorkFlow",map, attachmentMap,__pc__);
+        presenterRouter.create(ElectricitySubmitAPI.class).submit("eleOnWorkFlow", map, attachmentMap, __pc__);
     }
 
     private boolean checkTableBlank() {
@@ -398,7 +399,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
 //            ToastUtils.show(context, "操作人不允许为空！");
 //            return true;
 //        }
-        if (galleryView.getGalleryAdapter() != null && galleryView.getGalleryAdapter().getItemCount() <= 0){
+        if (galleryView.getGalleryAdapter() != null && galleryView.getGalleryAdapter().getItemCount() <= 0) {
             ToastUtils.show(context, "请拍摄照片！");
             return true;
         }
@@ -425,7 +426,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
     public void updateTableInfo(ElectricityOffOnEntity entity) {
         this.mElectricityOffOnEntity = entity;
 
-        if (mElectricityOffOnEntity.getWorkRecordId() == null){
+        if (mElectricityOffOnEntity.getWorkRecordId() == null) {
             workListTableNo.setVisibility(View.GONE);
         }
         //回填单据表头信息
@@ -450,13 +451,14 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         if (mElectricityOffOnEntity != null) {
             getController(AttachmentController.class).refreshGalleryView(new OnAPIResultListener<AttachmentListEntity>() {
                 @Override
-                public void onFail(String errorMsg) {}
+                public void onFail(String errorMsg) {
+                }
 
                 @Override
                 public void onSuccess(AttachmentListEntity result) {
                     if (result.result.size() > 0) {
                         mElectricityOffOnEntity.attachmentEntities = result.result;
-                        getController(OnlineCameraController.class).setPicData(mElectricityOffOnEntity.attachmentEntities,"BEAMEle_1.0.0_onOrOff");
+                        getController(OnlineCameraController.class).setPicData(mElectricityOffOnEntity.attachmentEntities, "BEAMEle_1.0.0_onOrOff");
                     }
                 }
             }, mElectricityOffOnEntity.getTableInfoId());
@@ -479,21 +481,21 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
     public void receiveStaff(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
             CommonSearchStaff staff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
-            if (applyStaff.getTag().toString().equals(commonSearchEvent.flag)){
+            if (applyStaff.getTag().toString().equals(commonSearchEvent.flag)) {
                 applyStaff.setContent(staff.name);
                 department.setContent(staff.department);
 
                 mElectricityOffOnEntity.getApplyStaff().id = staff.id;
                 mElectricityOffOnEntity.getApplyStaff().name = staff.name;
                 mElectricityOffOnEntity.getApplyStaff().code = staff.code;
-            }else if (operateStaff.getTag().toString().equals(commonSearchEvent.flag)){
+            } else if (operateStaff.getTag().toString().equals(commonSearchEvent.flag)) {
                 operateStaff.setContent(staff.name);
 
                 mElectricityOffOnEntity.getOperateStaff().id = staff.id;
                 mElectricityOffOnEntity.getOperateStaff().name = staff.name;
                 mElectricityOffOnEntity.getOperateStaff().code = staff.code;
-            }else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
-                workFlowView.addStaff(staff.name,staff.id);
+            } else if ("selectPeopleInput".equals(commonSearchEvent.flag)) {
+                workFlowView.addStaff(staff.name, staff.id);
             }
         }
     }
@@ -511,6 +513,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
 
     /**
      * 全屏展示时监听图片删除
+     *
      * @param imageDeleteEvent
      */
     @Subscribe

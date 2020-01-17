@@ -226,12 +226,17 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                             bundle.putLong(Constant.IntentKey.PENDING_ID, item.pendingId);
                                             // 通过摘要summary解析停电tableInfoId
                                             if (!TextUtils.isEmpty(item.summary)){
-                                                if (GsonUtil.gsonToMaps(item.summary).get("offApplyTableinfoid") != null){
-                                                    Double offApplyTableInfoId = (Double) GsonUtil.gsonToMaps(item.summary).get("offApplyTableinfoid");
-                                                    bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, Objects.requireNonNull(offApplyTableInfoId).longValue()); // 停电作业票tableInfoId
+                                                try {
+                                                    if (GsonUtil.gsonToMaps(item.summary).get("offApplyTableinfoid") != null){
+                                                        Double offApplyTableInfoId = (Double) GsonUtil.gsonToMaps(item.summary).get("offApplyTableinfoid");
+                                                        bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, Objects.requireNonNull(offApplyTableInfoId).longValue()); // 停电作业票tableInfoId
+                                                    }
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                    ToastUtils.show(context,"摘要格式转换json异常，请检查摘要是否正常");
+                                                    return;
                                                 }
                                             }
-
                                             switch (item.openUrl) {
                                                 case Constant.HSWorkTicketView.EDIT_URL:
                                                     IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_EDIT, bundle);
