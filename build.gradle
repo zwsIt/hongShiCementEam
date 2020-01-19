@@ -42,7 +42,7 @@ ext{
 
     minSdkVersion = 19
     targetSdkVersion = 22
-    versionCode = 44
+    versionCode = 45
     versionName = "8.20.05.08"
 
     ProductCode = "8.20.05"

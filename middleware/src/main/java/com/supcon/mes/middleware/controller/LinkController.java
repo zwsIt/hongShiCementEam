@@ -49,7 +49,7 @@ public class LinkController extends BasePresenterController implements LinkQuery
     public void queryCurrentLinkSuccess(LinkListEntity entity) {
 
         // 通知环节特殊处理
-        if (notify){
+        if (entity.result != null && entity.result.size() == 0 && notify){
             LinkEntity linkEntity = new LinkEntity();
             linkEntity.requiredStaff = "0";
             linkEntity.source = operateCode; // 来自菜单管理：业务模块的通知操作编码
