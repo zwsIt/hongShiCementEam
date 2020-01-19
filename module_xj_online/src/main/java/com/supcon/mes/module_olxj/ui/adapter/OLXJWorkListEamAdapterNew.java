@@ -853,7 +853,7 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
             if (data.eamID == null || TextUtils.isEmpty(data.eamID.name)) {
                 itemRecyclerTitle.setText("无关联设备");
             } else {
-                itemRecyclerTitle.setText(data.eamID.name);
+                itemRecyclerTitle.setText(String.format("%s(%s)", data.eamID.name, data.eamID.code));
 
                 if (!hashSet.contains(data.eamID.id)) {
                     hashSet.add(data.eamID.id);
