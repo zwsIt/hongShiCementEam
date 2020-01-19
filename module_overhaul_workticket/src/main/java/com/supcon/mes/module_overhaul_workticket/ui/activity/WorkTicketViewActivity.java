@@ -136,9 +136,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     private List<SystemCodeEntity> mRiskAssessmentList;
     private List<SystemCodeEntity> mHazardList;
     private SinglePickController mSinglePickController;
-    private HazardPointAdapter hazardPointAdapter;
     private String name = ""; // 当前活动名称
-    private boolean editable;
+    private String tableStatus;
 
     @Override
     protected void onInit() {
@@ -148,7 +147,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID, -1);
         pendingId = getIntent().getLongExtra(Constant.IntentKey.PENDING_ID, -1);
-        editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
+        tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
 
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
@@ -178,7 +177,10 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
 
         hazardCtrlPointFlowLy.setVisibility(View.GONE);
 
-        if (editable) {
+        if (pendingId != -1) {
+            if (tableStatus.contains(Constant.TableStatus_CH.NOTIFY)){ // 通知特殊处理
+                getController(LinkController.class).setNotify(true, "TaskEvent_1wq1qf2");
+            }
             getController(LinkController.class).setCancelShow(true);
             getController(LinkController.class).setOnSuccessListener(result -> {
                 //获取__pc__
@@ -338,6 +340,9 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             map.put("workFlowVar.dec", workFlowEntity.dec);
             map.put("workFlowVar.outcome", workFlowEntity.outcome);
             map.put("operateType", "submit");
+            if (tableStatus.contains(Constant.TableStatus_CH.NOTIFY)){ // 通知特殊处理
+                map.put("pendingActivityType", Constant.Transition.NOTIFICATION);
+            }
             if (Constant.Transition.CANCEL_CN.equals(workFlowEntity.dec)) {
                 map.put("workFlowVarStatus", Constant.Transition.CANCEL);
             }

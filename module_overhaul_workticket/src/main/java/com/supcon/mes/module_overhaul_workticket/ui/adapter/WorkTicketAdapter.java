@@ -81,7 +81,6 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
                         Bundle bundle = new Bundle();
                         bundle.putLong(Constant.IntentKey.TABLE_ID, workTicketEntity.getId());
                         bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, workTicketEntity.getOffApplyTableInfoId() == null ? -1 : workTicketEntity.getOffApplyTableInfoId()); // 停电作业票tableInfoId
-//                        bundle.putString(Constant.IntentKey.HAZARD_CONTRL_POINT, workTicketEntity.getHazardsourContrpointForDisplay());// 非编辑视图展示
 
                         if (workTicketEntity.getPending().id == null || workTicketEntity.getPending().openUrl == null) { // 无代办、生效
                             IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);
@@ -92,9 +91,7 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
                                     IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_EDIT, bundle);
                                     break;
                                 default:
-                                    if (workTicketEntity.getPending().id != null) {
-                                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-                                    }
+                                    bundle.putString(Constant.IntentKey.TABLE_STATUS,workTicketEntity.getPending().taskDescription); // 单据状态
                                     IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);
                             }
                             /*switch (workTicketEntity.getPending().taskDescription) {

@@ -515,6 +515,7 @@ public interface Constant {
         String SUBMIT_BTN = "submitBtn"; //提交按钮
         String ROUTER_BTN = "routerBtn"; //操作按钮
         String SAVE_BTN = "saveBtn";
+        String NOTIFICATION = "notification";   //通知
         String CANCEL_CN = "作废";   //作废
         String REJECT_CN = "驳回";   //驳回
     }

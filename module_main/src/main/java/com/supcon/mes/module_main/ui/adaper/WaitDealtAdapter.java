@@ -242,7 +242,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                                     IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_EDIT, bundle);
                                                     break;
                                                 case Constant.HSWorkTicketView.VIEW_URL:
-                                                    bundle.putBoolean(Constant.IntentKey.IS_EDITABLE,true);
+                                                    bundle.putString(Constant.IntentKey.TABLE_STATUS,item.state); // 单据状态
                                                     IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);
                                                     break;
                                             }

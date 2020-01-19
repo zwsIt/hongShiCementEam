@@ -41,10 +41,26 @@ public class LinkController extends BasePresenterController implements LinkQuery
     private Long pendingId;
     private boolean isCancel;//是否显示作废
     private OnSuccessListener listener;
+    private boolean notify; // 通知待办
+    private String operateCode; // 通知操作编码
 
     @SuppressLint("CheckResult")
     @Override
     public void queryCurrentLinkSuccess(LinkListEntity entity) {
+
+        // 通知环节特殊处理
+        if (notify){
+            LinkEntity linkEntity = new LinkEntity();
+            linkEntity.requiredStaff = "0";
+            linkEntity.source = operateCode; // 来自菜单管理：业务模块的通知操作编码
+            linkEntity.condition = "";
+            linkEntity.description = "确认";
+            linkEntity.selectPeople = "0";
+            linkEntity.name = linkEntity.description;
+            linkEntity.destination = "";
+            entity.result.add(linkEntity);
+        }
+
         if (entity.result != null && entity.result.size() != 0) {
             if (Constant.Transition.CANCEL_CN.equals(entity.result.get(0).description) || Constant.Transition.REJECT_CN.equals(entity.result.get(0).description)) {
                 Collections.reverse(entity.result);
@@ -193,5 +209,10 @@ public class LinkController extends BasePresenterController implements LinkQuery
 
     public void setOnSuccessListener(OnSuccessListener onSuccessListener) {
         this.listener = onSuccessListener;
+    }
+
+    public void setNotify(boolean notify, String operateCode) {
+        this.notify = notify;
+        this.operateCode = operateCode;
     }
 }
