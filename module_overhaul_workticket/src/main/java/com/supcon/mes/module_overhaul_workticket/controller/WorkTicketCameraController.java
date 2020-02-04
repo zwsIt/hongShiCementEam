@@ -1,12 +1,16 @@
 package com.supcon.mes.module_overhaul_workticket.controller;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 
 import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.adapter.GalleryAdapter;
 import com.supcon.mes.mbap.beans.GalleryBean;
+import com.supcon.mes.mbap.utils.SheetUtil;
 import com.supcon.mes.mbap.view.CustomGalleryView;
+import com.supcon.mes.mbap.view.CustomSheetDialog;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.controller.AttachmentController;
 import com.supcon.mes.middleware.controller.AttachmentDownloadController;
@@ -262,4 +266,54 @@ public class WorkTicketCameraController extends BaseCameraController {
     public void setCurrAdapterPosition(int adapterPosition) {
         this.currAdapterPosition = adapterPosition;
     }
+
+    private static final String[] SHEET_ENTITY = {"拍摄照片", "拍摄短视频"};
+
+    /**
+     * 重写拍照选择方式：仅支持："拍摄照片", "拍摄短视频"
+     */
+    @SuppressLint("CheckResult")
+    public void showCustomDialog() {
+        new CustomSheetDialog(context)
+                .sheet("请选择获取照片或视频的方式", SheetUtil.getSheetEntities(SHEET_ENTITY))
+                .setOnItemChildViewClickListener((childView, position, action, obj) -> {
+
+                    if(!check(position)){
+                        return;
+                    }
+
+                    if (position == 0) {
+                        startCamera();
+                    }
+                    else if(position == 1){
+                        startVideo();
+                    }
+                }).show();
+    }
+
+    private boolean check(int position) {
+        CustomGalleryView galleryViewLocal = galleryViewHashMap.get(String.valueOf(currAdapterPosition));
+        if(galleryViewLocal.getGalleryAdapter().getItemCount() == 9){
+            ToastUtils.show(context, "最多支持9张照片或视频！");
+            return false;
+        }
+
+        if(checkVideo(galleryViewLocal) && position == 1){
+            ToastUtils.show(context, "最多支持录制1次视频！");
+            return false;
+        }
+
+        return true;
+    }
+    private boolean checkVideo(CustomGalleryView galleryViewLocal){
+        if(galleryViewLocal.getGalleryAdapter().getItemCount()!=0)
+            for(GalleryBean galleryBean: galleryViewLocal.getGalleryAdapter().getList()){
+                if(galleryBean.fileType == GalleryAdapter.FILE_TYPE_VIDEO){
+                    return true;
+                }
+            }
+
+        return false;
+    }
+
 }

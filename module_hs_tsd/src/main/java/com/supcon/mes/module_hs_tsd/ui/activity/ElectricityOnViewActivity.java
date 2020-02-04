@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -122,6 +123,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
     private ElectricityOffOnEntity mElectricityOffOnEntityOld;
     private DatePickController mDatePickController;
     private String name = ""; // 当前活动名称
+    private ImageView customCameraIv;
 
     @Override
     protected void onInit() {
@@ -176,6 +178,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_ELE_PATH, Constant.PicType.ELE_ON_PIC);
         getController(OnlineCameraController.class).addGalleryView(0, galleryView);
 
+        customCameraIv = galleryView.findViewById(R.id.customCameraIv);
     }
 
     /**
@@ -295,6 +298,12 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
             }
         });
 
+        customCameraIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getController(OnlineCameraController.class).showCustomDialog();
+            }
+        });
     }
 
     private void doSave() {

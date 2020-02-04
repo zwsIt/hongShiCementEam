@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -25,12 +26,14 @@ import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.mbap.utils.SheetUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomListWidget;
+import com.supcon.mes.mbap.view.CustomSheetDialog;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
@@ -77,6 +80,9 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.supcon.mes.mbap.view.CustomGalleryView.ACTION_TAKE_PICTURE_FROM_CAMERA;
+import static com.supcon.mes.mbap.view.CustomGalleryView.ACTION_TAKE_VIDEO_FROM_CAMERA;
 
 /**
  * ClassName
@@ -131,6 +137,7 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
     private ElectricityOffOnEntity mElectricityOffOnEntityOld;
     private DatePickController mDatePickController;
     private String name = ""; // 当前活动名称
+    private ImageView customCameraIv;
 
     @Override
     protected void onInit() {
@@ -182,6 +189,8 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
 
         getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_ELE_PATH,Constant.PicType.ELE_OFF_PIC);
         getController(OnlineCameraController.class).addGalleryView(0,galleryView);
+
+        customCameraIv = galleryView.findViewById(R.id.customCameraIv);
 
     }
 
@@ -334,6 +343,13 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
         RxView.clicks(finishBtn)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(o -> doSave());
+
+        customCameraIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getController(OnlineCameraController.class).showCustomDialog();
+            }
+        });
 
     }
 

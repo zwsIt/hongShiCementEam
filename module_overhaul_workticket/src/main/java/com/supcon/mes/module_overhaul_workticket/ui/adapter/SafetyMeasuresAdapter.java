@@ -236,7 +236,8 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
                         public void accept(Object o) throws Exception {
 //                            onItemChildViewClick(videoGalleryView,0,getItem(getAdapterPosition()));
                             workTicketCameraController.setCurrAdapterPosition(getAdapterPosition());
-                            videoGalleryView.findViewById(R.id.customCameraIv).performClick();
+                            workTicketCameraController.showCustomDialog();
+//                            videoGalleryView.findViewById(R.id.customCameraIv).performClick();
 //                            if (videoGalleryView.getGalleryAdapter() != null && videoGalleryView.getGalleryAdapter().getItemCount() == 1) {
 //                                new CustomDialog(context).twoButtonAlertDialog("只支持一个附件,是否重拍?")
 //                                        .bindClickListener(R.id.redBtn, new View.OnClickListener() {
@@ -303,7 +304,8 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
                         public void accept(Object o) throws Exception {
 //                            onItemChildViewClick(videoGalleryView,0,getItem(getAdapterPosition()));
                             workTicketCameraController.setCurrAdapterPosition(getAdapterPosition());
-                            photoGalleryView.findViewById(R.id.customCameraIv).performClick();
+                            workTicketCameraController.showCustomDialog();
+//                            photoGalleryView.findViewById(R.id.customCameraIv).performClick();
 //                            if (photoGalleryView.getGalleryAdapter() != null && photoGalleryView.getGalleryAdapter().getItemCount() == 1) {
 //                                new CustomDialog(context).twoButtonAlertDialog("只支持一个附件,是否重拍?")
 //                                        .bindClickListener(R.id.redBtn, new View.OnClickListener() {
