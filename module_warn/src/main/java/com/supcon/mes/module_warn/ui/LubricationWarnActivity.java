@@ -270,7 +270,7 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
                                 } else {
                                     sourceIds.append(",").append(lubricationWarnEntity.id);
                                 }
-                                if (!lubricationWarnEntity.isDuration() && nextTime < lubricationWarnEntity.nextTime) {
+                                if (!lubricationWarnEntity.isDuration() /*&& nextTime < lubricationWarnEntity.nextTime*/) {
                                     nextTime = lubricationWarnEntity.nextTime;
                                 }
                             }, throwable -> {

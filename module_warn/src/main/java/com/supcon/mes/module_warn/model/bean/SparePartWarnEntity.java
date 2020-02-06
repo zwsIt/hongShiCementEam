@@ -57,7 +57,7 @@ public class SparePartWarnEntity extends BaseEntity {
         return productID;
     }
 
-    //是否润滑时长
+    //是否运行时长
     public boolean isDuration() {
         if (periodType != null && periodType.id.equals("BEAM014/02")) {
             return true;

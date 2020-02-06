@@ -240,7 +240,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
                 return;
             }
             checkBox.setButtonDrawable(R.drawable.sl_checkbox_selector_small);
-            checkBox.setTextColor(context.getResources().getColorStateList(R.drawable.tvbg_tag_item));
+            checkBox.setTextColor(context.getResources().getColor(R.color.textColorlightblack));
             checkBox.setId(id);
             checkBox.setText(btnContent);
             checkBox.setTextSize(14);

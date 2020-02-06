@@ -58,7 +58,7 @@
                     android:checked="true"
                     android:tag="scoreRadioBtn1"
                     android:text="是"
-                    android:textColor="@drawable/tvbg_tag_item"
+                    android:textColor="@color/textColorlightblack"
                     android:textSize="@dimen/fontSize_14sp" />
 
                 <RadioButton
@@ -69,7 +69,7 @@
                     android:button="@drawable/sl_checkbox_selector_small"
                     android:tag="scoreRadioBtn2"
                     android:text="否"
-                    android:textColor="@drawable/tvbg_tag_item"
+                    android:textColor="@color/textColorlightblack"
                     android:textSize="@dimen/fontSize_14sp" />
             </RadioGroup>
 

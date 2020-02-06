@@ -305,7 +305,7 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
                                 } else {
                                     sourceIds.append(",").append(maintenanceWarnEntity.id);
                                 }
-                                if (!maintenanceWarnEntity.isDuration() && nextTime < maintenanceWarnEntity.nextTime) {
+                                if (!maintenanceWarnEntity.isDuration() /*&& nextTime < maintenanceWarnEntity.nextTime*/) {
                                     nextTime = maintenanceWarnEntity.nextTime;
                                 }
                             }, throwable -> {

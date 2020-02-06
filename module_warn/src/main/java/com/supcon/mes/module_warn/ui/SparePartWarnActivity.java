@@ -307,7 +307,7 @@ public class SparePartWarnActivity extends BaseRefreshRecyclerActivity<SparePart
                                 } else {
                                     sourceIds.append(",").append(sparePartWarnEntity.id);
                                 }
-                                if (!sparePartWarnEntity.isDuration() && nextTime < sparePartWarnEntity.nextTime) {
+                                if (!sparePartWarnEntity.isDuration() /*&& nextTime < sparePartWarnEntity.nextTime*/) {
                                     nextTime = sparePartWarnEntity.nextTime;
                                 }
                             }, throwable -> {
