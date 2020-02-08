@@ -329,8 +329,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
             } else {
                 waitDealtContent.setVisibility(View.GONE);
             }
-            // 工单、隐患单可委托
-            if (Constant.ProcessKey.WORK.equals(data.processKey) || Constant.ProcessKey.FAULT_INFO.equals(data.processKey)) {
+            // 工单、隐患单、检修作业票、停送电可委托
+            if (Constant.ProcessKey.WORK.equals(data.processKey) || Constant.ProcessKey.FAULT_INFO.equals(data.processKey)
+                    || Constant.ProcessKey.WORK_TICKET.equals(data.processKey) || Constant.ProcessKey.ELE_OFF.equals(data.processKey)
+                    || Constant.ProcessKey.ELE_ON.equals(data.processKey)) {
                 waitDealtEntrust.setVisibility(View.VISIBLE);
                 if ("0".equals(data.entrFlag)) {
                     waitDealtEntrust.setImageDrawable(context.getResources().getDrawable(R.drawable.btn_entrust));

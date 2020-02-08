@@ -106,7 +106,7 @@
                 android:id="@+id/waitDealtEntrust"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/waitDealtContentLayout"
+                android:layout_below="@+id/waitDealtEamSource"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/dp_10"
                 android:src="@drawable/btn_entrust"
