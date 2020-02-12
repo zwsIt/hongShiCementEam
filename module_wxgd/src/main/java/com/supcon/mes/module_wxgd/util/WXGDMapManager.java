@@ -85,6 +85,8 @@ public class WXGDMapManager {
         map.put("workRecord.isOffApply",mWXGDEntity.isOffApply);
         map.put("workRecord.offApply.id",mWXGDEntity.offApply == null ? "" : mWXGDEntity.offApply.id);
         map.put("workRecord.ohWorkTicket.id",mWXGDEntity.ohWorkTicket == null ? "" : mWXGDEntity.ohWorkTicket.id);
+        map.put("workRecord.overhaulProId.id",mWXGDEntity.overhaulProId == null ? "" : mWXGDEntity.overhaulProId.id);
+        map.put("workRecord.repairProId.id",mWXGDEntity.repairProId == null ? "" : mWXGDEntity.repairProId.id);
 
         return map;
     }

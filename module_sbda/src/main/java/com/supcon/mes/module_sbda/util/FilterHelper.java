@@ -111,7 +111,7 @@ public class FilterHelper {
         all.name = "区域不限";
         all.type = CustomFilterView.VIEW_TYPE_ALL;
         list.add(all);
-        LogUtil.e(DeviceManager.getInstance().getAllDeviceTypes().toString());
+//        LogUtil.e(DeviceManager.getInstance().getAllDeviceTypes().toString());
         Flowable.fromIterable(DeviceManager.getInstance().getAllDeviceAreas())
                 .subscribe(type -> {
                     FilterBean filterBean = new FilterBean();

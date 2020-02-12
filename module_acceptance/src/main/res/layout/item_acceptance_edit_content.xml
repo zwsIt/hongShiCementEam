@@ -58,7 +58,7 @@
                     android:checked="true"
                     android:tag="acceptanceRadioBtn1"
                     android:text="符合"
-                    android:textColor="@drawable/tvbg_tag_item"
+                    android:textColor="@color/textColorlightblack"
                     android:textSize="@dimen/fontSize_14sp" />
 
                 <RadioButton
@@ -69,7 +69,7 @@
                     android:button="@drawable/sl_checkbox_selector_small"
                     android:tag="acceptanceRadioBtn2"
                     android:text="不符合"
-                    android:textColor="@drawable/tvbg_tag_item"
+                    android:textColor="@color/textColorlightblack"
                     android:textSize="@dimen/fontSize_14sp" />
             </RadioGroup>
 

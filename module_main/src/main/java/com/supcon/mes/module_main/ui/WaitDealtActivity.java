@@ -376,7 +376,8 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                         bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
-                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+//                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+                        IntentRouter.go(context,Constant.Router.STAFF,bundle);
                     }
                 })
                 .bindTextChangeListener(R.id.proxyReason, new OnTextListener() {

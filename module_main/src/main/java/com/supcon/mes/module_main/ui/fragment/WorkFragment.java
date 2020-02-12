@@ -615,7 +615,8 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                         bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                         bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
                         bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "Main");
-                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+//                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+                        IntentRouter.go(context,Constant.Router.STAFF,bundle);
                     }
                 })
                 .bindTextChangeListener(R.id.proxyReason, new OnTextListener() {
