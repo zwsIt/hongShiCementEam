@@ -78,7 +78,6 @@ public class AttachmentDownloadController extends BasePresenterController {
                             galleryBean.localPath = pic.getAbsolutePath();
                             return Flowable.just(galleryBean);
                         } else {
-                            String finalPath = path;
                             String key = entityCode + attachment.id;
                             if (!downloadList.contains(key)) {
                                 downloadList.add(key);
@@ -94,7 +93,7 @@ public class AttachmentDownloadController extends BasePresenterController {
                                         .map(new Function<ResponseBody, GalleryBean>() {
                                             @Override
                                             public GalleryBean apply(ResponseBody responseBody) throws Exception {
-                                                File file = PicUtil.writeToDisk(attachment.name, finalPath, responseBody); // 存储本地
+                                                File file = PicUtil.writeToDisk(attachment.name, path, responseBody); // 存储本地
                                                 galleryBean.localPath = file.getAbsolutePath();
                                                 return galleryBean;
 
