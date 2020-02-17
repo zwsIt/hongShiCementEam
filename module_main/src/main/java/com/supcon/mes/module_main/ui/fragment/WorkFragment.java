@@ -31,6 +31,7 @@ import com.supcon.mes.mbap.MBapConstant;
 import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.listener.OnTextListener;
+import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.view.CustomAdView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
@@ -208,13 +209,14 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         ((TextView) waitTitle.findViewById(R.id.contentTitleLabel)).setText("工作提醒");
         waitMore = waitTitle.findViewById(R.id.contentTitleSettingIc);
         waitMore.setVisibility(View.VISIBLE);
-        waitMore.setOnClickListener(v -> IntentRouter.go(getActivity(), Constant.Router.WAIT_DEALT));
+        waitMore.setOnClickListener(v -> IntentRouter.go(getActivity(), Constant.Router.WAIT_DEALT_NEW));
         View workTitle = rootView.findViewById(R.id.hs_work_title);
         ((TextView) workTitle.findViewById(R.id.contentTitleLabel)).setText("我的工作");
         marqueeTextView = workTitle.findViewById(R.id.contentTitleTips);
         marqueeTextView.setVisibility(View.VISIBLE);
 
         waitDealtRecycler.setLayoutManager(new LinearLayoutManager(context));
+        waitDealtRecycler.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(2,context)));
         waitDealtAdapter = new WaitDealtAdapter(getActivity());
         waitDealtRecycler.setAdapter(waitDealtAdapter);
 

@@ -228,6 +228,7 @@ public interface Constant {
         String HS_SD_LIST = "HS_SD_LIST"; // 红狮送电list
         String HS_ELE_ON_EDIT = "HS_ELE_ON_EDIT"; // 送电票编辑
         String HS_ELE_ON_VIEW = "HS_ELE_ON_VIEW"; // 送电票查看
+        String WAIT_DEALT_NEW = "WAIT_DEALT_NEW"; // 新版工作提醒
     }
 
 
@@ -690,6 +691,7 @@ public interface Constant {
 
         String ALL_QUERY = "ALL_QUERY"; // 查询按钮
         String PENDING_QUERY = "PENDING_QUERY"; // 仅查待办
+        String STATE = "STATE";
     }
 
 

@@ -61,7 +61,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
 
     public void setEditable(boolean isEdit) {
         this.isEdit = isEdit;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
     class ContentViewHolder extends BaseRecyclerViewHolder<WaitDealtEntity> {
@@ -284,12 +284,9 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                             }
                         }
                     });
-            chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    WaitDealtEntity item = getItem(getAdapterPosition());
-                    item.isCheck = b;
-                }
+            chkBox.setOnCheckedChangeListener((compoundButton, b) -> {
+                WaitDealtEntity item = getItem(getAdapterPosition());
+                item.isCheck = b;
             });
         }
 
@@ -301,13 +298,13 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
         @SuppressLint("SetTextI18n")
         @Override
         protected void update(WaitDealtEntity data) {
-            if (Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processKey)) {
+            if (TextUtils.isEmpty(data.workTableNo)) {
+                tableNo.setVisibility(View.GONE);
+            } else {
                 tableNo.setVisibility(View.VISIBLE);
                 tableNo.setContent(data.workTableNo);
-            } else {
-                tableNo.setVisibility(View.GONE);
             }
-            if (isEdit && !TextUtils.isEmpty(data.state) && (data.state.equals("派工"))) {
+            if (isEdit /*&& !TextUtils.isEmpty(data.state) && (data.state.equals("派工"))*/) {
                 chkBox.setVisibility(View.VISIBLE);
                 chkBox.setChecked(data.isCheck);
             } else {
@@ -319,7 +316,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
             } else {
                 waitDealtTime.setText(data.excuteTime != null ? DateUtil.dateFormat(data.excuteTime, "yyyy-MM-dd HH:mm:ss") : "--");
             }
-            waitDealtEamSource.setText(Util.strFormat(data.sourceType));
+            waitDealtEamSource.setText("来源:"+Util.strFormat(data.sourceType));
 
             // 隐患单、工单、设备验收单、润滑/维保预警 提供内容
             if (Constant.ProcessKey.FAULT_INFO.equals(data.processKey) || Constant.ProcessKey.WORK.equals(data.processKey) || Constant.ProcessKey.CHECK_APPLY_FW.equals(data.processKey)

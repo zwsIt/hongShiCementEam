@@ -137,6 +137,7 @@ public class BAPQueryParamsHelper {
             case Constant.BAPQuery.PRODUCT_MODEL:
             case Constant.BAPQuery.PLACE_SET_CODE:
             case Constant.BAPQuery.PLACE_SET_NAME:
+            case Constant.BAPQuery.STATE:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.columnName = key;

@@ -360,7 +360,7 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                 @Override
                 public void onClick(View view) {
                     if (isExpand) {
-                        ufItemPriority.setText("点击展开");
+                        ufItemPriority.setText("展开");
                         Drawable drawable = context.getResources().getDrawable(R.drawable.ic_zk);
                         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                         ufItemPriority.setCompoundDrawables(null, null, drawable, null);
@@ -368,7 +368,7 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                         notifyItemRangeRemoved(getAdapterPosition() + 1, workItemEntities.size());
                         notifyItemRangeChanged(getAdapterPosition() + 1, workItemEntities.size());
                     } else {
-                        ufItemPriority.setText("点击关闭");
+                        ufItemPriority.setText("收缩");
                         Drawable drawable = context.getResources().getDrawable(R.drawable.ic_sq);
                         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                         ufItemPriority.setCompoundDrawables(null, null, drawable, null);
@@ -410,12 +410,12 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                     }
                 }
                 if (isExpand) {
-                    ufItemPriority.setText("点击关闭");
+                    ufItemPriority.setText("收缩");
                     Drawable drawable = context.getResources().getDrawable(R.drawable.ic_sq);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     ufItemPriority.setCompoundDrawables(null, null, drawable, null);
                 } else {
-                    ufItemPriority.setText("点击展开");
+                    ufItemPriority.setText("展开");
                     Drawable drawable = context.getResources().getDrawable(R.drawable.ic_zk);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     ufItemPriority.setCompoundDrawables(null, null, drawable, null);

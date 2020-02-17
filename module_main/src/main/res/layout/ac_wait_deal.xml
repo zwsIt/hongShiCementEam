@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/dispatch"
+        android:orientation="vertical">
+
+        <include layout="@layout/ly_titlebar_local" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_5"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/entrust1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:drawableStart="@drawable/btn_entrust"
+                android:drawablePadding="@dimen/dp_10"
+                android:text="未委托"
+                android:textSize="@dimen/fontSize_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_toRightOf="@+id/entrust1"
+                android:drawableStart="@drawable/btn_entrusted"
+                android:drawablePadding="@dimen/dp_10"
+                android:text="已委托"
+                android:textSize="@dimen/fontSize_14sp" />
+
+            <Button
+                android:id="@+id/dispatchBtn"
+                android:layout_width="80dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:background="@drawable/btn_dispatch_selector"
+                android:tag="dispatchBtn" />
+        </RelativeLayout>
+
+<!--        <include layout="@layout/ly_line" />-->
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioGroup
+                android:id="@+id/waitStateRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_5"
+                android:tag="waitStateRadioGroup">
+
+                <RadioButton
+                    android:id="@+id/allRBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:button="@null"
+                    android:tag="allRBtn"
+                    android:text="全部"
+                    android:textSize="@dimen/fontSize_14sp"
+                    android:textColor="@drawable/sl_radio_text"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/overdueRBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:button="@null"
+                    android:tag="overdueRBtn"
+                    android:text="已超期"
+                    android:textColor="@drawable/sl_radio_text"
+                    android:textSize="@dimen/fontSize_14sp" />
+                <RadioButton
+                    android:id="@+id/pendingRBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:button="@null"
+                    android:tag="pendingRBtn"
+                    android:text="未超期"
+                    android:textColor="@drawable/sl_radio_text"
+                    android:textSize="@dimen/fontSize_14sp" />
+                <RadioButton
+                    android:id="@+id/waitDispatchRBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:button="@null"
+                    android:tag="waitDispatchRBtn"
+                    android:text="待派单"
+                    android:textColor="@drawable/sl_radio_text"
+                    android:textSize="@dimen/fontSize_14sp" />
+
+            </RadioGroup>
+        </HorizontalScrollView>
+<!--        <include layout="@layout/ly_line" />-->
+        <include layout="@layout/ly_recyclerview" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/dispatch"
+        style="@style/RedButton"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:tag="dispatch"
+        android:text="派单"
+        android:visibility="gone" />
+</RelativeLayout>
