@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_40">
     <com.supcon.mes.mbap.view.CustomTextView
@@ -17,11 +16,10 @@
         app:key="生成停电票:"
         app:key_width="@dimen/dp_120"/>
     <CheckBox
-        android:layout_width="@dimen/dp_50"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/eleOffChkBox"
         android:tag="eleOffChkBox"
-        android:layout_marginStart="@dimen/dp_10"
         android:layout_alignParentEnd="true"
         android:checked="true"
         android:layout_centerVertical="true"

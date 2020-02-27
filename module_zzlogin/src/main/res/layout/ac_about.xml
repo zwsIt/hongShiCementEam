@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgGray2"
+    android:background="@color/white"
     >
     <include layout="@layout/ly_titlebar_local"/>
     <LinearLayout
@@ -27,7 +27,6 @@
             android:id="@+id/aboutName"
             android:tag="aboutName"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/textColorblack"
             android:textStyle="bold"
 
             />
@@ -36,7 +35,6 @@
             android:layout_height="30dp"
             android:id="@+id/buildVersion"
             android:tag="buildVersion"
-            android:textColor="@color/textColorlightblack"
             android:textSize="12sp"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_gravity="center_horizontal"

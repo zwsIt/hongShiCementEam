@@ -149,7 +149,6 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
         //设置搜索框默认提示语
         titleSearchView.setHint("请输入设备编码");
         searchTitleBar.setTitleText("润滑预警");
-        searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
 
         if (!TextUtils.isEmpty(property) && property.equals(Constant.PeriodType.RUNTIME_LENGTH)) {

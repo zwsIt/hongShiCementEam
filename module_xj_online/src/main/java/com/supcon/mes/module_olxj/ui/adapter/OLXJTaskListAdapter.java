@@ -87,8 +87,8 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 
     class ViewHolder extends BaseRecyclerViewHolder<OLXJTaskEntity> implements View.OnClickListener {
 
-        @BindByTag("listLayout")
-        LinearLayout listLayout;
+//        @BindByTag("listLayout")
+//        LinearLayout listLayout;
 //        @BindByTag("mapLayout")
 //        LinearLayout mapLayout;
 
@@ -296,7 +296,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 //                webView.loadUrl(url, header);
 //            } else {
 //                mapLayout.setVisibility(View.GONE);
-            listLayout.setVisibility(View.VISIBLE);
+//            listLayout.setVisibility(View.VISIBLE);
             taskExpandBtn.setVisibility(View.VISIBLE);
 //            }
 

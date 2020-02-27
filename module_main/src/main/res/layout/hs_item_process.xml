@@ -12,9 +12,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/processTableNo"
             android:layout_width="match_parent"
@@ -41,7 +39,6 @@
         android:id="@+id/processEam"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:tag="processEam"
         app:key="设备:"
         app:key_width="@dimen/dp_80"/>
@@ -50,7 +47,6 @@
         android:id="@+id/processTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:tag="processTime"
         app:key="创建时间:"
         app:key_width="@dimen/dp_80"/>
@@ -59,7 +55,6 @@
         android:id="@+id/processStaff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:tag="processStaff"
         app:key="待办人:"
         app:key_width="@dimen/dp_80"/>
@@ -68,7 +63,6 @@
         android:id="@+id/processContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:tag="processContent"
         app:key="工作内容:"
         app:key_width="@dimen/dp_80"/>

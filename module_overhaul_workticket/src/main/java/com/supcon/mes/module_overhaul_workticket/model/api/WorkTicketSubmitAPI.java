@@ -13,5 +13,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = {BapResultEntity.class})
 public interface WorkTicketSubmitAPI {
-    void submit(String view,Map<String, Object> queryParams, String __pc__);
+    void submit(String view,Map<String, Object> queryParams, Map<String, Object> attachmentMap, String __pc__);
 }

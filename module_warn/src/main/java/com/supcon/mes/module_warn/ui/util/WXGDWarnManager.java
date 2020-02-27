@@ -21,7 +21,7 @@ public class WXGDWarnManager {
     public static WXGDEntity lubri(LubricationWarnEntity lubricationWarnEntity) {
         WXGDEntity wxgdEntity = new WXGDEntity();
         wxgdEntity.eamID = lubricationWarnEntity.eamID;
-        wxgdEntity.id = -1l;
+        wxgdEntity.id = -1L;
         SystemCodeEntity workSource = new SystemCodeEntity();
         workSource.value = "润滑";
         workSource.id = "BEAM2003/02";
@@ -68,7 +68,7 @@ public class WXGDWarnManager {
     public static WXGDEntity mainten(MaintenanceWarnEntity maintenanceWarnEntity) {
         WXGDEntity wxgdEntity = new WXGDEntity();
         wxgdEntity.eamID = maintenanceWarnEntity.eamID;
-        wxgdEntity.id = -1l;
+        wxgdEntity.id = -1L;
         SystemCodeEntity workSource = new SystemCodeEntity();
         workSource.value = "维保";
         workSource.id = "BEAM2003/03";
@@ -111,7 +111,7 @@ public class WXGDWarnManager {
     public static WXGDEntity spare(SparePartWarnEntity sparePartWarnEntity) {
         WXGDEntity wxgdEntity = new WXGDEntity();
         wxgdEntity.eamID = sparePartWarnEntity.eamID;
-        wxgdEntity.id = -1l;
+        wxgdEntity.id = -1L;
         SystemCodeEntity workSource = new SystemCodeEntity();
         workSource.value = "备件";
         workSource.id = "BEAM2003/04";

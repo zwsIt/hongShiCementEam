@@ -4,7 +4,6 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:orientation="vertical"
     android:paddingRight="@dimen/dp_10">
 
@@ -98,7 +97,6 @@
                     android:tag="department"
                     android:textSize="@dimen/fontSize_12sp"
                     tool:text="用户名" />
-
 
             </LinearLayout>
         </LinearLayout>

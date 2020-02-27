@@ -55,12 +55,11 @@
                     app:necessary="false"
                     app:text_size="15" />
             </LinearLayout>
-
+            <include layout="@layout/ly_line_light"/>
             <LinearLayout
                 android:id="@+id/timeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:paddingLeft="@dimen/dp_5"
                 android:tag="timeLayout"
@@ -93,7 +92,6 @@
                 android:id="@+id/durationLayout"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:paddingLeft="@dimen/dp_5"
                 android:tag="durationLayout"
@@ -122,12 +120,10 @@
                     app:text_size="15" />
             </LinearLayout>
 
-
             <com.supcon.mes.mbap.view.CustomVerticalEditText
                 android:id="@+id/claim"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:paddingLeft="@dimen/dp_10"
                 android:paddingTop="@dimen/dp_5"
@@ -137,12 +133,11 @@
                 app:editable="false"
                 app:key="@string/claim"
                 app:text_size="15" />
-
+            <include layout="@layout/ly_line_light"/>
             <com.supcon.mes.mbap.view.CustomVerticalEditText
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:paddingLeft="@dimen/dp_10"
                 android:paddingTop="@dimen/dp_5"

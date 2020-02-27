@@ -86,10 +86,13 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
                             IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);
                         } else {
                             bundle.putLong(Constant.IntentKey.PENDING_ID, workTicketEntity.getPending().id);
+                            bundle.putString(Constant.IntentKey.ACTIVITY_NAME,workTicketEntity.getPending().activityName);
                             switch (workTicketEntity.getPending().openUrl) {
                                 case Constant.HSWorkTicketView.EDIT_URL:
                                     IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_EDIT, bundle);
                                     break;
+                                case Constant.HSWorkTicketView.SAFE_VIEW_URL:
+                                    bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true); // 安全员视图，编辑拍照
                                 default:
                                     bundle.putString(Constant.IntentKey.TABLE_STATUS,workTicketEntity.getPending().taskDescription); // 单据状态
                                     IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);

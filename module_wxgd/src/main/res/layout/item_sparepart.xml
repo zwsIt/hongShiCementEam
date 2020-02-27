@@ -44,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_1"
                     android:layout_weight="1"
-                    android:background="@color/white"
                     android:padding="@dimen/dp_10"
                     android:tag="sparePartSpecific"
                     app:gravity="center_vertical"

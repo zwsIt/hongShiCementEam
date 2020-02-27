@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bgGray">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <include layout="@layout/ly_titlebar_local" android:id="@+id/include" />
     <com.supcon.common.view.ptr.PtrFrameLayout
         android:layout_width="match_parent"
@@ -15,30 +14,25 @@
         app:ptr_ratio_of_header_height_to_refresh="1.2"
         app:ptr_resistance="1.7"
         android:layout_marginTop="@dimen/dp_50"
-        android:layout_marginBottom="90dp"
-        >
+        android:layout_marginBottom="90dp">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/contentView"
-            android:tag="contentView"
-            >
+            android:tag="contentView">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                >
+                android:background="@color/white">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingStart="@dimen/dp_10"
                     android:paddingEnd="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_5"
-                    android:paddingBottom="@dimen/dp_5"
-                    android:background="@color/white"
-                    >
+                    android:paddingBottom="@dimen/dp_5">
                     <com.supcon.mes.mbap.view.CustomVerticalTextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -66,17 +60,15 @@
                         app:editable="false"
                         />
                 </LinearLayout>
+                <include layout="@layout/ly_line_light"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingStart="@dimen/dp_10"
                     android:paddingEnd="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_5"
-                    android:paddingBottom="@dimen/dp_5"
-                    android:background="@color/white"
-                    >
+                    android:paddingBottom="@dimen/dp_5">
                     <com.supcon.mes.mbap.view.CustomVerticalSpinner
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -103,7 +95,7 @@
                         app:editable="false"
                         />
                 </LinearLayout>
-
+                <include layout="@layout/ly_line_light"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
@@ -111,10 +103,7 @@
                     android:paddingTop="@dimen/dp_5"
                     android:paddingBottom="@dimen/dp_5"
                     android:paddingLeft="@dimen/dp_10"
-                    android:paddingRight="@dimen/dp_10"
-                    android:background="@color/white"
-                    android:layout_marginTop="@dimen/dp_5"
-                    >
+                    android:paddingRight="@dimen/dp_10">
                     <com.supcon.mes.mbap.view.CustomVerticalTextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -140,16 +129,16 @@
                         app:text_size="16"
                         />
                 </LinearLayout>
+                <include layout="@layout/ly_line_light"/>
                 <include layout="@layout/ly_ele_off_apply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_1"/>
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"/>
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/yhViewEamModel"
-                    android:background="@color/white"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingLeft="@dimen/dp_20"
                     android:paddingRight="@dimen/dp_20"
                     android:paddingTop="@dimen/dp_10"
@@ -159,17 +148,15 @@
                     app:text_size="16"
                     app:key_width="120dp"
                     />
-
+                <include layout="@layout/ly_line_light"/>
                 <com.supcon.mes.mbap.view.CustomSpinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingBottom="@dimen/dp_10"
-                    android:background="@color/white"
                     android:layout_weight="1"
                     android:id="@+id/yhViewType"
                     android:tag="yhViewType"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:paddingLeft="@dimen/dp_20"
                     android:paddingRight="@dimen/dp_20"
                     app:text_width="120dp"
@@ -183,7 +170,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/yhViewDescription"
                     android:tag="yhViewDescription"
-                    android:background="@color/white"
                     android:paddingStart="20dp"
                     android:paddingEnd="@dimen/dp_20"
                     android:paddingTop="@dimen/dp_10"
@@ -194,14 +180,13 @@
                     app:max_lines="99"
                     app:editable="false"
                     />
+                <include layout="@layout/ly_line_light"/>
                 <com.supcon.mes.mbap.view.CustomGalleryView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/dp_30"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:id="@+id/yhGalleryView"
                     android:tag="yhGalleryView"
-                    android:background="@color/white"
                     android:paddingLeft="20dp"
                     android:paddingRight="@dimen/dp_20"
                     android:paddingTop="@dimen/dp_10"
@@ -212,14 +197,13 @@
                     app:icon_visible="false"
                     app:editable="false"
                     />
-
+                <include layout="@layout/ly_line_light"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     android:orientation="horizontal"
                     android:paddingTop="@dimen/dp_5"
                     android:paddingBottom="@dimen/dp_5"
-                    android:background="@color/white"
                     android:layout_marginTop="@dimen/dp_5"
                     android:paddingLeft="10dp"
                     android:paddingRight="@dimen/dp_10"
@@ -252,11 +236,8 @@
                 </LinearLayout>
 
                 <com.supcon.mes.mbap.view.CustomVerticalEditText
-                    android:background="@drawable/sh_white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:layout_marginBottom="@dimen/dp_5"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingBottom="@dimen/dp_10"
                     android:paddingLeft="@dimen/dp_20"

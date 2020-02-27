@@ -795,7 +795,10 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                 ToastUtils.show(context,"签到原因为空，请退出页面重新加载");
                 return;
             }
-            new SinglePickController<String>(this).list(cartReasonList).listener((index, item) -> {
+            SinglePickController<String> singlePickController;
+            singlePickController = new SinglePickController<>(this);
+            singlePickController.setCanceledOnTouchOutside(true);
+            singlePickController.list(cartReasonList).listener((index, item) -> {
                 xjAreaEntity.signReason = cartReasonInfoList.get(index).id;
                 xjAreaEntity.isSign = true;
                 xjAreaEntity.signType = "cardType/02";

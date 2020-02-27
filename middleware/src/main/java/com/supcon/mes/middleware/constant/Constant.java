@@ -361,6 +361,7 @@ public interface Constant {
         String ELE_OFF_ON_TEMPLATE = "ELE_OFF_ON_TEMPLATE"; // 停送电模板
         String ElE_OFF_ID = "ElE_OFF_ID"; // 停电票id
         String ElE_OFF_TABLE_INFO_ID = "ElE_OFF_TABLE_INFO_ID"; // 停电票tableInfoId
+        String ACTIVITY_NAME = "ACTIVITY_NAME"; // 活动名称
     }
 
     interface FilterSearchParam {
@@ -542,6 +543,7 @@ public interface Constant {
 
     interface PicType {
         String WORK_TICKET_PIC = "workTicketRecord";
+        String WORK_TICKET_SAFER_PIC = "workTicketRecordSafer";
         String ELE_OFF_PIC = "eleOffRecord";
         String ELE_ON_PIC = "eleOnRecord";
         String XJ_PIC = "xjRecord";
@@ -993,6 +995,7 @@ public interface Constant {
     interface HSWorkTicketView {
         String EDIT_URL = "/WorkTicket/workTicket/ohworkticket/workTicketEdit.action";// 编辑
         String VIEW_URL = "/WorkTicket/workTicket/ohworkticket/workTicketView.action";// 查看
+        String SAFE_VIEW_URL = "/WorkTicket/workTicket/ohworkticket/workTicketViewsafe.action"; // 安全员视图
     }
 
     /**

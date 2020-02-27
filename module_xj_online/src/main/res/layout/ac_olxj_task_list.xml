@@ -20,7 +20,6 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/btnLayout"
         android:layout_marginTop="150dp"
-        android:background="@color/bgGray2"
         android:orientation="vertical"
         android:tag="mapLayout"
         android:visibility="gone">

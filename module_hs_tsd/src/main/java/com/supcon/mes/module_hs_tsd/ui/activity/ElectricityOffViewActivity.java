@@ -124,7 +124,8 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     private ElectricityOffOnEntity mElectricityOffOnEntity = new ElectricityOffOnEntity();
     private ElectricityOffOnEntity mElectricityOffOnEntityOld;
     private DatePickController mDatePickController;
-    private String name = ""; // 当前活动名称
+    private String activityName = ""; // 当前活动名称
+    private String tableStatus;
 
     @Override
     protected void onInit() {
@@ -134,6 +135,8 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID, -1);
         pendingId = getIntent().getLongExtra(Constant.IntentKey.PENDING_ID, -1);
+        tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
+        activityName = getIntent().getStringExtra(Constant.IntentKey.ACTIVITY_NAME);
 
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
@@ -156,7 +159,6 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         super.initView();
         titleText.setText("停电申请查看");
         finishBtn.setVisibility(View.GONE);
-        workFlowView.setVisibility(View.GONE);
 
         applyStaff.setEditable(false);
         eamName.setEditable(false);
@@ -166,13 +168,18 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         galleryView.setEditable(false);
         galleryView.setIconVisibility(false);
 
-//        getController(LinkController.class).setCancelShow(true);
-//        getController(LinkController.class).setOnSuccessListener(result -> {
-//            //获取__pc__
-//            name = result.toString();
-//            getSubmitPc(name);
-//        });
-//        getController(LinkController.class).initPendingTransition(workFlowView, pendingId);
+        if (pendingId != -1) {
+            workFlowView.setVisibility(View.VISIBLE);
+            if (tableStatus.contains(Constant.TableStatus_CH.NOTIFY)) { // 通知特殊处理
+                getController(LinkController.class).setNotify(true, activityName);
+            }
+            getController(LinkController.class).setCancelShow(true);
+            getController(LinkController.class).initPendingTransition(workFlowView, pendingId);
+            getSubmitPc(activityName);
+
+        } else {
+            workFlowView.setVisibility(View.GONE);
+        }
 
         getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_ELE_PATH,Constant.PicType.ELE_OFF_PIC);
         getController(OnlineCameraController.class).addGalleryView(0,galleryView);
@@ -352,7 +359,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         }
         map.put("workFlowVar.comment", Util.strFormat2(workFlowView.getComment()));
 //        map.put("taskDescription", "WorkTicket_8.20.3.03.workflow.randon1575618721430.flag");
-        map.put("activityName", name);
+        map.put("activityName", activityName);
         if (!pendingId.equals(-1L)){
             map.put("pendingId",pendingId);
         }

@@ -219,12 +219,14 @@ public class ElectricityOnListActivity extends BaseRefreshRecyclerActivity<Elect
             IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
         }else {
             bundle.putLong(Constant.IntentKey.PENDING_ID, electricityOffOnEntity.getPending().id);
+            bundle.putString(Constant.IntentKey.ACTIVITY_NAME,electricityOffOnEntity.getPending().activityName);
             switch (electricityOffOnEntity.getPending().openUrl) {
                 case Constant.HSEleOnView.EDIT_URL:
                     IntentRouter.go(context, Constant.Router.HS_ELE_ON_EDIT, bundle);
                     break;
                 case Constant.HSEleOnView.PREVIEW_URL:
                 default:
+                    bundle.putString(Constant.IntentKey.TABLE_STATUS,electricityOffOnEntity.getPending().taskDescription); // 单据状态
                     IntentRouter.go(context, Constant.Router.HS_ELE_ON_VIEW, bundle);
             }
         }

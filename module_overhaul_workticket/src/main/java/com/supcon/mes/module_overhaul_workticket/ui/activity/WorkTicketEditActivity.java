@@ -475,7 +475,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 //        }
 
         onLoading("单据处理中...");
-        presenterRouter.create(WorkTicketSubmitAPI.class).submit("workTicketEdit", map, /*attachmentMap,*/__pc__);
+        presenterRouter.create(WorkTicketSubmitAPI.class).submit("workTicketEdit", map, attachmentMap,__pc__);
     }
 
     private boolean checkTableBlank() {

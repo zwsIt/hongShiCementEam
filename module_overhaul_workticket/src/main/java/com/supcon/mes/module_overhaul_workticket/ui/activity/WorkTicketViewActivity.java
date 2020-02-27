@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,19 +29,24 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.AttachmentController;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
+import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.ui.view.FlowLayout;
@@ -79,7 +85,8 @@ import java.util.function.Function;
  */
 @Router(value = Constant.Router.OVERHAUL_WORKTICKET_VIEW)
 @Presenter(value = {WorkTicketSubmitPresenter.class})
-@Controller(value = {SafetyMeasuresController.class, LinkController.class, PcController.class, TableInfoController.class, WorkTicketCameraController.class})
+@Controller(value = {SafetyMeasuresController.class, LinkController.class, PcController.class, TableInfoController.class
+        , WorkTicketCameraController.class, OnlineCameraController.class, AttachmentController.class})
 public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkTicketSubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -123,8 +130,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     @BindByTag("controlDirectorStaff")
     CustomTextView controlDirectorStaff;
 
-    @BindByTag("hazardRecyclerView")
-    RecyclerView hazardRecyclerView;
+    @BindByTag("saferGalleryView")
+    CustomGalleryView saferGalleryView;
 
 
     private String __pc__;
@@ -136,8 +143,9 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     private List<SystemCodeEntity> mRiskAssessmentList;
     private List<SystemCodeEntity> mHazardList;
     private SinglePickController mSinglePickController;
-    private String name = ""; // 当前活动名称
+    private String activityName = ""; // 当前活动名称
     private String tableStatus;
+    private ImageView customCameraIv;
 
     @Override
     protected void onInit() {
@@ -148,6 +156,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID, -1);
         pendingId = getIntent().getLongExtra(Constant.IntentKey.PENDING_ID, -1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
+        activityName = getIntent().getStringExtra(Constant.IntentKey.ACTIVITY_NAME);
 
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
@@ -174,24 +183,29 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         hazardCtrlPoint.setEditable(false);
         riskAssessmentLl.setVisibility(View.GONE);
         riskAssessmentView.setVisibility(View.VISIBLE);
-
         hazardCtrlPointFlowLy.setVisibility(View.GONE);
+        // 安全员拍照
+        saferGalleryView.setVisibility(View.VISIBLE);
+        if (getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false)) {
+            saferGalleryView.setIconVisibility(true);
+            saferGalleryView.setEditable(true);
+        }
 
         if (pendingId != -1) {
-            if (tableStatus.contains(Constant.TableStatus_CH.NOTIFY)){ // 通知特殊处理
-                getController(LinkController.class).setNotify(true, "TaskEvent_1wq1qf2");
+            if (tableStatus.contains(Constant.TableStatus_CH.NOTIFY)) { // 通知特殊处理
+                getController(LinkController.class).setNotify(true, activityName);
             }
             getController(LinkController.class).setCancelShow(true);
-            getController(LinkController.class).setOnSuccessListener(result -> {
-                //获取__pc__
-                name = result.toString();
-                getSubmitPc(name);
-            });
             getController(LinkController.class).initPendingTransition(workFlowView, pendingId);
+            getSubmitPc(activityName);
 
         } else {
             workFlowView.setVisibility(View.GONE);
         }
+
+        customCameraIv = saferGalleryView.findViewById(R.id.customCameraIv);
+        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_WORKTICKETPATH, Constant.PicType.WORK_TICKET_SAFER_PIC);
+        getController(OnlineCameraController.class).addGalleryView(0, saferGalleryView);
 
     }
 
@@ -291,6 +305,13 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             }
         });
 
+        customCameraIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getController(OnlineCameraController.class).showCustomDialog();
+            }
+        });
+
     }
 
     private void doSave() {
@@ -340,7 +361,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             map.put("workFlowVar.dec", workFlowEntity.dec);
             map.put("workFlowVar.outcome", workFlowEntity.outcome);
             map.put("operateType", "submit");
-            if (tableStatus.contains(Constant.TableStatus_CH.NOTIFY)){ // 通知特殊处理
+            if (tableStatus.contains(Constant.TableStatus_CH.NOTIFY)) { // 通知特殊处理
                 map.put("pendingActivityType", Constant.Transition.NOTIFICATION);
             }
             if (Constant.Transition.CANCEL_CN.equals(workFlowEntity.dec)) {
@@ -351,7 +372,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         }
         map.put("workFlowVar.comment", Util.strFormat2(workFlowView.getComment()));
 //        map.put("taskDescription", "WorkTicket_8.20.3.03.workflow.randon1575618721430.flag");
-        map.put("activityName", name);
+        map.put("activityName", activityName);
         if (!pendingId.equals(-1L)) {
             map.put("pendingId", pendingId);
         }
@@ -373,14 +394,14 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         map.put("dgLists['dg1575615975095']", dgList.toString());
 
         // 附件
-//        Map<String, Object> attachmentMap = new HashMap<>();
-//        getController(OnlineCameraController.class).doSave(attachmentMap);
-//        if (attachmentMap.size() != 0) {
-//            attachmentMap.put("linkId", String.valueOf(mWorkTicketEntity.getTableInfoId()));
-//        }
+        Map<String, Object> attachmentMap = new HashMap<>();
+        getController(OnlineCameraController.class).doSave(attachmentMap);
+        if (attachmentMap.size() != 0) {
+            attachmentMap.put("linkId", String.valueOf(mWorkTicketEntity.getTableInfoId()));
+        }
 
         onLoading("单据处理中...");
-        presenterRouter.create(WorkTicketSubmitAPI.class).submit("workTicketView",map, /*attachmentMap,*/__pc__);
+        presenterRouter.create(WorkTicketSubmitAPI.class).submit("workTicketView", map, attachmentMap,__pc__);
     }
 
     private boolean checkTableBlank() {
@@ -436,18 +457,18 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
 //                return systemCodeEntity.id;
 //            }
 //        }).orElse("");
-        String flowStatus = entity.getFlowStatus() == null? "" : entity.getFlowStatus().id;
-        if (flowStatus.equals("WorkTicket_003/03")){ // 安全员审核
+        String flowStatus = entity.getFlowStatus() == null ? "" : entity.getFlowStatus().id;
+        if (flowStatus.equals("WorkTicket_003/03")) { // 安全员审核
             centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
-        }else if (flowStatus.equals("WorkTicket_003/04")){ // 领导审批
+        } else if (flowStatus.equals("WorkTicket_003/04")) { // 领导审批
             centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
             securityStaff.setVisibility(View.VISIBLE); // 显示安全员
-        }else if (flowStatus.equals("WorkTicket_003/05")){ // 生效
+        } else if (flowStatus.equals("WorkTicket_003/05")) { // 生效
             centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
             securityStaff.setVisibility(View.VISIBLE); // 显示安全员
             securityChiefStaff.setVisibility(View.VISIBLE); // 显示安保科科长
             controlDirectorStaff.setVisibility(View.VISIBLE); // 显示调度室主任
-        }else {
+        } else {
 
         }
 
@@ -461,16 +482,37 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         riskAssessmentView.setContent(entity.getRiskAssessment().value);
         hazardContrlPointValue = "";
         for (SystemCodeEntity systemCodeEntity : mHazardList) {
-            if (!TextUtils.isEmpty(entity.getHazardsourContrpoint()) && entity.getHazardsourContrpoint().contains(systemCodeEntity.id)){
+            if (!TextUtils.isEmpty(entity.getHazardsourContrpoint()) && entity.getHazardsourContrpoint().contains(systemCodeEntity.id)) {
                 hazardContrlPointValue = hazardContrlPointValue + systemCodeEntity.value + ",";
             }
         }
-        hazardCtrlPoint.setSpinner(hazardContrlPointValue.length() > 0 ? hazardContrlPointValue.substring(0,hazardContrlPointValue.length()-1) : "");
+        hazardCtrlPoint.setSpinner(hazardContrlPointValue.length() > 0 ? hazardContrlPointValue.substring(0, hazardContrlPointValue.length() - 1) : "");
         centralControlRoom.setContent(entity.getCentContRoom().name);
         securityStaff.setContent(entity.getSecurityStaff().name);
         securityChiefStaff.setContent(entity.getSecurityChiefStaff().name);
         controlDirectorStaff.setContent(entity.getContrDirectorStaff().name);
 
+        initPic();
+    }
+
+    /**
+     * 加载图片
+     */
+    private void initPic() {
+        if (mWorkTicketEntity != null) {
+            getController(AttachmentController.class).refreshGalleryView(new OnAPIResultListener<AttachmentListEntity>() {
+                @Override
+                public void onFail(String errorMsg) {
+                }
+
+                @Override
+                public void onSuccess(AttachmentListEntity result) {
+                    if (result.result.size() > 0) {
+                        getController(OnlineCameraController.class).setPicData(result.result, "WorkTicket_8.20.3.03_workTicket");
+                    }
+                }
+            }, mWorkTicketEntity.getTableInfoId());
+        }
     }
 
     @Override
@@ -490,15 +532,15 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
             CommonSearchStaff staff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
 
-            if (chargeStaff.getTag().toString().equals(commonSearchEvent.flag)){
+            if (chargeStaff.getTag().toString().equals(commonSearchEvent.flag)) {
                 chargeStaff.setContent(staff.name);
                 workShop.setContent(staff.department);
 
                 mWorkTicketEntity.getChargeStaff().id = staff.id;
                 mWorkTicketEntity.getChargeStaff().name = staff.name;
                 mWorkTicketEntity.getChargeStaff().code = staff.code;
-            } else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
-                workFlowView.addStaff(staff.name,staff.id);
+            } else if ("selectPeopleInput".equals(commonSearchEvent.flag)) {
+                workFlowView.addStaff(staff.name, staff.id);
             }
         }
     }
@@ -514,6 +556,17 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             mWorkTicketEntity.getEamId().name = eam.name;
             mWorkTicketEntity.getEamId().code = eam.code;
         }
+    }
+
+    /**
+     * 全屏展示时监听图片删除
+     *
+     * @param imageDeleteEvent
+     */
+    @Subscribe
+    public void onReceiveImageDeleteEvent(ImageDeleteEvent imageDeleteEvent) {
+        getController(OnlineCameraController.class).deleteGalleryBean(saferGalleryView.getGalleryAdapter().getList().get(imageDeleteEvent.getPos()), imageDeleteEvent.getPos());
+        EventBus.getDefault().post(new RefreshEvent());
     }
 
 

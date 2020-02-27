@@ -122,8 +122,9 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
     private ElectricityOffOnEntity mElectricityOffOnEntity = new ElectricityOffOnEntity();
     private ElectricityOffOnEntity mElectricityOffOnEntityOld;
     private DatePickController mDatePickController;
-    private String name = ""; // 当前活动名称
+    private String activityName = ""; // 当前活动名称
     private ImageView customCameraIv;
+    private String tableStatus;
 
     @Override
     protected void onInit() {
@@ -133,6 +134,8 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         tableId = getIntent().getLongExtra(Constant.IntentKey.TABLE_ID, -1);
         pendingId = getIntent().getLongExtra(Constant.IntentKey.PENDING_ID, -1);
+        tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
+        activityName = getIntent().getStringExtra(Constant.IntentKey.ACTIVITY_NAME);
 
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
@@ -166,13 +169,12 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
             galleryView.setIconVisibility(false);
             workFlowView.setVisibility(View.GONE);
         } else {
+            if (tableStatus.contains(Constant.TableStatus_CH.NOTIFY)) { // 通知特殊处理
+                getController(LinkController.class).setNotify(true, activityName);
+            }
             getController(LinkController.class).setCancelShow(true);
-            getController(LinkController.class).setOnSuccessListener(result -> {
-                //获取__pc__
-                name = result.toString();
-                getSubmitPc(name);
-            });
             getController(LinkController.class).initPendingTransition(workFlowView, pendingId);
+            getSubmitPc(activityName);
         }
 
         getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_ELE_PATH, Constant.PicType.ELE_ON_PIC);
@@ -361,7 +363,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         }
         map.put("workFlowVar.comment", Util.strFormat2(workFlowView.getComment()));
 //        map.put("taskDescription", "WorkTicket_8.20.3.03.workflow.randon1575618721430.flag");
-        map.put("activityName", name);
+        map.put("activityName", activityName);
         if (!pendingId.equals(-1L)) {
             map.put("pendingId", pendingId);
         }

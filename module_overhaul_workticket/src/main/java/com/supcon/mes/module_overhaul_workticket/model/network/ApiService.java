@@ -5,12 +5,15 @@ import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.module_overhaul_workticket.model.bean.SafetyMeasuresList;
 import com.supcon.mes.module_overhaul_workticket.model.bean.WorkTicketList;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -52,5 +55,5 @@ public interface ApiService {
      */
     @POST("/WorkTicket/workTicket/ohworkticket/{view}/submit.action?_bapFieldPermissonModelCode_=WorkTicket_8.20.3.03_workTicket_Ohworkticket&_bapFieldPermissonModelName_=Ohworkticket&superEdit=false")
     @Multipart
-    Flowable<BapResultEntity> submit(@Path(value = "view") String view, @PartMap Map<String, RequestBody> paramsMap, @Query("__pc__") String __pc__);
+    Flowable<BapResultEntity> submit(@Path(value = "view") String view, @PartMap Map<String, RequestBody> paramsMap, @Part List<MultipartBody.Part> partList, @Query("__pc__") String __pc__);
 }

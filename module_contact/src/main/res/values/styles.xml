@@ -36,7 +36,7 @@
     <style name="txl_view_text">
         <item name="android:layout_height">@dimen/dp_40</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="key_width">120dp</item>
+        <item name="key_width">100dp</item>
         <item name="key_color">@color/gray</item>
         <item name="android:paddingLeft">@dimen/dp_20</item>
         <item name="android:background">@color/white</item>

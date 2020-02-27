@@ -148,7 +148,6 @@ public class MaintenanceWarnActivity extends BaseRefreshRecyclerActivity<Mainten
         //设置搜索框默认提示语
         titleSearchView.setHint("请输入设备编码");
         searchTitleBar.setTitleText("运维预警");
-        searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
 
         if (!TextUtils.isEmpty(property) && property.equals(Constant.PeriodType.RUNTIME_LENGTH)) {

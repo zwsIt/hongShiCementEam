@@ -44,9 +44,7 @@
                     android:id="@+id/sparePartSpecific"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:layout_weight="1"
-                    android:background="@color/white"
                     android:padding="@dimen/dp_10"
                     android:tag="sparePartSpecific"
                     app:gravity="center_vertical"
@@ -84,12 +82,11 @@
                 app:max="99999999"
                 app:precision="2"
                 app:text="计划领用量:" />
-
+            <include layout="@layout/ly_line_light" />
             <com.supcon.mes.mbap.view.CustomNumView
                 android:id="@+id/actualQuantity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:padding="@dimen/dp_5"
@@ -98,7 +95,7 @@
                 app:max="99999999"
                 app:precision="2"
                 app:text="@string/actualQuantity" />
-
+            <include layout="@layout/ly_line_light" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -107,7 +104,6 @@
                     android:id="@+id/useQuantity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:padding="@dimen/dp_10"
@@ -120,7 +116,6 @@
                     android:id="@+id/standingCrop"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:padding="@dimen/dp_10"
@@ -141,30 +136,22 @@
                     android:padding="@dimen/dp_10"
                     android:layout_marginTop="@dimen/dp_1"/>-->
             </LinearLayout>
-
-            <LinearLayout
+            <include layout="@layout/ly_line_light" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/useState"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.supcon.mes.mbap.view.CustomTextView
-                    android:id="@+id/useState"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_1"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:padding="@dimen/dp_10"
-                    android:tag="useState"
-                    app:text="@string/useState"
-                    app:text_size="15"
-                    app:text_width="@dimen/dp_70" />
-            </LinearLayout>
-
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:padding="@dimen/dp_10"
+                android:tag="useState"
+                app:text="@string/useState"
+                app:text_size="15"
+                app:text_width="@dimen/dp_70" />
+            <include layout="@layout/ly_line_light" />
             <com.supcon.mes.mbap.view.CustomVerticalEditText
                 android:id="@+id/remark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:paddingStart="@dimen/dp_10"
                 android:paddingTop="@dimen/dp_5"

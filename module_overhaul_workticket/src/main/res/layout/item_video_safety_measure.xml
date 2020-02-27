@@ -19,6 +19,7 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:gravity="center"
+            android:layout_gravity="center"
             android:text="0"
             android:background="@drawable/sh_index_bg" />
 

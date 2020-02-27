@@ -2,6 +2,7 @@ package com.supcon.mes.module_overhaul_workticket.model.bean;
 
 import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.Department;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
@@ -9,6 +10,7 @@ import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**

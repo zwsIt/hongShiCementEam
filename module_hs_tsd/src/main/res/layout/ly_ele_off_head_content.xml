@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bgGray">
+    android:layout_height="match_parent">
 
     <include layout="@layout/ly_titlebar"/>
 
@@ -12,6 +11,7 @@
         android:id="@+id/refreshFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_50"
         android:tag="refreshFrameLayout"
         app:ptr_keep_header_when_refresh="true"
         app:ptr_pull_to_fresh="false"
@@ -133,7 +133,7 @@
                     android:layout_marginBottom="@dimen/dp_1"
                     android:background="@color/white"
                     android:paddingStart="@dimen/dp_10"
-                    android:paddingEnd="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_5"
                     android:tag="remark"
                     app:content_size="13"
                     app:editable="true"
@@ -176,4 +176,4 @@
 
     </com.supcon.common.view.ptr.PtrFrameLayout>
 
-</LinearLayout>
+</merge>

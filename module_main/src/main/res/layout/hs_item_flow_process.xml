@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:paddingTop="@dimen/dp_10"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/itemFlowName"
-            android:tag="itemFlowName"
-            android:textColor="@color/xjAreaBlue"
-            android:textSize="@dimen/fontSize_12sp"
-            android:text="流程:分厂领导确认"
-            android:gravity="start"
-            android:ellipsize="end"
-            android:singleLine="true"/>
-    </LinearLayout>
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemFlowName"
+        android:tag="itemFlowName"
+        android:textColor="@color/xjAreaBlue"
+        android:textSize="@dimen/fontSize_12sp"
+        android:text="流程:分厂领导确认"
+        android:gravity="start"
+        android:ellipsize="end"
+        android:singleLine="true"/>
 
     <LinearLayout
         android:id="@+id/itemFlowDotLayout"
@@ -48,7 +40,7 @@
             android:tag="itemFlowDot" />
         <View
             android:id="@+id/itemFlowLineRight"
-            android:layout_width="65dp"
+            android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/red"
             android:tag="itemFlowLineRight"/>
@@ -57,7 +49,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/dp_5"
-        android:background="@color/white"
         android:orientation="vertical">
         <TextView
             android:layout_width="@dimen/dp_80"

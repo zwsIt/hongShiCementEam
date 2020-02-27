@@ -1,4 +1,4 @@
-package com.example.module_hs_tsd;
+package com.supcon.mes.module_hs_tsd;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgGray">
+    android:background="@color/white">
 
     <include layout="@layout/ly_yh_table" />
 
@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/sh_white_stroke"
         android:orientation="vertical"
         android:tag="yhDealBar">
 

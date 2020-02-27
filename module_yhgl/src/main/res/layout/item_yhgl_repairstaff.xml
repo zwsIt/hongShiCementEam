@@ -19,8 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,13 +52,12 @@
                     app:editable="true"
                     />
             </LinearLayout>
+            <include layout="@layout/ly_line_light"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
-                android:paddingLeft="@dimen/dp_5"
-                >
+                android:paddingLeft="@dimen/dp_5">
                 <com.supcon.mes.mbap.view.CustomVerticalDateView
                     style="@style/CustomStyle"
                     android:id="@+id/actualStartTime"
@@ -80,8 +78,8 @@
                     app:text_size="15"
                     app:editable="true"/>
             </LinearLayout>
+            <include layout="@layout/ly_line_light"/>
             <com.supcon.mes.mbap.view.CustomVerticalEditText
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:id="@+id/remark"
                 android:tag="remark"

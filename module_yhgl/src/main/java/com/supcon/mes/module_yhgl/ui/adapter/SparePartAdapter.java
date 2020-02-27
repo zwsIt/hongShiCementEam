@@ -72,6 +72,8 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
 
     class ViewHolder extends BaseRecyclerViewHolder<SparePartEntity> {
 
+        @BindByTag("index")
+        TextView index;
         @BindByTag("sparePartName")
         CustomTextView sparePartName;
         @BindByTag("sum")
@@ -235,6 +237,7 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
 
         @Override
         protected void update(SparePartEntity data) {
+            index.setText(String.valueOf(getAdapterPosition() + 1));
 //            sum.getNumViewInput().setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});  //输入长度万级
             sum.getNumViewInput().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             actualQuantity.getNumViewInput().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);

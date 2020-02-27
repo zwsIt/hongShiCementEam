@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/bgGray"
     android:orientation="vertical">
 
     <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
@@ -17,15 +16,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:background="@color/bgGray">
 
-        <LinearLayout
+        <include layout="@layout/ly_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@+id/pinyinSearchBar">
-
-            <include layout="@layout/ly_recyclerview" />
-        </LinearLayout>
+            android:layout_toStartOf="@+id/pinyinSearchBar"/>
 
         <com.supcon.mes.middleware.ui.view.PinyinSearchBar
             android:id="@+id/pinyinSearchBar"
@@ -36,24 +33,16 @@
             android:layout_centerVertical="true"
             android:tag="pinyinSearchBar" />
     </RelativeLayout>
-    <LinearLayout
+    <TextView
+        android:id="@+id/rightBtn_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/rightBtn_1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/operate"
-            android:gravity="center"
-            android:tag="rightBtn_1"
-            android:text="确定"
-            android:textColor="@color/white"
-            android:textSize="@dimen/fontSize_15sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
-    </LinearLayout>
+        android:layout_height="50dp"
+        android:background="@color/operate"
+        android:gravity="center"
+        android:tag="rightBtn_1"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="@dimen/fontSize_15sp"
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
 </LinearLayout>

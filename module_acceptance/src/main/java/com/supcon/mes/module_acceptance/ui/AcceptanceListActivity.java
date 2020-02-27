@@ -107,7 +107,6 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
 
         refreshListController.setAutoPullDownRefresh(true);

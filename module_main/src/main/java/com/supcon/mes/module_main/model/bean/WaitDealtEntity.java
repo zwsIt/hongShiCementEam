@@ -75,6 +75,8 @@ public class WaitDealtEntity extends BaseEntity {
 
     public String summary; // 摘要
 
+    public String activityName; // 活动名称 ：TaskEvent_0u3o22s
+
     public Staff getStaffid() {
         if (staffId == null) {
             staffId = new Staff();

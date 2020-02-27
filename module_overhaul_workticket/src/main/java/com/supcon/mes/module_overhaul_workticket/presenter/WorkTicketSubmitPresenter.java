@@ -5,10 +5,12 @@ import com.supcon.mes.middleware.util.FormDataHelper;
 import com.supcon.mes.module_overhaul_workticket.model.contract.WorkTicketSubmitContract;
 import com.supcon.mes.module_overhaul_workticket.model.network.HttpClient;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**
@@ -20,10 +22,11 @@ import okhttp3.RequestBody;
 public class WorkTicketSubmitPresenter extends WorkTicketSubmitContract.Presenter {
 
     @Override
-    public void submit(String view, Map<String, Object> queryParams, String __pc__) {
+    public void submit(String view, Map<String, Object> queryParams, Map<String, Object> attachmentMap, String __pc__) {
         Map<String, RequestBody> params = FormDataHelper.createDataFormBody(queryParams);
+        List<MultipartBody.Part> part = FormDataHelper.createFileForm(attachmentMap);
         mCompositeSubscription.add(
-                HttpClient.submit(view,params,__pc__)
+                HttpClient.submit(view,params,part,__pc__)
                 .onErrorReturn(new Function<Throwable, BapResultEntity>() {
                     @Override
                     public BapResultEntity apply(Throwable throwable) throws Exception {

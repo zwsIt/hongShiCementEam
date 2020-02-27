@@ -44,7 +44,6 @@
             android:visibility="invisible" />
     </RelativeLayout>
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -80,7 +79,6 @@
                 android:textColor="@color/textColorlightblack"
                 android:textSize="@dimen/fontSize_12sp" />
         </LinearLayout>
-
 
         <ImageView
             android:id="@+id/itemAreaFault"

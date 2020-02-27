@@ -47,6 +47,7 @@ import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
@@ -273,9 +274,10 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
                     mElectricityOffOnEntity.getEamID().id = null;
                     eamCode.setContent(null);
                 } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constant.IntentKey.ELE_OFF_ON_TEMPLATE,false); // 停电模板
-                    IntentRouter.go(context, Constant.Router.ELE_OFF_TEMPLATE,bundle);
+                    IntentRouter.go(context, Constant.Router.EAM);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putBoolean(Constant.IntentKey.ELE_OFF_ON_TEMPLATE,false); // 停电模板
+//                    IntentRouter.go(context, Constant.Router.ELE_OFF_TEMPLATE,bundle);
                 }
             }
         });
@@ -595,6 +597,16 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
 
             mElectricityOffOnEntity.setEamID(eleOffOnTemplate.eamId);
             mElectricityOffOnEntity.setEleTemplateId(eleOffOnTemplate);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEam(CommonSearchEvent commonSearchEvent) {
+        if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
+            EamEntity eam = (EamEntity) commonSearchEvent.commonSearchEntity;
+            eamName.setContent(eam.name);
+            eamCode.setContent(eam.code);
+            mElectricityOffOnEntity.setEamID(eam);
         }
     }
 

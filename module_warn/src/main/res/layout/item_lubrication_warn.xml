@@ -116,7 +116,6 @@
             app:key_width="110dp"
             app:max_lines="100" />
 
-
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemLubriLastDateTv"
             android:layout_width="match_parent"

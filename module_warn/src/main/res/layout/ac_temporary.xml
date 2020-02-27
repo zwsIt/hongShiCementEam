@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgGray"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 
     <include layout="@layout/ly_titlebar" />
 
-
     <RelativeLayout
         android:id="@+id/contentView"
+        android:background="@color/bgGray"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

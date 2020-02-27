@@ -52,11 +52,10 @@
                     app:necessary="false"
                     app:text_size="15" />
             </LinearLayout>
-
+            <include layout="@layout/ly_line_light"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/dp_5"
@@ -88,23 +87,22 @@
                     app:necessary="false"
                     app:text_size="15" />
             </LinearLayout>
-
+            <include layout="@layout/ly_line_light"/>
             <com.supcon.mes.mbap.view.CustomEditText
                 android:id="@+id/lubricatingPart"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:padding="@dimen/dp_5"
                 android:tag="lubricatingPart"
                 app:icon_visible="true"
                 app:text="润滑部位:"
                 app:edit_hint="请输入润滑部位"/>
+            <include layout="@layout/ly_line_light"/>
             <com.supcon.mes.mbap.view.CustomNumView
                 android:id="@+id/sum"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_1"
                 android:background="@color/white"
                 android:paddingEnd="@dimen/dp_5"
                 android:paddingTop="@dimen/dp_5"
@@ -112,28 +110,17 @@
                 android:tag="sum"
                 app:editable="true"
                 app:text="用量:" />
-
-            <LinearLayout
+            <include layout="@layout/ly_line_light"/>
+            <com.supcon.mes.mbap.view.CustomSpinner
+                android:id="@+id/oilType"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="@dimen/dp_1"
+                android:layout_height="@dimen/dp_50"
                 android:background="@color/white"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/dp_5"
-                android:paddingEnd="@dimen/dp_5">
-
-                <com.supcon.mes.mbap.view.CustomSpinner
-                    android:id="@+id/oilType"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:tag="oilType"
-                    app:editable="false"
-                    app:text="@string/OilType"
-                    app:text_size="15" />
-
-            </LinearLayout>
+                android:padding="@dimen/dp_5"
+                android:tag="oilType"
+                app:editable="false"
+                app:text="@string/OilType"
+                app:text_size="15" />
 
             <com.supcon.mes.mbap.view.CustomVerticalEditText
                 android:id="@+id/remark"

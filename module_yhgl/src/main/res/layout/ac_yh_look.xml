@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/bgGray">
+    android:background="@color/white">
     <include layout="@layout/ly_titlebar_local" android:id="@+id/include" />
     <com.supcon.common.view.ptr.PtrFrameLayout
         android:layout_width="match_parent"
@@ -28,7 +28,6 @@
                     android:id="@+id/yhViewFindStaff"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
                     android:layout_weight="1"
                     android:paddingLeft="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
@@ -38,13 +37,12 @@
                     app:editable="false"
                     app:key="发现人"
                     app:text_size="16" />
+                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomDateView
                     android:id="@+id/yhViewFindTime"
                     android:layout_width="match_parent"
-                    android:background="@color/white"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingLeft="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingRight="@dimen/dp_20"
@@ -53,12 +51,11 @@
                     app:editable="false"
                     app:text="发现时间"
                     app:text_size="16" />
+                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/yhViewEamCode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingLeft="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingRight="@dimen/dp_20"
@@ -66,16 +63,16 @@
                     android:tag="yhViewEamCode"
                     app:key="设备编码"
                     app:text_size="16" />
+                <include layout="@layout/ly_line_light_light"/>
                 <include layout="@layout/ly_ele_off_apply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_1"/>
+                    android:layout_marginEnd="@dimen/dp_10"/>
+                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/yhViewEamName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingLeft="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingRight="@dimen/dp_20"
@@ -83,12 +80,11 @@
                     android:tag="yhViewEamName"
                     app:key="设备名称"
                     app:text_size="16" />
+                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/yhViewEamModel"
-                    android:background="@color/white"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingLeft="@dimen/dp_20"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingRight="@dimen/dp_20"
@@ -102,9 +98,7 @@
                     android:id="@+id/yhViewArea"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
                     android:layout_weight="1"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingLeft="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingRight="@dimen/dp_20"
@@ -113,13 +107,12 @@
                     app:editable="false"
                     app:text="区域位置"
                     app:text_size="16" />
+                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomSpinner
                     android:id="@+id/yhViewPriority"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
                     android:layout_weight="1"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:paddingLeft="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingRight="@dimen/dp_20"
@@ -128,19 +121,17 @@
                     app:editable="false"
                     app:text="优先级    "
                     app:text_size="16" />
-
+                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomSpinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/dp_10"
-                    android:paddingBottom="@dimen/dp_10"
-                    android:background="@color/white"
                     android:layout_weight="1"
                     android:id="@+id/yhViewType"
                     android:tag="yhViewType"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:paddingLeft="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_10"
                     android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10"
                     app:text="隐患类型"
                     app:text_size="16"
                     app:editable="false"
@@ -151,7 +142,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/yhViewDescription"
                     android:tag="yhViewDescription"
-                    android:background="@color/white"
                     android:paddingStart="10dp"
                     android:paddingEnd="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_10"
@@ -162,14 +152,13 @@
                     app:max_lines="99"
                     app:editable="false"
                     />
+                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomGalleryView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/dp_30"
-                    android:layout_marginTop="@dimen/dp_1"
                     android:id="@+id/yhGalleryView"
                     android:tag="yhGalleryView"
-                    android:background="@color/white"
                     android:paddingLeft="10dp"
                     android:paddingRight="@dimen/dp_20"
                     android:paddingTop="@dimen/dp_10"
@@ -180,14 +169,13 @@
                     app:icon_visible="false"
                     app:editable="false"
                     />
-
+                <include layout="@layout/ly_line_light_light"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="90dp"
+                    android:layout_height="80dp"
                     android:orientation="horizontal"
                     android:paddingTop="@dimen/dp_5"
                     android:paddingBottom="@dimen/dp_5"
-                    android:background="@color/white"
                     android:layout_marginTop="@dimen/dp_5"
                     android:paddingLeft="10dp"
                     android:paddingRight="@dimen/dp_10"
@@ -217,12 +205,10 @@
                         app:editable="false"
                         />
                 </LinearLayout>
-
+                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomVerticalEditText
-                    android:background="@drawable/sh_white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginBottom="@dimen/dp_5"
                     android:paddingTop="@dimen/dp_10"
                     android:paddingBottom="@dimen/dp_10"
@@ -236,6 +222,9 @@
                     app:edit_hint=" "
                     app:editable="false"
                     />
+                <View android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/line_gray_light"/>
                 <com.supcon.mes.mbap.view.CustomListWidget
                     android:id="@+id/sparePartListWidget"
                     android:layout_width="match_parent"

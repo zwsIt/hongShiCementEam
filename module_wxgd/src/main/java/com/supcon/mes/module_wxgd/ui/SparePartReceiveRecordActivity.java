@@ -89,9 +89,6 @@ public class SparePartReceiveRecordActivity extends BaseRefreshRecyclerActivity<
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         //设置搜索框默认提示语
         titleSearchView.setHint("请输入零部件名称或编码");
-        searchTitleBar.setBackgroundResource(R.color.gradient_start);
-        searchTitleBar.disableRightBtn();
-        searchTitleBar.setBackgroundResource(R.color.gradient_start);
         searchTitleBar.disableRightBtn();
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);

@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/sl_path_bg"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:background="@color/white"
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10">
 
@@ -65,7 +65,8 @@
             android:layout_marginLeft="@dimen/dp_18"
             android:orientation="vertical"
             android:padding="@dimen/dp_2"
-            android:tag="tableNoLinearLayout">
+            android:tag="tableNoLinearLayout"
+            android:visibility="gone">
             <!--<com.supcon.mes.mbap.view.CustomExpandableTextView
                 android:id="@+id/taskTableNo"
                 android:tag="taskTableNo"
@@ -150,24 +151,16 @@
             android:tag="taskExpandBtn" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/listLayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/taskAreaListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:tag="listLayout">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/taskAreaListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/BgXjAreaBlue"
-            android:overScrollMode="never"
-            android:paddingTop="@dimen/dp_20"
-            android:paddingBottom="@dimen/dp_10"
-            android:tag="taskAreaListView"
-            android:visibility="gone" />
-    </LinearLayout>
+        android:background="@color/BgXjAreaBlue"
+        android:overScrollMode="never"
+        android:paddingTop="@dimen/dp_20"
+        android:paddingBottom="@dimen/dp_10"
+        android:tag="taskAreaListView"
+        android:visibility="gone" />
 
     <!--<LinearLayout
         android:id="@+id/mapLayout"

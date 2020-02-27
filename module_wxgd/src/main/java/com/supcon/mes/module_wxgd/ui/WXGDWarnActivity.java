@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -139,6 +140,9 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
     @BindByTag("workContext")
     CustomVerticalTextView workContext;
 
+    @BindByTag("eleOffChkBox")
+    CheckBox eleOffChkBox; // 是否生成停电票
+
     private LinkController mLinkController;
 
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
@@ -172,6 +176,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
         mWXGDEntity = (WXGDEntity) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
+        mWXGDEntity.isOffApply = true;
         oldWxgdEntity = GsonUtil.gsonToBean(mWXGDEntity.toString(), WXGDEntity.class);
 
         mSparePartController = getController(SparePartController.class);
@@ -290,6 +295,8 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
+
+
     }
 
     @SuppressLint("CheckResult")
@@ -397,6 +404,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         eamName.getCustomValue().setOnClickListener(v -> goSBDA());
         eamIc.setOnClickListener(v -> goSBDA());
         eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
+        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mWXGDEntity.isOffApply = isChecked);
     }
 
     private void goSBDA() {

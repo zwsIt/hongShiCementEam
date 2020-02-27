@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_5"
+    android:paddingEnd="@dimen/dp_10"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -22,7 +23,6 @@
             android:id="@+id/dispatcherStaff"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/white"
             android:paddingStart="@dimen/dp_10"
             android:tag="dispatcherStaff"
             app:key="派单人:"
@@ -37,7 +37,6 @@
         android:paddingStart="@dimen/dp_10"
         android:id="@+id/repairGroup"
         android:tag="repairGroup"
-        android:background="@color/white"
         app:editable="true"
         app:key="@string/repairGroup"
         app:key_width="@dimen/dp_100"/>
@@ -50,7 +49,6 @@
         android:id="@+id/chargeStaff"
         android:paddingStart="@dimen/dp_10"
         android:tag="chargeStaff"
-        android:background="@color/white"
         app:editable="true"
         app:key="@string/chargeStaff"
         app:key_width="@dimen/dp_100"/>
@@ -62,7 +60,6 @@
         android:id="@+id/wosource"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
-        android:background="@color/white"
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10"
         android:tag="wosource"
@@ -74,7 +71,6 @@
         android:id="@+id/repairType"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
-        android:background="@color/white"
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10"
         android:tag="repairType"
@@ -125,7 +121,6 @@
         android:focusable="false"
         android:paddingStart="@dimen/dp_10"
         android:paddingTop="@dimen/dp_5"
-        android:paddingRight="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_10"
         android:tag="repairAdvise"
         app:edit_maxLine="10"

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/bgGray2">
+    android:background="@color/white">
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,15 +14,14 @@
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginTop="50dp"
         app:search_hint="请输入姓名/首字母/电话"
         android:tag="searchView" />
+    <include layout="@layout/ly_line_light"/>
     <FrameLayout
         android:id="@+id/fragmentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="fragmentLayout"
-        android:layout_marginTop="90dp"
         />
 
-</RelativeLayout>
+</LinearLayout>
