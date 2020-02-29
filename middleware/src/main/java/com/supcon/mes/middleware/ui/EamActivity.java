@@ -151,7 +151,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         titleBar.disableRightBtn();
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
-        contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(1, context)));
+        contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(2, context)));
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
         contentView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
         contentView.setScrollBarSize(2);

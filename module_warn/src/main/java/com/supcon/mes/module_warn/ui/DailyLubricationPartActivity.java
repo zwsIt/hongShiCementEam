@@ -18,6 +18,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
@@ -81,6 +82,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
     private String eamCode;
     private boolean isEdit;
     private long nextTime = 0;
+    private boolean isDeal; // 当处理单据后 列表无数据自动退出页面
 
     @Override
     protected IListAdapter<DailyLubricateTaskEntity> createAdapter() {
@@ -126,7 +128,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
             queryParam.put(Constant.IntentKey.EAM_CODE, eamCode);
             Map<String, Object> pageQueryParams = new HashMap<>();
             pageQueryParams.put("page.pageNo", pageIndex);
-            presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam,pageQueryParams);
+            presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam, pageQueryParams);
         });
 
         RxView.clicks(leftBtn)
@@ -226,32 +228,38 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
         refreshListController.refreshBegin();
     }
 
     @Override
     public void getLubricationsSuccess(DailyLubricateTaskListEntity entity) {
-        if (entity.pageNo == 1 && entity.result.size() <= 0) {
-            btnLayout.setVisibility(View.GONE);
-        } else if (isEdit) {
-            btnLayout.setVisibility(View.VISIBLE);
+        if (isDeal && entity.result.size() <= 0){
+            finish();
+            EventBus.getDefault().post(new RefreshEvent());
+        }else {
+            if (entity.pageNo == 1 && entity.result.size() <= 0) {
+                btnLayout.setVisibility(View.GONE);
+            } else if (isEdit) {
+                btnLayout.setVisibility(View.VISIBLE);
+            }
+            refreshListController.refreshComplete(entity.result);
         }
-
-        refreshListController.refreshComplete(entity.result);
     }
 
     @Override
     public void getLubricationsFailed(String errorMsg) {
         btnLayout.setVisibility(View.GONE);
-        SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
-        refreshListController.refreshComplete(null);
+        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+        refreshListController.refreshComplete();
     }
 
     @Override
     public void dailyCompleteSuccess(DelayEntity entity) {
-        EventBus.getDefault().post(new RefreshEvent());
-        onLoadSuccessAndExit("任务完成", () -> refreshListController.refreshBegin());
+//        EventBus.getDefault().post(new RefreshEvent());
+        onLoadSuccessAndExit("任务完成", () -> {
+             isDeal = true;
+            refreshListController.refreshBegin();
+        });
     }
 
     @Override
