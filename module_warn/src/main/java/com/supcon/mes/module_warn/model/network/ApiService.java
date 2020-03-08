@@ -3,6 +3,7 @@ package com.supcon.mes.module_warn.model.network;
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
+import com.supcon.mes.module_warn.model.bean.DailyLubricateRecordEntity;
 import com.supcon.mes.module_warn.model.bean.DailyLubricateTaskListEntity;
 import com.supcon.mes.module_warn.model.bean.DelayEntity;
 import com.supcon.mes.module_warn.model.bean.DelayRecordListEntity;
@@ -60,7 +61,7 @@ public interface ApiService {
 
 
     //日常润滑（红狮定制视图）
-    @GET("/BEAM/baseInfo/jWXItem/data-dg1558678704208.action")
+    @GET("/BEAM/baseInfo/jWXItem/data-dg1558678704208.action") // 设备档案模块--日常润滑到期(移动端)，菜单显示：预防性维护（时间频率页签），条件：日常润滑=true
     Flowable<DailyLubricateTaskListEntity> getLubrications(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     //领取润滑任务
@@ -68,7 +69,15 @@ public interface ApiService {
     Flowable<DelayEntity> receiveTask(@QueryMap Map<String, Object> pageQueryMap);
 
     //临时润滑
-    @GET("/BEAM/baseInfo/jWXItem/data-dg1560391643861.action")
+    @GET("/BEAM/baseInfo/jWXItem/data-dg1560391643861.action") // 设备档案模块--临时润滑任务(移动端)，菜单显示：预防性维护（时间频率页签），条件：日常润滑=true
     Flowable<CommonBAPListEntity<TemLubricateTaskEntity>> getTempLubrications(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
+    /**
+     *  已完成日常润滑记录
+     * @param fastQueryCondEntity
+     * @param pageQueryMap
+     * @return
+     */
+    @POST("/BEAM/baseInfo/dailyLubricateRecor/dailyLubricateTask-query.action?1=1&permissionCode=BEAM_1.0.0_baseInfo_dailyLubricateTask")
+    Flowable<CommonBAPListEntity<DailyLubricateRecordEntity>> dailyLubricateTaskQuery(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 }

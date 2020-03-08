@@ -54,6 +54,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author yangfei.cao
@@ -69,6 +70,8 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
     ImageButton leftBtn;
     @BindByTag("titleText")
     TextView titleText;
+    @BindByTag("rightBtn")
+    ImageButton rightBtn;
 
     @BindByTag("contentView")
     RecyclerView recyclerView;
@@ -116,6 +119,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("临时润滑");
+        rightBtn.setVisibility(View.VISIBLE);
 
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
@@ -143,6 +147,15 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
 
+        RxView.clicks(rightBtn).throttleFirst(200,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constant.IntentKey.EAM_CODE,eamCode.getContent());
+                        IntentRouter.go(context,Constant.Router.LUBRICATION_RECORDS_FINISH_LIST,bundle);
+                    }
+                });
         refreshController.setOnRefreshListener(() -> {
             Map<String, Object> pageQueryParams = new HashMap<>();
             pageQueryParams.put("page.pageNo", 1);
@@ -244,9 +257,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
 
     @Override
     public void dailyCompleteSuccess(DelayEntity entity) {
-        onLoadSuccessAndExit("任务完成", () -> {
-            back();
-        });
+        onLoadSuccessAndExit("任务完成", () -> back());
     }
 
     @Override

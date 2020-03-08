@@ -24,7 +24,8 @@
             android:tag="paramName"
             app:content_hint="--"
             app:gravity ="right"
-            app:key="参数名称:"
+            app:key="参数名称:值范围"
+            app:key_width="@dimen/dp_120"
             app:max_lines="1" />
 
         <com.supcon.mes.mbap.view.CustomTextView
@@ -36,7 +37,8 @@
             app:content_hint="--"
             app:gravity="right"
             app:key="值范围:"
-            app:max_lines="1" />
+            app:max_lines="1"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

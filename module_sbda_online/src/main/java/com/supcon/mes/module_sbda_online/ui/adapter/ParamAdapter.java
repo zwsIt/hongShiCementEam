@@ -24,8 +24,6 @@ import java.text.SimpleDateFormat;
  */
 public class ParamAdapter extends BaseListDataRecyclerViewAdapter<ParamEntity> {
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
     public ParamAdapter(Context context) {
         super(context);
     }
@@ -53,8 +51,9 @@ public class ParamAdapter extends BaseListDataRecyclerViewAdapter<ParamEntity> {
 
         @Override
         protected void update(ParamEntity data) {
-            paramName.setContent(Util.strFormat2(data.paramName));
-            paramValue.setContent(Util.strFormat2(data.paramValue) + (TextUtils.isEmpty(data.unit) ? "" : data.unit));
+            paramName.setKey(Util.strFormat2(data.paramName));
+            paramName.setContent(Util.strFormat2(data.paramValue) + (TextUtils.isEmpty(data.unit) ? "" : data.unit));
+//            paramValue.setContent(Util.strFormat2(data.paramValue) + (TextUtils.isEmpty(data.unit) ? "" : data.unit));
         }
     }
 }

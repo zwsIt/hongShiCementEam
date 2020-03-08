@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,19 +18,25 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseControllerActivity;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.SharedPreferencesUtils;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.MBapConstant;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.PatternUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.DataModule;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.Company;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorization;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorizationListEntity;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -52,12 +59,14 @@ import com.supcon.mes.push.controller.DeviceTokenController;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -69,6 +78,8 @@ import io.reactivex.schedulers.Schedulers;
 @Controller(DeviceTokenController.class)
 public class LoginActivity extends BaseControllerActivity implements LoginContract.View, ZhiZhiUrlQueryContract.View, MineContract.View {
 
+    @BindByTag("companySpinner")
+    CustomSpinner companySpinner;
 
     @BindByTag("usernameInput")
     CustomEditText usernameInput;
@@ -93,9 +104,11 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
     private int loginLogoId = 0;
     private int loginBgId = 0;
 
+    private ImageView spinnerIv; // 下拉选择公司
+
     @Override
     protected int getLayoutID() {
-        return R.layout.ac_login;
+        return R.layout.ac_login_multi_org;
     }
 
     @Override
@@ -126,10 +139,47 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
 //        EventBus.getDefault().unregister(this);
     }
 
+    SinglePickController mSinglePickController = new SinglePickController<String>(this);
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
+
+        companySpinner.setOnChildViewClickListener(new OnChildViewClickListener() {
+            @Override
+            public void onChildViewClick(View childView, int action, Object obj) {
+
+                //加载本地数据库：company
+                List<Company> companyList = EamApplication.dao().getCompanyDao().loadAll();
+
+                if (companyList.size() <= 0){
+                    ToastUtils.show(context,"请先同步公司信息数据");
+                    return;
+                }
+
+                List<String> list = new ArrayList<>();
+                for (Company company : companyList){
+                    list.add(company.name);
+                }
+//                list.add("集团");list.add("浙江兰溪股份有限公司");
+//                list.add("江西宜春股份有限公司");list.add("福建漳州一公司有限公司");
+//                list.add("印尼中外合资有限公司");list.add("香港技术股份有限公司");
+//                list.add("杭州建德水泥建材公司");list.add("杭州诸暨水泥建材公司");
+
+                mSinglePickController.textSize(20);
+                mSinglePickController.list(list)
+                        .listener(new SinglePicker.OnItemPickListener() {
+                            @Override
+                            public void onItemPicked(int index, Object item) {
+                                companySpinner.setContent(item.toString());
+                                companySpinner.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
+                                // 获取companyId
+                                Long companyId = companyList.get(index).id;
+                            }
+                        }).show(companySpinner.getContent());
+            }
+        });
+
         RxView.clicks(loginBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)   //两秒钟之内只取一个点击事件，防抖操作
                 .subscribe(o -> {
@@ -169,12 +219,12 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
         setSwipeBackEnable(false);
         StatusBarUtils.setWindowStatusBarColor(this, R.color.transparent);
 
-
         usernameInput.setInputType(InputType.TYPE_CLASS_TEXT);
         pwdInput.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         pwdInput.editText().setTransformationMethod(PasswordTransformationMethod.getInstance());
         usernameInput.setInput(MBapApp.getUserName());
         pwdInput.setInput(MBapApp.getPassword());
+        companySpinner.setContent(SharedPreferencesUtils.getParam(context,Constant.SPKey.COMPANY,""));
 
         if (loginLogoId != 0)
             loginLogo.setImageResource(loginLogoId);
@@ -246,17 +296,21 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
     }
 
     private boolean checkInput() {
+//        if (TextUtils.isEmpty(companySpinner.getContent().trim())){
+//            ToastUtils.show(context,"请选择公司登陆");
+//            return false;
+//        }
         if (TextUtils.isEmpty(usernameInput.getInput().trim())) {
-            SnackbarHelper.showError(rootView, "用户名不允许为空!");
+            ToastUtils.show(context, "用户名不允许为空!");
             return false;
         }
         if (!PatternUtil.checkUserName(usernameInput.getInput().trim()/*,"^[A-Za-z0-9\\u4e00-\\u9fa5]+$"*/)) {
-            SnackbarHelper.showError(rootView, "用户名/密码不合法！");
+            ToastUtils.show(context, "用户名/密码不合法！");
             return false;
         }
         //以上只单纯检测纯格式方面的错误
         if (TextUtils.isEmpty(pwdInput.getInput().trim())) {
-            SnackbarHelper.showError(rootView, "密码不允许为空!");
+            ToastUtils.show(context, "密码不允许为空!");
             return false;
         }
         //密码方面并没有特别的限制,所以这里并不特备进行验证,只进行是否为空的验证
@@ -382,6 +436,7 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
         MBapApp.setIsLogin(true);
         MBapApp.setUserName(usernameInput.getInput().trim());
         MBapApp.setPassword(pwdInput.getInput().trim());
+        SharedPreferencesUtils.setParam(context,Constant.SPKey.COMPANY,companySpinner.getContent());
 
         onLoadSuccessAndExit("登陆成功！", () -> {
 

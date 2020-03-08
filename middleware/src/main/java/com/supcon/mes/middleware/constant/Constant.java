@@ -229,6 +229,7 @@ public interface Constant {
         String HS_ELE_ON_EDIT = "HS_ELE_ON_EDIT"; // 送电票编辑
         String HS_ELE_ON_VIEW = "HS_ELE_ON_VIEW"; // 送电票查看
         String WAIT_DEALT_NEW = "WAIT_DEALT_NEW"; // 新版工作提醒
+        String LUBRICATION_RECORDS_FINISH_LIST = "LUBRICATION_RECORDS_FINISH_LIST"; // 已完成润滑记录
     }
 
 
@@ -491,6 +492,9 @@ public interface Constant {
 
 
         String TEXT_SIZE_SETTING = "TEXT_SIZE_SETTING";
+
+        String COMPANY = "COMPANY";
+        String COMPANY_LIST = "COMPANY_LIST";
     }
 
 

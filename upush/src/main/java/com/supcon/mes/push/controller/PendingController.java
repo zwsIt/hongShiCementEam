@@ -75,28 +75,36 @@ public class PendingController extends BaseDataController implements PendingQuer
             presenterRouter.create(PendingQueryAPI.class).queryWXGD(pendingEntity.tableNo);
         } else if (pendingEntity.deploymentName.contains("停电")) {
 
-            String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                    + Constant.WebUrl.TD_LIST_NEW;
+            if (EamApplication.isHongshi()){
+                IntentRouter.go(context, Constant.Router.HS_TD_LIST);
+            }else {
+                String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+                        + Constant.WebUrl.TD_LIST_NEW;
 
-            Bundle bundle = new Bundle();
-            bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
-            bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
-            bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
-            bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
-            bundle.putString(BaseConstant.WEB_URL, url);
-            IntentRouter.go(context, Constant.Router.TD, bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
+                bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                bundle.putString(BaseConstant.WEB_URL, url);
+                IntentRouter.go(context, Constant.Router.TD, bundle);
+            }
+
         } else if (pendingEntity.deploymentName.contains("送电")) {
+            if (EamApplication.isHongshi()){
+                IntentRouter.go(context, Constant.Router.HS_SD_LIST);
+            }else {
+                String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+                        + Constant.WebUrl.SD_LIST_NEW;
 
-            String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                    + Constant.WebUrl.SD_LIST_NEW;
-
-            Bundle bundle = new Bundle();
-            bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
-            bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
-            bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
-            bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
-            bundle.putString(BaseConstant.WEB_URL, url);
-            IntentRouter.go(context, Constant.Router.SD, bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+                bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+                bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
+                bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+                bundle.putString(BaseConstant.WEB_URL, url);
+                IntentRouter.go(context, Constant.Router.SD, bundle);
+            }
         }
 
     }

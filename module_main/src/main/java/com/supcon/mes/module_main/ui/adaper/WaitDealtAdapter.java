@@ -330,7 +330,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
             } else {
                 chkBox.setVisibility(View.GONE);
             }
-            waitDealtEamName.setText( data.eamName + "(" + data.eamCode + ")" );
+            waitDealtEamName.setText( TextUtils.isEmpty(data.eamCode) ? data.eamName : data.eamName + "(" + data.eamCode + ")" );
             if (data.nextDuration != null) {
                 waitDealtTime.setText(Util.strFormat2(data.nextDuration));
             } else {

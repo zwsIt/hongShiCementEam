@@ -97,24 +97,7 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
                                     bundle.putString(Constant.IntentKey.TABLE_STATUS,workTicketEntity.getPending().taskDescription); // 单据状态
                                     IntentRouter.go(context, Constant.Router.OVERHAUL_WORKTICKET_VIEW, bundle);
                             }
-                            /*switch (workTicketEntity.getPending().taskDescription) {
-                                case Constant.TableStatus_CH.EDIT:
-                                    IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_EDIT,bundle);
-                                    break;
-                                case Constant.TableStatus_CH.REVIEW:
-                                case Constant.TableStatus_CH.REVIEW1:
-                                case "中控室审批":
-                                case "安全员审批":
-                                case "领导审批":
-                                case Constant.TableStatus_CH.NOTIFY:
-                                case Constant.TableStatus_CH.NOTIFY_TAKE_EFFECT:
-                                    bundle.putBoolean(Constant.IntentKey.IS_EDITABLE,true);
-                                case Constant.TableStatus_CH.TAKE_EFFECT:
-                                default:
-                                    IntentRouter.go(context,Constant.Router.OVERHAUL_WORKTICKET_VIEW,bundle);
-                            }*/
                         }
-
                     });
         }
 
