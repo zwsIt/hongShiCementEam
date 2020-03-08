@@ -11,12 +11,14 @@ import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.api.CommonListAPI;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.ContractStaffEntity;
 import com.supcon.mes.middleware.model.contract.CommonListContract;
@@ -24,12 +26,16 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.bean.DailyLubricateRecordEntity;
 import com.supcon.mes.module_warn.presenter.DailyLubrRecordsFinishPresenter;
+import com.supcon.mes.module_warn.ui.adapter.LubricationRecordsFinishListAdapter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ClassName
  * Created by zhangwenshuai1 on 2020/3/8
  * Email zhangwenshuai1@supcon.com
- * Desc
+ * Desc 已完成日常润滑记录列表
  */
 @Router(Constant.Router.LUBRICATION_RECORDS_FINISH_LIST)
 @Presenter(value = {DailyLubrRecordsFinishPresenter.class})
@@ -43,9 +49,14 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
     @BindByTag("contentView")
     RecyclerView contentView;
 
+    Map<String,Object> queryParams = new HashMap<>();
+    String eamCode;
+
     @Override
     protected void onInit() {
         super.onInit();
+
+        eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setAutoPullDownRefresh(true);
         contentView.setLayoutManager(new LinearLayoutManager(context));
@@ -61,7 +72,7 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
 
     @Override
     protected IListAdapter<DailyLubricateRecordEntity> createAdapter() {
-        return null;
+        return new LubricationRecordsFinishListAdapter(context);
     }
 
     @Override
@@ -73,6 +84,13 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
     protected void initListener() {
         super.initListener();
         leftBtn.setOnClickListener(v -> finish());
+        refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
+            @Override
+            public void onRefresh(int pageIndex) {
+                queryParams.put(Constant.BAPQuery.EAM_CODE,eamCode);
+                presenterRouter.create(CommonListAPI.class).listCommonObj(pageIndex,queryParams,false);
+            }
+        });
     }
 
     @Override
