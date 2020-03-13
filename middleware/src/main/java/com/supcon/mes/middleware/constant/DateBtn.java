@@ -4,16 +4,17 @@ package com.supcon.mes.middleware.constant;
  * ClassName
  * Created by zhangwenshuai1 on 2019/12/12
  * Email zhangwenshuai1@supcon.com
- * Desc 列表查询按钮
+ * Desc 时间查询按钮
  */
-public enum QueryBtnType {
-    PENDING_QUERY(1000,"仅查待办"),
-    ALL_QUERY(1001,"查询");
+public enum DateBtn {
+    ONE_MONTH(1000,"近一月"),
+    THREE_MONTH(1001,"近三月"),
+    SIX_MONTH(1002,"近半年");
 
     private int type;
     private String value;
 
-    QueryBtnType(int type, String value) {
+    DateBtn(int type, String value) {
         this.type = type;
         this.value = value;
     }

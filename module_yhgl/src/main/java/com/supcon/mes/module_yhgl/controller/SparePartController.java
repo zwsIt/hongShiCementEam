@@ -79,7 +79,7 @@ public class SparePartController extends BaseViewController implements SparePart
                             bundle.putString(Constant.IntentKey.TABLE_STATUS, mYHEntity.pending.taskDescription);
                             bundle.putString(Constant.IntentKey.TABLE_ACTION, mYHEntity.pending.openUrl);
                         }
-                        bundle.putLong(Constant.IntentKey.LIST_ID, mYHEntity.id);
+                        bundle.putLong(Constant.IntentKey.LIST_ID, mYHEntity.id == null ? -1L : mYHEntity.id);
                         if (mYHEntity.getEamID().id != null) {
                             bundle.putLong(Constant.IntentKey.EAM_ID, mYHEntity.getEamID().id);
                         }
@@ -131,7 +131,7 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void initData() {
         super.initData();
-        if (mYHEntity.id != null){
+        if (mYHEntity.id != null) {
             presenterRouter.create(SparePartAPI.class).listSparePartList(mYHEntity.id);
         }
     }

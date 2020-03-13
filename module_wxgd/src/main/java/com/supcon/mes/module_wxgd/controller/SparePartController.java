@@ -38,7 +38,7 @@ import java.util.List;
 public class SparePartController extends BaseViewController implements SparePartContract.View {
 
     //    private CustomListWidget<SparePartEntity> sparePartListWidget;
-    private long id = -1;
+    private Long id = -1L;
     private ArrayList<SparePartEntity> mSparePartOldEntities = new ArrayList<>();
     private List<SparePartEntity> mSparePartEntities = new ArrayList<>();
     private boolean editable;
@@ -58,7 +58,7 @@ public class SparePartController extends BaseViewController implements SparePart
         EventBus.getDefault().register(this);
         mWXGDEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
         iswarn = ((Activity) context).getIntent().getBooleanExtra(Constant.IntentKey.ISWARN, false);
-        if (mWXGDEntity != null) {
+        if (mWXGDEntity.id != null) {
             this.id = mWXGDEntity.id;
         }
     }

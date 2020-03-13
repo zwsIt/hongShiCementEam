@@ -103,6 +103,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:id="@+id/companySyncRl"
+                android:tag="companySyncRl"
+                android:layout_marginTop="@dimen/dp_5"
+                android:background="@drawable/sh_white"
+                android:padding="@dimen/dp_10">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:text="公司列表数据同步"
+                    android:textColor="@color/textColorlightblack" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:id="@+id/companySyncTv"
+                    android:tag="companySyncTv"
+                    android:padding="5dp"
+                    android:text="同步"
+                    android:textColor="@color/blue"
+                    android:drawableStart="@drawable/ic_down"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp_5"
                 android:background="@drawable/sh_white"
                 android:visibility="gone"

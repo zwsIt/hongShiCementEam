@@ -6,6 +6,9 @@ import com.supcon.mes.middleware.model.bean.JWXItem;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * ClassName
  * Created by zhangwenshuai1 on 2020/3/8
@@ -42,6 +45,26 @@ public class DailyLubricateRecordEntity extends BaseEntity {
     private SystemCodeEntity taskType;// 任务类型：日常润滑( BEAM_067/01)、临时润滑（ BEAM_067/02）、工单润滑（ BEAM_067/03）
     private boolean valid;
     private int version;
+
+    private int viewType; // 视图类型
+    private List<DailyLubricateRecordEntity> expendList = new ArrayList<>();
+    private boolean isExpend;
+
+    public List<DailyLubricateRecordEntity> getExpendList() {
+        return expendList;
+    }
+
+    public void setExpendList(List<DailyLubricateRecordEntity> expendList) {
+        this.expendList = expendList;
+    }
+
+    public int getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
+    }
 
     public EamEntity getBeamId() {
         return beamId;
@@ -137,6 +160,14 @@ public class DailyLubricateRecordEntity extends BaseEntity {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public boolean isExpend() {
+        return isExpend;
+    }
+
+    public void setExpend(boolean expend) {
+        isExpend = expend;
     }
 
     public static class JwxItemIdBean {

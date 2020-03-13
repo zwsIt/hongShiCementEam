@@ -493,7 +493,8 @@ public interface Constant {
 
         String TEXT_SIZE_SETTING = "TEXT_SIZE_SETTING";
 
-        String COMPANY = "COMPANY";
+        String C_NAME = "C_NAME";
+        String C_ID = "C_ID";
         String COMPANY_LIST = "COMPANY_LIST";
     }
 
@@ -698,6 +699,9 @@ public interface Constant {
         String ALL_QUERY = "ALL_QUERY"; // 查询按钮
         String PENDING_QUERY = "PENDING_QUERY"; // 仅查待办
         String STATE = "STATE";
+        String DEAL_TIME_S = "DEAL_TIME_S"; // 润滑完成时间
+        String DEAL_TIME_E = "DEAL_TIME_E"; // 润滑完成时间
+        String DEAL_TIME = "DEAL_TIME"; // 润滑完成时间
     }
 
 
@@ -775,6 +779,7 @@ public interface Constant {
         String maintenance = "BEAM2003/03";//维保
         String sparepart = "BEAM2003/04";//备件
         String other = "BEAM2003/05";//其它
+        String manual_start = "BEAM2003/08";//手工添加
     }
 
     interface YhglWorkSource {

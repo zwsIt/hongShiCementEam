@@ -1,8 +1,12 @@
 package com.supcon.mes.module_warn.ui;
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,23 +17,41 @@ import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
+import com.supcon.mes.mbap.utils.ViewUtil;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.constant.DateBtn;
 import com.supcon.mes.middleware.model.api.CommonListAPI;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.ContractStaffEntity;
 import com.supcon.mes.middleware.model.contract.CommonListContract;
+import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+import com.supcon.mes.middleware.util.EmptyViewHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.FilterHelper;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.model.bean.DailyLubricateRecordEntity;
 import com.supcon.mes.module_warn.presenter.DailyLubrRecordsFinishPresenter;
 import com.supcon.mes.module_warn.ui.adapter.LubricationRecordsFinishListAdapter;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import io.reactivex.Flowable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 /**
  * ClassName
@@ -48,8 +70,11 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
     CustomImageButton rightBtn;
     @BindByTag("contentView")
     RecyclerView contentView;
+    @BindByTag("radioGroupFilter")
+    RadioGroup radioGroupFilter;
 
-    Map<String,Object> queryParams = new HashMap<>();
+    SimpleDateFormat sdf = new SimpleDateFormat(Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC);
+    Map<String, Object> queryParams = new HashMap<>();
     String eamCode;
 
     @Override
@@ -60,14 +85,22 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setAutoPullDownRefresh(true);
         contentView.setLayoutManager(new LinearLayoutManager(context));
-        contentView.addItemDecoration(new SpaceItemDecoration(5));
+        contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5,context)));
+
+        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context,""));
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.themeColor);
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("已完成日常润滑记录");
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        FilterHelper.addView(this,radioGroupFilter,FilterHelper.createMonthDateFilter());
     }
 
     @Override
@@ -87,14 +120,68 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                queryParams.put(Constant.BAPQuery.EAM_CODE,eamCode);
-                presenterRouter.create(CommonListAPI.class).listCommonObj(pageIndex,queryParams,false);
+                queryParams.put(Constant.BAPQuery.EAM_CODE, eamCode);
+                presenterRouter.create(CommonListAPI.class).listCommonObj(pageIndex, queryParams, false);
             }
+        });
+        radioGroupFilter.setOnCheckedChangeListener((group, checkedId) -> {
+            Calendar calendar = Calendar.getInstance();
+            if (checkedId == DateBtn.ONE_MONTH.getType()){
+                calendar.setTime(new Date());
+                calendar.add(Calendar.MONTH,-1);
+                queryParams.put(Constant.BAPQuery.DEAL_TIME_S,sdf.format(calendar.getTime()));
+            }else if (checkedId == DateBtn.THREE_MONTH.getType()){
+                calendar.setTime(new Date());
+                calendar.add(Calendar.MONTH,-3);
+                queryParams.put(Constant.BAPQuery.DEAL_TIME_S,sdf.format(calendar.getTime()));
+            }else if (checkedId == DateBtn.SIX_MONTH.getType()){
+                calendar.setTime(new Date());
+                calendar.add(Calendar.MONTH,-6);
+                queryParams.put(Constant.BAPQuery.DEAL_TIME_S,sdf.format(calendar.getTime()));
+            }
+            queryParams.put(Constant.BAPQuery.DEAL_TIME_E,sdf.format(new Date()));
+            refreshListController.refreshBegin();
         });
     }
 
+    List<DailyLubricateRecordEntity> dailyLubricateRecordEntityList = new ArrayList<>(); // 列表润滑部位展示
+    Map<String, DailyLubricateRecordEntity> lubricationPartMap = new HashMap<>(); // 临时存储展示用的润滑部位
+    @SuppressLint("CheckResult")
     @Override
     public void listCommonObjSuccess(CommonBAPListEntity entity) {
+        if (entity.pageNo == 1){
+            dailyLubricateRecordEntityList.clear();
+            lubricationPartMap.clear();
+        }
+        if (entity.result.size() <= 0){
+            refreshListController.refreshComplete(entity.result);
+        }else {
+            Flowable.fromIterable(entity.result)
+                    .subscribe(new Consumer<Object>() {
+                        @Override
+                        public void accept(Object o) throws Exception {
+                            DailyLubricateRecordEntity dailyLubricateRecordEntity = (DailyLubricateRecordEntity) o;
+                            dailyLubricateRecordEntity.setViewType(ListType.CONTENT.value());
+                            if (!TextUtils.isEmpty(dailyLubricateRecordEntity.getJwxItemId().lubricatePart) && !lubricationPartMap.containsKey(dailyLubricateRecordEntity.getJwxItemId().lubricatePart)){
+                                DailyLubricateRecordEntity dailyLubricateRecordEntityTitle = new DailyLubricateRecordEntity();
+                                dailyLubricateRecordEntityTitle.setViewType(ListType.TITLE.value());
+                                dailyLubricateRecordEntityTitle.setJwxItemId(dailyLubricateRecordEntity.getJwxItemId());
+                                dailyLubricateRecordEntityTitle.getExpendList().add(dailyLubricateRecordEntity);
+                                lubricationPartMap.put(dailyLubricateRecordEntity.getJwxItemId().lubricatePart,dailyLubricateRecordEntityTitle);
+                                dailyLubricateRecordEntityList.add(dailyLubricateRecordEntityTitle);
+                            }else {
+                                lubricationPartMap.get(dailyLubricateRecordEntity.getJwxItemId().lubricatePart).getExpendList().add(dailyLubricateRecordEntity);
+                            }
+                        }
+                    }, throwable -> {
+
+                    }, new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            refreshListController.refreshComplete(dailyLubricateRecordEntityList);
+                        }
+                    });
+        }
 
     }
 

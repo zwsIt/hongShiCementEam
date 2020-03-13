@@ -13,7 +13,6 @@
         android:tag="searchTitleBar"
         app:title_background_color="@color/themeColor"
         app:title_length="96dp"
-        app:title_right_btn_need="false"
         app:title_text="维修工单" />
 
     <include layout="@layout/ly_scroll_filter" />

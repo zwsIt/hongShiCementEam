@@ -39,7 +39,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     @BindByTag("lubricateOilsListWidget")
     CustomListWidget<LubricateOilsEntity> lubricateOilsListWidget;
 
-    private long id = -1;
+    private Long id = -1L;
     private List<LubricateOilsEntity> mLubricateOilsOldEntities = new ArrayList<>();
     private List<LubricateOilsEntity> mLubricateOilsEntities = new ArrayList<>();
     private boolean isEditable;
@@ -55,7 +55,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         super.onInit();
         EventBus.getDefault().register(this);
         mWXGDEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        if (mWXGDEntity != null) {
+        if (mWXGDEntity.id != null) {
             this.id = mWXGDEntity.id;
         }
     }

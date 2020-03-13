@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -50,11 +51,16 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.controller.YHCloseController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
+import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.PositionEvent;
@@ -130,6 +136,12 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     CustomTextView eamCode;
     @BindByTag("eamArea")
     CustomTextView eamArea;
+    @BindByTag("eamNameEdit")
+    CustomTextView eamNameEdit;
+    @BindByTag("eamCodeEdit")
+    CustomTextView eamCodeEdit;
+    @BindByTag("eamAreaEdit")
+    CustomTextView eamAreaEdit;
     @BindByTag("discoverer")
     CustomTextView discoverer;
     @BindByTag("faultInfoType")
@@ -140,7 +152,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     CustomVerticalTextView faultInfoDescribe;
     @BindByTag("faultInfo")
     LinearLayout faultInfo;
-
+    @BindByTag("eamInfoLl")
+    LinearLayout eamInfoLl;
+    @BindByTag("eamInfoEditLl")
+    LinearLayout eamInfoEditLl;
     @BindByTag("repairLl")
     LinearLayout repairLl;
     @BindByTag("repairGroup")
@@ -217,11 +232,16 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         EventBus.getDefault().register(this);
 
-        refreshController.setAutoPullDownRefresh(true);
-        refreshController.setPullDownRefreshEnabled(true);
-
         mWXGDEntity = (WXGDEntity) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
         tableNo = getIntent().getStringExtra(Constant.IntentKey.TABLENO);
+
+        if (mWXGDEntity.id != -1) {
+            refreshController.setAutoPullDownRefresh(true);
+            refreshController.setPullDownRefreshEnabled(true);
+        } else { // 制定
+            refreshController.setAutoPullDownRefresh(false);
+            refreshController.setPullDownRefreshEnabled(false);
+        }
 
         mSparePartController = getController(SparePartController.class);
         mSparePartController.setEditable(true);
@@ -285,13 +305,19 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/9/1
      */
     private void initLink() {
-        // 工单来源为巡检或其他时显示作废按钮
-        if (mWXGDEntity.workSource != null && (Constant.WxgdWorkSource.patrolcheck.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.other.equals(mWXGDEntity.workSource.id))) {
+        // 工单来源为巡检或其他、手工添加时显示作废按钮
+        if (mWXGDEntity.workSource != null && (Constant.WxgdWorkSource.patrolcheck.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.other.equals(mWXGDEntity.workSource.id)
+                || Constant.WxgdWorkSource.manual_start.equals(mWXGDEntity.workSource.id))) {
             mLinkController.setCancelShow(true);
         } else {
             mLinkController.setCancelShow(false);
         }
-        mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
+        if (mWXGDEntity.id != -1) {
+            mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
+        } else { // 制定
+            mLinkController.initStartTransition(transition, "work");
+        }
+
     }
 
     /**
@@ -302,6 +328,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      */
     private void initTableHeadView() {
         if (mWXGDEntity == null) return;
+        if (mWXGDEntity.id == -1 || "BEAM2003/08".equals(mWXGDEntity.workSource.id)){ // 制定
+            eamInfoLl.setVisibility(View.GONE);
+            eamInfoEditLl.setVisibility(View.VISIBLE);
+        }
         if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
         } else {
@@ -321,6 +351,14 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @Override
     protected void initData() {
         super.initData();
+        // 制定
+        if (mWXGDEntity.id == -1) {
+            WXGDListEntity wxgdListEntity = new WXGDListEntity();
+            wxgdListEntity.result = new ArrayList<>();
+            wxgdListEntity.result.add(mWXGDEntity);
+
+            listWxgdsSuccess(wxgdListEntity);
+        }
     }
 
     /**
@@ -337,6 +375,9 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             eamName.setValue(mWXGDEntity.eamID.name);
             eamCode.setValue(mWXGDEntity.eamID.code);
             eamArea.setValue(mWXGDEntity.eamID.installPlace == null ? "" : mWXGDEntity.eamID.installPlace.name);
+            eamNameEdit.setValue(mWXGDEntity.eamID.name);
+            eamCodeEdit.setValue(mWXGDEntity.eamID.code);
+            eamAreaEdit.setValue(mWXGDEntity.eamID.installPlace == null ? "" : mWXGDEntity.eamID.installPlace.name);
 
             new EamPicController().initEamPic(eamIc, mWXGDEntity.eamID.id);
         }
@@ -357,10 +398,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
-        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
+        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null) {
             eleOffChkBox.setClickable(false);
             eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
-        }else {
+        } else {
             eleOffChkBox.setClickable(true);
             eleOffChkBox.setButtonDrawable(R.drawable.sl_checkbox_selector_small);
         }
@@ -418,6 +459,19 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                 }, true)
                 .bindClickListener(R.id.grayBtn, null, true)
                 .show());
+
+        eamNameEdit.setOnChildViewClickListener(new OnChildViewClickListener() {
+            @Override
+            public void onChildViewClick(View childView, int action, Object obj) {
+                if (action == -1){
+                    mWXGDEntity.eamID.id = null;
+                    eamCodeEdit.setContent(null);
+                    eamAreaEdit.setContent(null);
+                }else {
+                    IntentRouter.go(context,Constant.Router.EAM);
+                }
+            }
+        });
 
         repairGroup.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
@@ -533,9 +587,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     }
 
     String closeReason; // 关闭原因
+
     private void showCancelDialog(WorkFlowVar workFlowVar) {
         CustomDialog customDialog = new CustomDialog(context);
-        customDialog.layout(R.layout.ac_cancel_dialog, DisplayUtil.getScreenWidth(context)*4/5,WRAP_CONTENT);
+        customDialog.layout(R.layout.ac_cancel_dialog, DisplayUtil.getScreenWidth(context) * 4 / 5, WRAP_CONTENT);
         customDialog.bindTextChangeListener(R.id.closeReason, new OnTextListener() {
             @Override
             public void onText(String text) {
@@ -855,12 +910,31 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateLubPart(PositionEvent positionEvent){
+    public void updateLubPart(PositionEvent positionEvent) {
         if (positionEvent.getPosition() == -1) return;
-        if (positionEvent.getObj() instanceof LubricatingPartEntity){
-            mLubricateOilsController.getLubricateOilsEntities().get(positionEvent.getPosition()).lubricatingPart = ((LubricatingPartEntity)positionEvent.getObj()).getLubPart();
+        if (positionEvent.getObj() instanceof LubricatingPartEntity) {
+            mLubricateOilsController.getLubricateOilsEntities().get(positionEvent.getPosition()).lubricatingPart = ((LubricatingPartEntity) positionEvent.getObj()).getLubPart();
             mLubricateOilsController.getLubricateOilsAdapter().notifyItemChanged(positionEvent.getPosition());
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getEam(CommonSearchEvent commonSearchEvent){
+        if (!(commonSearchEvent.commonSearchEntity instanceof EamEntity)) {
+            return;
+        }
+        EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+        eamCodeEdit.setContent(eamEntity.code);
+        eamNameEdit.setContent(eamEntity.name);
+        eamAreaEdit.setContent(eamEntity.getInstallPlace().name);
+
+        mWXGDEntity.eamID.id = eamEntity.id;
+        mWXGDEntity.eamID.code = eamEntity.code;
+        mWXGDEntity.eamID.name = eamEntity.name;
+        mWXGDEntity.eamID.model = eamEntity.model;
+        mWXGDEntity.eamID.eamType = eamEntity.eamType;
+        mWXGDEntity.eamID.installPlace = eamEntity.installPlace;
+        mWXGDEntity.eamID.inspectionStaff = eamEntity.inspectionStaff;
 
     }
 
@@ -989,6 +1063,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/10/23
      */
     private boolean checkTableBlank() {
+        if (mWXGDEntity.id == -1 && TextUtils.isEmpty(eamNameEdit.getValue())) { // 制单
+            ToastUtils.show(context, "设备不允许为空！");
+            return true;
+        }
         if (TextUtils.isEmpty(chargeStaff.getValue())) {
             ToastUtils.show(context, "负责人不允许为空！");
             return true;

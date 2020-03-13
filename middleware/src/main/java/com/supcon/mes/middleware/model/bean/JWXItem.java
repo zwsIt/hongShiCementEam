@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.supcon.common.com_http.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * JWXItem 业务规则实体
  * created by zhangwenshuai1 2018/9/18
@@ -22,6 +24,12 @@ public class JWXItem extends BaseEntity {
     public Long lastTime;
     public Long nextTime;
     public SparePartId sparePartId;//备件
+
+    public EamEntity eamID;
+    public LubricateOil lubricateOil; // 润滑油
+    public String lubricatePart; // 润滑部位
+    public SystemCodeEntity oilType; // 加/换油
+    public BigDecimal sum; // 用量
 
     public ValueEntity getPeriodType() {
         if (periodType == null) {

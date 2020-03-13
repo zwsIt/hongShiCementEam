@@ -9,7 +9,8 @@ import com.supcon.mes.module_login.model.bean.LoginEntity;
  */
 @ContractFactory(entites = {LoginEntity.class, LoginEntity.class})
 public interface SilentLoginAPI {
-    void dologin(String username, String pwd);
+    void dologin(String username, String pwd, Long cid);
+
     void dologinWithSuposPW(String username, String pwd);
 }
 

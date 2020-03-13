@@ -48,7 +48,7 @@ public class WXGDMapManager {
         map.put("modelName", "WorkRecord");
         map.put("bap_validate_user_id", EamApplication.getAccountInfo().userId);
         map.put("workRecord.createStaffId", EamApplication.getAccountInfo().staffId);
-        map.put("workRecord.createTime", format.format(mWXGDEntity.createTime));
+        map.put("workRecord.createTime", mWXGDEntity.createTime == null ? "" :format.format(mWXGDEntity.createTime));
 //DealInfo di = taskService.take(pendingId, deploymentId, workRecord.getId(), creatorService.getStaffFromSession(), workFlowVar);
         map.put("workRecord.version", mWXGDEntity.version);
         map.put("workRecord.workOrderContext", Util.strFormat2(mWXGDEntity.workOrderContext));
@@ -60,15 +60,19 @@ public class WXGDMapManager {
         if (mWXGDEntity.id != -1) {
             map.put("id", Util.strFormat2(mWXGDEntity.id));
             map.put("workRecord.id", Util.strFormat2(mWXGDEntity.id));
+        }else {
+            map.put("id", "");
+            map.put("workRecord.id", "");
+            map.put("workRecord.workState.id","BEAM049/01");// 派工
         }
         map.put("workRecord.eamID.id", (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) ? Util.strFormat2(mWXGDEntity.eamID.id) : "");
         map.put("workRecord.planStartDate", mWXGDEntity.planStartDate == null ? "" : format.format(mWXGDEntity.planStartDate));
         map.put("workRecord.planEndDate", mWXGDEntity.planEndDate == null ? "" : format.format(mWXGDEntity.planEndDate));
         map.put("workRecord.repairAdvise", Util.strFormat2(mWXGDEntity.repairAdvise));
         map.put("workRecord.workSource.id", mWXGDEntity.workSource != null ? Util.strFormat2(mWXGDEntity.workSource.id) : "");
-        map.put("workRecord.workSource.value", mWXGDEntity.workSource != null ? Util.strFormat2(mWXGDEntity.workSource.value) : "");
+//        map.put("workRecord.workSource.value", mWXGDEntity.workSource != null ? Util.strFormat2(mWXGDEntity.workSource.value) : "");
         map.put("workRecord.repairType.id", mWXGDEntity.repairType != null ? Util.strFormat2(mWXGDEntity.repairType.id) : "");
-        map.put("workRecord.repairType.value", mWXGDEntity.repairType != null ? Util.strFormat2(mWXGDEntity.repairType.value) : "");
+//        map.put("workRecord.repairType.value", mWXGDEntity.repairType != null ? Util.strFormat2(mWXGDEntity.repairType.value) : "");
         map.put("workRecord.content", Util.strFormat2(mWXGDEntity.content));
         map.put("workRecord.claim", Util.strFormat2(mWXGDEntity.claim));
         map.put("workRecord.period", mWXGDEntity.period == null ? "" : mWXGDEntity.period);

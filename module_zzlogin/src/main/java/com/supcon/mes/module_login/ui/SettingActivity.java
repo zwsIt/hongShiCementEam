@@ -1,16 +1,19 @@
 package com.supcon.mes.module_login.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BasePresenterActivity;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.SharedPreferencesUtils;
@@ -27,7 +30,12 @@ import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.api.CompanyQueryAPI;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.contract.CompanyQueryContract;
+import com.supcon.mes.middleware.presenter.CompanyQueryPresenter;
 import com.supcon.mes.middleware.util.DeviceManager;
+import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.module_login.BuildConfig;
 import com.supcon.mes.module_login.IntentRouter;
 import com.supcon.mes.module_login.R;
@@ -37,14 +45,20 @@ import com.supcon.mes.module_login.model.contract.MineContract;
 import com.supcon.mes.module_login.presenter.MinePresenter;
 import com.supcon.mes.module_login.util.EditTextHelper;
 
+import org.checkerframework.checker.signature.qual.BinaryNameInUnnamedPackage;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
+
 import static com.supcon.mes.mbap.utils.PatternUtil.URL_PATTERN;
 
 /**
  * Created by wangshizhan on 2017/8/16.
  */
 @Router(Constant.Router.SETTING)
-@Presenter(value = {MinePresenter.class})
-public class SettingActivity extends BasePresenterActivity implements MineContract.View {
+@Presenter(value = {MinePresenter.class, CompanyQueryPresenter.class})
+public class SettingActivity extends BasePresenterActivity implements MineContract.View, CompanyQueryContract.View {
     @BindByTag("titleText")
     TextView titleText;
     @BindByTag("rightBtn")
@@ -68,6 +82,10 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
     CustomArrowView pwdSettings;
     @BindByTag("tvSizeChangeSettings")
     CustomArrowView tvSizeChangeSettings;
+    @BindByTag("companySyncTv")
+    TextView companySyncTv;
+    @BindByTag("companySyncRl")
+    RelativeLayout companySyncRl;
 
 
     private PasswordController mPasswordController;
@@ -155,12 +173,14 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
                 .append(urlInput.getInput());
 
         if (EamApplication.isIsLogin()) {
+            companySyncRl.setVisibility(View.GONE);
             pwdSettings.setVisibility(View.VISIBLE);
             tvSizeChangeSettings.setVisibility(View.VISIBLE);
         }
 
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
@@ -202,6 +222,18 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
                 SharedPreferencesUtils.setParam(context, Constant.SPKey.HAS_SUPOS, isChecked);
             }
         });
+
+        RxView.clicks(companySyncTv).throttleFirst(200, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        if (doCheck()){
+                            onLoading("公司数据同步中");
+                            save();
+                            presenterRouter.create(CompanyQueryAPI.class).listCompany();
+                        }
+                    }
+                });
     }
 
     private void showPwdDialog() {
@@ -451,5 +483,20 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
     public void logoutFailed(String errorMsg) {
         LogUtil.w("logoutFailed:" + errorMsg);
         onLoadFailed("登出失败！");
+    }
+
+    @Override
+    public void listCompanySuccess(CommonListEntity entity) {
+        //插入本地
+        if (entity.result.size() > 0){
+            EamApplication.dao().getCompanyDao().deleteAll();
+            EamApplication.dao().getCompanyDao().insertOrReplaceInTx(entity.result);
+        }
+        onLoadSuccess("下载成功");
+    }
+
+    @Override
+    public void listCompanyFailed(String errorMsg) {
+        onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
     }
 }

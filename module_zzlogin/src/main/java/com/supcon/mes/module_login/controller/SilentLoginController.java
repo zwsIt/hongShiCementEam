@@ -52,7 +52,7 @@ public class SilentLoginController extends BasePresenterController implements Si
     @Override
     public void dologinFailed(String errorMsg) {
         LogUtil.e("后台登陆错误：" + errorMsg);
-        Toast.makeText(EamApplication.getAppContext(), "后台登陆错误：" + errorMsg, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(EamApplication.getAppContext(), "后台登陆错误：" + errorMsg, Toast.LENGTH_SHORT).show();
         isLogining = false;
     }
 
@@ -68,8 +68,8 @@ public class SilentLoginController extends BasePresenterController implements Si
 
 
     @Override
-    public void dologin(String username, String pwd) {
-        presenterRouter.create(SilentLoginAPI.class).dologin(username, pwd);
+    public void dologin(String username, String pwd, Long cid) {
+        presenterRouter.create(SilentLoginAPI.class).dologin(username, pwd, cid);
         isLogining = true;
     }
 
@@ -87,7 +87,7 @@ public class SilentLoginController extends BasePresenterController implements Si
         if (hasSupOS) {
             dologinWithSuposPW(EamApplication.getUserName(), EamApplication.getPassword());
         } else {
-            dologin(EamApplication.getUserName(), EamApplication.getPassword());
+            dologin(EamApplication.getUserName(), EamApplication.getPassword(), SharedPreferencesUtils.getParam(context, Constant.SPKey.C_ID, 0L));
         }
     }
 }

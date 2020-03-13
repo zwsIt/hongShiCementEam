@@ -55,6 +55,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 
 /**
  * @author yangfei.cao
@@ -120,6 +121,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("临时润滑");
         rightBtn.setVisibility(View.VISIBLE);
+        rightBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_lubr_record));
 
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
@@ -148,6 +150,16 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
                 .subscribe(o -> onBackPressed());
 
         RxView.clicks(rightBtn).throttleFirst(200,TimeUnit.MILLISECONDS)
+                .filter(new Predicate<Object>() {
+                    @Override
+                    public boolean test(Object o) throws Exception {
+                        if (TextUtils.isEmpty(eamCode.getContent())){
+                            ToastUtils.show(context,"请先选择具体设备");
+                            return false;
+                        }
+                        return true;
+                    }
+                })
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
@@ -181,7 +193,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
                                 if (!TextUtils.isEmpty(sourceIds)) {
                                     Map<String, Object> param = new HashMap<>();
                                     param.put(Constant.BAPQuery.sourceIds, sourceIds);
-                                    param.put("taskType", "BEAM_067/02");
+                                    param.put("taskType", "BEAM_067/02"); // 临时润滑
                                     onLoading("处理中...");
                                     presenterRouter.create(CompleteAPI.class).dailyComplete(param);
                                 } else {

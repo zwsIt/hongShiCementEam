@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class SilentLoginPresenter extends SilentLoginContract.Presenter {
     @Override
-    public void dologin(String username, String pwd) {
+    public void dologin(String username, String pwd, Long cid) {
         LogUtil.i("dologin username:" + username + " pwd:" + pwd);
 
         Map<String, Object> defaultMap = new HashMap<>();
@@ -23,6 +23,7 @@ public class SilentLoginPresenter extends SilentLoginContract.Presenter {
         defaultMap.put("clientType", "android");
         defaultMap.put("clientVersion", "2.1");
         defaultMap.put("timestamp", new Date().getTime());
+        defaultMap.put("company",cid);
 
 //        String token1 = SharedPreferencesUtils.getParam(EamApplication.getAppContext(), Constant.ZZ.ZZ_SUPOS_TOKEN, "");
 //        if(!TextUtils.isEmpty(token1)) {

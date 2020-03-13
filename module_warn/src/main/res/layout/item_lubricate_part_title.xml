@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:id="@+id/lubricationPart"
+        android:tag="lubricationPart"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/ic_lub_part"
+        android:padding="@dimen/dp_10"
+        android:drawablePadding="@dimen/dp_20"
+        android:text="润滑部位"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp_16"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/expendIv"
+        android:tag="expendIv"
+        android:paddingEnd="@dimen/dp_20"
+        android:paddingStart="@dimen/dp_10"
+        android:layout_gravity="bottom"
+        android:src="@drawable/ic_expand"/>
+</LinearLayout>

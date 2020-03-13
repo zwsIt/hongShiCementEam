@@ -153,7 +153,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
                                 if (!TextUtils.isEmpty(sourceIds)) {
                                     Map<String, Object> param = new HashMap<>();
                                     param.put(Constant.BAPQuery.sourceIds, sourceIds);
-                                    param.put("taskType", "BEAM_067/01");
+                                    param.put("taskType", "BEAM_067/01"); // 日常润滑(计划)
                                     onLoading("处理中...");
                                     presenterRouter.create(CompleteAPI.class).dailyComplete(param);
                                 } else {

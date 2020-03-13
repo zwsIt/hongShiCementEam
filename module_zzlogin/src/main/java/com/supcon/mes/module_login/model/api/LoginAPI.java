@@ -13,7 +13,7 @@ import com.supcon.mes.module_login.model.bean.LoginEntity;
  */
 @ContractFactory(entites = {LoginEntity.class, LoginEntity.class, LoginEntity.class, ModuleAuthorizationListEntity.class, NullEntity.class})
 public interface LoginAPI {
-    void dologin(String username, String pwd);
+    void dologin(String username, String pwd, Long cid);
     void dologinWithToken(String username, String pwd, String token1);
     void dologinWithSuposPW(String username, String supospwd);
     void getLicenseInfo(String moduleCodes);

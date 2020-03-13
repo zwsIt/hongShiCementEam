@@ -64,7 +64,7 @@
                         android:text="暂停"
                         android:textColor="@color/white" />
 
-                    <include layout="@layout/ly_wxgd_vertical_line" />
+                    <include layout="@layout/ly_wxgd_vertical_line"/>
 
                     <Button
                         android:id="@+id/activate"

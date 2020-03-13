@@ -105,6 +105,7 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
     private int loginBgId = 0;
 
     private ImageView spinnerIv; // 下拉选择公司
+    private Long mCompanyId;
 
     @Override
     protected int getLayoutID() {
@@ -174,7 +175,7 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
                                 companySpinner.setContent(item.toString());
                                 companySpinner.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
                                 // 获取companyId
-                                Long companyId = companyList.get(index).id;
+                                mCompanyId = companyList.get(index).id;
                             }
                         }).show(companySpinner.getContent());
             }
@@ -202,7 +203,7 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
                     if (hasSupOS) {
                         presenterRouter.create(LoginAPI.class).dologinWithSuposPW(usernameInput.getContent().trim(), pwdInput.getContent().trim());
                     } else {
-                        presenterRouter.create(LoginAPI.class).dologin(usernameInput.getContent().trim(), pwdInput.getContent().trim());
+                        presenterRouter.create(LoginAPI.class).dologin(usernameInput.getContent().trim(), pwdInput.getContent().trim(),mCompanyId);
                     }
                 });
 
@@ -224,7 +225,8 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
         pwdInput.editText().setTransformationMethod(PasswordTransformationMethod.getInstance());
         usernameInput.setInput(MBapApp.getUserName());
         pwdInput.setInput(MBapApp.getPassword());
-        companySpinner.setContent(SharedPreferencesUtils.getParam(context,Constant.SPKey.COMPANY,""));
+        companySpinner.setContent(SharedPreferencesUtils.getParam(context,Constant.SPKey.C_NAME,""));
+        mCompanyId = SharedPreferencesUtils.getParam(context,Constant.SPKey.C_ID,-1L);
 
         if (loginLogoId != 0)
             loginLogo.setImageResource(loginLogoId);
@@ -436,7 +438,8 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
         MBapApp.setIsLogin(true);
         MBapApp.setUserName(usernameInput.getInput().trim());
         MBapApp.setPassword(pwdInput.getInput().trim());
-        SharedPreferencesUtils.setParam(context,Constant.SPKey.COMPANY,companySpinner.getContent());
+        SharedPreferencesUtils.setParam(context,Constant.SPKey.C_NAME,companySpinner.getContent());
+        SharedPreferencesUtils.setParam(context,Constant.SPKey.C_ID,mCompanyId);
 
         onLoadSuccessAndExit("登陆成功！", () -> {
 

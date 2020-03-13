@@ -225,7 +225,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                     tableStatus.setTextColor(context.getResources().getColor(R.color.sparePartBlue));
                     tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_sparepart);
                 }
-                if (Constant.WxgdWorkSource.other.equals(data.workSource.id)) {
+                if (Constant.WxgdWorkSource.other.equals(data.workSource.id) || Constant.WxgdWorkSource.manual_start.equals(data.workSource.id)) {
                     workSource.setBackgroundResource(R.color.faultWarn);
                     tableStatus.setTextColor(context.getResources().getColor(R.color.faultWarn));
                     tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_faultinfo);

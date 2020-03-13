@@ -23,6 +23,7 @@ import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.IntentRouter;
@@ -168,7 +169,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                     // 工单跳转
                                     if (Constant.ProcessKey.WORK.equals(item.processKey)) {
                                         if (!TextUtils.isEmpty(item.openUrl)) {
-                                            bundle.putString(Constant.IntentKey.TABLENO, item.workTableNo);
+                                            WXGDEntity wxgdEntity = new WXGDEntity();
+                                            wxgdEntity.tableNo = item.workTableNo;
+                                            bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
+//                                                    bundle.putString(Constant.IntentKey.TABLENO, item.workTableNo);
                                             switch (item.openUrl) {
                                                 case Constant.WxgdView.RECEIVE_OPEN_URL:
                                                     IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);

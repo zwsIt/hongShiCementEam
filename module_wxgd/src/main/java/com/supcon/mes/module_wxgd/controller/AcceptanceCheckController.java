@@ -49,7 +49,7 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
     public void onInit() {
         super.onInit();
         mWxgdEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        if (mWxgdEntity != null) {
+        if (mWxgdEntity.id != null) {
             this.id = mWxgdEntity.id;
         }
     }

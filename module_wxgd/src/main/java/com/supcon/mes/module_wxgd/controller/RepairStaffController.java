@@ -40,7 +40,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
     //    private CustomListWidget<RepairStaffEntity> repairStaffListWidget;
     private List<RepairStaffEntity> staffEntities = new ArrayList<>();
 
-    private long id = -1;
+    private Long id = -1L;
     private boolean isEditable;
     private WXGDEntity mWXGDEntity;
 
@@ -56,7 +56,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
         super.onInit();
         EventBus.getDefault().register(this);
         mWXGDEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        if (mWXGDEntity != null) {
+        if (mWXGDEntity.id != null) {
             this.id = mWXGDEntity.id;
         }
     }

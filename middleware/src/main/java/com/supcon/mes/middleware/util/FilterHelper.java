@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.mes.mbap.beans.FilterBean;
 import com.supcon.mes.middleware.R;
+import com.supcon.mes.middleware.constant.DateBtn;
 import com.supcon.mes.middleware.constant.QueryBtnType;
 import com.supcon.mes.middleware.model.bean.CustomFilterBean;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
@@ -65,6 +66,27 @@ public class FilterHelper {
         filterBean.name = "时间不限";
         list.add(filterBean);
 
+        return list;
+    }
+
+    public static List<FilterBean> createMonthDateFilter() {
+
+        List<FilterBean> list = new ArrayList<>();
+
+        FilterBean filterBean = new FilterBean();
+        filterBean.name = DateBtn.ONE_MONTH.getValue();
+        filterBean.type = DateBtn.ONE_MONTH.getType();
+        list.add(filterBean);
+
+        filterBean = new FilterBean();
+        filterBean.name = DateBtn.THREE_MONTH.getValue();
+        filterBean.type = DateBtn.THREE_MONTH.getType();
+        list.add(filterBean);
+
+        filterBean = new FilterBean();
+        filterBean.name = DateBtn.SIX_MONTH.getValue();
+        filterBean.type = DateBtn.SIX_MONTH.getType();
+        list.add(filterBean);
 
         return list;
     }

@@ -8,6 +8,7 @@ import com.supcon.mes.middleware.model.bean.BuildVersionEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.middleware.model.bean.Company;
 import com.supcon.mes.middleware.model.bean.ContractListEntity;
 import com.supcon.mes.middleware.model.bean.CurrentDeploymentEntity;
 import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
@@ -449,5 +450,15 @@ public interface NetworkAPI {
      */
     @GET("http://api.fir.im/apps/latest/{appId}")
     Flowable<BuildVersionEntity> findLatestVersion(@Path("appId") String appId, @QueryMap Map<String, Object> queryMap);
+
+    /**
+     * @description 公司list获取：多组织登陆
+     * @param
+     * @return
+     * @author zhangwenshuai1 2020/3/11
+     *
+     */
+    @GET("/public/mobileCommon/foundation/getCompanyList.action")
+    Flowable<CommonListEntity<Company>> getCompanyList();
 
 }

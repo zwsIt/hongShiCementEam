@@ -35,7 +35,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
     @BindByTag("maintenanceListWidget")
     CustomListWidget<MaintainEntity> maintenanceListWidget;
 
-    private long id = -1;
+    private Long id = -1L;
     private List<MaintainEntity> maintenanceOldEntities = new ArrayList<>();
     private List<MaintainEntity> maintenanceEntities = new ArrayList<>();
     private boolean isEditable;
@@ -49,7 +49,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
     public void onInit() {
         super.onInit();
         wxgdEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        if (wxgdEntity != null) {
+        if (wxgdEntity.id != null) {
             this.id = wxgdEntity.id;
         }
     }

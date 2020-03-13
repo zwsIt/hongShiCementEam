@@ -17,11 +17,22 @@ public class Company extends BaseEntity{
     
     public String name;
     public String shortName;
-    @Generated(hash = 2130546896)
-    public Company(Long id, String name, String shortName) {
+    public String code;
+    public String address;
+    public String site;
+    public String telephone;
+    public String email;
+    @Generated(hash = 378846159)
+    public Company(Long id, String name, String shortName, String code,
+            String address, String site, String telephone, String email) {
         this.id = id;
         this.name = name;
         this.shortName = shortName;
+        this.code = code;
+        this.address = address;
+        this.site = site;
+        this.telephone = telephone;
+        this.email = email;
     }
     @Generated(hash = 1096856789)
     public Company() {
@@ -43,5 +54,35 @@ public class Company extends BaseEntity{
     }
     public void setShortName(String shortName) {
         this.shortName = shortName;
+    }
+    public String getCode() {
+        return this.code;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public String getAddress() {
+        return this.address;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public String getSite() {
+        return this.site;
+    }
+    public void setSite(String site) {
+        this.site = site;
+    }
+    public String getTelephone() {
+        return this.telephone;
+    }
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+    public String getEmail() {
+        return this.email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

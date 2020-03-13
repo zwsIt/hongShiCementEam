@@ -38,8 +38,11 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.RoleEntity;
 import com.supcon.mes.middleware.model.bean.ScreenEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.LoginValidEvent;
@@ -173,8 +176,8 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
             listRepairTypeFilter.setCurrentItem(repairType);
             queryParam.put(Constant.BAPQuery.REPAIR_TYPE, SystemCodeManager.getInstance().getSystemCodeEntityId(Constant.SystemCode.YH_WX_TYPE, repairType));
         }
-        ModulePermissonCheckController mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "faultInfoFW", new OnSuccessListener<Long>() {
+        ModulePermissonCheckController mModulePermissionCheckController = new ModulePermissonCheckController();
+        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName(), /*"faultInfoFW"*/"work", new OnSuccessListener<Long>() {
             @Override
             public void onSuccess(Long result) {
                 deploymentId = result;
@@ -219,7 +222,18 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
                     @Override
                     public void accept(Object o) throws Exception {
                         if (hasAddForumPermission) {
-                            createYH();
+//                            createYH();
+                            WXGDEntity wxgdEntity = new WXGDEntity();
+                            wxgdEntity.id = -1L;
+                            wxgdEntity.workSource = new SystemCodeEntity("BEAM2003/08", "手动添加", "BEAM2003", null, null, 0, EamApplication.getIp());
+                            wxgdEntity.pending = new PendingEntity();
+                            wxgdEntity.pending.deploymentId = deploymentId;
+                            wxgdEntity.pending.taskDescription = "派工";
+                            wxgdEntity.eamID = new WXGDEam();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
+                            IntentRouter.go(context,Constant.Router.WXGD_DISPATCHER,bundle);
                         } else {
                             ToastUtils.show(context, "当前用户并未拥有创建单据权限！");
                         }
