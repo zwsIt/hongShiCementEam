@@ -129,7 +129,7 @@
 
     <include layout="@layout/ly_line_light_light" />
 
-    <com.supcon.mes.mbap.view.CustomVerticalTextView
+    <com.supcon.mes.mbap.view.CustomVerticalEditText
         android:id="@+id/workContext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -138,6 +138,7 @@
         android:paddingRight="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_10"
         android:tag="workContext"
+        app:editable="false"
         app:key="工单内容："
         app:text_size="15" />
 </LinearLayout>

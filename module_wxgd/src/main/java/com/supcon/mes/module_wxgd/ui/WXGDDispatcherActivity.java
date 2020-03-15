@@ -183,7 +183,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     CustomWorkFlowView transition;
 
     @BindByTag("workContext")
-    CustomVerticalTextView workContext;
+    CustomVerticalEditText workContext;
 
     @BindByTag("eleOffChkBox")
     CheckBox eleOffChkBox; // 是否生成停电票
@@ -297,6 +297,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         super.initView();
         eamIc = findViewById(R.id.eamIc);
         if (mWXGDEntity.id == -1){
+            workContext.setNecessary(true);
             workContext.setEditable(true);
         }
     }
