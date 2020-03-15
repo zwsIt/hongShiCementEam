@@ -263,7 +263,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         datePickController = new DatePickController(this);
         datePickController.setCycleDisable(false);
         datePickController.setCanceledOnTouchOutside(true);
-        datePickController.setSecondVisible(true);
+        datePickController.setSecondVisible(false);
         datePickController.textSize(18);
 
         mSinglePickController = new SinglePickController(this);
@@ -296,6 +296,9 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
+        if (mWXGDEntity.id == -1){
+            workContext.setEditable(true);
+        }
     }
 
     /**
@@ -576,6 +579,11 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                     } else {
                         mWXGDEntity.repairAdvise = charSequence.toString();
                     }
+                });
+        RxTextView.textChanges(workContext.editText())
+                .skipInitialValue()
+                .subscribe(charSequence -> {
+                    mWXGDEntity.workOrderContext = charSequence.toString();
                 });
 
         eamName.getCustomValue().setOnClickListener(v -> goSBDA());
@@ -1065,6 +1073,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private boolean checkTableBlank() {
         if (mWXGDEntity.id == -1 && TextUtils.isEmpty(eamNameEdit.getValue())) { // 制单
             ToastUtils.show(context, "设备不允许为空！");
+            return true;
+        }
+        if (TextUtils.isEmpty(mWXGDEntity.workOrderContext)){
+            ToastUtils.show(context,"工单内容不允许为空！");
             return true;
         }
         if (TextUtils.isEmpty(chargeStaff.getValue())) {
