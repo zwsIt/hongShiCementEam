@@ -235,12 +235,12 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         mWXGDEntity = (WXGDEntity) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
         tableNo = getIntent().getStringExtra(Constant.IntentKey.TABLENO);
 
-        if (mWXGDEntity.id != -1) {
-            refreshController.setAutoPullDownRefresh(true);
-            refreshController.setPullDownRefreshEnabled(true);
-        } else { // 制定
+        if (mWXGDEntity.id == null || mWXGDEntity.id == -1) { // 制定
             refreshController.setAutoPullDownRefresh(false);
             refreshController.setPullDownRefreshEnabled(false);
+        } else {
+            refreshController.setAutoPullDownRefresh(true);
+            refreshController.setPullDownRefreshEnabled(true);
         }
 
         mSparePartController = getController(SparePartController.class);
@@ -296,7 +296,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-        if (mWXGDEntity.id == -1){
+        if (mWXGDEntity.id == null || mWXGDEntity.id == -1){
             workContext.setNecessary(true);
             workContext.setEditable(true);
         }
@@ -316,10 +316,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         } else {
             mLinkController.setCancelShow(false);
         }
-        if (mWXGDEntity.id != -1) {
-            mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
-        } else { // 制定
+        if (mWXGDEntity.id == null || mWXGDEntity.id == -1) { // 制定
             mLinkController.initStartTransition(transition, "work");
+        } else {
+            mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
         }
 
     }
@@ -332,7 +332,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      */
     private void initTableHeadView() {
         if (mWXGDEntity == null) return;
-        if (mWXGDEntity.id == -1 || "BEAM2003/08".equals(mWXGDEntity.workSource.id)){ // 制定
+        if (mWXGDEntity.id == null || mWXGDEntity.id == -1 || "BEAM2003/08".equals(mWXGDEntity.workSource.id)){ // 制定
             eamInfoLl.setVisibility(View.GONE);
             eamInfoEditLl.setVisibility(View.VISIBLE);
         }
@@ -356,7 +356,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     protected void initData() {
         super.initData();
         // 制定
-        if (mWXGDEntity.id == -1) {
+        if (mWXGDEntity.id == null || mWXGDEntity.id == -1) {
             WXGDListEntity wxgdListEntity = new WXGDListEntity();
             wxgdListEntity.result = new ArrayList<>();
             wxgdListEntity.result.add(mWXGDEntity);
@@ -514,8 +514,15 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                 mWXGDEntity.planStartDate = null;
             } else {
                 datePickController.listener((year, month, day, hour, minute, second) -> {
-                    String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-                    long select = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
+                    String dateStr;
+                    long select;
+                    if (datePickController.isSecondVisible()){
+                        dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                        select = DateUtil.dateFormat(dateStr, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC);
+                    }else {
+                        dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute;
+                        select = DateUtil.dateFormat(dateStr, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN);
+                    }
 
                     //计算大小
                     if (mWXGDEntity.planEndDate != null && select > mWXGDEntity.planEndDate) {
@@ -533,8 +540,15 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                 mWXGDEntity.planEndDate = null;
             } else {
                 datePickController.listener((year, month, day, hour, minute, second) -> {
-                    String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-                    long select = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm:ss");
+                    String dateStr;
+                    long select;
+                    if (datePickController.isSecondVisible()){
+                        dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+                        select = DateUtil.dateFormat(dateStr, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC);
+                    }else {
+                        dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute;
+                        select = DateUtil.dateFormat(dateStr, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN);
+                    }
                     //计算大小
                     if (mWXGDEntity.planStartDate != null && select < mWXGDEntity.planStartDate) {
                         ToastUtils.show(context, "计划结束时间不能小于计划开始时间", 3000);

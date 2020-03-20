@@ -2,8 +2,10 @@ package com.supcon.mes.module_yhgl.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -19,6 +21,7 @@ import com.supcon.common.com_http.BaseEntity;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.picker.SinglePicker;
@@ -26,6 +29,7 @@ import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.beans.LinkEntity;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
+import com.supcon.mes.mbap.listener.OnTextListener;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
@@ -55,9 +59,12 @@ import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
+import com.supcon.mes.middleware.model.bean.MaintainEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
+import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
@@ -68,6 +75,7 @@ import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
+import com.supcon.mes.middleware.ui.view.FlowLayout;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
@@ -247,6 +255,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private List<String> checkResultListStr = new ArrayList<>();
     private AttachmentController mAttachmentController;
     private AttachmentDownloadController mAttachmentDownloadController;
+    private CustomVerticalEditText mDelayDuration;
+    private CustomVerticalDateView mDelayDate;
 
     @Subscribe
     public void onReceiveImageDeleteEvent(ImageDeleteEvent imageDeleteEvent) {
@@ -266,7 +276,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         EventBus.getDefault().register(this);
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
-        mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY); // 制定、隐患单列表、隐患统计列表、工作提醒待办传参
+        mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY); // 制定、隐患单列表、隐患统计列表、工作提醒待办、异常记录传参
         deploymentId = getIntent().getLongExtra(DEPLOYMENT_ID, 0L);
 
         if (TextUtils.isEmpty(mYHEntity.tableNo)) { // 制定时赋值
@@ -603,12 +613,11 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             } else {
                 mDatePickController
                         .listener((year, month, day, hour, minute, second) -> {
-                            LogUtil.i(year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second);
                             String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute;
                             long select = DateUtil.dateFormat(dateStr, "yyyy-MM-dd HH:mm");
 
                             mYHEntity.findTime = select;
-                            yhEditFindTime.setDate(DateUtil.dateTimeFormat(mYHEntity.findTime));
+                            yhEditFindTime.setDate(DateUtil.dateFormat(mYHEntity.findTime,Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN));
 
                         })
                         .show(mYHEntity.findTime);
@@ -635,7 +644,13 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 //                        mYHEntity.chargeStaff.id = EamApplication.getAccountInfo().staffId;
 //                        yhEditWXChargeStaff.setContent(EamApplication.getAccountInfo().staffName);
 //                    }
-                    if (checkBeforeSubmit() && linkEntities.size() > 0) {
+                    if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
+                        // 预警：备件、润滑、维保延期处理
+                        if (mYHEntity.sourceType != null && (Constant.YhglWorkSource.sparepart.equals(mYHEntity.sourceType.id) || Constant.YhglWorkSource.lubrication.equals(mYHEntity.sourceType.id) ||
+                                Constant.YhglWorkSource.maintenance.equals(mYHEntity.sourceType.id))) {
+                            dealDelayDate(linkEntities.get(0));
+                            return;
+                        }
                         doSubmit(createWorkFlowVar(linkEntities.get(0)));
                     }
                 });
@@ -643,13 +658,13 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(gdBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    if (mYHEntity.isOffApply && mYHEntity.chargeStaff == null){
-                        ToastUtils.show(context,"勾选生成停电票时，请选择负责人");
+                    if (mYHEntity.isOffApply && mYHEntity.chargeStaff == null) {
+                        ToastUtils.show(context, "勾选生成停电票时，请选择负责人");
                         return;
                     }
                     mYHEntity.downStream.id = "BEAM2_2013/02";
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
-                    if (checkBeforeSubmit() && linkEntities.size() > 0) {
+                    if (linkEntities != null &&  checkBeforeSubmit() && linkEntities.size() > 0) {
                         doSubmit(createWorkFlowVar(linkEntities.get(0)));
                     }
                 });
@@ -665,7 +680,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 .subscribe(o -> {
                     mYHEntity.downStream.id = "BEAM2_2013/03";
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
-                    if (checkBeforeSubmit() && linkEntities.size() > 0) {
+                    if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
                         doSubmit(createWorkFlowVar(linkEntities.get(0)));
                     }
                 });
@@ -771,6 +786,94 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mYHEntity.isOffApply = isChecked);
 
+    }
+
+    /**
+     * @param
+     * @param linkEntity
+     * @return
+     * @description 延期处理预警数据
+     * @author zhangwenshuai1 2020/3/18
+     */
+    private void dealDelayDate(LinkEntity linkEntity) {
+        switch (mYHEntity.sourceType.id) {
+            case Constant.YhglWorkSource.sparepart:
+                if (mLubricateOilsController.getLubricateOilsEntities().size() > 0 && mSparePartController.getSparePartEntities().get(0) != null){ // 默认取第一条
+                    dealDelayDateOrDuration(mSparePartController.getSparePartEntities().get(0).periodType.id, linkEntity);
+                } else {
+                    ToastUtils.show(context, "数据或已经被修改，请刷新页面");
+                }
+                break;
+            case Constant.YhglWorkSource.lubrication:
+                if (mLubricateOilsController.getLubricateOilsEntities().size() > 0 && mLubricateOilsController.getLubricateOilsEntities().get(0) != null) { // 默认取第一条
+                    dealDelayDateOrDuration(mLubricateOilsController.getLubricateOilsEntities().get(0).getJwxItemID().getPeriodType().id, linkEntity);
+                } else {
+                    ToastUtils.show(context, "数据或已经被修改，请刷新页面");
+                }
+                break;
+            case Constant.YhglWorkSource.maintenance:
+                if (maintenanceController.getMaintenanceEntities().size() > 0 && maintenanceController.getMaintenanceEntities().get(0) != null) { // 默认取第一条
+                    dealDelayDateOrDuration(maintenanceController.getMaintenanceEntities().get(0).getJwxItem().getPeriodType().id, linkEntity);
+                } else {
+                    ToastUtils.show(context, "数据或已经被修改，请刷新页面");
+                }
+                break;
+        }
+    }
+
+    private void dealDelayDateOrDuration(String periodType, LinkEntity linkEntity) {
+        if (Constant.PeriodType.TIME_FREQUENCY.equals(periodType)) {
+            showDelayDateDialog(true, linkEntity);
+        } else if (Constant.PeriodType.RUNTIME_LENGTH.equals(periodType)) {
+            showDelayDateDialog(false, linkEntity);
+        } else {
+            ToastUtils.show(context, "数据或已经被修改，请刷新页面");
+        }
+    }
+
+    private void showDelayDateDialog(boolean b, LinkEntity linkEntity) {
+        CustomDialog customDialog = new CustomDialog(context).layout(R.layout.ac_delay_dialog, DisplayUtil.getScreenWidth(context) * 2/3,ViewGroup.LayoutParams.WRAP_CONTENT);
+        customDialog.bindChildListener(R.id.delayDate, (childView, action, obj) -> {
+            if (action == -1) {
+
+            } else {
+                mDatePickController.listener((year, month, day, hour, minute, second) -> {
+                    String date = year + "-" + month + "-" + day;
+                    if (DateUtil.dateFormat(date,Constant.TimeString.YEAR_MONTH_DAY) < new Date().getTime()){
+                        ToastUtils.show(context, "延期日期需大于当前日期");
+                        return;
+                    }
+                    mDelayDate.setContent(date);
+                }).show(TextUtils.isEmpty(mDelayDate.getContent()) ? new Date().getTime() : DateUtil.dateFormat(mDelayDate.getContent()));
+            }
+        })
+                .bindTextChangeListener(R.id.delayDuration, text -> {
+                })
+                .bindClickListener(R.id.blueBtn, v -> {
+                    if (b && TextUtils.isEmpty(mDelayDate.getContent())) {
+                        ToastUtils.show(context, "请填写延期日期");
+                        return;
+                    } else if (!b && TextUtils.isEmpty(mDelayDuration.getContent())) {
+                        ToastUtils.show(context, "请填写延期时长");
+                        return;
+                    }else if (!b && Double.parseDouble(mDelayDuration.getContent()) <= 0){
+                        ToastUtils.show(context,"延期时长需大于0");
+                        return;
+                    }
+                    doSubmit(createWorkFlowVar(linkEntity));
+                    customDialog.dismiss();
+
+                }, false)
+                .bindClickListener(R.id.grayBtn, null, true);
+        mDelayDate = customDialog.getDialog().findViewById(R.id.delayDate);
+        mDelayDuration = customDialog.getDialog().findViewById(R.id.delayDuration);
+        mDelayDuration.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        if (b) {
+            mDelayDuration.setVisibility(View.GONE);
+        } else {
+            mDelayDate.setVisibility(View.GONE);
+        }
+        customDialog.show();
     }
 
     private boolean checkResult() {
@@ -1082,7 +1185,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("faultInfo.sourceType.value", mYHEntity.sourceType != null ? mYHEntity.sourceType.value : "其他");
 
         map.put("faultInfo.chargeStaff.id", mYHEntity.chargeStaff == null ? "" : Util.strFormat2(mYHEntity.chargeStaff.id));
-        map.put("faultInfo.isOffApply",mYHEntity.isOffApply);
+        map.put("faultInfo.isOffApply", mYHEntity.isOffApply);
+        map.put("faultInfo.delayDate", TextUtils.isEmpty(mDelayDate.getContent()) ? "" :mDelayDate.getContent()  /*DateUtil.dateFormat(mDelayDate.getContent(), Constant.TimeString.YEAR_MONTH_DAY)*/);
+        map.put("faultInfo.delayDuration", mDelayDuration.getContent());
 
         if (mYHEntity.pending != null && mYHEntity.pending.id != null) {
             map.put("pendingId", Util.strFormat2(mYHEntity.pending.id));

@@ -207,6 +207,17 @@
                     app:key_width="@dimen/dp_120"
                     />
 
+                <com.supcon.mes.mbap.view.CustomVerticalEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:id="@+id/content"
+                    android:tag="content"
+                    android:background="@color/white"
+                    android:padding="@dimen/dp_10"
+                    app:key="内容"
+                    app:edit_hint="请输入内容"
+                    app:necessary="true"/>
+
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/centralControlRoom"
                     android:layout_width="match_parent"

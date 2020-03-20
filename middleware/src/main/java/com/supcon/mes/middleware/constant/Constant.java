@@ -544,6 +544,8 @@ public interface Constant {
         String START_TIME = " 00:00:00";
         String END_TIME = " 23:59:59";
         String YEAR_MONTH_DAY_HOUR_MIN_SEC = "yyyy-MM-dd HH:mm:ss";
+        String YEAR_MONTH_DAY_HOUR_MIN = "yyyy-MM-dd HH:mm";
+        String YEAR_MONTH_DAY = "yyyy-MM-dd";
     }
 
     interface PicType {
@@ -1022,6 +1024,14 @@ public interface Constant {
         String EDIT_URL = "/BEAMEle/onOrOff/onoroff/eleOnEdit.action";// 编辑
         String PREVIEW_URL = "";// 审核
         String VIEW_URL = "/BEAMEle/onOrOff/onoroff/eleOnWorkFlow.action"; // 查看
+    }
+    /**
+     * 隐患单据视图
+     */
+    interface FaultInfoView {
+        String EDIT_URL = "/BEAM2/faultInfo/faultInfo/faultInfoEdit.action";// 编辑
+        String PREVIEW_URL = "/BEAM2/faultInfo/faultInfo/faultInfoApproval.action";// 审核
+        String VIEW_URL = "/BEAM2/faultInfo/faultInfo/faultInfoView.action"; // 查看
     }
 
 }

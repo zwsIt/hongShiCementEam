@@ -103,11 +103,12 @@ public class RankingActivity extends BaseRefreshRecyclerActivity implements Scor
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(15));
-        if (type.equals("BEAM_065/03")) {
-            titleText.setText("机修工排名");
-        } else {
-            titleText.setText("巡检工排名");
-        }
+        titleText.setText("个人绩效排名");
+//        if (type.equals("BEAM_065/03")) {
+//            titleText.setText("机修工排名");
+//        } else {
+//            titleText.setText("巡检工排名");
+//        }
         datePickController = new DatePickController(this);
 
         datePickController.setCycleDisable(true);
@@ -148,7 +149,7 @@ public class RankingActivity extends BaseRefreshRecyclerActivity implements Scor
         });
 
         refreshListController.setOnRefreshPageListener(pageIndex -> {
-            String url="/BEAM/patrolWorkerScore/workerScoreHead/patrolMonhtList-query.action";
+            String url = "/BEAM/patrolWorkerScore/workerScoreHead/patrolMonhtList-query.action";  // 每日个人绩效list
 //            if (type.equals("BEAM_065/03")) {
 ////                url = "/BEAM/patrolWorkerScore/workerScoreHead/repairerScoreList-query.action";
 ////            } else {
@@ -163,8 +164,10 @@ public class RankingActivity extends BaseRefreshRecyclerActivity implements Scor
                 bundle.putSerializable(Constant.IntentKey.SCORE_ENTITY, ((ScoreStaffEntity) obj));
                 bundle.putBoolean(Constant.IntentKey.isEdit, false);
                 if (type.equals("BEAM_065/03")) {
+                    // 机修工每日评分
                     IntentRouter.go(context, Constant.Router.SCORE_MECHANIC_STAFF_PERFORMANCE, bundle);
                 } else {
+                    // 巡检工每日评分
                     IntentRouter.go(context, Constant.Router.SCORE_INSPECTOR_STAFF_DAILY_PERFORMANCE, bundle);
                 }
             }

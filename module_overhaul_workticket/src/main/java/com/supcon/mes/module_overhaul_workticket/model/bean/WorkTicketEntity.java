@@ -40,6 +40,7 @@ public class WorkTicketEntity extends BaseEntity {
     private Staff securityChiefStaff; // 安保科科长
     private Staff securityStaff; // 安全员
     private SystemCodeEntity flowStatus; // 工作流状态：WorkTicket_003/01：编辑；WorkTicket_003/02：中控室确认；WorkTicket_003/03：安全员审核；WorkTicket_003/04：领导审批；WorkTicket_003/05：生效；WorkTicket_003/06：作废；
+    private String content; // 内容
 
     private Long cid;
     private Staff createStaff;
@@ -61,6 +62,14 @@ public class WorkTicketEntity extends BaseEntity {
 
     public void setAttrMap(Map attrMap) {
         this.attrMap = attrMap;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Staff getChargeStaff() {

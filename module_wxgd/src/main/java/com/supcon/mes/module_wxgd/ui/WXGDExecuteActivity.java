@@ -163,7 +163,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     Button activate;
 
     @BindByTag("workContext")
-    CustomVerticalTextView workContext;
+    CustomVerticalEditText workContext;
     @BindByTag("workFlowBar")
     LinearLayout workFlowBar;
     @BindByTag("repairLl")

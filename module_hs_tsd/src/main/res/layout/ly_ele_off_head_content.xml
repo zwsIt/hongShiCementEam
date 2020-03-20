@@ -127,17 +127,17 @@
                     app:necessary="true" />
 
                 <com.supcon.mes.mbap.view.CustomVerticalEditText
-                    android:id="@+id/remark"
+                    android:id="@+id/workTask"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_80"
                     android:layout_marginBottom="@dimen/dp_1"
                     android:background="@color/white"
                     android:paddingStart="@dimen/dp_10"
                     android:paddingEnd="@dimen/dp_5"
-                    android:tag="remark"
+                    android:tag="workTask"
                     app:content_size="13"
                     app:editable="true"
-                    app:key="备注"
+                    app:key="内容"
                     app:key_size="14"/>
                 <com.supcon.mes.mbap.view.CustomGalleryView
                     android:layout_width="match_parent"

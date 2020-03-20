@@ -78,12 +78,13 @@ public class YHGLStatisticsAdapter extends BaseListDataRecyclerViewAdapter<YHEnt
                             Bundle bundle = new Bundle();
                             bundle.putSerializable(YHGL_ENTITY, yhEntity);
 
-                            if (Constant.TableStatus_CH.TAKE_EFFECT.equals(yhEntity.pending.taskDescription)) {
+                            if (yhEntity.pending.id == null){
                                 IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
-                            } else if (Constant.TableStatus_CH.EDIT.equals(yhEntity.pending.taskDescription) && yhEntity.pending.id != null ) {  // 本人代办
+                            }else if (Constant.FaultInfoView.EDIT_URL.equals(yhEntity.pending.openUrl)){
                                 IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
-                            } else
-                                IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
+                            }else if (Constant.FaultInfoView.PREVIEW_URL.equals(yhEntity.pending.openUrl)){
+                                IntentRouter.go(context, Constant.Router.YH_VIEW, bundle);
+                            }
                         }
                     });
         }

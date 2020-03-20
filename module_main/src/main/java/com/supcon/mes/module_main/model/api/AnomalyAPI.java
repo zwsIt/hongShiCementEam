@@ -16,4 +16,11 @@ public interface AnomalyAPI {
 
     void getAnomalyList(int page, int pageSize, Map<String, Object> params);
 
+//    /**
+//     * 获取异常记录的当前登录人待办ID
+//     * @param currentUserId
+//     * @param tableNo
+//     */
+//    void getCurrentUserPendingId(Long currentUserId, String tableNo);
+
 }

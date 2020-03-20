@@ -154,11 +154,11 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                     }
                                     bundle.putLong(Constant.IntentKey.WARN_ID, item.tableId);
                                     bundle.putString(Constant.IntentKey.PROPERTY, item.peroidType.id);
-                                    if (item.sourceType.equals("润滑提醒")) {
+                                    if ("日常润滑提醒".equals(item.sourceType) || "润滑提醒".equals(item.sourceType)) {
                                         IntentRouter.go(context, Constant.Router.LUBRICATION_EARLY_WARN, bundle);
-                                    } else if (item.sourceType.equals("零部件提醒")) {
+                                    } else if ("零部件提醒".equals(item.sourceType)) {
                                         IntentRouter.go(context, Constant.Router.SPARE_EARLY_WARN, bundle);
-                                    } else if (item.sourceType.equals("维保提醒")) {
+                                    } else if ("维保提醒".equals(item.sourceType)) {
                                         IntentRouter.go(context, Constant.Router.MAINTENANCE_EARLY_WARN, bundle);
                                     }
                                 }
@@ -170,6 +170,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                     if (Constant.ProcessKey.WORK.equals(item.processKey)) {
                                         if (!TextUtils.isEmpty(item.openUrl)) {
                                             WXGDEntity wxgdEntity = new WXGDEntity();
+                                            wxgdEntity.id = item.tableId;
                                             wxgdEntity.tableNo = item.workTableNo;
                                             bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
 //                                                    bundle.putString(Constant.IntentKey.TABLENO, item.workTableNo);

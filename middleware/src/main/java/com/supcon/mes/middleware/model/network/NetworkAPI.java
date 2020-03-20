@@ -61,7 +61,7 @@ import retrofit2.http.Url;
 @ApiFactory(name = "MiddlewareHttpClient")
 public interface NetworkAPI {
 
-    @GET("/foundation/staff/list-data.action?&staff.code=&department.name=&position.name=&companyId=1000&cusDepartmentDown=yes&cusPositionDown=yes&pageSize=500&records.pageSize=500&records.maxPageSize=500")
+    @GET("/foundation/staff/list-data.action?&staff.code=&department.name=&position.name=&cusDepartmentDown=yes&cusPositionDown=yes&pageSize=500&records.pageSize=500&records.maxPageSize=500")
     Flowable<TxlListEntity> getStaffList(@Query("staff.name") String staffName, @Query("records.pageNo") int pageNum);
 
     /**
@@ -275,16 +275,16 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @POST("/foundation/department/queryList.action?companyId=1000&page.pageSize=500&&page.maxPageSize=500")
+    @POST("/foundation/department/queryList.action?page.pageSize=500&page.maxPageSize=500")
     Flowable<DepartmentInfoListEntity> listDepartment(@Query("page.pageNo") int pageNo);
 
-    @POST("/foundation/position/queryList.action??companyId=1000&page.pageSize=500&&page.maxPageSize=500")
+    @POST("/foundation/position/queryList.action?page.pageSize=500&page.maxPageSize=500")
     Flowable<PositionEntityListEntity> listPosition(@Query("page.pageNo") int pageNo);
 
     /**
      * 获取departmentInfo列表
      */
-    @POST("/foundation/department/queryList.action?a=-1&departmentCode=&departmentName=&departmentId=&managerId=&managerName=&companyId=1000&page.pageSize=500&&page.maxPageSize=500")
+    @POST("/foundation/department/queryList.action?a=-1&departmentCode=&departmentName=&departmentId=&managerId=&managerName=&page.pageSize=500&page.maxPageSize=500")
     Flowable<DepartmentInfoListEntity> listDepartmentInfo();
 
     /**

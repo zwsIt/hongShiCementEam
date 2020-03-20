@@ -168,11 +168,9 @@ public class MineFragment extends BaseControllerFragment implements MineContract
             LogUtil.d("mineUpdate");
             String channel = ChannelUtil.getUMengChannel();
             if (channel.equals("hongshi")) {
-                uri = Uri.parse("https://fir.im/gr4e");
-            } else if (channel.equals("hailuo")) {
-                uri = Uri.parse("https://fir.im/conch");
+                uri = Uri.parse("http://d.6short.com/gr4e");
             } else {
-                uri = Uri.parse("https://fir.im/");
+                uri = Uri.parse("https://www.betaqr.com/");
             }
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);

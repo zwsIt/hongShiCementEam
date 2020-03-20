@@ -1,5 +1,6 @@
 package com.supcon.mes.module_contact.presenter;
 
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.module_contact.model.contract.ContactDataContract;
@@ -19,7 +20,7 @@ public class ContactDataPresenter extends ContactDataContract.Presenter {
     public void getStaffList(int pageNo, int pageSize) {
 
         mCompositeSubscription.add(
-                ContactHttpClient.getStaffList(pageNo, pageSize)
+                ContactHttpClient.getStaffList(EamApplication.getCid(), pageNo, pageSize)
                         .onErrorReturn(new Function<Throwable, CommonBAPListEntity<ContactEntity>>() {
                             @Override
                             public CommonBAPListEntity<ContactEntity> apply(Throwable throwable) throws Exception {

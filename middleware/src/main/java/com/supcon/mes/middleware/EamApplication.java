@@ -301,4 +301,12 @@ public class EamApplication extends MBapApp {
         res.updateConfiguration(config, res.getDisplayMetrics());
         return res;
     }
+
+    /**
+     * 公司id
+     * @return
+     */
+    public static Long getCid(){
+        return accountInfo.cid;
+    }
 }

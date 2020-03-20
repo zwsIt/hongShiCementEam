@@ -102,7 +102,7 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
     CustomTextView dispatcherStaff;
 
     @BindByTag("workContext")
-    CustomVerticalTextView workContext;
+    CustomVerticalEditText workContext;
 
     @BindByTag("eleOffChkBox")
     CheckBox eleOffChkBox; // 是否生成停电票

@@ -170,7 +170,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
 
     @BindByTag("workContext")
-    CustomVerticalTextView workContext;
+    CustomVerticalEditText workContext;
 
     @BindByTag("acceptApplyBtn")
     Button acceptApplyBtn;

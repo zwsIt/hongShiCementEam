@@ -103,8 +103,8 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
     CustomDateView applyDate;
     @BindByTag("operateStaff")
     CustomTextView operateStaff;
-    @BindByTag("remark")
-    CustomVerticalEditText remark;
+    @BindByTag("workTask")
+    CustomVerticalEditText workTask;
     @BindByTag("galleryView")
     CustomGalleryView galleryView;
     @BindByTag("operateItemWidget")
@@ -162,7 +162,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         eamName.setEditable(false);
         applyDate.setEditable(false);
         operateStaff.setEditable(false);
-        remark.setEditable(false);
+        workTask.setEditable(false);
 
         if (pendingId == -1) {
             galleryView.setEditable(false);
@@ -264,7 +264,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
                 IntentRouter.go(context, Constant.Router.STAFF, bundle);
             }
         });
-        RxTextView.textChanges(remark.editText()).skipInitialValue()
+        RxTextView.textChanges(workTask.editText()).skipInitialValue()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<CharSequence>() {
@@ -373,7 +373,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         map.put("onoroff.eleTemplateId.id", Util.strFormat2(mElectricityOffOnEntity.getEleTemplateId().id));
         map.put("onoroff.operateStaff.id", Util.strFormat2(mElectricityOffOnEntity.getOperateStaff().id));
         map.put("onoroff.applyDate", applyDate.getContent());
-        map.put("onoroff.remark", remark.getContent());
+        map.put("onoroff.workTask", workTask.getContent());
         map.put("__file_upload", true);
 
         // 表单
@@ -448,7 +448,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         eamCode.setContent(entity.getEamID().code);
         applyDate.setContent(entity.getApplyDate() == null ? "" : DateUtil.dateTimeFormat(entity.getApplyDate()));
         operateStaff.setContent(entity.getOperateStaff().name);
-        remark.setContent(entity.getRemark());
+        workTask.setContent(entity.getWorkTask());
 
         mElectricityOffOnEntityOld = GsonUtil.gsonToBean(mElectricityOffOnEntity.toString(), ElectricityOffOnEntity.class);
 

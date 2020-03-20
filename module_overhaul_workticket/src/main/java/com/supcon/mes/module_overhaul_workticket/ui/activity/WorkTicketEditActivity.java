@@ -19,6 +19,8 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
@@ -39,6 +41,7 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
@@ -134,6 +137,8 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
     @BindByTag("hazardCtrlPointFlowLy")
     FlowLayout hazardCtrlPointFlowLy;
+    @BindByTag("content")
+    CustomVerticalEditText content;
 
 
     private String __pc__;
@@ -390,6 +395,15 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             }
         });
 
+        RxTextView.textChanges(content.editText())
+                .skipInitialValue()
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        mWorkTicketEntity.setContent(charSequence.toString());
+                    }
+                });
+
     }
 
     private void doSave() {
@@ -456,7 +470,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         map.put("ohworkticket.eamId.id",Util.strFormat2(mWorkTicketEntity.getEamId().id));
         map.put("ohworkticket.workShop.id", Util.strFormat2(mWorkTicketEntity.getChargeStaff().getMainPosition().getDepartment().id));
         map.put("ohworkticket.riskAssessment.id", mWorkTicketEntity.getRiskAssessment().id);
-//        map.put("ohworkticket.remark", remark.getContent());
+        map.put("ohworkticket.content", content.getContent());
         map.put("ohworkticket.hazardsourContrpoint",mWorkTicketEntity.getHazardsourContrpoint());
         map.put("ohworkticket.value",mWorkTicketEntity.getHazardsourContrpointForDisplay());
         map.put("__file_upload", true);
@@ -495,6 +509,10 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 //            ToastUtils.show(context, "危险源控制点不允许为空！");
 //            return true;
 //        }
+        if (TextUtils.isEmpty(mWorkTicketEntity.getContent())) {
+            ToastUtils.show(context, "内容不允许为空！");
+            return true;
+        }
         return false;
     }
 
@@ -536,6 +554,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         workShop.setContent(entity.getWorkShop().name);
         eamName.setContent(entity.getEamId().name);
         eamCode.setContent(entity.getEamId().code);
+        content.setContent(entity.getContent());
 
         //初始化风险评估
 //        if (riskAssessmentRadioGroup.getChildCount() <= 0){

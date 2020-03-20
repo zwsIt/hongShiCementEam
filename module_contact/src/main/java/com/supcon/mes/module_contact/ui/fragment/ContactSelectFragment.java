@@ -66,7 +66,6 @@ public class ContactSelectFragment extends BaseRefreshRecyclerFragment<ContactEn
 
     @Override
     protected IListAdapter createAdapter() {
-        String selectedStaff = getActivity().getIntent().getStringExtra(Constant.IntentKey.IS_MULTI);
         mContactAdapter = new ContactAdapter(context, isSelect, isMulti, "", searchTag);
         return mContactAdapter;
     }

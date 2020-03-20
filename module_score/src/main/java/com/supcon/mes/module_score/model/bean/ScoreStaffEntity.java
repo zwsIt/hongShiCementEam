@@ -7,7 +7,7 @@ import com.supcon.mes.middleware.model.bean.Staff;
 public class ScoreStaffEntity extends BaseEntity {
 
 
-    public Long cid;//评分时间
+    public Long cid;
     public Long createTime;//创建时间
     public int id = -1;
     public Staff patrolWorker;//巡检工

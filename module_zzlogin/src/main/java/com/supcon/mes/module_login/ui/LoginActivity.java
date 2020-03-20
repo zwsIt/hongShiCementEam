@@ -162,10 +162,6 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
                 for (Company company : companyList){
                     list.add(company.name);
                 }
-//                list.add("集团");list.add("浙江兰溪股份有限公司");
-//                list.add("江西宜春股份有限公司");list.add("福建漳州一公司有限公司");
-//                list.add("印尼中外合资有限公司");list.add("香港技术股份有限公司");
-//                list.add("杭州建德水泥建材公司");list.add("杭州诸暨水泥建材公司");
 
                 mSinglePickController.textSize(20);
                 mSinglePickController.list(list)

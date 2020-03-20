@@ -16,25 +16,23 @@ import org.greenrobot.eventbus.EventBus;
 
 public class ErrorMsgHelper {
 
-    public static String msgParse(String errorMsg){
+    public static String msgParse(String errorMsg) {
 
 
-        if(TextUtils.isEmpty(errorMsg)){
+        if (TextUtils.isEmpty(errorMsg)) {
 
             return "请求错误！";
 
         }
         String msg2 = null;
 
-        if(errorMsg.contains("404")){
+        if (errorMsg.contains("404")) {
             msg2 = "服务不存在，未部署或ip设置错误！";
-        }
-        else if(errorMsg.contains("403")){
+        } else if (errorMsg.contains("403")) {
             msg2 = "访问被拒绝，模块未授权！";
-        }
-        else if(errorMsg.contains("401")){
+        } else if (errorMsg.contains("401")) {
             EventBus.getDefault().post(new LoginValidEvent(true));
-            msg2= "登陆失效,重新登陆中!";
+            msg2 = "登陆失效,重新登陆中!";
         }
 //        else if(errorMsg.contains("500")){
 //            msg2 = "服务器错误！";
@@ -52,10 +50,12 @@ public class ErrorMsgHelper {
             msg2 = "无法连接服务器!";
         } else if (errorMsg.contains("No address associated with hostname")) {
             msg2 = "无法解析服务器地址，请检查设置！";
-        }else if (errorMsg.contains("IllegalArgumentException: Query map contained null key.")) {
+        } else if (errorMsg.contains("IllegalArgumentException: Query map contained null key.")) {
             msg2 = "提交参数集Map含空key,请检查确认！";
-        }else if (errorMsg.contains("IllegalArgumentException: Query map contained null value for key '")) {
-            msg2 = "提交参数集Map的key '"+errorMsg.substring(errorMsg.indexOf("'")+1,errorMsg.lastIndexOf("'"))+"' 含空value,请检查确认！";
+        } else if (errorMsg.contains("IllegalArgumentException: Query map contained null value for key '")) {
+            msg2 = "提交参数集Map的key '" + errorMsg.substring(errorMsg.indexOf("'") + 1, errorMsg.lastIndexOf("'")) + "' 含空value,请检查确认！";
+        } else if (errorMsg.contains("wrong username or company")) {
+            msg2 = "用户名或公司错误！";
         } else if (errorMsg.contains("Exception")) {
             msg2 = "获取数据失败！";
         } else {

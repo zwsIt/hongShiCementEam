@@ -22,6 +22,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.QueryName;
 
 /**
  * Created by Administrator on 2016/3/23.
@@ -111,4 +112,7 @@ public interface MainService {
      */
     @GET("{url}/dealInfo-list.action")
     Flowable<List> getDealInfoList(@Path(value = "url",encoded = true) String url, @Query("tableInfoId") Long tableInfoId);
+
+    @GET("/BEAM2/personWork/allAbnormalInfoOfEam/getPendingId.action")
+    Flowable<CommonEntity> getPendingId(@Query("currentUserId") Long currentUserId, @Query("tableNo") String tableNo);
 }

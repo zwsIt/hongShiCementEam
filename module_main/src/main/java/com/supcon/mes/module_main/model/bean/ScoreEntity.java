@@ -12,7 +12,7 @@ public class ScoreEntity extends BaseEntity {
 
     public Integer ranking;
     public Float score;
-    public String type;
+    public String type; // BEAM_065/01 : 设备评分；BEAM_065/02 : 巡检个人评分；BEAM_065/03 : 机修个人评分；BEAM_065/04 : 验收单；BEAM_065/05 : 巡检工每日评分
     public int staffID;
 
 }

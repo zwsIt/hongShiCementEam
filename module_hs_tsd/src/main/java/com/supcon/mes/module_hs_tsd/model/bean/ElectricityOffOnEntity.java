@@ -31,7 +31,7 @@ public class ElectricityOffOnEntity extends BaseEntity {
     private Long operateDate; // 操作时间
     private Department applyCurrentDept; // 申请部门
     private Staff operateStaff; // 操作人
-    private String workTask; // 工作任务
+    private String workTask; // 工作任务(内容)
     private String remark;
     private EleOffOnTemplate eleTemplateId; // 停送电模板
     private SystemCodeEntity applyType; // 申请类型：BEAMEle001/01：停电；BEAMEle001/02：送电

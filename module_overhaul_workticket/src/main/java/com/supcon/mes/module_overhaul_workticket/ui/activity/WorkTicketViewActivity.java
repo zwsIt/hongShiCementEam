@@ -32,6 +32,7 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
@@ -132,6 +133,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
 
     @BindByTag("saferGalleryView")
     CustomGalleryView saferGalleryView;
+    @BindByTag("content")
+    CustomVerticalEditText content;
 
 
     private String __pc__;
@@ -184,6 +187,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         riskAssessmentLl.setVisibility(View.GONE);
         riskAssessmentView.setVisibility(View.VISIBLE);
         hazardCtrlPointFlowLy.setVisibility(View.GONE);
+        content.setEditable(false);
         // 安全员拍照
         saferGalleryView.setVisibility(View.VISIBLE);
         if (getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false)) {

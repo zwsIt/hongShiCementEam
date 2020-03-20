@@ -137,7 +137,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     CustomTextView dispatcherStaff;
 
     @BindByTag("workContext")
-    CustomVerticalTextView workContext;
+    CustomVerticalEditText workContext;
 
     private RepairStaffController mRepairStaffController;
     private SparePartController mSparePartController;

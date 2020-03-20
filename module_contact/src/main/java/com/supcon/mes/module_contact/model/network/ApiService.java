@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
 
-    @GET("/foundation/staff/list-data.action?&companyId=1000&cusDepartmentDown=yes&cusPositionDown=yes")
-    Flowable<CommonBAPListEntity<ContactEntity>> getStaffList(@Query("records.pageNo") int pageNum, @Query("records.pageSize") int pageSize);
+    @GET("/foundation/staff/list-data.action?cusDepartmentDown=yes&cusPositionDown=yes")
+    Flowable<CommonBAPListEntity<ContactEntity>> getStaffList(@Query("companyId") Long companyId,@Query("records.pageNo") int pageNum, @Query("records.pageSize") int pageSize);
 
 }

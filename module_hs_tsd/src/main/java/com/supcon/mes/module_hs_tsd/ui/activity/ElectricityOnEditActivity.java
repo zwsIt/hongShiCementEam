@@ -111,8 +111,8 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
     CustomDateView applyDate;
     @BindByTag("operateStaff")
     CustomTextView operateStaff;
-    @BindByTag("remark")
-    CustomVerticalEditText remark;
+    @BindByTag("workTask")
+    CustomVerticalEditText workTask;
     @BindByTag("galleryView")
     CustomGalleryView galleryView;
     @BindByTag("operateItemWidget")
@@ -302,7 +302,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
 //                IntentRouter.go(context, Constant.Router.STAFF,bundle);
             }
         });
-        RxTextView.textChanges(remark.editText()).skipInitialValue()
+        RxTextView.textChanges(workTask.editText()).skipInitialValue()
                .subscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
                .subscribe(new Consumer<CharSequence>() {
@@ -410,7 +410,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
         map.put("onoroff.operateStaff.id",Util.strFormat2(mElectricityOffOnEntity.getOperateStaff().id));
         map.put("onoroff.applyDate",applyDate.getContent());
         map.put("onoroff.operateDate",applyDate.getContent()); // 操作时间默认申请时间
-        map.put("onoroff.remark",remark.getContent());
+        map.put("onoroff.workTask",workTask.getContent());
         map.put("__file_upload", true);
 
          //表单
@@ -481,7 +481,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
         eamCode.setContent(entity.getEamID().code);
         applyDate.setContent(entity.getApplyDate() == null ? "" : DateUtil.dateTimeFormat(entity.getApplyDate()));
         operateStaff.setContent(entity.getOperateStaff().name);
-        remark.setContent(entity.getRemark());
+        workTask.setContent(entity.getWorkTask());
 
         mElectricityOffOnEntityOld = GsonUtil.gsonToBean(mElectricityOffOnEntity.toString(), ElectricityOffOnEntity.class);
 
