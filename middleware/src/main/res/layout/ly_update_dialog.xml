@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="280dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
@@ -15,26 +15,28 @@
         style="@style/TitleTextColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="5dp"
-        android:text="警告"
-        android:textColor="@color/textColorblack"
-        android:textSize="24sp"
-        android:visibility="gone" />
+        android:gravity="center"
+        android:text="版本更新"
+        android:textColor="@color/themeColor"
+        android:textSize="@dimen/dp_16"
+        android:drawableTop="@drawable/ic_down"
+        android:drawablePadding="0dp"/>
 
     <TextView
         android:id="@+id/msgText"
         style="@style/TitleTextColor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="160dp"
         android:layout_marginTop="@dimen/dp_5"
         android:gravity="center_vertical"
         android:paddingBottom="@dimen/dp_5"
         android:paddingLeft="@dimen/dp_10"
         android:paddingRight="@dimen/dp_10"
         android:paddingTop="@dimen/dp_5"
-        android:text="确定要删除吗？"
+        android:text="确定更新吗？"
         android:textColor="@color/textColorblack"
+        android:ellipsize="marquee"
+        android:scrollbars="vertical"
         android:textSize="@dimen/fontSize_16sp" />
 
     <LinearLayout
@@ -45,39 +47,26 @@
         android:orientation="vertical" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
         android:orientation="horizontal">
-
-
-
-        <Button
-            android:id="@+id/redBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sl_common"
-            android:text="确定"
-            android:textColor="@color/customOrange2"
-            android:textSize="@dimen/fontSize_16sp" />
-
-        <Button
-            android:id="@+id/blueBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sl_common"
-            android:text="确定"
-            android:textColor="@color/customBlue4"
-            android:textSize="@dimen/fontSize_16sp"
-            android:visibility="gone"
-            />
         <Button
             android:id="@+id/grayBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:background="@drawable/sl_common"
             android:text="取消"
             android:textColor="@color/gray"
+            android:textSize="@dimen/fontSize_16sp" />
+        <Button
+            android:id="@+id/redBtn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_common"
+            android:text="更新"
+            android:textColor="@color/customOrange2"
             android:textSize="@dimen/fontSize_16sp" />
     </LinearLayout>
 

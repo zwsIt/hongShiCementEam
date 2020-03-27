@@ -704,6 +704,7 @@ public interface Constant {
         String DEAL_TIME_S = "DEAL_TIME_S"; // 润滑完成时间
         String DEAL_TIME_E = "DEAL_TIME_E"; // 润滑完成时间
         String DEAL_TIME = "DEAL_TIME"; // 润滑完成时间
+        String EAM_ID = "EAM_ID"; // 设备ID
     }
 
 

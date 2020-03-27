@@ -42,6 +42,9 @@ public class DailyLubricationWarnPresenter extends DailyLubricationWarnContract.
         if (params.containsKey(Constant.BAPQuery.EAM_CODE)) {
             paramsEam.put(Constant.BAPQuery.EAM_CODE, Objects.requireNonNull(params.get(Constant.BAPQuery.EAM_CODE)));
         }
+        if (params.containsKey(Constant.BAPQuery.EAM_ID)) {
+            paramsEam.put(Constant.BAPQuery.EAM_ID, Objects.requireNonNull(params.get(Constant.BAPQuery.EAM_ID)));
+        }
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsEam, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
         if (params.containsKey(Constant.BAPQuery.NAME)) {
             Map<String, Object> paramsName = new HashMap<>();

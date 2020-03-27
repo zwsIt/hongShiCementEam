@@ -21,6 +21,7 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -73,9 +74,9 @@ public class DailyLubricationPartEnsureActivity extends BaseRefreshRecyclerActiv
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private DailyLubricationPartAdapter dailyLubricationPartAdapter;
-    private String eamCode;
 
     private NFCHelper nfcHelper;
+    private WXGDEam mWxgdEam;
 
     @Override
     protected IListAdapter<DailyLubricateTaskEntity> createAdapter() {
@@ -92,7 +93,7 @@ public class DailyLubricationPartEnsureActivity extends BaseRefreshRecyclerActiv
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
+        mWxgdEam = (WXGDEam) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
         dailyLubricationPartAdapter.setEditable(false);
 
         nfcHelper = NFCHelper.getInstance();
@@ -132,7 +133,8 @@ public class DailyLubricationPartEnsureActivity extends BaseRefreshRecyclerActiv
     protected void initListener() {
         super.initListener();
         refreshListController.setOnRefreshPageListener(pageIndex -> {
-            queryParam.put(Constant.IntentKey.EAM_CODE, eamCode);
+            queryParam.put(Constant.IntentKey.EAM_CODE, mWxgdEam.code);
+            queryParam.put(Constant.IntentKey.EAM_ID, mWxgdEam.id);
             Map<String, Object> pageQueryParams = new HashMap<>();
             pageQueryParams.put("page.pageNo", pageIndex);
             presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam, pageQueryParams);
@@ -192,12 +194,12 @@ public class DailyLubricationPartEnsureActivity extends BaseRefreshRecyclerActiv
         List<DailyLubricateTaskEntity> list = dailyLubricationPartAdapter.getList();
         if (list == null)
             return;
-        if (!code.equals(eamCode)) {
-            SnackbarHelper.showMessage(contentView, "请确认设备(" + eamCode + ")!");
+        if (!code.equals(mWxgdEam.code)) {
+            ToastUtils.show(context, "请确认设备(" + mWxgdEam.code + ")!");
             return;
         }
         if (list.size() <= 0) {
-            SnackbarHelper.showMessage(contentView, "没有润滑部位!");
+            ToastUtils.show(context,"没有润滑部位!");
             return;
         }
         StringBuffer sourceIds = new StringBuffer();

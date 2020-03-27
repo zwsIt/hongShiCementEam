@@ -40,6 +40,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
@@ -48,6 +49,7 @@ import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
@@ -92,7 +94,7 @@ import java.util.concurrent.TimeUnit;
  * 预警工单
  */
 @Router(value = Constant.Router.WXGD_WARN)
-@Controller(value = {SparePartController.class,
+@Controller(value = {PcController.class,SparePartController.class,
         RepairStaffController.class,
         MaintenanceController.class,
         LubricateOilsController.class, WXGDListPresenter.class})
@@ -160,6 +162,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
     private WXGDSubmitController mWxgdSubmitController;
     private RoleController roleController;
     private boolean saveAndExit;
+    private String __pc__;
 
 
     @Override
@@ -235,6 +238,8 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
 
         // 初始化工作流
         initLink();
+
+        getSubmitPc("start310work");
     }
 
     /**
@@ -246,6 +251,26 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
     private void initLink() {
         mLinkController.setCancelShow(false);
         mLinkController.initStartTransition(transition, "work");
+    }
+
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                __pc__ = result;
+            }
+        });
     }
 
     /**
@@ -547,7 +572,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         map.put("dg1557832434442ListJson", maintainDtos);
         map.put("dgLists['dg1557832434442']", maintainDtos);
 
-        mWxgdSubmitController.doDispatcherWarnSubmit(map);
+        mWxgdSubmitController.doDispatcherWarnSubmit(map,__pc__);
 
     }
 

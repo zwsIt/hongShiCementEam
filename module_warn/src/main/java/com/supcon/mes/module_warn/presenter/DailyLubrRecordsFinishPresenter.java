@@ -34,6 +34,8 @@ public class DailyLubrRecordsFinishPresenter extends CommonListContract.Presente
         for (String key : queryMap.keySet()){
             if (key.equals(Constant.BAPQuery.EAM_CODE)){
                 queryMapEAmCode.put(key,queryMap.get(key));
+            } else if (key.equals(Constant.BAPQuery.EAM_ID)){
+                queryMapEAmCode.put(key,queryMap.get(key));
             }else if (key.equals(Constant.BAPQuery.DEAL_TIME_S)){
                 queryMapDealTime.put(key,queryMap.get(key));
             }

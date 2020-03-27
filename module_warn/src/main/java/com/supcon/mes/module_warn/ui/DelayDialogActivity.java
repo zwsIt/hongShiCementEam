@@ -16,7 +16,6 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BasePresenterActivity;
-import com.supcon.common.view.util.DateUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
@@ -38,7 +37,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
 
 @Router(Constant.Router.DELAYDIALOG)
 @Presenter(value = DelayPresenter.class)
@@ -64,7 +62,7 @@ public class DelayDialogActivity extends BasePresenterActivity implements DelayC
 
     @Override
     protected int getLayoutID() {
-        return R.layout.ac_delay_dialog;
+        return R.layout.warn_ac_delay_dialog;
     }
 
     @Override

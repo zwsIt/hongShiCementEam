@@ -348,8 +348,6 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                 .subscribe(new Consumer<List<OLXJAreaEntity>>() {
                                @Override
                                public void accept(List<OLXJAreaEntity> mAreaEntities) throws Exception {
-                                   mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-                                   getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
                                }
                            }
                         , throwable -> {
@@ -358,6 +356,8 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                             @Override
                             public void run() throws Exception {
                                 if (mAreaEntities != null && mAreaEntities.size() != 0) {
+                                    mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+                                    getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
                                     onLoadSuccess();
                                     return;
                                 }
@@ -576,7 +576,6 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         if (!TextUtils.isEmpty(event.action)) {
             return;
         }
-        LogUtil.e("onRefresh");
         Flowable.timer(500, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Long>() {
                     @Override

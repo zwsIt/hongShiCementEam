@@ -90,7 +90,7 @@ public class AnomalyAdapter extends BaseListDataRecyclerViewAdapter<AnomalyEntit
                             if ((Constant.ProcessKey.WORK.equals(anomalyEntity.processKey) || Constant.ProcessKey.FAULT_INFO.equals(anomalyEntity.processKey)) && anomalyEntity.pendingId != null ){
                                 return true;
                             }
-                            ToastUtils.show(context,"不支持打开页面查看");
+                            ToastUtils.show(context,"非待办，暂不支持打开页面查看");
                             return false;
                         }
                     })
@@ -106,7 +106,7 @@ public class AnomalyAdapter extends BaseListDataRecyclerViewAdapter<AnomalyEntit
                                     goFaultInfo(anomalyEntity);
                                     break;
                                     default:
-                                        ToastUtils.show(context,"不支持打开页面查看");
+                                        ToastUtils.show(context,"非待办，暂不支持打开页面查看");
                             }
                         }
                     });

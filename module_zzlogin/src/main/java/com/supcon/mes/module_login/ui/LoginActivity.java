@@ -294,10 +294,10 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
     }
 
     private boolean checkInput() {
-//        if (TextUtils.isEmpty(companySpinner.getContent().trim())){
-//            ToastUtils.show(context,"请选择公司登陆");
-//            return false;
-//        }
+        if (TextUtils.isEmpty(companySpinner.getContent().trim())){
+            ToastUtils.show(context,"请选择公司登陆");
+            return false;
+        }
         if (TextUtils.isEmpty(usernameInput.getInput().trim())) {
             ToastUtils.show(context, "用户名不允许为空!");
             return false;

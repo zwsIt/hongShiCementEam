@@ -23,23 +23,17 @@ public class AcceptanceSubmitPresenter extends AcceptanceSubmitContract.Presente
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         mCompositeSubscription.add(
                 AcceptanceHttpClient.doSubmit(formBody, powerCode)
-                        .onErrorReturn(new Function<Throwable, BapResultEntity>() {
-                            @Override
-                            public BapResultEntity apply(Throwable throwable) throws Exception {
-                                BapResultEntity bapResultEntity = new BapResultEntity();
-                                bapResultEntity.dealSuccessFlag = false;
-                                bapResultEntity.errMsg = throwable.toString();
-                                return bapResultEntity;
-                            }
+                        .onErrorReturn(throwable -> {
+                            BapResultEntity bapResultEntity = new BapResultEntity();
+                            bapResultEntity.dealSuccessFlag = false;
+                            bapResultEntity.errMsg = throwable.toString();
+                            return bapResultEntity;
                         })
-                        .subscribe(new Consumer<BapResultEntity>() {
-                            @Override
-                            public void accept(BapResultEntity bapResultEntity) throws Exception {
-                                if (bapResultEntity.dealSuccessFlag) {
-                                    getView().doSubmitSuccess(bapResultEntity);
-                                } else {
-                                    getView().doSubmitFailed(bapResultEntity.errMsg);
-                                }
+                        .subscribe(bapResultEntity -> {
+                            if (bapResultEntity.dealSuccessFlag) {
+                                getView().doSubmitSuccess(bapResultEntity);
+                            } else {
+                                getView().doSubmitFailed(bapResultEntity.errMsg);
                             }
                         })
         );

@@ -23,6 +23,8 @@ import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -79,7 +81,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private DailyLubricationPartAdapter dailyLubricationPartAdapter;
-    private String eamCode;
+    private WXGDEam mWXGDEam;
     private boolean isEdit;
     private long nextTime = 0;
     private boolean isDeal; // 当处理单据后 列表无数据自动退出页面
@@ -99,7 +101,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
+        mWXGDEam = (WXGDEam) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
         isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, false);
         dailyLubricationPartAdapter.setEditable(isEdit);
     }
@@ -125,7 +127,8 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
     protected void initListener() {
         super.initListener();
         refreshListController.setOnRefreshPageListener(pageIndex -> {
-            queryParam.put(Constant.IntentKey.EAM_CODE, eamCode);
+            queryParam.put(Constant.IntentKey.EAM_CODE, mWXGDEam.code);
+            queryParam.put(Constant.IntentKey.EAM_ID, mWXGDEam.id);
             Map<String, Object> pageQueryParams = new HashMap<>();
             pageQueryParams.put("page.pageNo", pageIndex);
             presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam, pageQueryParams);

@@ -32,11 +32,11 @@ public class EamPresenter extends EamContract.Presenter {
         if (params.containsKey(Constant.BAPQuery.EAM_CODE) || params.containsKey(Constant.BAPQuery.EAM_NAME)) {
             Map<String, Object> codeParam = new HashMap();
             // 红狮 设备编码=搜索
-            if (EamApplication.isHongshi()){
-                codeParam.put(Constant.BAPQuery.EAM_EXACT_CODE, params.get(Constant.BAPQuery.EAM_CODE));
-            }else {
+//            if (EamApplication.isHongshi()){
+//                codeParam.put(Constant.BAPQuery.EAM_EXACT_CODE, params.get(Constant.BAPQuery.EAM_CODE));
+//            }else {
                 codeParam.put(Constant.BAPQuery.EAM_CODE, params.get(Constant.BAPQuery.EAM_CODE));
-            }
+//            }
             codeParam.put(Constant.BAPQuery.EAM_NAME, params.get(Constant.BAPQuery.EAM_NAME));
             List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(codeParam);
             fastQuery.subconds.addAll(baseSubcondEntities);

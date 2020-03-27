@@ -137,6 +137,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
             eamCode.setContent(Util.strFormat(mEamEntity.code));
             eamName.setContent(Util.strFormat(mEamEntity.name));
             queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(mEamEntity.code));
+            queryParam.put(Constant.IntentKey.EAM_ID, Util.strFormat(mEamEntity.id));
             refreshController.refreshBegin();
         }
     }
@@ -164,7 +165,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
                     @Override
                     public void accept(Object o) throws Exception {
                         Bundle bundle = new Bundle();
-                        bundle.putString(Constant.IntentKey.EAM_CODE,eamCode.getContent());
+                        bundle.putSerializable(Constant.IntentKey.EAM,mEamEntity);
                         IntentRouter.go(context,Constant.Router.LUBRICATION_RECORDS_FINISH_LIST,bundle);
                     }
                 });
@@ -227,25 +228,29 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getNFC(NFCEvent nfcEvent) {
-        LogUtil.d("NFC_TAG", nfcEvent.getNfc());
         Map<String, Object> nfcJson = Util.gsonToMaps(nfcEvent.getNfc());
         if (nfcJson.get("textRecord") == null) {
             ToastUtils.show(context, "标签内容空！");
             return;
         }
         eamCode.setContent(String.valueOf(nfcJson.get("textRecord")));
-        queryParam.put(Constant.IntentKey.EAM_CODE, nfcJson.get("textRecord"));
-        refreshController.refreshBegin();
+//        queryParam.put(Constant.IntentKey.EAM_CODE, nfcJson.get("textRecord"));
+//        refreshController.refreshBegin();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.IntentKey.EAM_CODE, eamCode.getContent());
+        IntentRouter.go(context,Constant.Router.EAM,bundle);
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void search(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity != null) {
             if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
-                EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
-                eamCode.setContent(Util.strFormat(eamEntity.code));
-                eamName.setContent(Util.strFormat(eamEntity.name));
-                queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(eamEntity.code));
+                mEamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+                eamCode.setContent(Util.strFormat(mEamEntity.code));
+                eamName.setContent(Util.strFormat(mEamEntity.name));
+                queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(mEamEntity.code));
+                queryParam.put(Constant.IntentKey.EAM_ID, Util.strFormat(mEamEntity.id));
                 refreshController.refreshBegin();
             }
         }

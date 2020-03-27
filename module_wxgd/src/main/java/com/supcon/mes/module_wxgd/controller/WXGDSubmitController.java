@@ -26,29 +26,29 @@ public class WXGDSubmitController extends BasePresenterController implements WXG
 
     //接单提交
     @Override
-    public void doReceiveSubmit(Map<String, Object> map) {
-        presenterRouter.create(WXGDSubmitAPI.class).doReceiveSubmit(map);
+    public void doReceiveSubmit(Map<String, Object> map, String __pc__) {
+        presenterRouter.create(WXGDSubmitAPI.class).doReceiveSubmit(map,__pc__);
     }
 
     //执行提交
     @Override
-    public void doExecuteSubmit(Map<String, Object> map) {
-        presenterRouter.create(WXGDSubmitAPI.class).doExecuteSubmit(map);
+    public void doExecuteSubmit(Map<String, Object> map, String __pc__) {
+        presenterRouter.create(WXGDSubmitAPI.class).doExecuteSubmit(map,__pc__);
     }
 
     @Override
-    public void doAcceptChkSubmit(Map<String, Object> map, Map<String, Object> attachmentMap) {
-        presenterRouter.create(WXGDSubmitAPI.class).doAcceptChkSubmit(map, attachmentMap);
+    public void doAcceptChkSubmit(Map<String, Object> map, Map<String, Object> attachmentMap, String __pc__) {
+        presenterRouter.create(WXGDSubmitAPI.class).doAcceptChkSubmit(map, attachmentMap,__pc__);
     }
 
     @Override
-    public void doDispatcherSubmit(Map<String, Object> map) {
-        presenterRouter.create(WXGDSubmitAPI.class).doDispatcherSubmit(map);
+    public void doDispatcherSubmit(Map<String, Object> map,String __pc__) {
+        presenterRouter.create(WXGDSubmitAPI.class).doDispatcherSubmit(map,__pc__);
     }
 
     @Override
-    public void doDispatcherWarnSubmit(Map<String, Object> map) {
-        presenterRouter.create(WXGDSubmitAPI.class).doDispatcherWarnSubmit(map);
+    public void doDispatcherWarnSubmit(Map<String, Object> map, String __pc__) {
+        presenterRouter.create(WXGDSubmitAPI.class).doDispatcherWarnSubmit(map,__pc__);
     }
 
 

@@ -116,7 +116,7 @@ public class DailyLubricateReceiveTaskFragment extends BaseRefreshRecyclerFragme
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 DailyLubricateTaskEntity item = dailyLubricateTaskAdapter.getItem(position);
                 Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.EAM_CODE, item.getEamID().code);
+                bundle.putSerializable(Constant.IntentKey.EAM, item.getEamID());
                 bundle.putBoolean(Constant.IntentKey.isEdit, true);
                 IntentRouter.go(getActivity(), Constant.Router.DAILY_LUBRICATION_EARLY_PART_WARN, bundle);
             }
@@ -166,7 +166,7 @@ public class DailyLubricateReceiveTaskFragment extends BaseRefreshRecyclerFragme
         for (DailyLubricateTaskEntity dailyLubricateTaskEntity : list) {
             if (dailyLubricateTaskEntity.getEamID().code.equals(code)) {
                 Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.EAM_CODE, code);
+                bundle.putSerializable(Constant.IntentKey.EAM, dailyLubricateTaskEntity.getEamID());
                 IntentRouter.go(getActivity(), Constant.Router.DAILY_LUBRICATION_EARLY_PART_ENSURE_WARN, bundle);
 
 //                List<DailyLubricateTaskEntity> dailyLubricateTaskEntities = dailyLubricateTaskEntity.lubricationPartMap.get(code);

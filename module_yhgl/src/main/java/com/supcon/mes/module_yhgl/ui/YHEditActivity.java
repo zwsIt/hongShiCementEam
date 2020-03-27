@@ -29,7 +29,6 @@ import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.beans.LinkEntity;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
-import com.supcon.mes.mbap.listener.OnTextListener;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
@@ -59,12 +58,9 @@ import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.middleware.model.bean.LubricateOilsEntity;
 import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
-import com.supcon.mes.middleware.model.bean.MaintainEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
-import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
@@ -75,7 +71,6 @@ import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
-import com.supcon.mes.middleware.ui.view.FlowLayout;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
@@ -832,7 +827,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     }
 
     private void showDelayDateDialog(boolean b, LinkEntity linkEntity) {
-        CustomDialog customDialog = new CustomDialog(context).layout(R.layout.ac_delay_dialog, DisplayUtil.getScreenWidth(context) * 2/3,ViewGroup.LayoutParams.WRAP_CONTENT);
+        CustomDialog customDialog = new CustomDialog(context).layout(R.layout.yhgl_ac_delay_dialog, DisplayUtil.getScreenWidth(context) * 2/3,ViewGroup.LayoutParams.WRAP_CONTENT);
         customDialog.bindChildListener(R.id.delayDate, (childView, action, obj) -> {
             if (action == -1) {
 
@@ -1186,8 +1181,12 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         map.put("faultInfo.chargeStaff.id", mYHEntity.chargeStaff == null ? "" : Util.strFormat2(mYHEntity.chargeStaff.id));
         map.put("faultInfo.isOffApply", mYHEntity.isOffApply);
-        map.put("faultInfo.delayDate", TextUtils.isEmpty(mDelayDate.getContent()) ? "" :mDelayDate.getContent()  /*DateUtil.dateFormat(mDelayDate.getContent(), Constant.TimeString.YEAR_MONTH_DAY)*/);
-        map.put("faultInfo.delayDuration", mDelayDuration.getContent());
+        // 预警：备件、润滑、维保延期处理
+        if (mYHEntity.sourceType != null && (Constant.YhglWorkSource.sparepart.equals(mYHEntity.sourceType.id) || Constant.YhglWorkSource.lubrication.equals(mYHEntity.sourceType.id) ||
+                Constant.YhglWorkSource.maintenance.equals(mYHEntity.sourceType.id))) {
+            map.put("faultInfo.delayDate", TextUtils.isEmpty(mDelayDate.getContent()) ? "" : mDelayDate.getContent()  /*DateUtil.dateFormat(mDelayDate.getContent(), Constant.TimeString.YEAR_MONTH_DAY)*/);
+            map.put("faultInfo.delayDuration", mDelayDuration.getContent());
+        }
 
         if (mYHEntity.pending != null && mYHEntity.pending.id != null) {
             map.put("pendingId", Util.strFormat2(mYHEntity.pending.id));

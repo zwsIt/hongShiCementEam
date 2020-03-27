@@ -213,6 +213,7 @@
                     android:id="@+id/content"
                     android:tag="content"
                     android:background="@color/white"
+                    android:layout_marginBottom="@dimen/dp_1"
                     android:padding="@dimen/dp_10"
                     app:key="内容"
                     app:edit_hint="请输入内容"

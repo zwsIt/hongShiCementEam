@@ -2,6 +2,9 @@ package com.supcon.mes.middleware.controller;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.app.annotation.Presenter;
 import com.supcon.common.view.base.controller.BaseDataController;
@@ -18,6 +21,8 @@ import com.supcon.mes.middleware.model.contract.BuildVersionContract;
 import com.supcon.mes.middleware.presenter.BuildVersionPresenter;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SystemUtil;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by wangshizhan on 2019/12/26
@@ -72,12 +77,10 @@ public class BuildVersionController extends BaseDataController implements BuildV
 //        items.add("更新日志："+(TextUtils.isEmpty(entity.changelog)?"":entity.changelog));
 
 
-        new CustomDialog(context, R.style.UpdateDialog)
-                .layout(R.layout.ly_update_dialog, DisplayUtil.dip2px(300, context), DisplayUtil.dip2px(220, context))
-
-                .bindView(R.id.msgText, "检测到版本更新，是否前往下载更新？"
-                        +"\n\n版本："+entity.build
-                        +"\n包名："+entity.versionShort
+        CustomDialog customDialog = new CustomDialog(context, R.style.UpdateDialog)
+                .layout(R.layout.ly_update_dialog, DisplayUtil.dip2px(300, context), WRAP_CONTENT);
+        ((TextView)customDialog.getDialog().findViewById(R.id.msgText)).setMovementMethod(ScrollingMovementMethod.getInstance()); // 超出内容滚动
+        customDialog.bindView(R.id.msgText,"版本："+entity.versionShort +"（ Build "+entity.build+" ）"
                         +"\n时间："+ DateUtil.dateFormat(entity.updated_at*1000)
                         +"\n日志："+(TextUtils.isEmpty(entity.changelog)?"":entity.changelog))
 //                        +"\n\n是否前往下载更新？")

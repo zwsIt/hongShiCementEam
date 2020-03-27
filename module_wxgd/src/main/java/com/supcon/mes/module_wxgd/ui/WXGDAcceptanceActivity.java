@@ -46,6 +46,7 @@ import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
+import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.middleware.model.bean.AccountInfo;
@@ -103,7 +104,7 @@ import java.util.Map;
 
 @Router(value = Constant.Router.WXGD_ACCEPTANCE)
 @Presenter(value = {WXGDListPresenter.class, GenerateAcceptancePresenter.class})
-@Controller(value = {LinkController.class,SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class, OnlineCameraController.class, AttachmentController.class})
+@Controller(value = {LinkController.class, PcController.class,SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class, OnlineCameraController.class, AttachmentController.class})
 public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View, GenerateAcceptanceContract.View {
 
     @BindByTag("leftBtn")
@@ -206,6 +207,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private AcceptanceCheckEntity currentAcceptChkEntity = new AcceptanceCheckEntity();  //当前验收数据
     private String acceptanceCheckEntities;
     private String tableNo;
+    private String __pc__;
 
     @Override
     protected int getLayoutID() {
@@ -287,8 +289,28 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
      */
     private void initLink() {
         mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
+        getSubmitPc(mWXGDEntity.pending.activityName);
     }
 
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                __pc__ = result;
+            }
+        });
+    }
     /**
      * @param
      * @return
@@ -612,7 +634,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
             attachmentMap.put("linkId", String.valueOf(mWXGDEntity.tableInfoId));
         }
 
-        wxgdSubmitController.doAcceptChkSubmit(map, attachmentMap);
+        wxgdSubmitController.doAcceptChkSubmit(map, attachmentMap, __pc__);
 
     }
 

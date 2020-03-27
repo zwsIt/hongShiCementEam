@@ -156,7 +156,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
     @Override
     protected void initView() {
         super.initView();
-        titleText.setText("送电申请查看");
+        titleText.setText("送电申请");
 
         applyStaff.setEditable(false);
         eamName.setEditable(false);

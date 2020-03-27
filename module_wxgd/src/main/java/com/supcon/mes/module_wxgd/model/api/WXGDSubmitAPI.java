@@ -12,9 +12,9 @@ import java.util.Map;
 @ContractFactory(entites = {BapResultEntity.class, BapResultEntity.class, BapResultEntity.class, BapResultEntity.class, BapResultEntity.class})
 public interface WXGDSubmitAPI {
 
-    void doReceiveSubmit(Map<String, Object> map);
+    void doReceiveSubmit(Map<String, Object> map, String __pc__);
 
-    void doExecuteSubmit(Map<String, Object> map);
+    void doExecuteSubmit(Map<String, Object> map, String __pc__);
 
     /**
      * @param
@@ -22,7 +22,7 @@ public interface WXGDSubmitAPI {
      * @description 派工提交（作废/驳回）
      * @author zhangwenshuai1 2018/9/4
      */
-    void doDispatcherSubmit(Map<String, Object> map);
+    void doDispatcherSubmit(Map<String, Object> map, String __pc__);
 
     /**
      * @param
@@ -30,7 +30,7 @@ public interface WXGDSubmitAPI {
      * @description 预警派工提交（作废/驳回）
      * @author zhangwenshuai1 2018/9/4
      */
-    void doDispatcherWarnSubmit(Map<String, Object> map);
+    void doDispatcherWarnSubmit(Map<String, Object> map, String __pc__);
 
     /**
      * @param
@@ -38,7 +38,7 @@ public interface WXGDSubmitAPI {
      * @description 验收提交
      * @author zhangwenshuai1 2018/9/11
      */
-    void doAcceptChkSubmit(Map<String, Object> map, Map<String, Object> attachmentMap);
+    void doAcceptChkSubmit(Map<String, Object> map, Map<String, Object> attachmentMap, String __pc__);
 
 
 }

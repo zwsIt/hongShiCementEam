@@ -44,6 +44,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
@@ -52,6 +53,7 @@ import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
@@ -104,7 +106,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 @Router(Constant.Router.WXGD_EXECUTE)
 @Presenter(value = {WXGDStopOrActivatePresenter.class, WXGDListPresenter.class})
-@Controller(value = {SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
+@Controller(value = {PcController.class,SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
 public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDStopOrActivateContract.View, WXGDListContract.View {
 
     @BindByTag("leftBtn")
@@ -207,6 +209,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     private Map<String, SystemCodeEntity> wxTypes;
     private String tableNo;
     private boolean isEdit = true;//是否查看页面，默认可以编辑
+    private String __pc__;
 
 
     @Override
@@ -282,7 +285,28 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             }
             initTableHeadData();
             mLinkController.initPendingTransition(transition, mWXGDEntity.pending != null ? mWXGDEntity.pending.id : 0);
+            getSubmitPc(mWXGDEntity.pending.activityName);
         }
+    }
+
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                __pc__ = result;
+            }
+        });
     }
 
     /**
@@ -751,7 +775,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         map.put("dg1557993341033ListJson", maintainDtos);
         map.put("dgLists['dg1557993341033']", maintainDtos);
 
-        wxgdSubmitController.doExecuteSubmit(map);
+        wxgdSubmitController.doExecuteSubmit(map,__pc__);
     }
 
     //暂停或激活

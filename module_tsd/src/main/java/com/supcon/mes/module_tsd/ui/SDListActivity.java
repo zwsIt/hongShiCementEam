@@ -135,6 +135,11 @@ public class SDListActivity extends BaseWebViewActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     public void goNext(String url) {
 
         Bundle bundle = new Bundle();

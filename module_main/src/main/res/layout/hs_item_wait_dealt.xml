@@ -18,19 +18,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/chkBox">
-
             <LinearLayout
                 android:id="@+id/waitDealtContentLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_5"
                 android:paddingTop="@dimen/dp_5"
-                android:layout_toLeftOf="@+id/waitDealtEamState"
+                android:layout_toLeftOf="@+id/waitDealtEntrust"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/waitDealtEamName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="260dp"
                     android:layout_height="wrap_content"
                     android:tag="waitDealtEamName"
                     android:textColor="#333333"
@@ -70,17 +69,15 @@
                         tools:text="来源" />
                     <TextView
                         android:id="@+id/waitDealtTime"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:tag="waitDealtTime"
                         android:textColor="#757575"
                         android:textSize="@dimen/fontSize_12sp"
-                        tools:text="2019-07-24 09:27" />
+                        tools:text="2019-07-24 09:27:00" />
                 </LinearLayout>
 
             </LinearLayout>
-
             <TextView
                 android:id="@+id/waitDealtEamState"
                 android:layout_width="wrap_content"

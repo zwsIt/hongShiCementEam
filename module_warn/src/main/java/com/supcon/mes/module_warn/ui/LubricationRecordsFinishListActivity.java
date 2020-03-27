@@ -29,6 +29,7 @@ import com.supcon.mes.middleware.constant.DateBtn;
 import com.supcon.mes.middleware.model.api.CommonListAPI;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.ContractStaffEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.contract.CommonListContract;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.EmptyViewHelper;
@@ -75,13 +76,13 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
 
     SimpleDateFormat sdf = new SimpleDateFormat(Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC);
     Map<String, Object> queryParams = new HashMap<>();
-    String eamCode;
+    EamEntity mEamEntity;
 
     @Override
     protected void onInit() {
         super.onInit();
 
-        eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setAutoPullDownRefresh(true);
         contentView.setLayoutManager(new LinearLayoutManager(context));
@@ -120,7 +121,8 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                queryParams.put(Constant.BAPQuery.EAM_CODE, eamCode);
+                queryParams.put(Constant.BAPQuery.EAM_CODE, mEamEntity.code);
+                queryParams.put(Constant.BAPQuery.EAM_ID,mEamEntity.id);
                 presenterRouter.create(CommonListAPI.class).listCommonObj(pageIndex, queryParams, false);
             }
         });
@@ -162,6 +164,9 @@ public class LubricationRecordsFinishListActivity extends BaseRefreshRecyclerAct
                         public void accept(Object o) throws Exception {
                             DailyLubricateRecordEntity dailyLubricateRecordEntity = (DailyLubricateRecordEntity) o;
                             dailyLubricateRecordEntity.setViewType(ListType.CONTENT.value());
+                            if (TextUtils.isEmpty(dailyLubricateRecordEntity.getJwxItemId().lubricatePart)){
+                                dailyLubricateRecordEntity.getJwxItemId().lubricatePart = "无部位信息";
+                            }
                             if (!TextUtils.isEmpty(dailyLubricateRecordEntity.getJwxItemId().lubricatePart) && !lubricationPartMap.containsKey(dailyLubricateRecordEntity.getJwxItemId().lubricatePart)){
                                 DailyLubricateRecordEntity dailyLubricateRecordEntityTitle = new DailyLubricateRecordEntity();
                                 dailyLubricateRecordEntityTitle.setViewType(ListType.TITLE.value());

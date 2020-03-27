@@ -100,7 +100,7 @@ public class DailyLubricateTaskFragment extends BaseRefreshRecyclerFragment<Dail
                 DailyLubricateTaskEntity item = dailyLubricateTaskAdapter.getItem(position);
                 if (id == R.id.eamName) {
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constant.IntentKey.EAM_CODE, item.getEamID().code);
+                    bundle.putSerializable(Constant.IntentKey.EAM, item.getEamID());
                     bundle.putBoolean(Constant.IntentKey.isEdit, false);
                     IntentRouter.go(getActivity(), Constant.Router.DAILY_LUBRICATION_EARLY_PART_WARN, bundle);
                 } else if (id == R.id.receive) {

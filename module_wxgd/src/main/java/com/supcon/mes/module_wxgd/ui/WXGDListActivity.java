@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -36,6 +37,7 @@ import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
@@ -47,6 +49,7 @@ import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.LoginValidEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -85,6 +88,7 @@ import io.reactivex.functions.Consumer;
 
 @Router(value = Constant.Router.WXGD_LIST)
 @Presenter(value = {WXGDListPresenter.class})
+@Controller(value = PcController.class)
 public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> implements WXGDListContract.View, WXGDSubmitController.OnSubmitResultListener {
 
     @BindByTag("contentView")
@@ -131,6 +135,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
 
     private Long deploymentId;//隐患单
     private boolean hasAddForumPermission;
+    private String __pc__;
 
     @Override
     protected IListAdapter createAdapter() {
@@ -195,7 +200,25 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         registerController(Constant.Controller.ROLE, roleController);
         registerController(Constant.Controller.SUBMIT, wxgdSubmitController);
     }
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    public void getSubmitPc(String operateCode) {
+        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
 
+            @Override
+            public void onSuccess(String result) {
+                __pc__ = result;
+            }
+        });
+    }
     /**
      * @param
      * @return
@@ -393,7 +416,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
 
         map.put("dg1531695879365ModelCode", "BEAM2_1.0.0_workList_RepairStaff");
         map.put("dg1531695879365ListJson", new LinkedList().toString());
-        wxgdSubmitController.doReceiveSubmit(map);
+        wxgdSubmitController.doReceiveSubmit(map,__pc__);
     }
 
     /**

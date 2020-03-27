@@ -48,6 +48,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.controller.YHCloseController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
@@ -65,6 +66,7 @@ import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
@@ -115,7 +117,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 @Router(value = Constant.Router.WXGD_DISPATCHER)
 @Presenter(value = {WXGDDispatcherPresenter.class, WXGDListPresenter.class})
-@Controller(value = {SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
+@Controller(value = {PcController.class, SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
 public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDDispatcherContract.View, WXGDListContract.View, WXGDSubmitController.OnSubmitResultListener {
 
     @BindByTag("leftBtn")
@@ -220,6 +222,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private String tableNo;
     private YHCloseController yhCloseController;
     private boolean isCancel;
+    private String __pc__;
 
     @Override
     protected int getLayoutID() {
@@ -318,10 +321,34 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         }
         if (mWXGDEntity.id == null || mWXGDEntity.id == -1) { // 制定
             mLinkController.initStartTransition(transition, "work");
+            getSubmitPc("start310work"); // 通过pc端菜单管理中相应菜单获取制定 操作编码
         } else {
+            mLinkController.setOnSuccessListener(result -> {
+                //获取__pc__
+                getSubmitPc(result.toString());
+            });
             mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
         }
+    }
 
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                __pc__ = result;
+            }
+        });
     }
 
     /**
@@ -350,6 +377,8 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         realEndTime.setVisibility(View.GONE);
         dispatcherLayout.setVisibility(View.GONE);
         chargeStaff.setNecessary(true);
+        workContext.setNecessary(true);
+        workContext.setEditable(true);
     }
 
     @Override
@@ -809,7 +838,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         map.put("dg1557832434442ListJson", maintainDtos);
         map.put("dgLists['dg1557832434442']", maintainDtos);
 
-        mWxgdSubmitController.doDispatcherSubmit(map);
+        mWxgdSubmitController.doDispatcherSubmit(map,__pc__);
 
     }
 

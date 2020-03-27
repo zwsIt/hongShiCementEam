@@ -87,21 +87,15 @@ public class WaitDealtPresenter extends WaitDealtContract.Presenter {
         }
 
         mCompositeSubscription.add(MainClient.proxyPending(pageQueryParams)
-                .onErrorReturn(new Function<Throwable, BapResultEntity>() {
-                    @Override
-                    public BapResultEntity apply(Throwable throwable) throws Exception {
-                        BapResultEntity bapResultEntity = new BapResultEntity();
-                        bapResultEntity.errMsg = throwable.toString();
-                        return bapResultEntity;
-                    }
-                }).subscribe(new Consumer<BapResultEntity>() {
-                    @Override
-                    public void accept(BapResultEntity bapResultEntity) throws Exception {
-                        if (bapResultEntity.dealSuccessFlag) {
-                            getView().proxyPendingSuccess(bapResultEntity);
-                        } else {
-                            getView().proxyPendingFailed(bapResultEntity.errMsg);
-                        }
+                .onErrorReturn(throwable -> {
+                    BapResultEntity bapResultEntity = new BapResultEntity();
+                    bapResultEntity.errMsg = throwable.toString();
+                    return bapResultEntity;
+                }).subscribe(bapResultEntity -> {
+                    if (bapResultEntity.dealSuccessFlag) {
+                        getView().proxyPendingSuccess(bapResultEntity);
+                    } else {
+                        getView().proxyPendingFailed(bapResultEntity.errMsg);
                     }
                 }));
     }

@@ -121,6 +121,7 @@ public class BAPQueryParamsHelper {
         SubcondEntity subcondEntity = null;
         switch (key) {
             case Constant.BAPQuery.ID:
+            case Constant.BAPQuery.EAM_ID:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.columnName = key;

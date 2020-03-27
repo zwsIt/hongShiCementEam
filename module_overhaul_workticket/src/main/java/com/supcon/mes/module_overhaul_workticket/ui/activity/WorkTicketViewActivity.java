@@ -386,7 +386,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         map.put("ohworkticket.eamId.id", Util.strFormat2(mWorkTicketEntity.getEamId().id));
         map.put("ohworkticket.workShop.id", Util.strFormat2(mWorkTicketEntity.getChargeStaff().getMainPosition().getDepartment().id));
         map.put("ohworkticket.riskAssessment.id", mWorkTicketEntity.getRiskAssessment().id);
-//        map.put("ohworkticket.remark", remark.getContent());
+        map.put("ohworkticket.content", content.getContent());
         map.put("ohworkticket.hazardsourContrpoint", mWorkTicketEntity.getHazardsourContrpoint());
         map.put("ohworkticket.value", mWorkTicketEntity.getHazardsourContrpointForDisplay());
         map.put("__file_upload", true);
@@ -483,6 +483,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         workShop.setContent(entity.getWorkShop().name);
         eamName.setContent(entity.getEamId().name);
         eamCode.setContent(entity.getEamId().code);
+        content.setContent(entity.getContent());
         riskAssessmentView.setContent(entity.getRiskAssessment().value);
         hazardContrlPointValue = "";
         for (SystemCodeEntity systemCodeEntity : mHazardList) {

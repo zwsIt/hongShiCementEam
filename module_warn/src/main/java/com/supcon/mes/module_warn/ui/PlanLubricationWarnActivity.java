@@ -149,7 +149,7 @@ public class PlanLubricationWarnActivity extends BaseRefreshRecyclerActivity<Dai
                 DailyLubricateTaskEntity item = dailyLubricateTaskAdapter.getItem(position);
                 if (id == R.id.eamName) {
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constant.IntentKey.EAM_CODE, item.getEamID().code);
+                    bundle.putSerializable(Constant.IntentKey.EAM, item.getEamID());
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
                     IntentRouter.go(PlanLubricationWarnActivity.this, Constant.Router.DAILY_LUBRICATION_EARLY_PART_WARN, bundle);
                 }
@@ -194,7 +194,7 @@ public class PlanLubricationWarnActivity extends BaseRefreshRecyclerActivity<Dai
         for (DailyLubricateTaskEntity dailyLubricateTaskEntity : list) {
             if (dailyLubricateTaskEntity.getEamID().code.equals(code)) {
                 Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.EAM_CODE, code);
+                bundle.putSerializable(Constant.IntentKey.EAM, dailyLubricateTaskEntity.getEamID());
                 IntentRouter.go(this, Constant.Router.DAILY_LUBRICATION_EARLY_PART_ENSURE_WARN, bundle);
 
 //                List<DailyLubricateTaskEntity> dailyLubricateTaskEntities = dailyLubricateTaskEntity.lubricationPartMap.get(code);

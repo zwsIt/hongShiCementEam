@@ -38,11 +38,13 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
@@ -83,7 +85,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Router(value = Constant.Router.WXGD_RECEIVE)
 @Presenter(value = {WXGDListPresenter.class})
-@Controller(value = {SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
+@Controller(value = {PcController.class,SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
 public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View {
 
     @BindByTag("leftBtn")
@@ -154,6 +156,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     private WXGDSubmitController wxgdSubmitController;
     private Map<String, SystemCodeEntity> wxTypes;
     private String tableNo;
+    private String __pc__;
 
     @Override
     protected int getLayoutID() {
@@ -212,7 +215,28 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
             wxTypes = initEntities(wxTypeEntities);
             initTableHeadData();
             mLinkController.initPendingTransition(transition, mWXGDEntity.pending != null ? mWXGDEntity.pending.id : 0);
+            getSubmitPc(mWXGDEntity.pending.activityName);
         }
+    }
+
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                __pc__ = result;
+            }
+        });
     }
 
     @Override
@@ -422,7 +446,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
 
         map.put("dg1557994493235ModelCode", "BEAM2_1.0.0_workList_Maintenance");
         map.put("dg1557994493235ListJson", new LinkedList().toString());
-        wxgdSubmitController.doReceiveSubmit(map);
+        wxgdSubmitController.doReceiveSubmit(map,__pc__);
     }
 
     @Override

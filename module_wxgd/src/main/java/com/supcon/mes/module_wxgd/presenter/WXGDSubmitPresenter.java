@@ -21,12 +21,12 @@ public class WXGDSubmitPresenter extends WXGDSubmitContract.Presenter {
 
     //维修工单接单提交
     @Override
-    public void doReceiveSubmit(Map<String, Object> map) {
+    public void doReceiveSubmit(Map<String, Object> map, String __pc__) {
 
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
 
         mCompositeSubscription.add(
-                HttpClient.receiveSubmit(formBody)
+                HttpClient.receiveSubmit(formBody,__pc__)
                         .onErrorReturn(new Function<Throwable, BapResultEntity>() {
                             @Override
                             public BapResultEntity apply(Throwable throwable) throws Exception {
@@ -50,10 +50,10 @@ public class WXGDSubmitPresenter extends WXGDSubmitContract.Presenter {
 
     //维修工单执行提交
     @Override
-    public void doExecuteSubmit(Map<String, Object> map) {
+    public void doExecuteSubmit(Map<String, Object> map, String __pc__) {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         mCompositeSubscription.add(
-                HttpClient.executeSubmit(formBody)
+                HttpClient.executeSubmit(formBody,__pc__)
                         .onErrorReturn(new Function<Throwable, BapResultEntity>() {
                             @Override
                             public BapResultEntity apply(Throwable throwable) throws Exception {
@@ -77,10 +77,10 @@ public class WXGDSubmitPresenter extends WXGDSubmitContract.Presenter {
 
     //维修工单派工提交
     @Override
-    public void doDispatcherSubmit(Map<String, Object> map) {
+    public void doDispatcherSubmit(Map<String, Object> map, String __pc__) {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         mCompositeSubscription.add(
-                HttpClient.doSubmitDispatch(formBody)
+                HttpClient.doSubmitDispatch(formBody, __pc__)
                         .onErrorReturn(new Function<Throwable, BapResultEntity>() {
                             @Override
                             public BapResultEntity apply(Throwable throwable) throws Exception {
@@ -103,10 +103,10 @@ public class WXGDSubmitPresenter extends WXGDSubmitContract.Presenter {
     }
 
     @Override
-    public void doDispatcherWarnSubmit(Map<String, Object> map) {
+    public void doDispatcherWarnSubmit(Map<String, Object> map, String __pc__) {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         mCompositeSubscription.add(
-                HttpClient.doSubmitDispatchWarn(formBody)
+                HttpClient.doSubmitDispatchWarn(formBody,__pc__)
                         .onErrorReturn(new Function<Throwable, BapResultEntity>() {
                             @Override
                             public BapResultEntity apply(Throwable throwable) throws Exception {
@@ -130,12 +130,12 @@ public class WXGDSubmitPresenter extends WXGDSubmitContract.Presenter {
 
     //维修工单验收提交
     @Override
-    public void doAcceptChkSubmit(Map<String, Object> map, Map<String, Object> attachmentMap) {
+    public void doAcceptChkSubmit(Map<String, Object> map, Map<String, Object> attachmentMap, String __pc__) {
         Map<String, RequestBody> formBody = FormDataHelper.createDataFormBody(map);
         List<MultipartBody.Part> parts = FormDataHelper.createFileForm(attachmentMap);
 
         mCompositeSubscription.add(
-                HttpClient.doAcceptChk(formBody, parts)
+                HttpClient.doAcceptChk(formBody, parts,__pc__)
                         .onErrorReturn(new Function<Throwable, BapResultEntity>() {
                             @Override
                             public BapResultEntity apply(Throwable throwable) throws Exception {

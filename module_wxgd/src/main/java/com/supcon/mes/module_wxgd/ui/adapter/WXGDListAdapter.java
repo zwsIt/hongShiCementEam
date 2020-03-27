@@ -30,6 +30,7 @@ import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.constant.WXGDConstant;
+import com.supcon.mes.module_wxgd.ui.WXGDListActivity;
 
 import java.util.List;
 
@@ -275,6 +276,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
 
             if (Constant.WxgdView.RECEIVE_OPEN_URL.equals(data.pending == null ? "" : data.pending.openUrl)) {
                 receiveBtnLl.setVisibility(View.VISIBLE);
+                ((WXGDListActivity)context).getSubmitPc(data.pending.activityName);
             } else {
                 receiveBtnLl.setVisibility(View.GONE);
             }

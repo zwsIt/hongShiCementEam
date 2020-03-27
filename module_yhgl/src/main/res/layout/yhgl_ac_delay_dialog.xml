@@ -56,16 +56,6 @@
         tools:ignore="RtlHardcoded">
 
         <Button
-            android:id="@+id/blueBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sl_common"
-            android:tag="blueBtn"
-            android:text="确定"
-            android:textColor="@color/customBlue4"
-            android:textSize="@dimen/fontSize_16sp" />
-
-        <Button
             android:id="@+id/grayBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,6 +63,15 @@
             android:tag="grayBtn"
             android:text="取消"
             android:textColor="@color/gray"
+            android:textSize="@dimen/fontSize_16sp" />
+        <Button
+            android:id="@+id/blueBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sl_common"
+            android:tag="blueBtn"
+            android:text="确定"
+            android:textColor="@color/customBlue4"
             android:textSize="@dimen/fontSize_16sp" />
     </LinearLayout>
 </LinearLayout>

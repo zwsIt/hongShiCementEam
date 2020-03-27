@@ -56,9 +56,9 @@ public interface ApiService {
      * @param requestBodyMap 表单
      * @return
      */
-    @POST("/BEAM2/workList/workRecord/workReceiptEdit/submit.action?__pc__=dGFzazQ1N3x3b3Jr")
+    @POST("/BEAM2/workList/workRecord/workReceiptEdit/submit.action")
     @Multipart
-    Flowable<BapResultEntity> receiveSubmit(@PartMap Map<String, RequestBody> requestBodyMap);
+    Flowable<BapResultEntity> receiveSubmit(@PartMap Map<String, RequestBody> requestBodyMap,@Query("__pc__") String __pc__);
 
     /**
      * 维修工单执行提交
@@ -66,9 +66,9 @@ public interface ApiService {
      * @param map
      * @return
      */
-    @POST("/BEAM2/workList/workRecord/workExecuteEdit/submit.action?__pc__=dGFzazE4Mzh8d29yaw__")
+    @POST("/BEAM2/workList/workRecord/workExecuteEdit/submit.action")
     @Multipart
-    Flowable<BapResultEntity> executeSubmit(@PartMap Map<String, RequestBody> map);
+    Flowable<BapResultEntity> executeSubmit(@PartMap Map<String, RequestBody> map,@Query("__pc__") String __pc__);
 
 
     /**
@@ -125,9 +125,9 @@ public interface ApiService {
      * @description 派工
      * @author zhangwenshuai1 2018/9/11
      */
-    @POST("/BEAM2/workList/workRecord/workEdit/submit.action?__pc__=dGFzazMzOHx3b3Jr&_bapFieldPermissonModelCode_=BEAM2_1.0.0_workList_WorkRecord&_bapFieldPermissonModelName_=WorkRecord&superEdit=false")
+    @POST("/BEAM2/workList/workRecord/workEdit/submit.action?_bapFieldPermissonModelCode_=BEAM2_1.0.0_workList_WorkRecord&_bapFieldPermissonModelName_=WorkRecord&superEdit=false")
     @Multipart
-    Flowable<BapResultEntity> doSubmitDispatch(@PartMap Map<String, RequestBody> map);
+    Flowable<BapResultEntity> doSubmitDispatch(@PartMap Map<String, RequestBody> map,@Query("__pc__") String __pc__);
 
     /**
      * @param
@@ -135,9 +135,9 @@ public interface ApiService {
      * @description 预警派工
      * @author zhangwenshuai1 2018/9/11
      */
-    @POST("/BEAM2/workList/workRecord/workEdit/submit.action?__pc__=c3RhcnQzMTB3b3JrfHdvcms_&_bapFieldPermissonModelCode_=BEAM2_1.0.0_workList_WorkRecord&_bapFieldPermissonModelName_=WorkRecord&superEdit=false")
+    @POST("/BEAM2/workList/workRecord/workEdit/submit.action?_bapFieldPermissonModelCode_=BEAM2_1.0.0_workList_WorkRecord&_bapFieldPermissonModelName_=WorkRecord&superEdit=false")
     @Multipart
-    Flowable<BapResultEntity> doSubmitDispatchWarn(@PartMap Map<String, RequestBody> map);
+    Flowable<BapResultEntity> doSubmitDispatchWarn(@PartMap Map<String, RequestBody> map, @Query("__pc__") String __pc__);
 
 
     /**
@@ -155,9 +155,9 @@ public interface ApiService {
      * @description 验收
      * @author zhangwenshuai1 2018/9/11
      */
-    @POST("/BEAM2/workList/workRecord/workCheckEdit/submit.action?__pc__=dGFzazE5ODd8d29yaw__&_bapFieldPermissonModelCode_=BEAM2_1.0.0_workList_WorkRecord&_bapFieldPermissonModelName_=WorkRecord&superEdit=false")
+    @POST("/BEAM2/workList/workRecord/workCheckEdit/submit.action?_bapFieldPermissonModelCode_=BEAM2_1.0.0_workList_WorkRecord&_bapFieldPermissonModelName_=WorkRecord&superEdit=false")
     @Multipart
-    Flowable<BapResultEntity> doAcceptChk(@PartMap Map<String, RequestBody> map, @Part List<MultipartBody.Part> partList);
+    Flowable<BapResultEntity> doAcceptChk(@PartMap Map<String, RequestBody> map, @Part List<MultipartBody.Part> partList,@Query("__pc__") String __pc__);
 
     /**
      * @param productCode 备件编码
