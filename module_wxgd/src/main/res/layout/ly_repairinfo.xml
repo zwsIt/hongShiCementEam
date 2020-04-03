@@ -89,7 +89,8 @@
         android:tag="planStartTime"
         app:editable="true"
         app:text="@string/planStartTime"
-        app:text_width="@dimen/dp_120"/>
+        app:text_width="@dimen/dp_120"
+        app:necessary="true"/>
     <include layout="@layout/ly_line_light_light" />
     <com.supcon.mes.mbap.view.CustomDateView
         android:layout_width="match_parent"
@@ -99,7 +100,8 @@
         android:tag="planEndTime"
         app:editable="true"
         app:text="@string/planEndTime"
-        app:text_width="@dimen/dp_120"/>
+        app:text_width="@dimen/dp_120"
+        app:necessary="true"/>
 
     <include layout="@layout/ly_line_light_light" />
 

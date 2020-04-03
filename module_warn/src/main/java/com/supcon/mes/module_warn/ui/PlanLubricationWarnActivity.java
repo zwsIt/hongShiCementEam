@@ -257,7 +257,14 @@ public class PlanLubricationWarnActivity extends BaseRefreshRecyclerActivity<Dai
                     LogUtil.e(throwable.toString());
                 }, () -> {
                     staffName = "";
-                    refreshListController.refreshComplete(lubricationWarnEntities);
+
+                    if (lubricationWarnEntities.size() > 0){ // 默认展开第一项
+                        lubricationWarnEntities.get(0).isExpand = true;
+                        lubricationWarnEntities.addAll(1,lubricationWarnEntities.get(0).lubricationMap.values());
+                    }/*else {
+                        refreshListController.refreshComplete(lubricationWarnEntities);
+                    }*/
+                        refreshListController.refreshComplete(lubricationWarnEntities);
                 });
     }
 

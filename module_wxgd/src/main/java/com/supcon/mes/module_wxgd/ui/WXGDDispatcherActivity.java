@@ -1119,12 +1119,20 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             ToastUtils.show(context, "设备不允许为空！");
             return true;
         }
-        if (TextUtils.isEmpty(mWXGDEntity.workOrderContext)){
-            ToastUtils.show(context,"工单内容不允许为空！");
-            return true;
-        }
         if (TextUtils.isEmpty(chargeStaff.getValue())) {
             ToastUtils.show(context, "负责人不允许为空！");
+            return true;
+        }
+        if (TextUtils.isEmpty(planStartTime.getContent())) {
+            ToastUtils.show(context, "计划开始时间不允许为空！");
+            return true;
+        }
+        if (TextUtils.isEmpty(planEndTime.getContent())) {
+            ToastUtils.show(context, "计划结束时间不允许为空！");
+            return true;
+        }
+        if (TextUtils.isEmpty(mWXGDEntity.workOrderContext)){
+            ToastUtils.show(context,"工单内容不允许为空！");
             return true;
         }
 //        if (TextUtils.isEmpty(repairGroup.getValue()) && TextUtils.isEmpty(chargeStaff.getValue())) {

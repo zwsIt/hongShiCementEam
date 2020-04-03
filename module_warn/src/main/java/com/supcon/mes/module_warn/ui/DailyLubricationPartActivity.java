@@ -247,6 +247,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
             }
             refreshListController.refreshComplete(entity.result);
         }
+        isDeal = false; // 状态复原
     }
 
     @Override

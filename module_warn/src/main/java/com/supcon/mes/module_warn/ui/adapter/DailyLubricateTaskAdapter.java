@@ -127,6 +127,11 @@ public class DailyLubricateTaskAdapter extends BaseListDataRecyclerViewAdapter<D
                 params.setMargins(0, Util.dpToPx(context, 5), 0, 0);
                 itemView.setLayoutParams(params);
             }
+            if (data.isExpand){
+                rotationExpandIcon(0, 90);
+            }else {
+                rotationExpandIcon(90, 0);
+            }
         }
 
         @TargetApi(Build.VERSION_CODES.HONEYCOMB)

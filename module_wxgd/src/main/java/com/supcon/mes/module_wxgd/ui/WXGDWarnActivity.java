@@ -140,7 +140,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
     CustomWorkFlowView transition;
 
     @BindByTag("workContext")
-    CustomVerticalTextView workContext;
+    CustomVerticalEditText workContext;
 
     @BindByTag("eleOffChkBox")
     CheckBox eleOffChkBox; // 是否生成停电票
@@ -722,6 +722,14 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
 //        }
         if (TextUtils.isEmpty(chargeStaff.getValue())) {
             ToastUtils.show(context,"负责人不允许为空！");
+            return true;
+        }
+        if (TextUtils.isEmpty(planStartTime.getContent())) {
+            ToastUtils.show(context, "计划开始时间不允许为空！");
+            return true;
+        }
+        if (TextUtils.isEmpty(planEndTime.getContent())) {
+            ToastUtils.show(context, "计划结束时间不允许为空！");
             return true;
         }
         return false;
