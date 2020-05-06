@@ -16,4 +16,5 @@ public class LubricateOilsEntityDto extends BaseEntity {
     public String oilQuantity;
     public String remark;
     public String lubricatingPart;
+    public boolean isWarn;
 }

@@ -13,6 +13,7 @@ import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.mes.mbap.beans.LoginEvent;
+import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -41,6 +42,7 @@ public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implemen
     @BindByTag("more")
     TextView more;
     private EamListAdapter eamListAdapter;
+    private boolean mNoData; // 是否有数据
 
     @Override
     protected int getLayoutID() {
@@ -67,11 +69,11 @@ public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implemen
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
+        contentView.addItemDecoration(new SpaceItemDecoration(5));
     }
 
     @SuppressLint("CheckResult")
     private void refreshList() {
-
     }
 
     @SuppressLint("CheckResult")
@@ -105,7 +107,6 @@ public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implemen
     @Override
     protected void initData() {
         super.initData();
-
     }
 
     @SuppressLint("CheckResult")
@@ -113,18 +114,20 @@ public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implemen
     public void onResume() {
         super.onResume();
         refreshList();
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
         refreshListController.refreshBegin();
     }
 
     @Override
     public void getEamsSuccess(CommonBAPListEntity entity) {
         refreshListController.refreshComplete(entity.result);
+        if (entity.totalCount <= 0){
+            mNoData = true;
+            more.performClick();
+        }
     }
 
     @Override
@@ -139,4 +142,9 @@ public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implemen
         EventBus.getDefault().unregister(this);
     }
 
+    public void refreshBegin() {
+        if (mNoData){
+            refreshListController.refreshBegin();
+        }
+    }
 }

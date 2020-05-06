@@ -16,6 +16,7 @@ import com.supcon.mes.module_sbda_online.model.network.SBDAOnlineHttpClient;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -38,6 +39,12 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
         if (params.containsKey(Constant.BAPQuery.EAM_CODE)) {
             Map<String, Object> codeParam = new HashMap();
             codeParam.put(Constant.BAPQuery.EAM_CODE, params.get(Constant.BAPQuery.EAM_CODE));
+            List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(codeParam);
+            fastQuery.subconds.addAll(baseSubcondEntities);
+        }
+        if (params.containsKey(Constant.BAPQuery.EAM_ID)) {
+            Map<String, Object> codeParam = new HashMap();
+            codeParam.put(Constant.BAPQuery.EAM_ID, Objects.requireNonNull(params.get(Constant.BAPQuery.EAM_ID)));
             List<BaseSubcondEntity> baseSubcondEntities = BAPQueryParamsHelper.createSubcondEntity(codeParam);
             fastQuery.subconds.addAll(baseSubcondEntities);
         }

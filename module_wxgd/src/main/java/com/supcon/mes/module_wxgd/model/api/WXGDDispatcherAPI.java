@@ -17,7 +17,7 @@ public interface WXGDDispatcherAPI {
      * @description 转为大修 或 检修
      * @author zhangwenshuai1 2018/9/4
      */
-    void translateRepair(long faultInfoId, String repairType);
+    void translateRepair(long workRecordId, String repairType);
 
 
 }

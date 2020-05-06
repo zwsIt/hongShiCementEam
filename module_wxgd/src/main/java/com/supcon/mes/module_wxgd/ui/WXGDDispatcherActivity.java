@@ -17,6 +17,7 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
@@ -77,6 +78,7 @@ import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
 import com.supcon.mes.module_wxgd.controller.SparePartController;
 import com.supcon.mes.module_wxgd.controller.WXGDSubmitController;
+import com.supcon.mes.module_wxgd.model.api.WXGDDispatcherAPI;
 import com.supcon.mes.module_wxgd.model.api.WXGDListAPI;
 import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.bean.WXGDTableInfoEntity;
@@ -107,6 +109,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -300,6 +305,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         super.initView();
         eamIc = findViewById(R.id.eamIc);
         if (mWXGDEntity.id == null || mWXGDEntity.id == -1){
+            repairLl.setVisibility(View.GONE);
             workContext.setNecessary(true);
             workContext.setEditable(true);
         }
@@ -363,14 +369,15 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             eamInfoLl.setVisibility(View.GONE);
             eamInfoEditLl.setVisibility(View.VISIBLE);
         }
+        if (mWXGDEntity.workSource != null && (Constant.WxgdWorkSource.repair.equals(mWXGDEntity.workSource.id) || Constant.WxgdWorkSource.big_repair.equals(mWXGDEntity.workSource.id))){
+            repairLl.setVisibility(View.GONE);
+        }
         if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
         } else {
             if (TextUtils.isEmpty(mWXGDEntity.faultInfo.tableNo)) {
-                repairLl.setVisibility(View.GONE);
                 faultInfo.setVisibility(View.GONE);
             } else {
-                repairLl.setVisibility(View.VISIBLE);
                 faultInfo.setVisibility(View.VISIBLE);
             }
         }
@@ -461,37 +468,55 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
         leftBtn.setOnClickListener(v -> onBackPressed());
 
-        bigRepair.setOnClickListener(v -> new CustomDialog(context)
-                .twoButtonAlertDialog("确定转为大修计划?")
-                .bindView(R.id.redBtn, "确定")
-                .bindView(R.id.grayBtn, "取消")
-                .bindClickListener(R.id.redBtn, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v12) {
-                        onLoading("正在处理中...");
-                        // 产品
+        RxView.clicks(bigRepair).throttleFirst(200,TimeUnit.MILLISECONDS)
+                .filter(o -> {
+                    if (mWXGDEntity.eamID == null || mWXGDEntity.eamID.id == null){
+                        ToastUtils.show(context,"设备信息不允许为空");
+                        return false;
+                    }
+                    return true;
+                }).subscribe(o -> new CustomDialog(context)
+                        .twoButtonAlertDialog("确定转为大修计划?")
+                        .bindView(R.id.redBtn, "确定")
+                        .bindView(R.id.grayBtn, "取消")
+                        .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v12) {
+                                onLoading("正在处理中...");
+                                // 产品
 //                        presenterRouter.create(WXGDDispatcherAPI.class).translateRepair(mWXGDEntity.faultInfo.id, Constant.YHWXType.DX_SYSCODE);
-                        // 水泥(红狮/海螺)项目
-                        doSave(Constant.YHWXType.DX_SYSCODE);
+                                // 水泥(红狮/海螺)项目
+//                        doSave(Constant.YHWXType.DX_SYSCODE);
+                                presenterRouter.create(WXGDDispatcherAPI.class).translateRepair(mWXGDEntity.id, Constant.YHWXType.DX_SYSCODE);
+                            }
+                        }, true)
+                        .bindClickListener(R.id.grayBtn, null, true)
+                        .show());
+        RxView.clicks(checkRepair).throttleFirst(200,TimeUnit.MILLISECONDS)
+                .filter(o -> {
+                    if (mWXGDEntity.eamID == null || mWXGDEntity.eamID.id == null){
+                        ToastUtils.show(context,"设备信息不允许为空");
+                        return false;
                     }
-                }, true)
-                .bindClickListener(R.id.grayBtn, null, true)
-                .show());
-        checkRepair.setOnClickListener(v -> new CustomDialog(context)
-                .twoButtonAlertDialog("确定转为检修计划?")
-                .bindView(R.id.redBtn, "确定")
-                .bindView(R.id.grayBtn, "取消")
-                .bindClickListener(R.id.redBtn, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v12) {
-                        onLoading("正在处理中...");
-//                        presenterRouter.create(WXGDDispatcherAPI.class).translateRepair(mWXGDEntity.faultInfo.id, Constant.YHWXType.JX_SYSCODE);
-
-                        doSave(Constant.YHWXType.JX_SYSCODE);
-                    }
-                }, true)
-                .bindClickListener(R.id.grayBtn, null, true)
-                .show());
+                    return true;
+                }).subscribe(o -> new CustomDialog(context)
+                        .twoButtonAlertDialog("确定转为检修计划?")
+                        .bindView(R.id.redBtn, "确定")
+                        .bindView(R.id.grayBtn, "取消")
+                        .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v12) {
+                                if (mWXGDEntity.eamID == null || mWXGDEntity.eamID.id == null){
+                                    ToastUtils.show(context,"设备信息不允许为空");
+                                    return;
+                                }
+                                onLoading("正在处理中...");
+                                presenterRouter.create(WXGDDispatcherAPI.class).translateRepair(mWXGDEntity.id, Constant.YHWXType.JX_SYSCODE);
+//                        doSave(Constant.YHWXType.JX_SYSCODE);
+                            }
+                        }, true)
+                        .bindClickListener(R.id.grayBtn, null, true)
+                        .show());
 
         eamNameEdit.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
@@ -721,6 +746,8 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             map.put("workRecord.repairType.id", Constant.YHWXType.DX_SYSCODE);
         } else if (Constant.YHWXType.JX_SYSCODE.equals(str)) {
             map.put("workRecord.repairType.id", Constant.YHWXType.JX_SYSCODE);
+        }else {
+            map.put("workRecord.repairType.id", Constant.YHWXType.RC_SYSCODE);
         }
         map.put("workRecord.chargeStaff.id", Util.strFormat2(mWXGDEntity.getChargeStaff().id)); // 负责人
 
@@ -763,7 +790,12 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         List<WorkFlowEntity> workFlowEntities = generateWorkFlowMigrationLine(workFlowVar);
 
         WorkFlowEntity workFlowEntity = workFlowEntities.get(0);
-
+        if (workFlowVar != null){
+            List<WorkFlowEntity> outcomeMapJson = workFlowVar.outcomeMapJson;
+            if (!TextUtils.isEmpty(outcomeMapJson.get(0).assignUser)){
+                outcomeMapJson.get(0).assignUser = ("\"\"".equals(outcomeMapJson.get(0).assignUser)) ? null : outcomeMapJson.get(0).assignUser.replace("\"","");
+            }
+        }
         map.put("workFlowVar.outcomeMapJson", workFlowEntities.toString());
         map.put("workFlowVar.outcome", workFlowEntity.outcome);
         map.put("workFlowVarStatus", "");
@@ -1027,16 +1059,12 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
     @Override
     public void translateRepairSuccess(ResultEntity entity) {
-        onLoadSuccessAndExit("处理成功", () -> {
-            onLoading("工单作废中...");
-
-            //封装公共参数
-            Map map = WXGDMapManager.createMap(mWXGDEntity);
-            //封装工作流参数
-            map = generateWorkFlow(null, map);
-            generateParamsDtoAndSubmit(map);
-
-        });
+        // 工单作废中...
+        //封装公共参数
+        Map map = WXGDMapManager.createMap(mWXGDEntity);
+        //封装工作流参数
+        map = generateWorkFlow(null, map);
+        generateParamsDtoAndSubmit(map);
 
     }
 
@@ -1090,7 +1118,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/9/11
      */
     private boolean doCheckChange() {
-        if (mWXGDEntity != null && !mWXGDEntity.toString().equals(oldWxgdEntity.toString())) {
+        if (mWXGDEntity != null && oldWxgdEntity != null && !mWXGDEntity.toString().equals(oldWxgdEntity.toString())) {
             return true;
         }
         if (!TextUtils.isEmpty(sparePartListStr) && !sparePartListStr.equals(mSparePartController.getSparePartEntities().toString())) {

@@ -43,6 +43,7 @@ import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
@@ -545,7 +546,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
                 mWorkTicketEntity.getChargeStaff().name = staff.name;
                 mWorkTicketEntity.getChargeStaff().code = staff.code;
             } else if ("selectPeopleInput".equals(commonSearchEvent.flag)) {
-                workFlowView.addStaff(staff.name, staff.id);
+                workFlowView.addStaff(staff.name, staff.userId);
             }
         }
     }
@@ -589,5 +590,15 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     @Override
     public void submitFailed(String errorMsg) {
         onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    @Override
+    public void retrialSuccess(CommonEntity entity) {
+
+    }
+
+    @Override
+    public void retrialFailed(String errorMsg) {
+
     }
 }

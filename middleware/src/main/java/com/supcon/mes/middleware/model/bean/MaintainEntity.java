@@ -9,6 +9,8 @@ public class MaintainEntity extends BaseEntity {
     public JWXItem jwxItemID; //业务规则
     public String remark;//备注
 
+    public boolean isWarn;
+
     public JWXItem getJwxItem() {
         if (jwxItemID == null) {
             jwxItemID = new JWXItem();

@@ -125,16 +125,13 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
     RadioGroup radioGroupFilter;
 
     private WXGDListAdapter wxgdListAdapter;
-//    private RecyclerEmptyAdapter mRecyclerEmptyAdapter;
 
     Map<String, Object> queryParam = new HashMap<>();
     private WXGDSubmitController wxgdSubmitController;
     private RoleController roleController;
     private String repairType;
 
-
-    private Long deploymentId;//隐患单
-    private boolean hasAddForumPermission;
+    private Long deploymentId;
     private String __pc__;
 
     @Override
@@ -169,8 +166,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         contentView.addItemDecoration(new SpaceItemDecoration(10));
 
         customSearchView.setHint("搜索");
-        rightBtn.setImageResource(R.drawable.add);
-//        searchTitleBar.disableRightBtn();
+        searchTitleBar.disableRightBtn();
         initFilter();
     }
 
@@ -186,7 +182,9 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
             @Override
             public void onSuccess(Long result) {
                 deploymentId = result;
-                hasAddForumPermission = true;
+                if (deploymentId != null){
+                    searchTitleBar.enableRightBtn();
+                }
             }
         }, null);
     }
@@ -244,7 +242,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        if (hasAddForumPermission) {
+                        if (deploymentId != null) {
 //                            createYH();
                             WXGDEntity wxgdEntity = new WXGDEntity();
                             wxgdEntity.id = -1L;

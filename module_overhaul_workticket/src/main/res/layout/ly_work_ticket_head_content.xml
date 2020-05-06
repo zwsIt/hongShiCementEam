@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/ly_titlebar"/>
+    <include layout="@layout/ly_ticket_titlebar"/>
 
     <com.supcon.common.view.ptr.PtrFrameLayout
         android:id="@+id/refreshFrameLayout"

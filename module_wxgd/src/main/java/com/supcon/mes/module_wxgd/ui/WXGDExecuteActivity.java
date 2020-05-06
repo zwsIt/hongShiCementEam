@@ -707,7 +707,9 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         map.put("operateType", Constant.Transition.SUBMIT);
 
         List<WorkFlowEntity> outcomeMapJson = workFlowVar.outcomeMapJson;
-        outcomeMapJson.get(0).assignUser = "\"\"".equals(outcomeMapJson.get(0).assignUser) ? null : outcomeMapJson.get(0).assignUser;
+        if (!TextUtils.isEmpty(outcomeMapJson.get(0).assignUser)){
+            outcomeMapJson.get(0).assignUser = ("\"\"".equals(outcomeMapJson.get(0).assignUser)) ? null : outcomeMapJson.get(0).assignUser.replace("\"","");
+        }
 
         map.put("workFlowVar.outcomeMapJson", workFlowVar.outcomeMapJson.toString());
         map.put("workFlowVar.outcome", workFlowVar.outCome);
@@ -897,7 +899,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 
     public boolean doCheckChange() {
 
-        if (mWXGDEntity != null && !oldWxgdEntity.toString().equals(mWXGDEntity.toString())) {
+        if (mWXGDEntity != null && oldWxgdEntity != null && !oldWxgdEntity.toString().equals(mWXGDEntity.toString())) {
             return true;
         }
 

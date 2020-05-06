@@ -31,7 +31,7 @@ android {
 
     buildTypes {
         release {
-            buildConfigField "boolean", "HAS_SUPOS", "true"
+            buildConfigField "boolean", "HAS_SUPOS", "false"
             postprocessing {
                 removeUnusedCode false
                 removeUnusedResources false
@@ -41,7 +41,7 @@ android {
             }
         }
         debug{
-            buildConfigField "boolean", "HAS_SUPOS", "true"
+            buildConfigField "boolean", "HAS_SUPOS", "false"
         }
     }
 

@@ -20,6 +20,8 @@ public class LubricateOilsEntity extends BaseEntity {
     public JWXItem jwxItemID; //业务规则
     public String lubricatingPart;//润滑部位
 
+    public boolean isWarn;
+
     public JWXItem getJwxItemID() {
         if (jwxItemID==null) {
             jwxItemID = new JWXItem();

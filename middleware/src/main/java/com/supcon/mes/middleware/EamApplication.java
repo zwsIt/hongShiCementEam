@@ -46,7 +46,7 @@ public class EamApplication extends MBapApp {
     public static AccountInfo getAccountInfo() {
         if (accountInfo == null) {
             accountInfo = dao().getAccountInfoDao().queryBuilder()
-                    .where(AccountInfoDao.Properties.UserName.eq(TextUtils.isEmpty(getUserName())?"":getUserName().toLowerCase()), AccountInfoDao.Properties.Ip.eq(getIp()))
+                    .where(AccountInfoDao.Properties.UserName.eq(TextUtils.isEmpty(getUserName())?"":getUserName().toLowerCase()), AccountInfoDao.Properties.Ip.eq(getIpPort()))
                     .unique();
         }
 
@@ -308,5 +308,9 @@ public class EamApplication extends MBapApp {
      */
     public static Long getCid(){
         return accountInfo.cid;
+    }
+
+    public static String getIpPort(){
+        return getIp() + ":" + getPort();
     }
 }

@@ -145,6 +145,7 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
                 if (!TextUtils.isEmpty(eamCodes)) {
                     Map<String, Object> queryParam = new HashMap<>();
                     queryParam.put(Constant.BAPQuery.EAM_CODE, eamCodes);
+                    queryParam.put(Constant.BAPQuery.EAM_ID, eamId);
                     presenterRouter.create(SBDAOnlineListAPI.class).getSearchSBDA(queryParam, 1);
                 }
                 presenterRouter.create(RoutineAPI.class).getEamOtherInfo(eamId);

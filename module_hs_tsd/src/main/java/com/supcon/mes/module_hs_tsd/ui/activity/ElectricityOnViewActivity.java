@@ -506,7 +506,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
                 mElectricityOffOnEntity.getOperateStaff().name = staff.name;
                 mElectricityOffOnEntity.getOperateStaff().code = staff.code;
             } else if ("selectPeopleInput".equals(commonSearchEvent.flag)) {
-                workFlowView.addStaff(staff.name, staff.id);
+                workFlowView.addStaff(staff.name, staff.userId);
             }
         }
     }

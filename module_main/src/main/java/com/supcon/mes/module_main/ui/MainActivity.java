@@ -76,6 +76,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
 
     private NFCHelper nfcHelper;
     private WorkFragment workFragment;
+    private EamFragment mEamFragment; // 我的设备
 
     @Override
     protected int getLayoutID() {
@@ -141,11 +142,11 @@ public class MainActivity extends BaseMultiFragmentActivity {
 //        TxlListFragment txlListFragment = new TxlListFragment();
 //        txlListFragment.fitInstatusBarEnable(true);
         ContactFragment contactFragment = new ContactFragment();
-        EamFragment eamFragment = new EamFragment();
+        mEamFragment = new EamFragment();
         MineFragment mineFragment = new MineFragment();
         fragments.add(workFragment);
         fragments.add(contactFragment);
-        fragments.add(eamFragment);
+        fragments.add(mEamFragment);
         fragments.add(mineFragment);
     }
 
@@ -206,6 +207,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
                     showFragment(1);
                 } else if (checkedId == R.id.tabRadioBtn3) {
                     showFragment(2);
+                    mEamFragment.refreshBegin();
                 } else if (checkedId == R.id.tabRadioBtn4) {
                     showFragment(3);
                 }

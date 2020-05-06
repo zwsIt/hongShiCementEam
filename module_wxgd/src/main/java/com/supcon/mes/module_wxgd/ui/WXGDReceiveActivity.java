@@ -150,7 +150,6 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
     private LinkController mLinkController;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private RoleController roleController;
     private String tip;
     private WXGDSubmitController wxgdSubmitController;

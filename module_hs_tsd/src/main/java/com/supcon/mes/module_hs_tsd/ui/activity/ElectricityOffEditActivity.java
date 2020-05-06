@@ -457,6 +457,10 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
             ToastUtils.show(context, "操作人不允许为空！");
             return true;
         }
+        if (galleryView.getGalleryAdapter() == null || galleryView.getGalleryAdapter().getItemCount() <= 0) {
+            ToastUtils.show(context, "照片不允许为空！");
+            return true;
+        }
         return false;
     }
 
@@ -584,7 +588,7 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
                 mElectricityOffOnEntity.getOperateStaff().name = staff.name;
                 mElectricityOffOnEntity.getOperateStaff().code = staff.code;
             }else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
-                workFlowView.addStaff(staff.name,staff.id);
+                workFlowView.addStaff(staff.name,staff.userId);
             }
         }
     }

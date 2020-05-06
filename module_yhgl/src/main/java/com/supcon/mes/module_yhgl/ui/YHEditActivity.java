@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -130,9 +131,14 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
-
     @BindByTag("titleText")
     TextView titleText;
+    @BindByTag("repairLl")
+    LinearLayout repairLl;
+    @BindByTag("bigRepair")
+    Button bigRepair;
+    @BindByTag("checkRepair")
+    Button checkRepair;
 
     @BindByTag("yhEditFindTime")
     CustomDateView yhEditFindTime;
@@ -235,7 +241,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private String sparePartListStr;
     private String maintenanceListStr;
     private YHEntity oldYHEntity;
-    private List<SystemCodeEntity> wxTypeEntities;
+//    private List<SystemCodeEntity> wxTypeEntities;
     private List<SystemCodeEntity> yhPriorityEntity;
     private List<SystemCodeEntity> yhTypeEntities;
 
@@ -279,6 +285,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             iniTransition();
             yhEditFindStaff.setValue(mYHEntity.findStaffID != null ? mYHEntity.findStaffID.name : "");
             yhEditFindTime.setDate(mYHEntity.findTime != null ? DateUtil.dateTimeFormat(mYHEntity.findTime) : "");
+            yhEditWXType.setContent(mYHEntity.repairType.value);
             oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
         }
 
@@ -340,6 +347,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText("隐患编辑");
         mYHEntity.downStream = new SystemCodeEntity();
+        repairLl.setVisibility(View.VISIBLE);
     }
 
     public void updateInitView() {
@@ -424,8 +432,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     protected void initData() {
         super.initData();
 
-        wxTypeEntities = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.YH_WX_TYPE);
-        wxTypes = initEntities(wxTypeEntities);
+//        wxTypeEntities = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.YH_WX_TYPE);
+//        wxTypes = initEntities(wxTypeEntities);
 
         yhTypeEntities = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.QX_TYPE);
         yhTypes = initEntities(yhTypeEntities);
@@ -455,14 +463,15 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             }
             yhEditType.setSpinner(mYHEntity.faultInfoType != null ? mYHEntity.faultInfoType.value : "");
 
-            if (mYHEntity.repairType == null && wxTypeEntities.size() > 0) {
-                mYHEntity.repairType = wxTypeEntities.get(0);
+            if (mYHEntity.repairType == null) {
+                SystemCodeEntity repairType = new SystemCodeEntity();
+                repairType.id = Constant.YHWXType.RC_SYSCODE;
+                repairType.value = Constant.YHWXType.RC;
+                mYHEntity.repairType = repairType;
             }
-            if (mYHEntity.repairType != null) {
-                yhEditWXType.setSpinner(mYHEntity.repairType.value);
-                if (Constant.YHWXType.JX_SYSCODE.equals(mYHEntity.repairType.id) || Constant.YHWXType.DX_SYSCODE.equals(mYHEntity.repairType.id)) {
-                    yhEditWXChargeGroup.setEditable(false);
-                }
+            yhEditWXType.setSpinner(mYHEntity.repairType.value);
+            if (Constant.YHWXType.JX_SYSCODE.equals(mYHEntity.repairType.id) || Constant.YHWXType.DX_SYSCODE.equals(mYHEntity.repairType.id)) {
+                yhEditWXChargeGroup.setEditable(false);
             }
         }
     }
@@ -552,35 +561,35 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             }
         });
 
-        yhEditWXType.setOnChildViewClickListener((childView, action, obj) -> {
-            if (action == -1) {
-                mYHEntity.repairType = null;
-                yhEditWXChargeGroup.setEditable(true);
-            } else {
-                List<String> list = new ArrayList<>(wxTypes.keySet());
-                if (list.size() <= 0) {
-                    ToastUtils.show(context, "维修类型列表数据为空,请重新加载页面！");
-                    return;
-                }
-                mSinglePickController
-                        .list(list)
-                        .listener((SinglePicker.OnItemPickListener<String>) (index, item) -> {
-                            SystemCodeEntity wxType = wxTypes.get(item);
-                            mYHEntity.repairType = wxType;
-                            yhEditWXType.setSpinner(item);
-
-                            //大修或检修时，维修组不可编辑，若有值清空
-                            if (Constant.YHWXType.DX.equals(item) || Constant.YHWXType.JX.equals(item)) {
-                                yhEditWXChargeGroup.setEditable(false);
-                                yhEditWXChargeGroup.setContent(null);
-                                mYHEntity.repiarGroup = null;
-                            } else {
-                                yhEditWXChargeGroup.setEditable(true);
-                            }
-                        })
-                        .show(yhEditWXType.getSpinnerValue());
-            }
-        });
+//        yhEditWXType.setOnChildViewClickListener((childView, action, obj) -> {
+//            if (action == -1) {
+//                mYHEntity.repairType = null;
+//                yhEditWXChargeGroup.setEditable(true);
+//            } else {
+//                List<String> list = new ArrayList<>(wxTypes.keySet());
+//                if (list.size() <= 0) {
+//                    ToastUtils.show(context, "维修类型列表数据为空,请重新加载页面！");
+//                    return;
+//                }
+//                mSinglePickController
+//                        .list(list)
+//                        .listener((SinglePicker.OnItemPickListener<String>) (index, item) -> {
+//                            SystemCodeEntity wxType = wxTypes.get(item);
+//                            mYHEntity.repairType = wxType;
+//                            yhEditWXType.setSpinner(item);
+//
+//                            //大修或检修时，维修组不可编辑，若有值清空
+//                            if (Constant.YHWXType.DX.equals(item) || Constant.YHWXType.JX.equals(item)) {
+//                                yhEditWXChargeGroup.setEditable(false);
+//                                yhEditWXChargeGroup.setContent(null);
+//                                mYHEntity.repiarGroup = null;
+//                            } else {
+//                                yhEditWXChargeGroup.setEditable(true);
+//                            }
+//                        })
+//                        .show(yhEditWXType.getSpinnerValue());
+//            }
+//        });
 
         yhEditPriority.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1) {
@@ -674,6 +683,26 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 })
                 .subscribe(o -> {
                     mYHEntity.downStream.id = "BEAM2_2013/03";
+                    List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
+                    if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
+                        doSubmit(createWorkFlowVar(linkEntities.get(0)));
+                    }
+                });
+        RxView.clicks(bigRepair)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    eleOffChkBox.setChecked(false);
+                    mYHEntity.downStream.id = "BEAM2_2013/04";
+                    List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
+                    if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
+                        doSubmit(createWorkFlowVar(linkEntities.get(0)));
+                    }
+                });
+        RxView.clicks(checkRepair)
+                .throttleFirst(2, TimeUnit.SECONDS)
+                .subscribe(o -> {
+                    eleOffChkBox.setChecked(false);
+                    mYHEntity.downStream.id = "BEAM2_2013/05";
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
                     if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
                         doSubmit(createWorkFlowVar(linkEntities.get(0)));

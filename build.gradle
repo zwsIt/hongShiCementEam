@@ -40,14 +40,14 @@ ext{
     buildToolsVersion = "28.0.3"
     applicationId = "com.supcon.mes.cementEam"
 
-    minSdkVersion = 19
+    minSdkVersion = 21
     targetSdkVersion = 22
     versionCode = 47
-    versionName = "8.20.05.09"
+    versionName = "8.20.08.01"
 
-    ProductCode = "8.20.05"
+    ProductCode = "8.20.08"
     EamCode = "01"
-    MobileCode = "09"  //测试版本，不足一位加“0”补足
+    MobileCode = "01"  //测试版本，不足一位加“0”补足
 
     isAlone  = false
 

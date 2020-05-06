@@ -782,6 +782,8 @@ public interface Constant {
         String maintenance = "BEAM2003/03";//维保
         String sparepart = "BEAM2003/04";//备件
         String other = "BEAM2003/05";//其它
+        String big_repair = "BEAM2003/06";// 大修
+        String repair = "BEAM2003/07";// 检修
         String manual_start = "BEAM2003/08";//手工添加
     }
 

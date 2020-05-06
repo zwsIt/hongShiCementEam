@@ -755,7 +755,13 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         } else {
             waitDealtLayout.setVisibility(View.VISIBLE);
         }
+//        List<WaitDealtEntity> waitDealtEntityList = new ArrayList<>();
+//        if (entity.result.size() > 2){
+//            waitDealtEntityList.add((WaitDealtEntity) entity.result.get(0));
+//            waitDealtEntityList.add((WaitDealtEntity) entity.result.get(1));
+//        }
         waitDealtAdapter.setList(entity.result);
+//        waitDealtAdapter.setList(waitDealtEntityList);
         waitDealtAdapter.notifyDataSetChanged();
         if (entity.totalCount > 0) {
             Spanned item = HtmlParser.buildSpannedText(String.format(context.getString(R.string.device_style15), "更多", entity.totalCount), new HtmlTagHandler());

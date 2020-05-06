@@ -31,4 +31,5 @@ public class SparePartEntityDto extends BaseEntity {
     public String sparePartId; // 基础备件（来源备件更换到期）
     public String actualQuantity; // 实际用量
     public String version;
+    public boolean isWarn;
 }

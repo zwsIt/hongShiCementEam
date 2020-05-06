@@ -49,6 +49,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
@@ -107,6 +108,8 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     TextView titleText;
     @BindByTag("rightBtn")
     ImageButton rightBtn;
+    @BindByTag("rightTv")
+    TextView rightTv;
     @BindByTag("workListTableNo")
     CustomTextView workListTableNo;
     @BindByTag("eleOffTableNo")
@@ -321,57 +324,6 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             }
         });
 
-//        hazardPointAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-//            @Override
-//            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-//                List<HazardPointEntity> hazardPointEntityList = (List<HazardPointEntity>) obj;
-//                StringBuilder sbValue = new StringBuilder();
-//                StringBuilder sbIds = new StringBuilder();
-//                for (HazardPointEntity entity : hazardPointEntityList) {
-//                    if (entity.checked) {
-//                        sbValue.append(entity.value).append(",");
-//                        sbIds.append(entity.id).append(",");
-//                    }
-//                }
-//                hazardCtrlPoint.setSpinner(sbValue.length() > 0 ? sbValue.substring(0, sbValue.length() - 1) : "");
-//                hazardCtrlPoint.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
-//                mWorkTicketEntity.setHazardsourContrpoint(sbIds.length() > 0 ? sbIds.substring(0, sbIds.length() - 1) : "");
-//                mWorkTicketEntity.setHazardsourContrpointForDisplay(hazardCtrlPoint.getContent());
-//            }
-//        });
-//        hazardCtrlPoint.setOnChildViewClickListener(new OnChildViewClickListener() {
-//            @Override
-//            public void onChildViewClick(View childView, int action, Object obj) {
-//                drawer_layout.openDrawer(Gravity.START);
-//
-////                if (action == -1){
-////                    mWorkTicketEntity.setHazardsourContrpoint(null);
-////                    mWorkTicketEntity.setHazardsourContrpointForDisplay(null);
-////                }else {
-////                    if (mHazardList.size() <= 0){
-////                        ToastUtils.show(context, "危险源控制点列表数据为空,请重新加载页面！");
-////                        return;
-////                    }
-////                    new CustomSheetDialog(context).multiSheet("危险源控制点",FieldHelper.getSheetEntityList(mHazardList),null)
-////                            .setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-////                                @Override
-////                                public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-////                                    List<SonSheetEntity> sonSheetEntityList = GsonUtil.jsonToList(obj.toString(), SonSheetEntity.class);
-////                                    StringBuilder value = new StringBuilder();
-////                                    StringBuilder id = new StringBuilder();
-////                                    for (SonSheetEntity sonSheetEntity : sonSheetEntityList){
-////                                        value.append(sonSheetEntity.name).append(",");
-////                                        id.append(sonSheetEntity.id).append(",");
-////                                    }
-////                                    hazardCtrlPoint.setContent(value.toString());
-////                                    mWorkTicketEntity.setHazardsourContrpoint(id.toString());
-////                                    mWorkTicketEntity.setHazardsourContrpointForDisplay(value.toString());
-////                                }
-////                            }).show();
-////                }
-//            }
-//        });
-
         workFlowView.setOnChildViewClickListener((childView, action, obj) -> {
             if ("selectPeopleInput".equals(childView.getTag())) {//选人
                 Bundle bundle = new Bundle();
@@ -401,6 +353,14 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                     @Override
                     public void accept(CharSequence charSequence) throws Exception {
                         mWorkTicketEntity.setContent(charSequence.toString());
+                    }
+                });
+        RxView.clicks(rightTv).throttleFirst(200,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        onLoading(context.getResources().getString(R.string.ticket_dealing));
+                        presenterRouter.create(WorkTicketSubmitAPI.class).retrial(mWorkTicketEntity.getOffApplyTableNo());
                     }
                 });
 
@@ -545,6 +505,9 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         // 停电隐藏
         if (TextUtils.isEmpty(entity.getOffApplyTableNo())) {
             eleOffTableNo.setVisibility(View.GONE);
+        }else {
+            rightTv.setVisibility(View.VISIBLE);
+            rightTv.setText("停电弃审");
         }
 
         //回填单据表头信息
@@ -638,7 +601,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                 mWorkTicketEntity.getChargeStaff().name = staff.name;
                 mWorkTicketEntity.getChargeStaff().code = staff.code;
             } else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
-                workFlowView.addStaff(staff.name,staff.id);
+                workFlowView.addStaff(staff.name,staff.userId);
             }
         }
     }
@@ -679,6 +642,17 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
     @Override
     public void submitFailed(String errorMsg) {
+        onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    @Override
+    public void retrialSuccess(CommonEntity entity) {
+        onLoadSuccess(context.getResources().getString(R.string.ticket_dealt_success));
+        refreshController.refreshBegin();
+    }
+
+    @Override
+    public void retrialFailed(String errorMsg) {
         onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
     }
 }

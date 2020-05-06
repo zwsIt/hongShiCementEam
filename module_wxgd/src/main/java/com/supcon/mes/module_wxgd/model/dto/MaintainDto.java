@@ -11,5 +11,6 @@ public class MaintainDto extends BaseEntity {
 
     public String id;
     public IdDto jwxItemID;
+    public boolean isWarn;
 
 }

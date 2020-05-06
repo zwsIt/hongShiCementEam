@@ -201,9 +201,9 @@ public class LoginPresenter extends LoginContract.Presenter {
                         staff.code = accountInfo.staffCode;
                         staff.name = accountInfo.staffName;
                         EamApplication.setStaff(staff);
-                        accountInfo.ip = EamApplication.getIp();
+                        accountInfo.ip = EamApplication.getIpPort();
                         accountInfo.setPassword(SharedPreferencesUtils.getParam(MBapApp.getAppContext(), MBapConstant.SPKey.PWD, ""));
-                        accountInfo.setIp(SharedPreferencesUtils.getParam(MBapApp.getAppContext(), MBapConstant.SPKey.IP, ""));
+//                        accountInfo.setIp(SharedPreferencesUtils.getParam(MBapApp.getAppContext(), MBapConstant.SPKey.IP, ""));
                         accountInfo.setDate(DateUtil.dateTimeFormat(System.currentTimeMillis()));
                         EamApplication.dao().getAccountInfoDao().insertOrReplace(accountInfo);
                         EamApplication.setAccountInfo(accountInfo);

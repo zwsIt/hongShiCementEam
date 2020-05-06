@@ -596,7 +596,9 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
         map.put("operateType", Constant.Transition.SUBMIT);
         List<WorkFlowEntity> outcomeMapJson = workFlowVar.outcomeMapJson;
-        outcomeMapJson.get(0).assignUser = "\"\"".equals(outcomeMapJson.get(0).assignUser) ? null : outcomeMapJson.get(0).assignUser;
+        if (!TextUtils.isEmpty(outcomeMapJson.get(0).assignUser)){
+            outcomeMapJson.get(0).assignUser = ("\"\"".equals(outcomeMapJson.get(0).assignUser)) ? null : outcomeMapJson.get(0).assignUser.replace("\"","");
+        }
         map.put("workFlowVar.outcomeMapJson", workFlowVar.outcomeMapJson.toString());
         map.put("workFlowVar.outcome", workFlowVar.outCome);
         map.put("workFlowVarStatus", "");

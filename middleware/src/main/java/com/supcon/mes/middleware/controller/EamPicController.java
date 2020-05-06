@@ -57,9 +57,8 @@ public class EamPicController extends BasePresenterController {
                 for (AttachmentEntity attachmentEntity : entity.result) {
                     if ("pic".equals(attachmentEntity.fileType)) {
 
-
                         if("BEAM_baseInfo_baseInfo".equals(attachmentEntity.type)) {
-                            mAttachmentDownloadController.downloadEamPic(attachmentEntity, "mobileEAM_1.0.0_work", new OnSuccessListener<File>() {
+                            mAttachmentDownloadController.downloadEamPic(attachmentEntity, "BEAM_1.0.0_baseInfo", new OnSuccessListener<File>() {
                                 @Override
                                 public void onSuccess(File result) {
                                     CommonDeviceEntity commonDeviceEntity = EamApplication.dao().getCommonDeviceEntityDao().queryBuilder().where(CommonDeviceEntityDao.Properties.EamId.eq(eamId)).unique();

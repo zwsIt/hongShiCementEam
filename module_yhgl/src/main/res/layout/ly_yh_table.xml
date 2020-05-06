@@ -30,7 +30,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/repairLl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/themeColor"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:tag="repairLl"
+                    android:visibility="gone">
 
+                    <Button
+                        android:id="@+id/bigRepair"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/sl_transparent_press_no_stroke"
+                        android:drawableLeft="@drawable/ic_big_repair"
+                        android:drawablePadding="0dp"
+                        android:paddingLeft="45dp"
+                        android:paddingRight="45dp"
+                        android:tag="bigRepair"
+                        android:text="@string/bigRepair"
+                        android:textColor="@color/white" />
+
+                    <include layout="@layout/ly_wxgd_vertical_line" />
+
+                    <Button
+                        android:id="@+id/checkRepair"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/sl_transparent_press_no_stroke"
+                        android:drawableStart="@drawable/ic_check_repair"
+                        android:paddingStart="45dp"
+                        android:paddingEnd="45dp"
+                        android:tag="checkRepair"
+                        android:text="@string/checkRepair"
+                        android:textColor="@color/white" />
+                </LinearLayout>
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/yhEditFindStaff"
                     android:layout_width="match_parent"
@@ -194,7 +232,8 @@
                     android:tag="yhEditWXType"
                     app:necessary="true"
                     app:text="维修类型"
-                    app:text_size="16" />
+                    app:text_size="16"
+                    app:editable="false"/>
 
                 <include layout="@layout/ly_line_light" />
 

@@ -60,6 +60,7 @@ public class WXGDWarnManager {
         jwxItem.sparePartId = lubricationWarnEntity.sparePartId;
         lubricateOilsEntity.jwxItemID = jwxItem;
         lubricateOilsEntity.basicLubricate = "预警润滑不能删除";
+        lubricateOilsEntity.isWarn = true;
         lubricateOilsEntities.add(lubricateOilsEntity);
         wxgdEntity.lubricateOils = lubricateOilsEntities;
         return wxgdEntity;
@@ -103,6 +104,7 @@ public class WXGDWarnManager {
         jwxItem.sparePartId = maintenanceWarnEntity.sparePartId;
         maintainEntity.jwxItemID = jwxItem;
         maintainEntity.basicJwx = "预警备件不能删除";
+        maintainEntity.isWarn = true;
         maintainEntities.add(maintainEntity);
         wxgdEntity.maintainEntities = maintainEntities;
         return wxgdEntity;

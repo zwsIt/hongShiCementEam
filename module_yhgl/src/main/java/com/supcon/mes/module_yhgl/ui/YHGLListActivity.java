@@ -35,6 +35,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.AreaDao;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
@@ -95,8 +96,6 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    YHListAdapter mAdapter;
-
     @BindByTag("radioGroupFilter")
     RadioGroup radioGroupFilter;
 
@@ -121,10 +120,10 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+    YHListAdapter mAdapter;
     private ModulePermissonCheckController mModulePermissonCheckController;
     private Long deploymentId;
 
-    private boolean hasNext = true;
     private boolean isShow;
 
     @Override
@@ -393,6 +392,12 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
         yhEntity.findStaffID = EamApplication.me();
         yhEntity.findTime = System.currentTimeMillis();
         yhEntity.cid = SharedPreferencesUtils.getParam(App.getAppContext(), Constant.CID, 0L);
+
+        SystemCodeEntity repairType = new SystemCodeEntity();
+        repairType.id = Constant.YHWXType.RC_SYSCODE;
+        repairType.value = Constant.YHWXType.RC;
+        yhEntity.repairType = repairType;
+
         Bundle bundle = new Bundle();
         bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, yhEntity);
         bundle.putSerializable(Constant.IntentKey.DEPLOYMENT_ID, deploymentId);

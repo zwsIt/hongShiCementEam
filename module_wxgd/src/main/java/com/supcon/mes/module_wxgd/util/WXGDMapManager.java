@@ -166,6 +166,7 @@ public class WXGDMapManager {
             sparePartEntityDto.accessoryName = Util.strFormat2(sparePartEntity.accessoryName);
             sparePartEntityDto.timesNum = Util.strFormat2(sparePartEntity.timesNum);
             sparePartEntityDto.isRef = Util.strFormat2(sparePartEntity.isRef);
+            sparePartEntityDto.isWarn = sparePartEntity.isWarn;
             sparePartEntityDtos.add(sparePartEntityDto);
         }
 
@@ -198,6 +199,7 @@ public class WXGDMapManager {
             lubricateOilsEntityDto.oilQuantity = lubricateOilsEntity.oilQuantity == null ? "" : Util.strFormat2(lubricateOilsEntity.oilQuantity);
             lubricateOilsEntityDto.remark = Util.strFormat2(lubricateOilsEntity.remark);
             lubricateOilsEntityDto.lubricatingPart = Util.strFormat2(lubricateOilsEntity.lubricatingPart);
+            lubricateOilsEntityDto.isWarn= lubricateOilsEntity.isWarn;
 
             lubricateOilsEntityDtos.add(lubricateOilsEntityDto);
         }
@@ -207,7 +209,7 @@ public class WXGDMapManager {
     /**
      * @param
      * @return
-     * @description 转化传输润滑油
+     * @description 转化传输维保
      * @author zhangwenshuai1 2018/9/5
      */
     public static LinkedList<MaintainDto> translateMaintainDto(List<MaintainEntity> list) {
@@ -218,6 +220,7 @@ public class WXGDMapManager {
             IdDto idDto = new IdDto();
             idDto.id = Util.strFormat2(maintainEntity.getJwxItem().id);
             maintainDto.jwxItemID = idDto;
+            maintainDto.isWarn = maintainEntity.isWarn;
             maintainDtos.add(maintainDto);
         }
         return maintainDtos;

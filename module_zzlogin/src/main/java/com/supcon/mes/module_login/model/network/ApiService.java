@@ -12,6 +12,8 @@ import com.supcon.mes.module_login.model.bean.LoginEntity;
 import com.supcon.mes.module_login.model.bean.PendingNumEntity;
 import com.supcon.mes.module_login.model.bean.WorkNumEntity;
 
+import org.json.JSONObject;
+
 import java.util.Map;
 
 import io.reactivex.Flowable;
@@ -54,8 +56,9 @@ public interface ApiService {
      * 用户心跳接口
      * @return
      */
-    @GET("/foundation/refreshSession.action")
-    Flowable<HeartBeatEntity> heartbeat();
+//    @GET("/foundation/refreshSession.action")
+    @GET("/foundation/workbench/timer.action?old=")
+    Flowable<JSONObject> heartbeat();
 
    /**
      * 获取授权

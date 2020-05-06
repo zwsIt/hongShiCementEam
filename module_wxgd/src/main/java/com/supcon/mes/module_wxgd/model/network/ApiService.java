@@ -110,13 +110,13 @@ public interface ApiService {
     Flowable<AcceptanceCheckListEntity> listAcceptances(@Query("workRecord.id") long id);
 
     /**
-     * @param faultInfoId 隐患单ID  repairType 维修类型
+     * @param workRecordId 工单ID  changeType 工单来源
      * @return
      * @description 转化为大修或检修
      * @author zhangwenshuai1 2018/9/3
      */
-    @POST("/BEAM2/workList/workRecord/overhaul.action")
-    Flowable<ResultEntity> translateRepair(@Query("faultInfoId") long faultInfoId, @Query("repairType") String repairType);
+    @POST("/BEAM2/workList/workRecord/changeToPro.action")
+    Flowable<ResultEntity> translateRepair(@Query("workRecordId") long workRecordId, @Query("changeType") String changeType);
 
 
     /**

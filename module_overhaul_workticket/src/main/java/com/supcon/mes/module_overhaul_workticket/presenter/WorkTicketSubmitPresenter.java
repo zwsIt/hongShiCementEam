@@ -1,7 +1,9 @@
 package com.supcon.mes.module_overhaul_workticket.presenter;
 
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.util.FormDataHelper;
+import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_overhaul_workticket.model.contract.WorkTicketSubmitContract;
 import com.supcon.mes.module_overhaul_workticket.model.network.HttpClient;
 
@@ -45,6 +47,31 @@ public class WorkTicketSubmitPresenter extends WorkTicketSubmitContract.Presente
                         }
                     }
                 })
+        );
+    }
+
+    @Override
+    public void retrial(String offApplyTableNo) {
+        mCompositeSubscription.add(
+                HttpClient.retrial(offApplyTableNo)
+                        .onErrorReturn(new Function<Throwable, CommonEntity<Boolean>>() {
+                            @Override
+                            public CommonEntity<Boolean> apply(Throwable throwable) throws Exception {
+                                CommonEntity<Boolean> commonEntity = new CommonEntity<>();
+                                commonEntity.errMsg = HttpErrorReturnUtil.getErrorInfo(throwable);
+                                return commonEntity;
+                            }
+                        })
+                        .subscribe(new Consumer<CommonEntity<Boolean>>() {
+                            @Override
+                            public void accept(CommonEntity<Boolean> booleanCommonEntity) throws Exception {
+                                if (booleanCommonEntity.success){
+                                    getView().retrialSuccess(booleanCommonEntity);
+                                }else {
+                                    getView().retrialFailed(booleanCommonEntity.errMsg);
+                                }
+                            }
+                        })
         );
     }
 }

@@ -2,6 +2,7 @@ package com.supcon.mes.module_overhaul_workticket.model.network;
 
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.module_overhaul_workticket.model.bean.SafetyMeasuresList;
 import com.supcon.mes.module_overhaul_workticket.model.bean.WorkTicketList;
 
@@ -56,4 +57,13 @@ public interface ApiService {
     @POST("/WorkTicket/workTicket/ohworkticket/{view}/submit.action?_bapFieldPermissonModelCode_=WorkTicket_8.20.3.03_workTicket_Ohworkticket&_bapFieldPermissonModelName_=Ohworkticket&superEdit=false")
     @Multipart
     Flowable<BapResultEntity> submit(@Path(value = "view") String view, @PartMap Map<String, RequestBody> paramsMap, @Part List<MultipartBody.Part> partList, @Query("__pc__") String __pc__);
+
+    /**
+     * 停电弃审
+     * @param offApplyTableNo
+     * @return
+     */
+//    @POST("/BEAMEle/onOrOff/onoroff/retrial.action?scriptCode=&__pc__=QkVBTUVsZV8xLjAuMF9vbk9yT2ZmX3JldHJpYWx8")
+    @POST("/BEAMEle/onOrOff/onoroff/checkPendindIsExists.action")
+    Flowable<CommonEntity<Boolean>> retrial(@Query(value = "offApplyTableNo") String offApplyTableNo);
 }

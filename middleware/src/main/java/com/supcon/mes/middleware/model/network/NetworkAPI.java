@@ -448,7 +448,7 @@ public interface NetworkAPI {
      * @param queryMap
      * @return
      */
-    @GET("http://api.fir.im/apps/latest/{appId}")
+    @GET("http://api.bq04.com/apps/latest/{appId}")
     Flowable<BuildVersionEntity> findLatestVersion(@Path("appId") String appId, @QueryMap Map<String, Object> queryMap);
 
     /**

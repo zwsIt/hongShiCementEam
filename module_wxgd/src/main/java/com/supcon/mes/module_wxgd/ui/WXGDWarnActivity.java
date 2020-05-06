@@ -15,6 +15,7 @@ import com.app.annotation.Controller;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LinkEntity;
@@ -292,7 +293,6 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         mSparePartController.updateOldSparePart(mWXGDEntity.sparePart);
         mLubricateOilsController.updateOldLubricateOils(mWXGDEntity.lubricateOils);
         maintenanceController.updateOldLubricateOils(mWXGDEntity.maintainEntities);
-
     }
 
     /**
