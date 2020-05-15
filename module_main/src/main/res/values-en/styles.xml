@@ -1,0 +1,54 @@
+<resources>
+
+    <style name="TabRadioButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:button">@null</item>
+        <item name="android:paddingTop">@dimen/dp_10</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@drawable/tab_text_color_selector</item>
+    </style>
+
+    <declare-styleable name="SimpleRatingBar">
+        <attr name="srb_borderColor" format="color" />
+        <attr name="srb_fillColor" format="color" />
+        <attr name="srb_backgroundColor" format="color" />
+        <attr name="srb_starBackgroundColor" format="color" />
+        <attr name="srb_pressedBorderColor" format="color" />
+        <attr name="srb_pressedFillColor" format="color" />
+        <attr name="srb_pressedBackgroundColor" format="color" />
+        <attr name="srb_pressedStarBackgroundColor" format="color" />
+        <attr name="srb_numberOfStars" format="integer" />
+        <attr name="srb_starSize" format="dimension" />
+        <attr name="srb_maxStarSize" format="dimension" />
+        <attr name="srb_starsSeparation" format="dimension" />
+        <attr name="srb_starBorderWidth" format="float" />
+        <attr name="srb_starCornerRadius" format="float" />
+        <attr name="srb_isIndicator" format="boolean" />
+        <attr name="srb_rating" format="float" />
+        <attr name="srb_stepSize" format="float" />
+        <attr name="srb_drawBorderEnabled" format="boolean" />
+        <attr name="srb_gravity" format="enum">
+            <enum name="left" value="0"/>
+            <enum name="right" value="1"/>
+        </attr>
+    </declare-styleable>
+
+
+    <!--仿微信字体大小调整 ChangeTextSizeView-->
+    <declare-styleable name="ChangeTextSizeView">
+        <attr name="lineWidth" format="dimension|reference" />
+        <attr name="lineColor" format="color|reference" />
+        <attr name="totalCount" format="integer" />
+        <attr name="circleColor" format="color|reference" />
+        <attr name="circleRadius" format="dimension|reference" />
+
+        <attr name="textFontColor" format="color|reference" />
+        <attr name="smallSize" format="integer" />
+        <attr name="standerSize" format="integer" />
+        <attr name="bigSize" format="integer" />
+        <attr name="defaultPosition" format="integer" />
+    </declare-styleable>
+</resources>

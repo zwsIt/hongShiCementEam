@@ -12,6 +12,7 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomExpandableTextView;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.util.EAMStatusHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -156,8 +157,8 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
     @Override
     public void getSearchSBDASuccess(SBDAOnlineListEntity entity) {
         if (entity.result.size() > 0) {
-            SBDAOnlineEntity sbdaOnlineEntity = entity.result.get(0);
-            setTextValue(eamCode, sbdaOnlineEntity.code);
+            EamEntity sbdaOnlineEntity = entity.result.get(0);
+            setTextValue(eamCode, sbdaOnlineEntity.eamAssetCode);
             setTextValue(eamName, sbdaOnlineEntity.name);
             setTextValue(eamModel, sbdaOnlineEntity.model);
             setTextValue(eamType, sbdaOnlineEntity.getEamType().name);

@@ -78,7 +78,7 @@ public class ElectricityOffOnListAdapter extends BaseListDataRecyclerViewAdapter
         protected void update(ElectricityOffOnEntity data) {
             itemTableNo.setContent(data.getTableNo());
             itemTableStatus.setText(data.getPending().taskDescription);
-            itemEam.setText(TextUtils.isEmpty(data.getEamID().name) ? "" : String.format("%s(%s)", data.getEamID().name, data.getEamID().code));
+            itemEam.setText(TextUtils.isEmpty(data.getEamID().name) ? "" : String.format("%s(%s)", data.getEamID().name, data.getEamID().eamAssetCode));
             itemApplyStaff.setText(data.getApplyStaff().name);
             itemTableStatus.setTextColor(context.getResources().getColor(R.color.white));
             if (Constant.TableStatus_CH.EDIT.equals(data.getPending().taskDescription)) {

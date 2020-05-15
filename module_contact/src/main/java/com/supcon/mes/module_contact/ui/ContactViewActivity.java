@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BasePresenterActivity;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomCircleTextImageView;
@@ -61,7 +62,7 @@ public class ContactViewActivity extends BasePresenterActivity {
     CustomCircleTextImageView userIcon;
     private ContactEntity mData;
     //匹配手机号码的正则表达式
-    private Pattern mPattern = Pattern.compile("^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$");
+    private Pattern mPattern = Pattern.compile("^[1][3,4,5,7,8,9][0-9]{9}$"/*"^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$"*/);
 
     @Override
     protected int getLayoutID() {
@@ -87,15 +88,16 @@ public class ContactViewActivity extends BasePresenterActivity {
         ivBack.setOnClickListener(v -> back());
         //电话拨打功能开发
         ivTelphone.setOnClickListener(v -> {
+
             if (!TextUtils.isEmpty(mData.getMOBILE()) && mPattern.matcher(mData.getMOBILE()).find())
                 SystemUtil.callPhone(context, mData.getMOBILE());
-            else ToastUtils.show(context, "未设置通话信息！");
+            else ToastUtils.show(context, "电话信息为空或号码错误！");
         });
         //短信发送功能开发
         ivSms.setOnClickListener(v -> {
                     if (!TextUtils.isEmpty(mData.getMOBILE()) && mPattern.matcher(mData.getMOBILE()).find())
                         SystemUtil.sendSms(context, mData.getMOBILE());
-                    else ToastUtils.show(context, "未设置电话信息！");
+                    else ToastUtils.show(context, "电话信息为空或号码错误！");
                 }
         );
         //邮件发送功能开发

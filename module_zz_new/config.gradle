@@ -12,7 +12,7 @@ dependencies {
     implementation 'com.githang:status-bar-compat:0.7'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.github.bumptech.glide:okhttp3-integration:4.7.1'
+    implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
     api ('com.qmuiteam:qmui:1.0.6'){
         exclude group: 'com.android.support'
     }
@@ -42,9 +42,9 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.android.support:multidex:1.0.3'
-    implementation files('libs/libjsapi.aar')
-    implementation files('libs/libwebview.aar')
-    api files('libs/coresdk.aar')
+//    implementation files('libs/libjsapi.aar')
+//    implementation files('libs/libwebview.aar')
+//    api files('libs/coresdk.aar')
 
     implementation 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'

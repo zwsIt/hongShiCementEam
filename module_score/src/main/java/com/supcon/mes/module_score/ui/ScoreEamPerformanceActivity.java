@@ -191,7 +191,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
         titleText.setText(title);
         if (scoreEamEntity != null) {
             scoreId = scoreEamEntity.id;
-            eamCode.setContent(Util.strFormat(scoreEamEntity.getBeamId().code));
+            eamCode.setContent(Util.strFormat(scoreEamEntity.getBeamId().eamAssetCode));
             eamName.setContent(Util.strFormat(scoreEamEntity.getBeamId().name));
             eamDept.setContent(Util.strFormat(scoreEamEntity.getBeamId().getUseDept().name));
         } else {
@@ -329,7 +329,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
                         .subscribe(scoreDeviceCheckResultEntity -> {
                             if (scoreDeviceCheckResultEntity.success) {
                                 loaderController.closeLoader();
-                                eamCode.setContent(Util.strFormat(eamEntity.code));
+                                eamCode.setContent(Util.strFormat(eamEntity.eamAssetCode));
                                 eamName.setContent(Util.strFormat(eamEntity.name));
                                 eamDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
                                 scoreEamEntity.beamId = eamEntity;
@@ -345,7 +345,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
     public void getEamSuccess(CommonListEntity entity) {
         if (entity.result.size() > 0) {
             EamEntity eamEntity = (EamEntity) entity.result.get(0);
-            eamCode.setContent(Util.strFormat(eamEntity.code));
+            eamCode.setContent(Util.strFormat(eamEntity.eamAssetCode));
             eamName.setContent(Util.strFormat(eamEntity.name));
             eamDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
             scoreEamEntity.beamId = eamEntity;

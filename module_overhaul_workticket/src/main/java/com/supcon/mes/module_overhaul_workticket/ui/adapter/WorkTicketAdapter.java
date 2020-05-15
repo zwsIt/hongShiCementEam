@@ -105,7 +105,7 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
         protected void update(WorkTicketEntity data) {
             itemTableNo.setContent(data.getTableNo());
             itemTableStatus.setText(data.getPending().taskDescription);
-            itemEam.setText(TextUtils.isEmpty(data.getEamId().name) ? "" : String.format("%s(%s)", data.getEamId().name, data.getEamId().code));
+            itemEam.setText(TextUtils.isEmpty(data.getEamId().name) ? "" : String.format("%s(%s)", data.getEamId().name, data.getEamId().eamAssetCode));
             itemChargeStaff.setText(data.getChargeStaff().name);
             itemRiskAssessment.setText(data.getRiskAssessment().value);
             itemTableStatus.setTextColor(context.getResources().getColor(R.color.white));

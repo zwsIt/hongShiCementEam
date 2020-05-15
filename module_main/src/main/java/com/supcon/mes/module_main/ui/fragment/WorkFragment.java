@@ -94,9 +94,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import cn.bluetron.coresdk.contract.CoreSdkContract;
-import cn.bluetron.coresdk.main.SLCoreSdk;
-import cn.bluetron.coresdk.model.bean.response.OwnMinAppItem;
+//import cn.bluetron.coresdk.contract.CoreSdkContract;
+//import cn.bluetron.coresdk.main.SLCoreSdk;
+//import cn.bluetron.coresdk.model.bean.response.OwnMinAppItem;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -209,7 +209,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         ((TextView) waitTitle.findViewById(R.id.contentTitleLabel)).setText("工作提醒");
         waitMore = waitTitle.findViewById(R.id.contentTitleSettingIc);
         waitMore.setVisibility(View.VISIBLE);
-        waitMore.setOnClickListener(v -> IntentRouter.go(getActivity(), Constant.Router.WAIT_DEALT_NEW));
+        waitMore.setOnClickListener(v -> IntentRouter.go(getActivity(), Constant.Router.PENDING_LIST));
         View workTitle = rootView.findViewById(R.id.hs_work_title);
         ((TextView) workTitle.findViewById(R.id.contentTitleLabel)).setText("我的工作");
         marqueeTextView = workTitle.findViewById(R.id.contentTitleTips);
@@ -252,9 +252,9 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         workAdapter.setList(workInfos);
         workAdapter.notifyDataSetChanged();
 
-        if (!EamApplication.isHongshi()) {
-            doZhiZhiLogin();
-        }
+//        if (!EamApplication.isHongshi()) {
+//            doZhiZhiLogin();
+//        }
 
         aewMenu = MenuHelper.getAewMenu();
         lubricateMenu = MenuHelper.getLubricateMenu();
@@ -265,93 +265,93 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         powerCheck(userPowerCheckController, aewMenu, lubricateMenu, repairMenu, formMenu);
     }
 
-    public void doZhiZhiLogin() {
-        String suposTicket = SharedPreferencesUtils.getParam(context, MBapConstant.SPKey.SUPOS_TICKET, "");
-        LogUtil.d("suposTicket:" + suposTicket);
-
-        String zzUrl = EamApplication.getZzUrl();
-        if (TextUtils.isEmpty(zzUrl)) {
-            String zzIp = SharedPreferencesUtils.getParam(context, Constant.ZZ.IP, "");
-            String zzPort = SharedPreferencesUtils.getParam(context, Constant.ZZ.PORT, "");
-
-            if (!TextUtils.isEmpty(zzIp) && !TextUtils.isEmpty(zzPort)) {
-                zzUrl = "http://" + zzIp + ":" + zzPort;
-            }
-        }
-
-        SLCoreSdk.initialize(EamApplication.getAppContext(), TextUtils.isEmpty(zzUrl) ? "http://10.30.55.50:8042" : zzUrl, suposTicket, EamApplication.getUserName());
-        SLCoreSdk.client().getMinAppList(new CoreSdkContract.GetMinAppListCallBack() {
-            @Override
-            public void onGetMinAppList(List<OwnMinAppItem> list) {
-                LogUtil.d("zz list size:" + list.size());
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initZhiZhiApps(list);
-                    }
-                });
-
-            }
-
-            @Override
-            public void onError(String msg) {
-                //Toast.makeText(MainActivity.this,"getMinAppList error:"+msg,Toast.LENGTH_LONG).show();
-                LogUtil.e("zz getMinAppList error:" + msg);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ToastUtils.show(context, "获取知之系统菜单失败");
-                    }
-                });
-            }
-        });
-
-    }
-
-    private void initZhiZhiApps(List<OwnMinAppItem> list) {
-
-        if (list == null || list.size() == 0) {
-            return;
-        }
-        zzMenu = MenuHelper.getZZMenu(list);
-
-        GridLayoutManager layoutManager = new GridLayoutManager(context, 5);
-        workRecycler.setLayoutManager(layoutManager);
-        WorkInfo workInfo5 = new WorkInfo();
-        workInfo5.name = "流程图";
-        workInfo5.iconResId = R.drawable.menu_form_selector;
-        workInfos.add(workInfo5);
-
-        // supos质量管理 开放到主页级别
-        for (OwnMinAppItem ownMinAppItem : list) {
-            if (ownMinAppItem.getCreateType() == 2) {
-                WorkInfo workInfoSupOS = new WorkInfo();
-                workInfoSupOS.name = ownMinAppItem.getAppname();
-//                workInfoSupOS.iconResId = R.drawable.ic_work_quality;
-                workInfoSupOS.iconUrl = ownMinAppItem.getAppiconurl(); // 动态获取icon
-                workInfoSupOS.appItem = ownMinAppItem;
-                workInfos.add(workInfoSupOS);
-            }
-        }
-        workAdapter.setList(workInfos);
-        workAdapter.notifyDataSetChanged();
-    }
-
-    private void goZZApp(MenuPopwindowBean menuPopwindowBean) {
-
-        // 内部判断跳转
-        SLCoreSdk.client().openApp(menuPopwindowBean.getAppItem());
-
-//        switch (menuPopwindowBean.getAppItem().getApptype()) {
-//            case 1:
-//                SLCoreSdk.client().openTFAppListActivity(menuPopwindowBean.getAppItem());
-//                break;
-//            case 2:
-//                SLCoreSdk.client().openWebApp(menuPopwindowBean.getAppItem());
-//                break;
+//    public void doZhiZhiLogin() {
+//        String suposTicket = SharedPreferencesUtils.getParam(context, MBapConstant.SPKey.SUPOS_TICKET, "");
+//        LogUtil.d("suposTicket:" + suposTicket);
 //
+//        String zzUrl = EamApplication.getZzUrl();
+//        if (TextUtils.isEmpty(zzUrl)) {
+//            String zzIp = SharedPreferencesUtils.getParam(context, Constant.ZZ.IP, "");
+//            String zzPort = SharedPreferencesUtils.getParam(context, Constant.ZZ.PORT, "");
+//
+//            if (!TextUtils.isEmpty(zzIp) && !TextUtils.isEmpty(zzPort)) {
+//                zzUrl = "http://" + zzIp + ":" + zzPort;
+//            }
 //        }
-    }
+//
+//        SLCoreSdk.initialize(EamApplication.getAppContext(), TextUtils.isEmpty(zzUrl) ? "http://10.30.55.50:8042" : zzUrl, suposTicket, EamApplication.getUserName());
+//        SLCoreSdk.client().getMinAppList(new CoreSdkContract.GetMinAppListCallBack() {
+//            @Override
+//            public void onGetMinAppList(List<OwnMinAppItem> list) {
+//                LogUtil.d("zz list size:" + list.size());
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        initZhiZhiApps(list);
+//                    }
+//                });
+//
+//            }
+//
+//            @Override
+//            public void onError(String msg) {
+//                //Toast.makeText(MainActivity.this,"getMinAppList error:"+msg,Toast.LENGTH_LONG).show();
+//                LogUtil.e("zz getMinAppList error:" + msg);
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ToastUtils.show(context, "获取知之系统菜单失败");
+//                    }
+//                });
+//            }
+//        });
+//
+//    }
+
+//    private void initZhiZhiApps(List<OwnMinAppItem> list) {
+//
+//        if (list == null || list.size() == 0) {
+//            return;
+//        }
+//        zzMenu = MenuHelper.getZZMenu(list);
+//
+//        GridLayoutManager layoutManager = new GridLayoutManager(context, 5);
+//        workRecycler.setLayoutManager(layoutManager);
+//        WorkInfo workInfo5 = new WorkInfo();
+//        workInfo5.name = "流程图";
+//        workInfo5.iconResId = R.drawable.menu_form_selector;
+//        workInfos.add(workInfo5);
+//
+//        // supos质量管理 开放到主页级别
+//        for (OwnMinAppItem ownMinAppItem : list) {
+//            if (ownMinAppItem.getCreateType() == 2) {
+//                WorkInfo workInfoSupOS = new WorkInfo();
+//                workInfoSupOS.name = ownMinAppItem.getAppname();
+////                workInfoSupOS.iconResId = R.drawable.ic_work_quality;
+//                workInfoSupOS.iconUrl = ownMinAppItem.getAppiconurl(); // 动态获取icon
+//                workInfoSupOS.appItem = ownMinAppItem;
+//                workInfos.add(workInfoSupOS);
+//            }
+//        }
+//        workAdapter.setList(workInfos);
+//        workAdapter.notifyDataSetChanged();
+//    }
+
+//    private void goZZApp(MenuPopwindowBean menuPopwindowBean) {
+//
+//        // 内部判断跳转
+//        SLCoreSdk.client().openApp(menuPopwindowBean.getAppItem());
+//
+////        switch (menuPopwindowBean.getAppItem().getApptype()) {
+////            case 1:
+////                SLCoreSdk.client().openTFAppListActivity(menuPopwindowBean.getAppItem());
+////                break;
+////            case 2:
+////                SLCoreSdk.client().openWebApp(menuPopwindowBean.getAppItem());
+////                break;
+////
+////        }
+//    }
 
     private void initAd() {
         List<GalleryBean> ads = new ArrayList<>();
@@ -447,14 +447,14 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                         break;
                     case 5:
                     default:
-                        WorkInfo workInfo = (WorkInfo) obj;
-                        MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();
+//                        WorkInfo workInfo = (WorkInfo) obj;
+//                        MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();
 //                        menuPopwindowBean.setType(Constant.HSWorkType.ZZ);
 //                        menuPopwindowBean.setPower(true);
 //                        menuPopwindowBean.setName(workInfo.appItem.getAppname());
 //                        menuPopwindowBean.setRouter(workInfo.appItem.getAppId());  // 保证不为空，可跳转
-                        menuPopwindowBean.setAppItem(workInfo.appItem);
-                        goZZApp(menuPopwindowBean);
+//                        menuPopwindowBean.setAppItem(workInfo.appItem);
+//                        goZZApp(menuPopwindowBean);
                         break;
                 }
                 oldPosition = position;
@@ -528,7 +528,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
 //                            bundle.putString(BaseConstant.WEB_URL, "http://" + EamApplication.getIp() + ":" + EamApplication.getPort() + Constant.WebUrl.JX_TICKETS + "&date=" + System.currentTimeMillis());
 //                            break;
                         case Constant.HSWorkType.ZZ:
-                            goZZApp(menuPopwindowBean);
+//                            goZZApp(menuPopwindowBean);
                             break;
                     }
                     IntentRouter.go(getContext(), menuPopwindowBean.getRouter(), bundle);

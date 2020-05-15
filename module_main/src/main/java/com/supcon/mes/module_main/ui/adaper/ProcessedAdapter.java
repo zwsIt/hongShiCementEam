@@ -123,9 +123,9 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
 //            }
 
             processState.setText(Util.strFormat2(data.proStatus));
-            if (!TextUtils.isEmpty(data.getEamId().name) || !TextUtils.isEmpty(data.getEamId().code)) {
+            if (!TextUtils.isEmpty(data.getEamId().name) || !TextUtils.isEmpty(data.getEamId().eamAssetCode)) {
                 String eam = String.format(context.getString(R.string.device_style10), data.getEamId().name
-                        , data.getEamId().code);
+                        , data.getEamId().eamAssetCode);
                 processEam.setContent(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()).toString());
             }else {
                 processEam.setContent("");

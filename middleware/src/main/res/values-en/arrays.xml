@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner">
+        <item>集团</item>
+        <item>兰溪</item>
+        <item>宜春</item>
+        <item>印尼</item>
+        <item>永州</item>
+        <item>一公司</item>
+        <item>二公司</item>
+        <item>三公司</item>
+        <item>四公司</item>
+    </string-array>
+</resources>

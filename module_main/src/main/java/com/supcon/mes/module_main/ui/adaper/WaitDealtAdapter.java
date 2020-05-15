@@ -367,7 +367,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                 waitDealtEntrust.setVisibility(View.GONE);
             }
 
-            if (data.overDateFlag.equals("1")) {
+            if (data.overDateFlag != null && data.overDateFlag.equals("1")) {
                 waitDealtEamSource.setTextColor(context.getResources().getColor(R.color.orange));
             } else {
                 waitDealtEamSource.setTextColor(context.getResources().getColor(R.color.gray));

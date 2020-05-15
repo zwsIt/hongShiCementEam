@@ -72,7 +72,7 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="areaNum"
-        app:key="设备位号"
+        app:key="@string/sbda_area_no"
         app:key_width="@dimen/dp_120"
         app:necessary="false" />
 

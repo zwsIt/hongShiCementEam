@@ -134,7 +134,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
     protected void initData() {
         super.initData();
         if (mEamEntity != null) {
-            eamCode.setContent(Util.strFormat(mEamEntity.code));
+            eamCode.setContent(Util.strFormat(mEamEntity.eamAssetCode));
             eamName.setContent(Util.strFormat(mEamEntity.name));
             queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(mEamEntity.code));
             queryParam.put(Constant.IntentKey.EAM_ID, Util.strFormat(mEamEntity.id));
@@ -247,7 +247,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
         if (commonSearchEvent.commonSearchEntity != null) {
             if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
                 mEamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
-                eamCode.setContent(Util.strFormat(mEamEntity.code));
+                eamCode.setContent(Util.strFormat(mEamEntity.eamAssetCode));
                 eamName.setContent(Util.strFormat(mEamEntity.name));
                 queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(mEamEntity.code));
                 queryParam.put(Constant.IntentKey.EAM_ID, Util.strFormat(mEamEntity.id));

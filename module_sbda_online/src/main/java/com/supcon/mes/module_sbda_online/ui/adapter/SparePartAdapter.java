@@ -109,9 +109,9 @@ public class SparePartAdapter extends BaseListDataRecyclerViewAdapter<SparePartE
                 itemSparePartModelSpecifTv.contentView().setText(HtmlParser.buildSpannedText(modelSpecif, new HtmlTagHandler()));
             }
 
-            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().eamAssetCode)) {
                 itemSparePartAttachEamTv.setVisibility(View.VISIBLE);
-                itemSparePartAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+                itemSparePartAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().eamAssetCode);
             }
 
             if (data.isDuration()) {

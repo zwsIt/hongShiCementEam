@@ -492,7 +492,7 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
         applyStaff.setContent(entity.getApplyStaff().name);
         department.setContent(entity.getApplyStaff().getMainPosition().getDepartment().name);
         eamName.setContent(entity.getEamID().name);
-        eamCode.setContent(entity.getEamID().code);
+        eamCode.setContent(entity.getEamID().eamAssetCode);
         applyDate.setContent(entity.getApplyDate() == null ? "" : DateUtil.dateTimeFormat(entity.getApplyDate()));
         operateStaff.setContent(entity.getOperateStaff().name);
         workTask.setContent(entity.getWorkTask());
@@ -597,7 +597,7 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
     public void receiveEam(EleOffOnTemplate eleOffOnTemplate) {
         if (eleOffOnTemplate != null) {
             eamName.setContent(eleOffOnTemplate.eamId.name);
-            eamCode.setContent(eleOffOnTemplate.eamId.code);
+            eamCode.setContent(eleOffOnTemplate.eamId.eamAssetCode);
 
             mElectricityOffOnEntity.setEamID(eleOffOnTemplate.eamId);
             mElectricityOffOnEntity.setEleTemplateId(eleOffOnTemplate);
@@ -609,7 +609,7 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
         if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
             EamEntity eam = (EamEntity) commonSearchEvent.commonSearchEntity;
             eamName.setContent(eam.name);
-            eamCode.setContent(eam.code);
+            eamCode.setContent(eam.eamAssetCode);
             mElectricityOffOnEntity.setEamID(eam);
         }
     }

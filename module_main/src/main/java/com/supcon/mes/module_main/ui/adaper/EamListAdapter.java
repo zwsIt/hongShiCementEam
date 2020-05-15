@@ -14,6 +14,7 @@ import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.middleware.model.bean.EamEntity;
@@ -43,7 +44,8 @@ public class EamListAdapter extends BaseListDataRecyclerViewAdapter<EamEntity> {
 
         @BindByTag("itemSBDADeviceCode")
         TextView itemSBDADeviceCode;
-
+        @BindByTag("areaNum")
+        TextView areaNum;
         @BindByTag("itemSBDADeviceArea")
         TextView getItemSBDADeviceArea;
 
@@ -100,7 +102,7 @@ public class EamListAdapter extends BaseListDataRecyclerViewAdapter<EamEntity> {
 
         @Override
         protected int layoutId() {
-            return R.layout.item_hs_eam;           //获取列表自视图布局
+            return R.layout.item_online_sbda;           //获取列表自视图布局
         }
 
         @Override
@@ -110,7 +112,8 @@ public class EamListAdapter extends BaseListDataRecyclerViewAdapter<EamEntity> {
             new EamPicController().initEamPic(itemSBDADeviceIc, entity.id);
 
             itemSBDADeviceTitle.setText(entity.name);
-            itemSBDADeviceCode.setText("[" + entity.code + "]");
+            itemSBDADeviceCode.setText(String.format("[%s]", entity.eamAssetCode));
+            areaNum.setText(Util.strFormat(entity.areaNum));
             getItemSBDADeviceArea.setText(entity.installPlace.name);
 
             eamFraction.setText(String.valueOf(Math.round(entity.score)));

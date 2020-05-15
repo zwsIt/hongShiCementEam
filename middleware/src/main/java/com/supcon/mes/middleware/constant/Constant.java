@@ -33,7 +33,6 @@ public interface Constant {
      */
     interface Fir{
         String API_TOKEN = "1ce8d7b6ac5ecef81e3a6c0dfaafb7e3"; // https://fir.im/apps提供，切勿在网站点击重新生成，否则已有app 不能检查更新
-        String HAI_LUO_APP_ID = "5ddb955cb2eb46487e3ccee8";
         String HONG_SHI_APP_ID = "5ddb877423389f4559ae8303";
     }
 
@@ -230,6 +229,7 @@ public interface Constant {
         String HS_ELE_ON_VIEW = "HS_ELE_ON_VIEW"; // 送电票查看
         String WAIT_DEALT_NEW = "WAIT_DEALT_NEW"; // 新版工作提醒
         String LUBRICATION_RECORDS_FINISH_LIST = "LUBRICATION_RECORDS_FINISH_LIST"; // 已完成润滑记录
+        String PENDING_LIST = "PENDING_LIST"; // 工作提醒
     }
 
 
@@ -692,19 +692,24 @@ public interface Constant {
         String STOP_POLICE_STOP_EXPLAIN = "stopExplain";
         String STOP_POLICE_EAM_IDS = "eamIds";
 
-        String NEWSTATE = "NEWSTATE";
-
         String EAMTYPE_NAME = "EAMTYPE_NAME"; // 设备类型：名称
         String EAMTYPE_CODE = "EAMTYPE_CODE";//设备类型：编码
         String LUB_PART = "LUB_PART"; // 润滑部位
 
         String ALL_QUERY = "ALL_QUERY"; // 查询按钮
         String PENDING_QUERY = "PENDING_QUERY"; // 仅查待办
-        String STATE = "STATE";
+
         String DEAL_TIME_S = "DEAL_TIME_S"; // 润滑完成时间
         String DEAL_TIME_E = "DEAL_TIME_E"; // 润滑完成时间
         String DEAL_TIME = "DEAL_TIME"; // 润滑完成时间
         String EAM_ID = "EAM_ID"; // 设备ID
+
+        // 工作提醒
+        String STATE = "STATE";  // 状态
+        String PROCESSKEY = "PROCESSKEY"; // 工作流程key(单据类型)
+        // 我处理的
+        String NEWSTATE = "NEWSTATE"; // 单据状态
+        String PROCESS_KEY = "PROCESS_KEY"; // 工作流程key(单据类型)
     }
 
 

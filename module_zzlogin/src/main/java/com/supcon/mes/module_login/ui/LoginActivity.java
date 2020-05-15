@@ -191,7 +191,7 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
                     }
 
                     onLoading("正在登陆...");
-                    presenterRouter.create(ZhiZhiUrlQueryAPI.class).getZhizhiUrl();
+//                    presenterRouter.create(ZhiZhiUrlQueryAPI.class).getZhizhiUrl();
 
 
                     boolean hasSupOS = SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, BuildConfig.HAS_SUPOS);

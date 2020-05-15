@@ -1008,7 +1008,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             return;
         }
         EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
-        eamCodeEdit.setContent(eamEntity.code);
+        eamCodeEdit.setContent(eamEntity.eamAssetCode);
         eamNameEdit.setContent(eamEntity.name);
         eamAreaEdit.setContent(eamEntity.getInstallPlace().name);
 

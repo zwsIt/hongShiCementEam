@@ -1,6 +1,6 @@
 package com.supcon.mes.module_main.ui.view;
 
-import cn.bluetron.coresdk.model.bean.response.OwnMinAppItem;
+//import cn.bluetron.coresdk.model.bean.response.OwnMinAppItem;
 
 /**
  * @author yangfei.cao
@@ -17,15 +17,15 @@ public class MenuPopwindowBean {
     private String tag;
     private boolean isPower;
     private String menuOperateCodes;
-    private OwnMinAppItem appItem;
-
-    public void setAppItem(OwnMinAppItem appItem) {
-        this.appItem = appItem;
-    }
-
-    public OwnMinAppItem getAppItem() {
-        return appItem;
-    }
+//    private OwnMinAppItem appItem;
+//
+//    public void setAppItem(OwnMinAppItem appItem) {
+//        this.appItem = appItem;
+//    }
+//
+//    public OwnMinAppItem getAppItem() {
+//        return appItem;
+//    }
 
     public String getName() {
         return name;

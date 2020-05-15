@@ -27,7 +27,7 @@ dependencies {
     api 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     api 'com.google.code.gson:gson:2.8.5'
     api 'org.greenrobot:greendao:3.2.2'
-    api "com.github.bumptech.glide:okhttp3-integration:4.7.1"
+    api "com.github.bumptech.glide:okhttp3-integration:4.9.0"
 
 //        annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
 //    annotationProcessor "com.github.jasonwang18.common:apt:$rootProject.ext.commonVersion@jar"

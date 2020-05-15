@@ -56,7 +56,7 @@ public class ScoreEamListAdapter extends BaseListDataRecyclerViewAdapter<ScoreEa
         @Override
         protected void update(ScoreEamEntity data) {
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getBeamId().name)
-                    , Util.strFormat(data.getBeamId().code));
+                    , Util.strFormat(data.getBeamId().eamAssetCode));
             itemScoreEam.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             itemScoreNum.setValue(Util.big(data.scoreNum));

@@ -215,7 +215,7 @@ public class SparePartApplyViewActivity extends BaseRefreshActivity implements S
         applyStaff.setContent(entity.getApplyStaff().name);
         department.setContent(entity.getApplyStaff().getMainPosition().getDepartment().name);
         position.setContent(entity.getApplyStaff().getMainPosition().name);
-        eamCode.setContent(entity.getEam().code);
+        eamCode.setContent(entity.getEam().eamAssetCode);
         eamName.setContent(entity.getEam().name);
         sparePartTotal.setContent(Util.bigDecimal2Str(entity.getTotalPrice(),2));
         applyTime.setContent(DateUtil.dateTimeFormat(entity.getApplyTime()));

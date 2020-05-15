@@ -56,7 +56,7 @@ public class EleOffOnEamTemplateAdapter extends BaseListDataRecyclerViewAdapter<
         @Override
         protected void update(EleOffOnTemplate data) {
             name.setContent(data.eamId.name);
-            code.setContent(data.eamId.code);
+            code.setContent(data.eamId.eamAssetCode);
             remark.setContent(data.remark);
         }
     }

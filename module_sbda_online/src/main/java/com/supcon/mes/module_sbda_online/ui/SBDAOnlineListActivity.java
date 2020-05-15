@@ -23,6 +23,7 @@ import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.ScreenEntity;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -60,7 +61,7 @@ import java.util.Map;
  */
 @Router(Constant.Router.SBDA_ONLINE_LIST)
 @Presenter(value = {SBDAOnlineListPresenter.class, ScreenAreaPresenter.class, ScreenTypePresenter.class})
-public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnlineEntity> implements SBDAOnlineListContract.View {
+public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<EamEntity> implements SBDAOnlineListContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
 
@@ -156,7 +157,7 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnli
     }
 
     @Override
-    protected IListAdapter<SBDAOnlineEntity> createAdapter() {
+    protected IListAdapter<EamEntity> createAdapter() {
         mSBDAListAdapter = new SBDAOnlineListAdapter(this);
         return mSBDAListAdapter;
     }
@@ -180,7 +181,7 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<SBDAOnli
         });
         //点击触发事件跳转界面
         mSBDAListAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
-            SBDAOnlineEntity sbdaOnlineEntity = (SBDAOnlineEntity) obj;
+            EamEntity sbdaOnlineEntity = (EamEntity) obj;
             Bundle bundle = new Bundle();
             bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID, sbdaOnlineEntity.id);
             bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE, sbdaOnlineEntity.code);

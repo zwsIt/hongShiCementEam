@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/list_bg_color"
+    android:orientation="vertical">
+    <include layout="@layout/ly_titlebar_local"/>
+
+    <com.supcon.mes.mbap.view.CustomTab
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:id="@+id/customTab"
+        android:tag="customTab"
+        app:select_text_color="@color/themeColor"
+        app:unselect_text_color="@color/darkgrey"
+        app:select_bg_color="@color/white"
+        app:unselect_bg_color="@color/white"
+        app:indicator_color="@color/themeColor"/>
+    <com.supcon.mes.mbap.view.NoScrollViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager"
+        android:tag="viewPager"/>
+</LinearLayout>

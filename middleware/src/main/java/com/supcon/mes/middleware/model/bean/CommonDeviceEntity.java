@@ -49,7 +49,7 @@ public class CommonDeviceEntity extends BaseEntity implements CommonSearchEntity
     public String installFirm;          //安装单位
     public String fileState;            //建档标记
     public String fileDate;               //建档日期
-    public String areaNum;              //设备位号
+    public String areaNum;              //设备位号(工艺编码)
     public Float useYear;              //使用年限
     public String vendor;               //供应商
     public boolean isSpecial;           //是否特种设备

@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bluetron.coresdk.model.bean.response.OwnMinAppItem;
+//import cn.bluetron.coresdk.model.bean.response.OwnMinAppItem;
 
 
 public class MenuHelper {
@@ -171,21 +171,21 @@ public class MenuHelper {
     }
 
 
-    public static List<MenuPopwindowBean> getZZMenu(List<OwnMinAppItem> zzWorks) {
-        List<MenuPopwindowBean> works = new ArrayList<>();
-        for (OwnMinAppItem ownMinAppItem : zzWorks) {
-//          注：  ownMinAppItem.getCreateType() = 1：自建(apptype=1 公众号打开；apptype=2 小程序打开); = 2：supos(apptype=1 公众号打开); = 3 第三方小程序：(apptype=2 小程序打开)。
-
-            if (ownMinAppItem.getCreateType() == 2) continue;
-
-            MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();
-            menuPopwindowBean.setType(Constant.HSWorkType.ZZ);
-            menuPopwindowBean.setPower(true);
-            menuPopwindowBean.setName(ownMinAppItem.getAppname());
-            menuPopwindowBean.setRouter(ownMinAppItem.getAppId());  // 保证不为空，可跳转
-            menuPopwindowBean.setAppItem(ownMinAppItem);
-            works.add(menuPopwindowBean);
-        }
-        return works;
-    }
+//    public static List<MenuPopwindowBean> getZZMenu(List<OwnMinAppItem> zzWorks) {
+//        List<MenuPopwindowBean> works = new ArrayList<>();
+//        for (OwnMinAppItem ownMinAppItem : zzWorks) {
+////          注：  ownMinAppItem.getCreateType() = 1：自建(apptype=1 公众号打开；apptype=2 小程序打开); = 2：supos(apptype=1 公众号打开); = 3 第三方小程序：(apptype=2 小程序打开)。
+//
+//            if (ownMinAppItem.getCreateType() == 2) continue;
+//
+//            MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();
+//            menuPopwindowBean.setType(Constant.HSWorkType.ZZ);
+//            menuPopwindowBean.setPower(true);
+//            menuPopwindowBean.setName(ownMinAppItem.getAppname());
+//            menuPopwindowBean.setRouter(ownMinAppItem.getAppId());  // 保证不为空，可跳转
+//            menuPopwindowBean.setAppItem(ownMinAppItem);
+//            works.add(menuPopwindowBean);
+//        }
+//        return works;
+//    }
 }

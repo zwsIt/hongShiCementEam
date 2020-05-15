@@ -17,7 +17,7 @@ public interface SPAHLConstant {
     interface HeaderData{
         String SPAD_DATA_INCLUDES = "id,createStaffId,createTime,version,deploymentId,tableInfoId,tableNo,applyStaff.id,applyStaff.code,applyStaff.name," +
                 "applyStaff.mainPosition.name,applyStaff.mainPosition.department,applyStaff.mainPosition.department.name,applyTime," +
-                "explain,remark,repairWork.id,repairWork.tableNo,repairWork.content,repairWork.eamID.name,repairWork.eamID.code,eam.id,eam.code,eam.name,totalPrice";
+                "explain,remark,repairWork.id,repairWork.tableNo,repairWork.content,repairWork.eamID.name,repairWork.eamID.code,eam.id,eam.code,eam.eamAssetcode,eam.name,totalPrice";
     }
 
     interface URL{

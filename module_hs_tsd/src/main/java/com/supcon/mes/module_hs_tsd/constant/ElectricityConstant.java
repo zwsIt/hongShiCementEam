@@ -12,7 +12,7 @@ public interface ElectricityConstant {
     interface HeaderData {
         String HEADER_DATA_INCLUDES = "id,createStaffId,createTime,version,deploymentId,tableInfoId,tableNo,remark,applyStaff.id,applyStaff.code,applyStaff.name," +
                 "applyStaff.mainPosition.name,applyStaff.mainPosition.department.id,applyStaff.mainPosition.department.name," +
-                "applyCurrentDept.id,applyCurrentDept.name,applyCurrentDept.code,eamID.id,eamID.code,eamID.name,workRecordId,workRecordTableno,applyDate,operateDate," +
+                "applyCurrentDept.id,applyCurrentDept.name,applyCurrentDept.code,eamID.id,eamID.code,eamID.eamAssetcode,eamID.name,workRecordId,workRecordTableno,applyDate,operateDate," +
                 "operateStaff.id,operateStaff.name,operateStaff.code,workTask,eleTemplateId.id,eleTemplateId.code,applyType.id,applyType.value,workTask";
     }
 

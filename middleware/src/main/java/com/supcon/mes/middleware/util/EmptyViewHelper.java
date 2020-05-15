@@ -14,7 +14,7 @@ public class EmptyViewHelper {
 
     private static EmptyViewEntity createEmptyNoBtnEntity(String msg){
         EmptyViewEntity emptyViewEntity = new EmptyViewEntity();
-        emptyViewEntity.icon = R.drawable.ic_nodata_notext;
+        emptyViewEntity.icon = R.drawable.ic_nodata_new2;
         emptyViewEntity.contentText = TextUtils.isEmpty(msg)?"暂无数据":msg;
 
         return emptyViewEntity;
@@ -23,7 +23,7 @@ public class EmptyViewHelper {
 
     public static EmptyViewEntity createErrorNoBtnEntity(String msg){
         EmptyViewEntity emptyViewEntity = new EmptyViewEntity();
-        emptyViewEntity.icon = R.drawable.ic_nodata_notext;
+        emptyViewEntity.icon = R.drawable.ic_nodata_new2;
         emptyViewEntity.contentText = TextUtils.isEmpty(msg)?"加载失败！":msg;
 //        emptyViewEntity.buttonText = "重试";
         return emptyViewEntity;
@@ -31,7 +31,7 @@ public class EmptyViewHelper {
 
     public static EmptyViewEntity createErrorEntity(String msg, String btnText){
         EmptyViewEntity emptyViewEntity = new EmptyViewEntity();
-        emptyViewEntity.icon = R.drawable.ic_nodata_notext;
+        emptyViewEntity.icon = R.drawable.ic_nodata_new2;
         emptyViewEntity.contentText = TextUtils.isEmpty(msg)?"加载失败！":msg;
         emptyViewEntity.buttonText = btnText;
         return emptyViewEntity;
@@ -39,7 +39,7 @@ public class EmptyViewHelper {
 
     private static EmptyViewEntity createEntity(String msg, String btnText){
         EmptyViewEntity emptyViewEntity = new EmptyViewEntity();
-        emptyViewEntity.icon = R.drawable.ic_nodata_notext;
+        emptyViewEntity.icon = R.drawable.ic_nodata_new2;
         emptyViewEntity.contentText = TextUtils.isEmpty(msg)?"暂无数据":msg;
         emptyViewEntity.buttonText = btnText;
 

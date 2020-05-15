@@ -69,10 +69,14 @@ public class WorkAdapter extends HeaderRecyclerViewAdapter<WorkInfo> {
 
         @Override
         protected void update(WorkInfo data) {
+            if (workIcon.getTag(R.id.imageid) != null && !workIcon.getTag(R.id.imageid).equals(data.iconUrl)){
+                Glide.with(context).clear(workIcon);
+            }
             if (data.iconResId != 0) {
                 workIcon.setImageResource(data.iconResId);
             } else {
                 Glide.with(context).load(data.iconUrl).apply(RequestOptionUtil.getWorkRequestOptions(context)).into(workIcon);
+                workIcon.setTag(R.id.imageid,data.iconUrl);
             }
             workName.setText(data.name);
             if (data.num > 0) {

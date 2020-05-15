@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/list_bg_color">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/dispatch"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:background="@color/white">
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/rightLl"
+                android:fillViewport="true">
+                <RadioGroup
+                    android:id="@+id/waitStateRadioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp_5"
+                    android:tag="waitStateRadioGroup">
+
+                    <RadioButton
+                        android:id="@+id/allRBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:button="@null"
+                        android:tag="allRBtn"
+                        android:text="全部"
+                        android:textSize="@dimen/fontSize_14sp"
+                        android:textColor="@drawable/sl_radio_text"
+                        android:checked="true"/>
+
+                    <RadioButton
+                        android:id="@+id/overdueRBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_20"
+                        android:button="@null"
+                        android:tag="overdueRBtn"
+                        android:text="已超期"
+                        android:textColor="@drawable/sl_radio_text"
+                        android:textSize="@dimen/fontSize_14sp" />
+                    <RadioButton
+                        android:id="@+id/pendingRBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_20"
+                        android:button="@null"
+                        android:tag="pendingRBtn"
+                        android:text="未超期"
+                        android:textColor="@drawable/sl_radio_text"
+                        android:textSize="@dimen/fontSize_14sp" />
+                    <RadioButton
+                        android:id="@+id/waitDispatchRBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_20"
+                        android:button="@null"
+                        android:tag="waitDispatchRBtn"
+                        android:text="待派单"
+                        android:textColor="@drawable/sl_radio_text"
+                        android:textSize="@dimen/fontSize_14sp" />
+
+                </RadioGroup>
+            </HorizontalScrollView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/rightLl">
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="@dimen/dp_25"
+                    android:background="@color/line_gray"/>
+                <com.supcon.mes.mbap.view.CustomFilterView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:id="@+id/tableFilter"
+                    android:tag="tableFilter"
+                    app:text="@string/main_table_type"
+                    app:text_size="14"
+                    app:text_color="@color/themeColor"
+                    app:item_text_color="@color/themeColor"
+                    app:icon_res="@drawable/display_down"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <include layout="@layout/ly_recyclerview" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/dispatch"
+        style="@style/RedButton"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:tag="dispatch"
+        android:text="@string/main_dispatch"
+        android:visibility="gone" />
+</RelativeLayout>

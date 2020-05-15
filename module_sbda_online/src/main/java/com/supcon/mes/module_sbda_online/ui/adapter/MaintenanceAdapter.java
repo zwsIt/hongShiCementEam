@@ -81,9 +81,9 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintena
                 itemMaintenanceNextDateTv.setValue(data.nextTime != null ? dateFormat.format(data.nextTime) : "");
             }
 
-            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().eamAssetCode)) {
                 itemMaintenanceAttachEamTv.setVisibility(View.VISIBLE);
-                itemMaintenanceAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+                itemMaintenanceAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().eamAssetCode);
             }
             if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
                 itemMaintenanceSparePartIdTv.setVisibility(View.VISIBLE);

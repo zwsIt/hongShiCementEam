@@ -359,11 +359,24 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        onLoading(context.getResources().getString(R.string.ticket_dealing));
-                        presenterRouter.create(WorkTicketSubmitAPI.class).retrial(mWorkTicketEntity.getOffApplyTableNo());
+                        retrialEleOff();
                     }
                 });
 
+    }
+
+    private void retrialEleOff() {
+        new CustomDialog(this)
+                .twoButtonAlertDialog("确定弃审停电票？")
+                .bindClickListener(R.id.grayBtn,null,true)
+                .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onLoading(context.getResources().getString(R.string.ticket_dealing));
+                        presenterRouter.create(WorkTicketSubmitAPI.class).retrial(mWorkTicketEntity.getOffApplyTableNo());
+                    }
+                }, true)
+                .show();
     }
 
     private void doSave() {
@@ -516,7 +529,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         chargeStaff.setContent(entity.getChargeStaff().name);
         workShop.setContent(entity.getWorkShop().name);
         eamName.setContent(entity.getEamId().name);
-        eamCode.setContent(entity.getEamId().code);
+        eamCode.setContent(entity.getEamId().eamAssetCode);
         content.setContent(entity.getContent());
 
         //初始化风险评估
@@ -611,7 +624,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
             EamEntity eam = (EamEntity) commonSearchEvent.commonSearchEntity;
             eamName.setContent(eam.name);
-            eamCode.setContent(eam.code);
+            eamCode.setContent(eam.eamAssetCode);
 
             mWorkTicketEntity.getEamId().id = eam.id;
             mWorkTicketEntity.getEamId().name = eam.name;

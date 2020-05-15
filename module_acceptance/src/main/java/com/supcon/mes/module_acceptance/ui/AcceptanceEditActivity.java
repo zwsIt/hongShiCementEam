@@ -308,7 +308,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
                 acceptanceEntity.getBeamID().id = -1L;
             }
         }
-        eamCode.setContent(Util.strFormat2(acceptanceEntity.getBeamID().code));
+        eamCode.setContent(Util.strFormat2(acceptanceEntity.getBeamID().eamAssetCode));
         eamName.setContent(Util.strFormat2(acceptanceEntity.getBeamID().name));
         acceptanceDept.setContent(Util.strFormat2(acceptanceEntity.getDept().name));
         acceptanceArea.setContent(Util.strFormat2(acceptanceEntity.getArea().name));
@@ -350,7 +350,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             }
             if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
                 EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
-                eamCode.setContent(Util.strFormat(eamEntity.code));
+                eamCode.setContent(Util.strFormat(eamEntity.eamAssetCode));
                 eamName.setContent(Util.strFormat(eamEntity.name));
                 acceptanceDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
                 acceptanceArea.setContent(Util.strFormat(eamEntity.getInstallPlace().name));
@@ -386,7 +386,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
     public void getEamSuccess(CommonListEntity entity) {
         if (entity.result.size() > 0) {
             EamEntity eamEntity = (EamEntity) entity.result.get(0);
-            eamCode.setContent(Util.strFormat(eamEntity.code));
+            eamCode.setContent(Util.strFormat(eamEntity.eamAssetCode));
             eamName.setContent(Util.strFormat(eamEntity.name));
             acceptanceDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
             acceptanceArea.setContent(Util.strFormat(eamEntity.getInstallPlace().name));

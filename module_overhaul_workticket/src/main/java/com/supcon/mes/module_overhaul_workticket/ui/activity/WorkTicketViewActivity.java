@@ -150,6 +150,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     private String activityName = ""; // 当前活动名称
     private String tableStatus;
     private ImageView customCameraIv;
+    private boolean editable;
 
     @Override
     protected void onInit() {
@@ -161,6 +162,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         pendingId = getIntent().getLongExtra(Constant.IntentKey.PENDING_ID, -1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
         activityName = getIntent().getStringExtra(Constant.IntentKey.ACTIVITY_NAME);
+        editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
 
         refreshController.setAutoPullDownRefresh(true);
         refreshController.setPullDownRefreshEnabled(true);
@@ -191,9 +193,10 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         content.setEditable(false);
         // 安全员拍照
         saferGalleryView.setVisibility(View.VISIBLE);
-        if (getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false)) {
+        if (editable) {
             saferGalleryView.setIconVisibility(true);
             saferGalleryView.setEditable(true);
+            saferGalleryView.setNecessary(true);
         }
 
         if (pendingId != -1) {
@@ -324,9 +327,9 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     }
 
     private void doSubmit(WorkFlowVar workFlowVar) {
-//        if (!Constant.Transition.CANCEL_CN.equals(workFlowVar.dec) && checkTableBlank()) {
-//            return;
-//        }
+        if (editable && checkTableBlank()) {
+            return;
+        }
         List<WorkFlowEntity> workFlowEntityList = new ArrayList<>();
         WorkFlowEntity workFlowEntity = new WorkFlowEntity();
         workFlowEntity.dec = workFlowVar.dec;
@@ -410,20 +413,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     }
 
     private boolean checkTableBlank() {
-        if (TextUtils.isEmpty(chargeStaff.getValue())) {
-            ToastUtils.show(context, "负责人不允许为空！");
-            return true;
-        }
-        if (TextUtils.isEmpty(eamName.getValue())) {
-            ToastUtils.show(context, "设备不允许为空！");
-            return true;
-        }
-        if (TextUtils.isEmpty(mWorkTicketEntity.getRiskAssessment().id)) {
-            ToastUtils.show(context, "风险评估不允许为空！");
-            return true;
-        }
-        if (TextUtils.isEmpty(mWorkTicketEntity.getHazardsourContrpoint())) {
-            ToastUtils.show(context, "危险源控制点不允许为空！");
+        if (saferGalleryView.getGalleryAdapter().getItemCount() <= 0) {
+            ToastUtils.show(context, "请拍摄照片！");
             return true;
         }
         return false;
@@ -483,7 +474,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         chargeStaff.setContent(entity.getChargeStaff().name);
         workShop.setContent(entity.getWorkShop().name);
         eamName.setContent(entity.getEamId().name);
-        eamCode.setContent(entity.getEamId().code);
+        eamCode.setContent(entity.getEamId().eamAssetCode);
         content.setContent(entity.getContent());
         riskAssessmentView.setContent(entity.getRiskAssessment().value);
         hazardContrlPointValue = "";
@@ -556,7 +547,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
             EamEntity eam = (EamEntity) commonSearchEvent.commonSearchEntity;
             eamName.setContent(eam.name);
-            eamCode.setContent(eam.code);
+            eamCode.setContent(eam.eamAssetCode);
 
             mWorkTicketEntity.getEamId().id = eam.id;
             mWorkTicketEntity.getEamId().name = eam.name;

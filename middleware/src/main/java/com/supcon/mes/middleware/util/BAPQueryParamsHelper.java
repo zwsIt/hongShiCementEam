@@ -147,7 +147,16 @@ public class BAPQueryParamsHelper {
                 subcondEntity.paramStr = LIKE_OPT_BLUR;
                 subcondEntity.value = String.valueOf(value);
                 break;
-
+            case Constant.BAPQuery.PROCESSKEY:
+            case Constant.BAPQuery.PROCESS_KEY:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.columnName = key;
+                subcondEntity.dbColumnType = TEXT;
+                subcondEntity.operator = BE;
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
             case Constant.BAPQuery.BATCH_TEXT:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = Constant.BAPQuery.BATCH_TEXT;

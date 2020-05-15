@@ -284,7 +284,7 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
         applyStaff.setContent(entity.getApplyStaff().name);
         department.setContent(entity.getApplyStaff().getMainPosition().getDepartment().name);
         position.setContent(entity.getApplyStaff().getMainPosition().name);
-        eamCode.setContent(entity.getEam().code);
+        eamCode.setContent(entity.getEam().eamAssetCode);
         eamName.setContent(entity.getEam().name);
         sparePartTotal.setContent(Util.bigDecimal2Str(entity.getTotalPrice(),2));
         applyTime.setContent(DateUtil.dateTimeFormat(entity.getApplyTime()));
@@ -584,13 +584,13 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
     public void searchEam(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
             EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
-            eamCode.setContent(eamEntity.code);
+            eamCode.setContent(eamEntity.eamAssetCode);
             eamName.setContent(eamEntity.name);
 
             //更新设备
             sparePartApplyHeaderInfoEntity.setEam(eamEntity);
             // 更新使用说明
-            explain.setContent(eamEntity.name +"("+eamEntity.code+")用");
+            explain.setContent(eamEntity.name +"("+eamEntity.eamAssetCode+")用");
             sparePartApplyHeaderInfoEntity.setExplain(explain.getContent());
         }
     }

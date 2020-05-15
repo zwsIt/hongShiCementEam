@@ -125,7 +125,7 @@ public class WorkAdapter extends HeaderRecyclerViewAdapter<WorkInfo> {
                     }
 
                     //添加模块授权判断
-                    if(workInfo.appItem == null)
+//                    if(workInfo.appItem == null)
                     switch (workInfo.router) {
                         case Constant.Router.XJGL_LIST:
                         case Constant.Router.JHXJ_LIST:

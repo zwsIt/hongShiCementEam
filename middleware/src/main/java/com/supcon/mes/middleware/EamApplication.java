@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.supcon.common.view.util.LogUtil;
@@ -235,7 +234,6 @@ public class EamApplication extends MBapApp {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        MultiDex.install(base);
     }
 
     public static boolean offlineLogin(String userName, String pwd) {

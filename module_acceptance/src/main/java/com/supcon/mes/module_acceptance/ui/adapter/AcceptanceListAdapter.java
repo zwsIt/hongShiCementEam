@@ -62,7 +62,7 @@ public class AcceptanceListAdapter extends BaseListDataRecyclerViewAdapter<Accep
         @Override
         protected void update(AcceptanceEntity data) {
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getBeamID().name)
-                    , Util.strFormat(data.getBeamID().code));
+                    , Util.strFormat(data.getBeamID().eamAssetCode));
             itemAcceptanceEam.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             itemAcceptanceItem.setValue(Util.strFormat(data.checkItem));

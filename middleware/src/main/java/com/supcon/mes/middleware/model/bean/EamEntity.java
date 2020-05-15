@@ -1,5 +1,6 @@
 package com.supcon.mes.middleware.model.bean;
 
+import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.Department;
@@ -15,7 +16,7 @@ import com.supcon.mes.middleware.model.bean.ValueEntity;
  */
 public class EamEntity extends BaseEntity implements CommonSearchEntity {
     public Long id;
-    public String code;
+    public String code; // 设备资产编码
     public String name;
 
     public String state;//设备状态
@@ -32,7 +33,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     public String produceCode;//出厂编号
     public String produceFirm;//制造厂
     public String installFirm;//安装单位
-    public String areaNum;//设备位号
+    public String areaNum;//设备位号（工艺编码）
     public Long fileDate;//建档日期
     public Float useYear;//使用年限
     public boolean haveRunState;//关注运行
@@ -49,7 +50,8 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
 
     public ScoreMerity scoreMerity;//设备评分
 
-    public String eamAssetcode; // 设备资产编号
+    @SerializedName(value = "eamAssetcode")
+    public String eamAssetCode; // 设备编码
 
     public ScoreMerity getScoreMerity() {
         if (scoreMerity == null) {

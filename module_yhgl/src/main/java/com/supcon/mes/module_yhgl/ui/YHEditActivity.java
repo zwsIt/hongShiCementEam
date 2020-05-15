@@ -938,7 +938,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         }
         EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
         yhEditEamName.setValue(eamEntity.name);
-        yhEditEamCode.setValue(eamEntity.code);
+        yhEditEamCode.setValue(eamEntity.eamAssetCode);
 //            yhEditEamModel.setValue(eamType.model);
         WXGDEam wxgdEam = new WXGDEam();
         wxgdEam.name = eamEntity.name;

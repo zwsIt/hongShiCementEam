@@ -75,9 +75,9 @@ public class LubriAdapter extends BaseListDataRecyclerViewAdapter<LubriEntity> {
             itemLubricationNumTv.setText(String.format(context.getString(R.string.device_style1), "用量:", Util.big2(data.sum)));
             itemLubricationPartTv.setValue(Util.strFormat(data.lubricatePart));
 
-            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().code)) {
+            if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().eamAssetCode)) {
                 itemLubricationAttachEamTv.setVisibility(View.VISIBLE);
-                itemLubricationAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().code);
+                itemLubricationAttachEamTv.setContent(data.getAccessoryEamId().getAttachEamId().eamAssetCode);
             }
             if (!TextUtils.isEmpty(data.getSparePartId().getProductID().productCode)) {
                 itemLubricationSparePartIdTv.setVisibility(View.VISIBLE);

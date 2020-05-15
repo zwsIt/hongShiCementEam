@@ -1,5 +1,6 @@
 package com.supcon.mes.module_sbda_online.model.bean;
 
+import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.Department;
@@ -13,9 +14,10 @@ import com.supcon.mes.middleware.model.bean.ValueEntity;
  * @date 2019/3/29
  * ------------- Description -------------
  */
+@Deprecated
 public class SBDAOnlineEntity extends BaseEntity {
     public Long id;
-    public String code;
+    public String code; // 设备资产编码
     public String name;
 
     public String state;//设备状态
@@ -48,6 +50,8 @@ public class SBDAOnlineEntity extends BaseEntity {
     public Staff repairStaff;//机修责任人
 
     public ScoreMerity scoreMerity;//设备评分
+    @SerializedName(value = "eamAssetcode")
+    public String eamAssetCode; // 设备编码
 
     public ScoreMerity getScoreMerity() {
         if (scoreMerity == null) {

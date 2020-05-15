@@ -39,6 +39,7 @@
         android:paddingTop="@dimen/dp_10"
         android:paddingRight="@dimen/dp_15"
         android:tag="proxyReason"
+        app:text_width="0dp"
         app:edit_hint="请输入委托原因"
         app:gravity="top" />
 
