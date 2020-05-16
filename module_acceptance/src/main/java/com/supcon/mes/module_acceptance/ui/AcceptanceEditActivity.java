@@ -256,7 +256,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             } else {
                 Map<String, Object> params = new HashMap<>();
                 params.put(Constant.IntentKey.EAM_CODE, eamCodeStr);
-                presenterRouter.create(EamAPI.class).getEam(params, 1);
+                presenterRouter.create(EamAPI.class).getEam(params, true,1);
                 eamCodeStr = null;
             }
         });
@@ -438,10 +438,6 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
     public void getAcceptanceEditFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
         refreshListController.refreshComplete(null);
-    }
-
-    private void doSave() {
-
     }
 
     private void doSubmit(WorkFlowVar workFlowVar) {

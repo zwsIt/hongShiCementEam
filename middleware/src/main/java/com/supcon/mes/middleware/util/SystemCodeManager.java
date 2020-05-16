@@ -34,7 +34,11 @@ public class SystemCodeManager extends BaseController {
 
    @SuppressLint("CheckResult")
    public void setSystemCodeList(List<SystemCodeEntity> systemCodeList){
-       EamApplication.dao().getSystemCodeEntityDao().deleteAll();
+       SystemCodeEntityDao systemCodeEntityDao = EamApplication.dao().getSystemCodeEntityDao();
+       List<SystemCodeEntity> listLazy = systemCodeEntityDao.queryBuilder().where(SystemCodeEntityDao.Properties.EntityCode.eq(systemCodeList.get(0).entityCode)).build().listLazy();
+       if (systemCodeList.size() < listLazy.size()){
+           systemCodeEntityDao.deleteInTx(listLazy);
+       }
        EamApplication.dao().getSystemCodeEntityDao().insertOrReplaceInTx(systemCodeList);
 
    }

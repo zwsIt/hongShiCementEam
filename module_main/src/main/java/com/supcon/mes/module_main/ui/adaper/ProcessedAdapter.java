@@ -1,5 +1,6 @@
 package com.supcon.mes.module_main.ui.adaper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,9 +10,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.BaseConstant;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
@@ -27,6 +30,9 @@ import com.supcon.mes.module_main.model.bean.ProcessedEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 
 /**
  * @author yangfei.cao
@@ -67,24 +73,37 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
             super(context);
         }
 
+        @SuppressLint("CheckResult")
         @Override
         protected void initListener() {
             super.initListener();
-            itemView.setOnClickListener(new View.OnClickListener() {
+            RxView.clicks(itemView)
+                    .subscribe(new Consumer<Object>() {
                 @Override
-                public void onClick(View v) {
-                    ProcessedEntity item = getItem(getAdapterPosition());
-                    String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-                            + Constant.WebUrl.FLOWVIEW + "&modelCode=" + item.modelCode + "&deploymentId=" + item.deploymentId + "&fvTableInfoId=" + item.tableInfoId;
-                    Bundle bundle = new Bundle();
-                    bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
-                    bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
-                    bundle.putString(BaseConstant.WEB_URL, url);
-                    bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
-                    bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
-                    IntentRouter.go(context, Constant.Router.PROCESSED_FLOW, bundle);
+                public void accept(Object o) throws Exception {
+                    // TODO...现场讨论
+//                    ProcessedEntity processedEntity = getItem(getAdapterPosition());
+//                    if (TextUtils.isEmpty(processedEntity.processKey)){
+//                        ToastUtils.show(context,context.getString(R.string.main_data_exception) + processedEntity.processKey);
+//                        return;
+//                    }
+//                    onItemChildViewClick(itemView,getAdapterPosition(),processedEntity);
                 }
             });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
+//                            + Constant.WebUrl.FLOWVIEW + "&modelCode=" + item.modelCode + "&deploymentId=" + item.deploymentId + "&fvTableInfoId=" + item.tableInfoId;
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(BaseConstant.WEB_AUTHORIZATION, EamApplication.getAuthorization());
+//                    bundle.putString(BaseConstant.WEB_COOKIE, EamApplication.getCooki());
+//                    bundle.putString(BaseConstant.WEB_URL, url);
+//                    bundle.putBoolean(BaseConstant.WEB_HAS_REFRESH, true);
+//                    bundle.putBoolean(BaseConstant.WEB_IS_LIST, true);
+//                    IntentRouter.go(context, Constant.Router.PROCESSED_FLOW, bundle);
+//                }
+//            });
         }
 
         @Override

@@ -7,5 +7,5 @@ import java.util.Map;
 
 @ContractFactory(entites = CommonListEntity.class)
 public interface EamAPI {
-    void getEam(Map<String, Object> params, int page);
+    void getEam(Map<String, Object> params,boolean nfcCard, int page);
 }

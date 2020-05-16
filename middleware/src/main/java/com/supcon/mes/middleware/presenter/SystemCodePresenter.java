@@ -45,7 +45,8 @@ public class SystemCodePresenter extends SystemCodeContract.Presenter {
                                        if (systemCodeListEntity.result.size() == 0) {
                                            getView().getSystemCodeListFailed("获取列表为空");
                                        } else {
-                                           systemCodeEntities.addAll(systemCodeListEntity.result);
+//                                           systemCodeEntities.addAll(systemCodeListEntity.result);
+                                           getView().getSystemCodeListSuccess(systemCodeListEntity.result);
                                        }
                                    } else {
                                        getView().getSystemCodeListFailed(systemCodeListEntity.errMsg);
@@ -54,12 +55,12 @@ public class SystemCodePresenter extends SystemCodeContract.Presenter {
                            }, throwable -> {
                             getView().getSystemCodeListFailed(throwable.toString());
                         }
-                        , new Action() {
+                        /*, new Action() {
                             @Override
                             public void run() throws Exception {
                                 getView().getSystemCodeListSuccess(systemCodeEntities);
                             }
-                        }));
+                        }*/));
     }
 
 }

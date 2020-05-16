@@ -132,7 +132,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
 
     @Override
     public String getSearchCode() {
-        return code;
+        return eamAssetCode;
     }
 
     @Override

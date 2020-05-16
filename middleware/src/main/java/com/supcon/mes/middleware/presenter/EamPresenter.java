@@ -19,7 +19,8 @@ import java.util.Map;
 
 public class EamPresenter extends EamContract.Presenter {
     @Override
-    public void getEam(Map<String, Object> params, int page) {
+    public void getEam(Map<String, Object> params, boolean nfcCard, int page) {
+        BAPQueryParamsHelper.setNfcCard(nfcCard);
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
 
         if (EamApplication.isHongshi() && params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {

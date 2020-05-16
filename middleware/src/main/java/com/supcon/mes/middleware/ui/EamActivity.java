@@ -93,6 +93,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     private String searchTag;
 
     private List<CommonSearchEntity> searchEntities = new ArrayList<>();
+    private boolean mNfcCard;
 
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
@@ -228,7 +229,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 if (isMainEam) {
                     queryParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
                 }
-                presenterRouter.create(EamAPI.class).getEam(queryParam, pageIndex);
+                presenterRouter.create(EamAPI.class).getEam(queryParam, mNfcCard,pageIndex);
             }
         });
         KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () ->
@@ -238,6 +239,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 .skipInitialValue()
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribe(charSequence -> {
+                    mNfcCard = false;
                     refreshListController.refreshBegin();
                 });
 
@@ -286,6 +288,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         }
         eamCode = (String) nfcJson.get("textRecord");
         titleSearchView.setInput(eamCode);
+        mNfcCard = true;
         refreshListController.refreshBegin();
     }
 

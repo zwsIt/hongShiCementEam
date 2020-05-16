@@ -32,6 +32,8 @@ import static com.supcon.mes.middleware.constant.Constant.BAPQuery.TYPE_NORMAL;
 public class BAPQueryParamsHelper {
 
 
+    private static boolean mNfcCard;
+
     public static FastQueryCondEntity createSingleFastQueryCond(Map<String, Object> queryMap) {
 
         FastQueryCondEntity fastQueryCondEntity = new FastQueryCondEntity();
@@ -337,8 +339,13 @@ public class BAPQueryParamsHelper {
                 subcondEntity.columnName = key;
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.dbColumnType = Constant.BAPQuery.BAPCODE;
-                subcondEntity.operator = Constant.BAPQuery.LIKE;
-                subcondEntity.paramStr = LIKE_OPT_BLUR;
+                if (mNfcCard){
+                    subcondEntity.operator = BE;
+                    subcondEntity.paramStr = LIKE_OPT_Q;
+                }else {
+                    subcondEntity.operator = Constant.BAPQuery.LIKE;
+                    subcondEntity.paramStr = LIKE_OPT_BLUR;
+                }
                 subcondEntity.value = String.valueOf(value);
                 break;
             case Constant.BAPQuery.IS_MAIN_EQUIP:
@@ -638,5 +645,9 @@ public class BAPQueryParamsHelper {
         subcondEntity.value = String.valueOf(value);
 
         return subcondEntity;
+    }
+
+    public static void setNfcCard(boolean nfcCard) {
+        mNfcCard = nfcCard;
     }
 }

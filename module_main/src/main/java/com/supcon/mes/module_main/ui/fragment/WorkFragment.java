@@ -716,7 +716,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                 eamTv.setContent((String) nfcJson.get("textRecord"));
                 Map<String, Object> params = new HashMap<>();
                 params.put(Constant.IntentKey.EAM_CODE, nfcJson.get("textRecord"));
-                presenterRouter.create(EamAPI.class).getEam(params, 1);
+                presenterRouter.create(EamAPI.class).getEam(params, true,1);
             }
         }
     }

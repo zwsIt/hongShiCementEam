@@ -6,4 +6,6 @@
     <string name="main_current_work">工作提醒</string>
     <string name="main_dispatch">派单</string>
     <string name="main_table_type">单据类型</string>
+    <string name="main_processed_table_no_view">该单据暂不支持查看详情!</string>
+    <string name="main_data_exception">数据异常_processKey:</string>
 </resources>

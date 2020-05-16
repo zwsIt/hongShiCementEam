@@ -1,6 +1,7 @@
 package com.supcon.mes.module_main.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.FilterBean;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
@@ -25,6 +27,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.model.api.ProcessedAPI;
 import com.supcon.mes.module_main.model.bean.ProcessedEntity;
@@ -128,7 +131,30 @@ public class ProcessedFragment extends BaseRefreshRecyclerFragment<ProcessedEnti
         processedAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-
+                ProcessedEntity processedEntity = (ProcessedEntity) obj;
+                Bundle bundle = new Bundle();
+                switch (processedEntity.processKey){
+                    case Constant.ProcessKey.WORK_TICKET:
+                        break;
+                    case Constant.ProcessKey.ELE_ON:
+                        bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableInfoId);
+                        IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
+                        break;
+                    case Constant.ProcessKey.ELE_OFF:
+                        bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableInfoId);
+                        IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
+                        break;
+                    case Constant.ProcessKey.RUN_STATE_WF:
+                        break;
+                    case Constant.ProcessKey.CHECK_APPLY_FW:
+                        break;
+                    case Constant.ProcessKey.FAULT_INFO:
+                        break;
+                    case Constant.ProcessKey.WORK:
+                        break;
+                        default:
+                            ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
+                }
             }
         });
 
