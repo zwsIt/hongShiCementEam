@@ -23,7 +23,7 @@ public class EamPresenter extends EamContract.Presenter {
         BAPQueryParamsHelper.setNfcCard(nfcCard);
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
 
-        if (EamApplication.isHongshi() && params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {
+        if (params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {
             Map<String, Object> mainParam = new HashMap();
             mainParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, params.get(Constant.BAPQuery.IS_MAIN_EQUIP));
             List<BaseSubcondEntity> subcondEntities = BAPQueryParamsHelper.createSubcondEntity(mainParam);

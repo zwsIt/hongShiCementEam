@@ -24,7 +24,7 @@ allprojects {
         maven { url 'http://192.168.90.70:8888/nexus/content/groups/supcon_mes' }
         mavenCentral()
         jcenter()
-//        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
         flatDir {
             dirs '../module_zz_new/libs', '../vibLib/libs', 'libs'  //系统会搜索本身libs下和moduleM中libs下的依赖，使用逗号隔开。
         }
@@ -45,7 +45,7 @@ ext{
     versionCode = 47
     versionName = "8.20.08.01"
 
-    ProductCode = "8.20.08"
+    ProductCode = "8.20.08" 
     EamCode = "01"
     MobileCode = "01"  //测试版本，不足一位加“0”补足
 
@@ -69,7 +69,7 @@ ext{
     mbapVersion         = '9.7.29.5release30'
 
     vibVersion          = '9.7.29.1'
-    sb2Version          = '9.7.29.2debug4'
+    sb2Version          = '9.7.29.5release4'
     nfcVersion          = '9.7.29.1'
 
 //zz

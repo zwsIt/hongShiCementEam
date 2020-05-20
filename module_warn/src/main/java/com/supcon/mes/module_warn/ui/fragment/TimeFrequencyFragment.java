@@ -1,4 +1,4 @@
-package com.supcon.mes.module_warn.ui;
+package com.supcon.mes.module_warn.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -14,11 +14,10 @@ import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
-import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
@@ -43,6 +42,7 @@ import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
 import com.supcon.mes.module_warn.model.contract.LubricationWarnContract;
 import com.supcon.mes.module_warn.presenter.LubricationWarnPresenter;
+import com.supcon.mes.module_warn.ui.LubricationWarnActivity;
 import com.supcon.mes.module_warn.ui.adapter.LubricationWarnAdapter;
 import com.supcon.mes.module_warn.ui.util.WXGDWarnManager;
 
@@ -61,31 +61,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * @author yangfei.cao
- * @ClassName hongShiCementEam
- * @date 2019/4/29
- * ------------- Description -------------
- * 润滑预警
+ * ClassName
+ * Created by zhangwenshuai1 on 2020/5/18
+ * Email zhangwenshuai1@supcon.com
+ * Desc 时间频率TimeFrequencyFragment
  */
-@Deprecated
-//@Router(Constant.Router.LUBRICATION_EARLY_WARN)
 @Presenter(value = LubricationWarnPresenter.class)
-public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<LubricationWarnEntity> implements LubricationWarnContract.View {
-
-    @BindByTag("leftBtn")
-    AppCompatImageButton leftBtn;
-
-    @BindByTag("customSearchView")
-    CustomSearchView titleSearchView;
-
-    @BindByTag("searchTitleBar")
-    CustomHorizontalSearchTitleBar searchTitleBar;
+public class TimeFrequencyFragment extends BaseRefreshRecyclerFragment<LubricationWarnEntity> implements LubricationWarnContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
-
-    @BindByTag("warnRadioGroup")
-    RadioGroup warnRadioGroup;
 
     @BindByTag("btnLayout")
     LinearLayout btnLayout;
@@ -100,31 +85,28 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
     private LubricationWarnAdapter lubricationWarnAdapter;
 
     private final Map<String, Object> queryParam = new HashMap<>();
-    private String selecStr;
-    private String url;
+    private String searchContent;
     private ModulePermissonCheckController mModulePermissonCheckController;
     private Long deploymentId;
     private long warnId;
-    private String property;
 
 
     @Override
     protected IListAdapter<LubricationWarnEntity> createAdapter() {
-        lubricationWarnAdapter = new LubricationWarnAdapter(this);
+        lubricationWarnAdapter = new LubricationWarnAdapter(context);
         return lubricationWarnAdapter;
     }
 
     @Override
     protected int getLayoutID() {
-        return R.layout.ac_early_warn_list;
+        return R.layout.fragment_warn_lubrication;
     }
 
     @Override
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        warnId = getIntent().getLongExtra(Constant.IntentKey.WARN_ID, -1);
-        property = getIntent().getStringExtra(Constant.IntentKey.PROPERTY);
+        warnId = getActivity().getIntent().getLongExtra(Constant.IntentKey.WARN_ID, -1);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -141,21 +123,12 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(15));
-        //设置搜索框默认提示语
-        titleSearchView.setHint("请输入设备编码");
-        searchTitleBar.setTitleText(context.getResources().getString(R.string.warn_lubrication));
-        searchTitleBar.disableRightBtn();
 
-        if (!TextUtils.isEmpty(property) && property.equals(Constant.PeriodType.RUNTIME_LENGTH)) {
-            warnRadioGroup.check(R.id.warnRadioBtn2);
-            url = "/BEAM/baseInfo/jWXItem/data-dg1530749613834.action";
-        }
     }
 
     @Override
@@ -178,36 +151,12 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
             if (queryParam.containsKey(Constant.BAPQuery.EAM_CODE)) {
                 queryParam.remove(Constant.BAPQuery.EAM_CODE);
             }
-            if (!TextUtils.isEmpty(selecStr)) {
-                queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
+            if (!TextUtils.isEmpty(searchContent)) {
+                queryParam.put(Constant.BAPQuery.EAM_CODE, searchContent);
             }
-            setRadioEnable(false);
+            String url = "/BEAM/baseInfo/jWXItem/data-dg1530747504994.action";
             presenterRouter.create(LubricationWarnAPI.class).getLubrication(url, queryParam, pageIndex, warnId);
 //            warnId = -1;
-        });
-        RxTextView.textChanges(titleSearchView.editText())
-                .skipInitialValue()
-                .subscribe(charSequence -> {
-                    if (TextUtils.isEmpty(charSequence)) {
-                        doSearchTableNo(charSequence.toString());
-                    }
-                });
-        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () ->
-                doSearchTableNo(titleSearchView.getInput()));
-
-        leftBtn.setOnClickListener(v -> onBackPressed());
-
-        warnRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.warnRadioBtn1) {
-                    url = "/BEAM/baseInfo/jWXItem/data-dg1530747504994.action";
-                } else if (checkedId == R.id.warnRadioBtn2) {
-                    url = "/BEAM/baseInfo/jWXItem/data-dg1530749613834.action";
-                }
-                Flowable.timer(500, TimeUnit.MILLISECONDS)
-                        .subscribe(aLong -> doRefresh());
-            }
         });
 
         RxView.clicks(dispatch)
@@ -250,7 +199,7 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
                                     .twoButtonAlertDialog("确定生成工单?")
                                     .bindView(R.id.redBtn, "确定")
                                     .bindView(R.id.grayBtn, "取消")
-                                    .bindClickListener(R.id.redBtn, v12 -> IntentRouter.go(LubricationWarnActivity.this, Constant.Router.WXGD_WARN, pair.second), true)
+                                    .bindClickListener(R.id.redBtn, v12 -> IntentRouter.go(context, Constant.Router.WXGD_WARN, pair.second), true)
                                     .bindClickListener(R.id.grayBtn, null, true).show());
 
                 });
@@ -279,9 +228,9 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
                                     bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
                                     bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
                                     bundle.putLong(Constant.IntentKey.WARN_NEXT_TIME, nextTime);
-                                    IntentRouter.go(this, Constant.Router.DELAYDIALOG, bundle);
+                                    IntentRouter.go(context, Constant.Router.DELAYDIALOG, bundle);
                                 } else {
-                                    ToastUtils.show(this, "请选择操作项!");
+                                    ToastUtils.show(context, "请选择操作项!");
                                 }
                             });
 
@@ -306,9 +255,9 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
                                     bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
                                     bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
                                     bundle.putString(Constant.IntentKey.WARN_SOURCE_URL, "/BEAM/baseInfo/delayRecords/delayRecordsList-query.action");
-                                    IntentRouter.go(this, Constant.Router.DELAY_RECORD, bundle);
+                                    IntentRouter.go(context, Constant.Router.DELAY_RECORD, bundle);
                                 } else {
-                                    ToastUtils.show(this, "请选择操作项!");
+                                    ToastUtils.show(context, "请选择操作项!");
                                 }
                             });
                 });
@@ -322,8 +271,8 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
         refreshListController.refreshBegin();
     }
 
-    public void doSearchTableNo(String search) {
-        selecStr = search;
+    public void doSearch(String search) {
+        searchContent = search;
         refreshListController.refreshBegin();
     }
 
@@ -335,25 +284,17 @@ public class LubricationWarnActivity extends BaseRefreshRecyclerActivity<Lubrica
             btnLayout.setVisibility(View.VISIBLE);
         }
         refreshListController.refreshComplete(entity.result);
-        setRadioEnable(true);
     }
 
     @Override
     public void getLubricationFailed(String errorMsg) {
         btnLayout.setVisibility(View.GONE);
         SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
-        refreshListController.refreshComplete(null);
-        setRadioEnable(true);
-    }
-
-    public void setRadioEnable(boolean enable) {
-        for (int i = 0; i < warnRadioGroup.getChildCount(); i++) {
-            warnRadioGroup.getChildAt(i).setEnabled(enable);
-        }
+        refreshListController.refreshComplete();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }

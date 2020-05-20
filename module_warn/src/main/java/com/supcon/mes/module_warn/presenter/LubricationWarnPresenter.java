@@ -23,9 +23,6 @@ public class LubricationWarnPresenter extends LubricationWarnContract.Presenter 
 
     @Override
     public void getLubrication(String url, Map<String, Object> params, int page, long id) {
-        if (TextUtils.isEmpty(url)) {
-            url = "/BEAM/baseInfo/jWXItem/data-dg1530747504994.action";
-        }
 
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(params, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");

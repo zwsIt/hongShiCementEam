@@ -42,7 +42,7 @@ public class PendingActivity extends BaseFragmentActivity {
 
     @Override
     protected int getLayoutID() {
-        return R.layout.main_ac_pending_list;
+        return R.layout.ac_tab_list;
     }
     @Override
     protected void onInit() {

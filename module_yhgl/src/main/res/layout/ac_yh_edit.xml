@@ -26,6 +26,7 @@
             android:tag="yhEditCommentInput"
             app:edit_hint="填写意见"
             app:text_color="@color/textColorlightblack"
+            app:text_width="0dp"
             app:text_size="16" />
 
         <LinearLayout
@@ -43,7 +44,7 @@
                 android:layout_marginRight="@dimen/dp_10"
                 android:layout_weight="1"
                 android:tag="xqBtn"
-                android:text="直接消缺" />
+                android:text="@string/fault_direct_process" />
 
             <Button
                 android:id="@+id/gdBtn"
@@ -54,7 +55,7 @@
                 android:layout_marginRight="@dimen/dp_10"
                 android:layout_weight="1"
                 android:tag="gdBtn"
-                android:text="生成工单" />
+                android:text="@string/fault_do_work" />
 
             <Button
                 android:id="@+id/ysBtn"
@@ -65,7 +66,8 @@
                 android:layout_marginRight="@dimen/dp_10"
                 android:layout_weight="1"
                 android:tag="ysBtn"
-                android:text="验收" />
+                android:text="@string/fault_accept"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>

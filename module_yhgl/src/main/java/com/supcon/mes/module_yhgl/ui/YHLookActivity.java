@@ -175,7 +175,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText("隐患登记");
+        titleText.setText(context.getResources().getString(R.string.fault_look));
         yhViewFindStaff.setValue(mYHEntity.findStaffID != null ? mYHEntity.findStaffID.name : "");
         yhViewFindTime.setDate(DateUtil.dateTimeFormat(mYHEntity.findTime));
         yhViewPriority.setSpinner(mYHEntity.priority != null ? mYHEntity.priority.value : "");

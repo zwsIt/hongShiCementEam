@@ -345,7 +345,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText("隐患编辑");
+        titleText.setText(context.getResources().getString(R.string.fault_process));
         mYHEntity.downStream = new SystemCodeEntity();
         repairLl.setVisibility(View.VISIBLE);
     }

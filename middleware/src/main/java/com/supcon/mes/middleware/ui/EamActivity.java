@@ -93,7 +93,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     private String searchTag;
 
     private List<CommonSearchEntity> searchEntities = new ArrayList<>();
-    private boolean mNfcCard;
+    private boolean mNfcCard = true;
 
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
@@ -232,16 +232,18 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 presenterRouter.create(EamAPI.class).getEam(queryParam, mNfcCard,pageIndex);
             }
         });
-        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () ->
-                refreshListController.refreshBegin());
+        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () -> {
+            mNfcCard = false;
+            refreshListController.refreshBegin();
+        });
 
-        RxTextView.textChanges(titleSearchView.editText())
-                .skipInitialValue()
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribe(charSequence -> {
-                    mNfcCard = false;
-                    refreshListController.refreshBegin();
-                });
+//        RxTextView.textChanges(titleSearchView.editText())
+//                .skipInitialValue()
+//                .debounce(500, TimeUnit.MILLISECONDS)
+//                .subscribe(charSequence -> {
+//                    mNfcCard = false;
+//                    refreshListController.refreshBegin();
+//                });
 
         leftBtn.setOnClickListener(v -> back());
 
@@ -288,7 +290,6 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         }
         eamCode = (String) nfcJson.get("textRecord");
         titleSearchView.setInput(eamCode);
-        mNfcCard = true;
         refreshListController.refreshBegin();
     }
 

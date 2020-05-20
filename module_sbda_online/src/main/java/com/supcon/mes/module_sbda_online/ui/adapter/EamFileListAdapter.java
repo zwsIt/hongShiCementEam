@@ -10,6 +10,7 @@ import com.app.annotation.BindByTag;
 import com.supcon.common.BaseConstant;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
@@ -55,6 +56,7 @@ public class EamFileListAdapter extends BaseListDataRecyclerViewAdapter<EamFileE
 //                    onItemChildViewClick(v, 0,getItem(getAdapterPosition()));
                 EamFileEntity data = getItem(getAdapterPosition());
                 if (TextUtils.isEmpty(data.getViewUrl())){
+                    ToastUtils.show(context,data.getViewErrorMsg());
                     return;
                 }
                 Bundle bundle = new Bundle();
@@ -80,7 +82,9 @@ public class EamFileListAdapter extends BaseListDataRecyclerViewAdapter<EamFileE
                 }
                 eamFileUrlController.getEamFileViewUrl(Long.parseLong(data.getDocNameMultiFileIds()), new OnAPIResultListener<EamFileViewUrlEntity>() {
                     @Override
-                    public void onFail(String errorMsg) {}
+                    public void onFail(String errorMsg) {
+                        data.setViewErrorMsg(errorMsg);
+                    }
 
                     @Override
                     public void onSuccess(EamFileViewUrlEntity result) {

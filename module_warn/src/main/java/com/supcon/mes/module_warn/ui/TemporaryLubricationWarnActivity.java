@@ -286,9 +286,9 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
     public void getTempLubricationsSuccess(CommonBAPListEntity entity) {
         if (entity.result != null && entity.result.size() > 0) {
             ensure.setVisibility(View.VISIBLE);
-            TemLubricateTaskEntity dailyLubricateTaskEntity = (TemLubricateTaskEntity) entity.result.get(0);
-            eamCode.setContent(dailyLubricateTaskEntity.getEamID().code);
-            eamName.setContent(dailyLubricateTaskEntity.getEamID().name);
+//            TemLubricateTaskEntity dailyLubricateTaskEntity = (TemLubricateTaskEntity) entity.result.get(0);
+//            eamCode.setContent(dailyLubricateTaskEntity.getEamID().code);
+//            eamName.setContent(dailyLubricateTaskEntity.getEamID().name);
             temporaryAdapter.setList(entity.result);
             recyclerView.setAdapter(temporaryAdapter);
         } else {

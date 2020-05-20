@@ -57,7 +57,7 @@ dependencies {
 
     // 2019/12/13添加
     api 'com.makeramen:roundedimageview:2.3.0'
-    implementation 'ywl.ywl5320:wlmedia:1.0.0-beta17'
+//    implementation 'ywl.ywl5320:wlmedia:1.0.0-beta17'
 
 //    implementation ('com.qmuiteam:qmui:1.0.6'){
 //        exclude group: 'com.android.support'

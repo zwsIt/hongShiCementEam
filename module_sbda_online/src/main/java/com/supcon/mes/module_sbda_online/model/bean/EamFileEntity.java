@@ -41,6 +41,15 @@ public class EamFileEntity extends BaseEntity {
     private int version;
 
     private String viewUrl; // 在线预览url
+    private String viewErrorMsg; // 在线预览错误信息
+
+    public String getViewErrorMsg() {
+        return viewErrorMsg;
+    }
+
+    public void setViewErrorMsg(String viewErrorMsg) {
+        this.viewErrorMsg = viewErrorMsg;
+    }
 
     public String getCode() {
         return code;

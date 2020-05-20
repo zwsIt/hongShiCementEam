@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:tag="searchTitleBar"
             app:title_background_color="@color/themeColor"
+            app:title_length="@dimen/dp_80"
             app:title_text="预警" />
 
         <RelativeLayout

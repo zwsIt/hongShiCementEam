@@ -334,10 +334,11 @@
                     app:text_size="14"
                     app:title_bg_color="@color/white"
                     app:widget_name="验收" />
-                <View android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:background="@color/line_gray_light"/>
+<!--                <View android:layout_width="match_parent"-->
+<!--                    android:layout_height="5dp"-->
+<!--                    android:background="@color/line_gray_light"/>-->
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_70"
                     android:paddingStart="@dimen/dp_10">
@@ -363,8 +364,9 @@
                         app:key="@string/acceptChkStaffCode"
                         app:text_size="15" />
                 </LinearLayout>
-                <include layout="@layout/ly_line_light_light"/>
+<!--                <include layout="@layout/ly_line_light_light"/>-->
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:paddingStart="@dimen/dp_10">
@@ -391,7 +393,7 @@
                         app:text="@string/acceptChkConclusion"
                         app:text_size="15" />
                 </LinearLayout>
-                <include layout="@layout/ly_line_light"/>
+<!--                <include layout="@layout/ly_line_light"/>-->
             </LinearLayout>
 
         </ScrollView>
