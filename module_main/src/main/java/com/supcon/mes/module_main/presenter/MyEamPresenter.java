@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.module_main.model.contract.EamContract;
 import com.supcon.mes.module_main.model.network.MainClient;
 
 import java.util.HashMap;
@@ -14,7 +13,7 @@ import java.util.Map;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public class EamPresenter extends EamContract.Presenter {
+public class MyEamPresenter extends MyEamContract.Presenter {
     @Override
     public void getEams(int page) {
         Map<String, Object> pageQueryParams = new HashMap<>();

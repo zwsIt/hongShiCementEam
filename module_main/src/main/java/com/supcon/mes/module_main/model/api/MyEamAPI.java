@@ -10,7 +10,7 @@ import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
  * ------------- Description -------------
  */
 @ContractFactory(entites = {CommonBAPListEntity.class})
-public interface EamAPI {
+public interface MyEamAPI {
 
     void getEams(int page);
 }
