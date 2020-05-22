@@ -54,5 +54,7 @@
     <string name="acceptChkConclusion">验收结论</string>
     <string name="lub_part">润滑部位</string>
     <string name="sbda_area_no">工艺编码</string>
+    <string name="eam_code">设备编码</string>
+    <string name="eam_name">设备名称</string>
 
 </resources>

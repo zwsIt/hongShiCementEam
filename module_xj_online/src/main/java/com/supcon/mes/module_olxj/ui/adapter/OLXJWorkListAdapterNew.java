@@ -921,7 +921,7 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
             if (data.eamID == null || TextUtils.isEmpty(data.eamID.name)) {
                 itemRecyclerTitle.setText("无关联设备");
             } else {
-                itemRecyclerTitle.setText(String.format("%s(%s)", data.eamID.name, data.eamID.code));
+                itemRecyclerTitle.setText(String.format("%s(%s)", data.eamID.name, data.eamID.eamAssetCode));
 
                 if (!hashSet.contains(data.eamID.id)) {
                     hashSet.add(data.eamID.id);

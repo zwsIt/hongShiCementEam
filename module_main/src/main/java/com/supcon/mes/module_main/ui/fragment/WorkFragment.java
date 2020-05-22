@@ -69,6 +69,7 @@ import com.supcon.mes.module_main.model.bean.WorkNumEntity;
 import com.supcon.mes.module_main.model.contract.MainPendingNumContract;
 import com.supcon.mes.module_main.model.contract.ScoreStaffContract;
 import com.supcon.mes.module_main.model.contract.WaitDealtContract;
+import com.supcon.mes.module_main.presenter.EamPresenter;
 import com.supcon.mes.module_main.presenter.MainPendingNumPresenter;
 import com.supcon.mes.module_main.presenter.ScoreStaffPresenter;
 import com.supcon.mes.module_main.presenter.WaitDealtPresenter;
@@ -149,7 +150,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     private List<MenuPopwindowBean> lubricateMenu;
     private List<MenuPopwindowBean> repairMenu;
     private List<MenuPopwindowBean> formMenu;
-    private List<MenuPopwindowBean> zzMenu;
+//    private List<MenuPopwindowBean> zzMenu;
     private ArrayList<WorkInfo> workInfos;
     private ScoreEntity scoreEntity;
     private CommonSearchStaff proxyStaff;
@@ -233,6 +234,10 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     protected void initData() {
         super.initData();
         workInfos = new ArrayList<>();
+        WorkInfo workInfo0 = new WorkInfo();
+        workInfo0.name = "工作发起";
+        workInfo0.iconResId = R.drawable.ic_work_wxgd;
+        workInfos.add(workInfo0);
         WorkInfo workInfo1 = new WorkInfo();
         workInfo1.name = "计划巡检";
         workInfo1.iconResId = R.drawable.menu_aew_selector;
@@ -409,6 +414,9 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                 }
                 switch (position) {
                     case 0:
+                        IntentRouter.go(context, Constant.Router.WORK_START);
+                        break;
+                    case 1:
 //                        if (!menuPopwindow.refreshList(aewMenu)) return;
 //                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.right, 1);
 //                        childView.setSelected(true);
@@ -425,27 +433,26 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                                     }
                                 });
                         return;
-                    case 1:
+                    case 2:
                         if (!menuPopwindow.refreshList(lubricateMenu)) return;
                         menuPopwindow.showPopupWindow(childView, MenuPopwindow.right, 0);
                         childView.setSelected(true);
                         break;
-                    case 2:
+                    case 3:
                         if (!menuPopwindow.refreshList(repairMenu)) return;
                         menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 0);
                         childView.setSelected(true);
                         break;
-                    case 3:
+                    case 4:
                         if (!menuPopwindow.refreshList(formMenu)) return;
                         menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
                         childView.setSelected(true);
                         break;
-                    case 4:
-                        if (!menuPopwindow.refreshList(zzMenu)) return;
-                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
-                        childView.setSelected(true);
-                        break;
                     case 5:
+//                        if (!menuPopwindow.refreshList(zzMenu)) return;
+//                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
+//                        childView.setSelected(true);
+//                        break;
                     default:
 //                        WorkInfo workInfo = (WorkInfo) obj;
 //                        MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();

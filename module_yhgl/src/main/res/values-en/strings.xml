@@ -5,4 +5,8 @@
     <string name="fault_direct_process">直接消缺</string>
     <string name="fault_do_work">生成工单</string>
     <string name="fault_accept">验收</string>
+    <string name="fault_work_start_staff">发起人</string>
+    <string name="fault_work_contact_staff">工作联络人</string>
+    <string name="fault_work_end_time">工作完成时间</string>
+    <string name="fault_work_priority">优先级</string>
 </resources>

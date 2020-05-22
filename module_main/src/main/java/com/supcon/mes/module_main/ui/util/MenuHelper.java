@@ -53,7 +53,7 @@ public class MenuHelper {
             for (MenuPopwindowBean menuPopwindowBean : works) {
                 switch (menuPopwindowBean.getType()) {
                     case Constant.HSWorkType.PLAN_LUBRICATION_EARLY_WARN:
-                        menuPopwindowBean.setRouter(Constant.Router.PLAN_LUBRICATION_EARLY_WARN);
+                        menuPopwindowBean.setRouter(Constant.Router.WARN_PLAN_LUBRICATION_NEW);
                         break;
                     case Constant.HSWorkType.TEMPORARY_LUBRICATION_EARLY_WARN:
                         menuPopwindowBean.setRouter(Constant.Router.TEMPORARY_LUBRICATION_EARLY_WARN);

@@ -230,6 +230,8 @@ public interface Constant {
         String WAIT_DEALT_NEW = "WAIT_DEALT_NEW"; // 新版工作提醒
         String LUBRICATION_RECORDS_FINISH_LIST = "LUBRICATION_RECORDS_FINISH_LIST"; // 已完成润滑记录
         String PENDING_LIST = "PENDING_LIST"; // 工作提醒
+        String WARN_PLAN_LUBRICATION_NEW = "WARN_PLAN_LUBRICATION_NEW"; // 计划润滑新
+        String WORK_START = "WORK_START"; // 工作发起
     }
 
 

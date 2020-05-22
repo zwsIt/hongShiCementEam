@@ -116,7 +116,7 @@ public class LubricationWarnAdapter extends BaseListDataRecyclerViewAdapter<Lubr
         @Override
         protected void update(LubricationWarnEntity data) {
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getEamID().name)
-                    , Util.strFormat(data.getEamID().code));
+                    , Util.strFormat(data.getEamID().eamAssetCode));
             itemLubriEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             itemLubriOilTv.setContent(data.getLubricateOil().name);

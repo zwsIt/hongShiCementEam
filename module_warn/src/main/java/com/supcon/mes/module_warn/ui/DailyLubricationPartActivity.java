@@ -81,7 +81,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private DailyLubricationPartAdapter dailyLubricationPartAdapter;
-    private WXGDEam mWXGDEam;
+    private EamEntity mEamEntity;
     private boolean isEdit;
     private long nextTime = 0;
     private boolean isDeal; // 当处理单据后 列表无数据自动退出页面
@@ -101,7 +101,7 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        mWXGDEam = (WXGDEam) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
         isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, false);
         dailyLubricationPartAdapter.setEditable(isEdit);
     }
@@ -127,8 +127,8 @@ public class DailyLubricationPartActivity extends BaseRefreshRecyclerActivity<Da
     protected void initListener() {
         super.initListener();
         refreshListController.setOnRefreshPageListener(pageIndex -> {
-            queryParam.put(Constant.IntentKey.EAM_CODE, mWXGDEam.code);
-            queryParam.put(Constant.IntentKey.EAM_ID, mWXGDEam.id);
+            queryParam.put(Constant.IntentKey.EAM_CODE, mEamEntity.code);
+            queryParam.put(Constant.IntentKey.EAM_ID, mEamEntity.id);
             Map<String, Object> pageQueryParams = new HashMap<>();
             pageQueryParams.put("page.pageNo", pageIndex);
             presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam, pageQueryParams);

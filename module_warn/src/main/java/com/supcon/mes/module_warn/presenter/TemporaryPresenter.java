@@ -24,6 +24,7 @@ public class TemporaryPresenter extends TemporaryContract.Presenter {
         if (params.containsKey(Constant.BAPQuery.EAM_CODE)) {
             Map<String, Object> paramsEam = new HashMap<>();
             paramsEam.put(Constant.BAPQuery.EAM_CODE, params.get(Constant.BAPQuery.EAM_CODE));
+            paramsEam.put(Constant.BAPQuery.EAM_ID, params.get(Constant.BAPQuery.EAM_ID) == null ? 0 :params.get(Constant.BAPQuery.EAM_ID));
             JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsEam, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
             fastQuery.subconds.add(joinSubcondEntity);
         }

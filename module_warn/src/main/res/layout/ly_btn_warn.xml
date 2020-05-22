@@ -11,27 +11,31 @@
         style="@style/RedButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dp_1"
+        android:layout_marginEnd="@dimen/dp_1"
         android:layout_weight="1"
         android:tag="dispatch"
-        android:text="生成工单" />
+        android:text="@string/warn_do_work" />
 
     <Button
         android:id="@+id/delay"
         style="@style/RedButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_1"
+        android:layout_marginStart="@dimen/dp_1"
+        android:layout_marginEnd="@dimen/dp_1"
         android:layout_weight="1"
         android:tag="delay"
-        android:text="延期" />
+        android:text="@string/warn_delay_setting" />
 
     <Button
         android:id="@+id/overdue"
         style="@style/RedButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_1"
+        android:layout_marginStart="@dimen/dp_1"
+        android:layout_marginEnd="@dimen/dp_1"
         android:layout_weight="1"
         android:tag="overdue"
-        android:text="延期记录" />
+        android:text="@string/warn_delay_records" />
 </LinearLayout>

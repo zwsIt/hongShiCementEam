@@ -126,7 +126,7 @@
         android:layout_marginTop="@dimen/dp_7"
         android:layout_marginEnd="@dimen/dp_12"
         android:tag="eamAbc"
-        app:key="资产ABC"
+        app:key="重要等级"
         app:key_width="@dimen/dp_120"
         app:necessary="false" />
 

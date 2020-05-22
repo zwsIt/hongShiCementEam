@@ -21,7 +21,7 @@ public class SystemCodePresenter extends SystemCodeContract.Presenter {
 
     @Override
     public void getSystemCodeList(List<String> codes) {
-        List<SystemCodeEntity> systemCodeEntities = new LinkedList<>();
+//        List<SystemCodeEntity> systemCodeEntities = new LinkedList<>();
         mCompositeSubscription.add(Flowable.fromIterable(codes)
                 .concatMap(new Function<String, Flowable<SystemCodeListEntity>>() {
                     @Override

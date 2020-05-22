@@ -165,7 +165,7 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
             setTextValue(eamState, EAMStatusHelper.getType(sbdaOnlineEntity.state));
             setTextValue(eamUserDept, sbdaOnlineEntity.getUseDept().name);
             setTextValue(eamDutyStaff, sbdaOnlineEntity.getDutyStaff().name);
-            setTextValue(eamAbc, sbdaOnlineEntity.abcForDisplay);
+            setTextValue(eamAbc, sbdaOnlineEntity.abc == null ? "" : sbdaOnlineEntity.abc.value);
             setTextValue(installPlace, sbdaOnlineEntity.getInstallPlace().name);
             setTextValue(areaNum, sbdaOnlineEntity.areaNum);
             setTextValue(electricStaff, sbdaOnlineEntity.getElectricStaff().name);

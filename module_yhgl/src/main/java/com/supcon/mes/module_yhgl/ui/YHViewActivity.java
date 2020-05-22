@@ -40,6 +40,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.YHEntity;
@@ -326,12 +327,12 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
             yhViewEamName.setValue(commonDeviceEntity.eamName);
             yhViewEamCode.setValue(commonDeviceEntity.eamCode);
             yhViewEamModel.setValue(commonDeviceEntity.eamModel);
-            WXGDEam wxgdEam = new WXGDEam();
-            wxgdEam.name = commonDeviceEntity.eamName;
-            wxgdEam.code = commonDeviceEntity.eamCode;
-            wxgdEam.model = commonDeviceEntity.eamModel;
-            wxgdEam.id = commonDeviceEntity.eamId;
-            mYHEntity.eamID = wxgdEam;
+            EamEntity eamEntity = new EamEntity();
+            eamEntity.name = commonDeviceEntity.eamName;
+            eamEntity.code = commonDeviceEntity.eamCode;
+            eamEntity.model = commonDeviceEntity.eamModel;
+            eamEntity.id = commonDeviceEntity.eamId;
+            mYHEntity.eamID = eamEntity;
         }
 
     }

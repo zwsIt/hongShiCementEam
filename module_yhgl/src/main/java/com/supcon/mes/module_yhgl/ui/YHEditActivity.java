@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -208,7 +209,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     @BindByTag("eleOff")
     CustomTextView eleOff;
 
-
     private YHEntity mYHEntity;
 
     private SinglePickController mSinglePickController;
@@ -259,6 +259,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private CustomVerticalEditText mDelayDuration;
     private CustomVerticalDateView mDelayDate;
 
+    private ImageView customCameraIv;
+
     @Subscribe
     public void onReceiveImageDeleteEvent(ImageDeleteEvent imageDeleteEvent) {
         getController(OnlineCameraController.class).deleteGalleryBean(yhGalleryView.getGalleryAdapter().getList().get(imageDeleteEvent.getPos()), imageDeleteEvent.getPos());
@@ -304,7 +306,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         initSinglePickController();
         initDatePickController();
         initCheckResult();
-
         getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
     }
 
@@ -348,6 +349,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         titleText.setText(context.getResources().getString(R.string.fault_process));
         mYHEntity.downStream = new SystemCodeEntity();
         repairLl.setVisibility(View.VISIBLE);
+
+        customCameraIv = yhGalleryView.findViewById(R.id.customCameraIv);
     }
 
     public void updateInitView() {
@@ -365,7 +368,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         yhEditFindTime.setDate(mYHEntity.findTime != 0 ? DateUtil.dateTimeFormat(mYHEntity.findTime) : "");
         yhEditArea.setSpinner(mYHEntity.areaInstall != null ? mYHEntity.areaInstall.name : "");
         if (mYHEntity.eamID != null && !TextUtils.isEmpty(mYHEntity.eamID.name)) {
-            yhEditEamCode.setValue(mYHEntity.eamID.code);
+            yhEditEamCode.setValue(mYHEntity.eamID.eamAssetCode);
             yhEditEamName.setValue(mYHEntity.eamID.name);
 //            yhEditEamModel.setValue(mYHEntity.eamID.model);
         }
@@ -810,6 +813,12 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mYHEntity.isOffApply = isChecked);
 
+        customCameraIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getController(OnlineCameraController.class).showCustomDialog();
+            }
+        });
     }
 
     /**
@@ -940,15 +949,15 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         yhEditEamName.setValue(eamEntity.name);
         yhEditEamCode.setValue(eamEntity.eamAssetCode);
 //            yhEditEamModel.setValue(eamType.model);
-        WXGDEam wxgdEam = new WXGDEam();
-        wxgdEam.name = eamEntity.name;
-        wxgdEam.code = eamEntity.code;
-        wxgdEam.model = eamEntity.model;
-        wxgdEam.id = eamEntity.id;
-        mYHEntity.eamID = wxgdEam;
-        mSparePartController.upEam(wxgdEam);
-        mLubricateOilsController.upEam(wxgdEam);
-        maintenanceController.upEam(wxgdEam);
+//        WXGDEam wxgdEam = new WXGDEam();
+//        wxgdEam.name = eamEntity.name;
+//        wxgdEam.code = eamEntity.code;
+//        wxgdEam.model = eamEntity.model;
+//        wxgdEam.id = eamEntity.id;
+        mYHEntity.eamID = eamEntity;
+        mSparePartController.upEam(eamEntity);
+        mLubricateOilsController.upEam(eamEntity);
+        maintenanceController.upEam(eamEntity);
 
         //处理区域位置
         yhEditArea.setEditable(false);

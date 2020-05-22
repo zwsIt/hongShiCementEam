@@ -155,7 +155,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                     bundle.putLong(Constant.IntentKey.WARN_ID, item.tableId);
                                     bundle.putString(Constant.IntentKey.PROPERTY, item.peroidType.id);
                                     if ("日常润滑提醒".equals(item.sourceType)) {
-                                        IntentRouter.go(context, Constant.Router.PLAN_LUBRICATION_EARLY_WARN);
+                                        IntentRouter.go(context, Constant.Router.WARN_PLAN_LUBRICATION_NEW);
                                     }else if ("润滑提醒".equals(item.sourceType)) {
                                         IntentRouter.go(context, Constant.Router.LUBRICATION_EARLY_WARN, bundle);
                                     } else if ("零部件提醒".equals(item.sourceType)) {

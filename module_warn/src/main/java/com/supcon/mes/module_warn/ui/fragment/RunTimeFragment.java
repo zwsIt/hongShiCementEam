@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.adapter.IListAdapter;
@@ -23,6 +24,7 @@ import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.UserPowerCheckController;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
@@ -31,6 +33,7 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
+import com.supcon.mes.module_warn.constant.WarnConstant;
 import com.supcon.mes.module_warn.model.api.LubricationWarnAPI;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
@@ -60,6 +63,7 @@ import io.reactivex.schedulers.Schedulers;
  * Desc 运行时长RunTimeFragment
  */
 @Presenter(value = LubricationWarnPresenter.class)
+@Controller(value = {UserPowerCheckController.class})
 public class RunTimeFragment extends BaseRefreshRecyclerFragment<LubricationWarnEntity> implements LubricationWarnContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -121,6 +125,10 @@ public class RunTimeFragment extends BaseRefreshRecyclerFragment<LubricationWarn
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(15));
 
+        delay.setText(context.getResources().getString(R.string.warn_delay_run_setting));
+        overdue.setText(context.getResources().getString(R.string.warn_delay_run_records));
+
+        initOperateCodePermission();
     }
 
     @Override
@@ -133,6 +141,38 @@ public class RunTimeFragment extends BaseRefreshRecyclerFragment<LubricationWarn
                 deploymentId = result;
             }
         }, null);
+    }
+
+    /**
+     * 操作按钮权限初始化
+     */
+    private void initOperateCodePermission(){
+        String operateCodes = WarnConstant.OperateCode.R_DO_WORK +","+WarnConstant.OperateCode.R_DELAY_SET+"," + WarnConstant.OperateCode.R_DELAY_RECORDS;
+        getController(UserPowerCheckController.class).checkModulePermission(EamApplication.getCid(), operateCodes, new OnSuccessListener<Map<String, Boolean>>() {
+            @Override
+            public void onSuccess(Map<String, Boolean> result) {
+                //判断权限按钮显示
+                for (String operateCode : result.keySet()){
+                    switch (operateCode){
+                        case WarnConstant.OperateCode.R_DO_WORK:
+                            if (!result.get(operateCode).booleanValue()){
+                                dispatch.setVisibility(View.GONE);
+                            }
+                            break;
+                        case WarnConstant.OperateCode.R_DELAY_SET:
+                            if (!result.get(operateCode).booleanValue()){
+                                delay.setVisibility(View.GONE);
+                            }
+                            break;
+                        case WarnConstant.OperateCode.R_DELAY_RECORDS:
+                            if (!result.get(operateCode).booleanValue()){
+                                overdue.setVisibility(View.GONE);
+                            }
+                            break;
+                    }
+                }
+            }
+        });
     }
 
     @SuppressLint("CheckResult")

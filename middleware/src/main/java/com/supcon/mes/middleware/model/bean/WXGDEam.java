@@ -1,5 +1,6 @@
 package com.supcon.mes.middleware.model.bean;
 
+import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
 
 /**
@@ -9,9 +10,11 @@ import com.supcon.common.com_http.BaseEntity;
 public class WXGDEam extends BaseEntity implements CheckNil {
 
     public Long id;
-    public String code;
+    public String code; // 设备资产编码
     public String name;
     public String model;
+    @SerializedName(value = "eamAssetcode")
+    public String eamAssetCode; // 设备编码
     public EamType eamType;//设备类型
     public Area installPlace;//区域位置
     public Staff inspectionStaff;//巡检负责人

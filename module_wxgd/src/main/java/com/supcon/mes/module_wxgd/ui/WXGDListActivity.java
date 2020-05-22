@@ -40,6 +40,7 @@ import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.RoleEntity;
 import com.supcon.mes.middleware.model.bean.ScreenEntity;
@@ -250,7 +251,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
                             wxgdEntity.pending = new PendingEntity();
                             wxgdEntity.pending.deploymentId = deploymentId;
                             wxgdEntity.pending.taskDescription = "派工";
-                            wxgdEntity.eamID = new WXGDEam();
+                            wxgdEntity.eamID = new EamEntity();
 
                             Bundle bundle = new Bundle();
                             bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);

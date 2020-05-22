@@ -175,7 +175,7 @@ public class DailyLubricateTaskAdapter extends BaseListDataRecyclerViewAdapter<D
         @Override
         protected void update(DailyLubricateTaskEntity data) {
             String name = String.format(context.getString(R.string.device_style10)
-                    , Util.strFormat2(data.getEamID().name), Util.strFormat2(data.getEamID().code));
+                    , Util.strFormat2(data.getEamID().name), Util.strFormat2(data.getEamID().eamAssetCode));
             eamName.setText(HtmlParser.buildSpannedText(name, new HtmlTagHandler()));
         }
     }

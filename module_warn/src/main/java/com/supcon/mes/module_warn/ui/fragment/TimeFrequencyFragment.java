@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -28,6 +29,7 @@ import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.UserPowerCheckController;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
@@ -37,6 +39,7 @@ import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
+import com.supcon.mes.module_warn.constant.WarnConstant;
 import com.supcon.mes.module_warn.model.api.LubricationWarnAPI;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnEntity;
 import com.supcon.mes.module_warn.model.bean.LubricationWarnListEntity;
@@ -67,14 +70,13 @@ import io.reactivex.schedulers.Schedulers;
  * Desc 时间频率TimeFrequencyFragment
  */
 @Presenter(value = LubricationWarnPresenter.class)
+@Controller(value = {UserPowerCheckController.class})
 public class TimeFrequencyFragment extends BaseRefreshRecyclerFragment<LubricationWarnEntity> implements LubricationWarnContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
-
     @BindByTag("btnLayout")
     LinearLayout btnLayout;
-
     @BindByTag("dispatch")
     Button dispatch;
     @BindByTag("delay")
@@ -129,18 +131,46 @@ public class TimeFrequencyFragment extends BaseRefreshRecyclerFragment<Lubricati
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(15));
 
+        initOperateCodePermission();
     }
 
     @Override
     protected void initData() {
         super.initData();
         mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "work", new OnSuccessListener<Long>() {
+        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "work", result -> deploymentId = result, null);
+    }
+
+    /**
+     * 操作按钮权限初始化
+     */
+    private void initOperateCodePermission(){
+        String operateCodes = WarnConstant.OperateCode.T_DO_WORK +","+WarnConstant.OperateCode.T_DELAY_SET+"," + WarnConstant.OperateCode.T_DELAY_RECORDS;
+        getController(UserPowerCheckController.class).checkModulePermission(EamApplication.getCid(), operateCodes, new OnSuccessListener<Map<String, Boolean>>() {
             @Override
-            public void onSuccess(Long result) {
-                deploymentId = result;
+            public void onSuccess(Map<String, Boolean> result) {
+                //判断权限按钮显示
+                for (String operateCode : result.keySet()){
+                    switch (operateCode){
+                        case WarnConstant.OperateCode.T_DO_WORK:
+                            if (!result.get(operateCode).booleanValue()){
+                                dispatch.setVisibility(View.GONE);
+                            }
+                            break;
+                        case WarnConstant.OperateCode.T_DELAY_SET:
+                            if (!result.get(operateCode).booleanValue()){
+                                delay.setVisibility(View.GONE);
+                            }
+                            break;
+                        case WarnConstant.OperateCode.T_DELAY_RECORDS:
+                            if (!result.get(operateCode).booleanValue()){
+                                overdue.setVisibility(View.GONE);
+                            }
+                            break;
+                    }
+                }
             }
-        }, null);
+        });
     }
 
     @SuppressLint("CheckResult")

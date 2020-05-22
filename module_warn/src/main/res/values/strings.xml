@@ -3,9 +3,17 @@
     <string name="warn_lubrication">润滑预警</string>
     <string name="time_frequency">时间频率</string>
     <string name="run_time">运行时长</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="warn_do_work">生成工单</string>
+    <string name="warn_delay_setting">延期设置</string>
+    <string name="warn_delay_records">延期记录</string>
+    <string name="warn_delay_run_setting">延时设置</string>
+    <string name="warn_delay_run_records">延时记录</string>
+    <string name="warn_lubrication_num">润滑数量：</string>
+    <string name="warn_lubrication_staff">润滑责任人：</string>
+    <string name="warn_plan_lubrication">计划润滑</string>
+    <string name="warn_finish">完成</string>
+    <string name="warn_task_finish">任务完成</string>
+    <string name="warn_no_data_operate">无数据可操作!</string>
+    <string name="warn_no_match_eam_lubrication">未匹配当前设备润滑信息</string>
 
 </resources>

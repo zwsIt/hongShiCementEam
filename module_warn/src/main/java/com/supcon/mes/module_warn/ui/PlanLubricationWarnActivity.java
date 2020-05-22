@@ -68,7 +68,6 @@ public class PlanLubricationWarnActivity extends BaseRefreshRecyclerActivity<Dai
     @BindByTag("titleText")
     TextView titleText;
 
-
     @BindByTag("contentView")
     RecyclerView contentView;
 

@@ -59,19 +59,22 @@
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
-            android:name=".ui.DailyLubricationPartEnsureActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppNoTitleBarTheme"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
-        <activity android:name=".ui.LubricationRecordsFinishListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppNoTitleBarTheme"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
-        <activity android:name=".ui.WarnLubricationListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppNoTitleBarTheme"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
-            android:launchMode="singleTask"/>
+        android:name=".ui.DailyLubricationPartEnsureActivity"
+        android:launchMode="singleTask"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppNoTitleBarTheme"
+        android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+      <activity
+          android:name=".ui.WarnLubricationListActivity"
+          android:launchMode="singleTask"
+          android:screenOrientation="portrait"
+          android:theme="@style/AppNoTitleBarTheme"
+          android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+      <activity
+          android:name=".ui.PlanLubricationWarnNewActivity"
+          android:launchMode="singleTask"
+          android:screenOrientation="portrait"
+          android:theme="@style/AppNoTitleBarTheme"
+          android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
     </application>
 </manifest>

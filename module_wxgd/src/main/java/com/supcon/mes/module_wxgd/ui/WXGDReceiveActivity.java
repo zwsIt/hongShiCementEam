@@ -192,7 +192,6 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-        updateInitView();
     }
 
     public void updateInitView() {
@@ -205,7 +204,6 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     @Override
     protected void initData() {
         super.initData();
-        updateInitData();
     }
 
     public void updateInitData() {

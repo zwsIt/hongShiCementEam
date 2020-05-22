@@ -104,7 +104,9 @@ import java.util.Map;
 
 @Router(value = Constant.Router.WXGD_ACCEPTANCE)
 @Presenter(value = {WXGDListPresenter.class, GenerateAcceptancePresenter.class})
-@Controller(value = {LinkController.class, PcController.class,SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class, OnlineCameraController.class, AttachmentController.class})
+@Controller(value = {LinkController.class, PcController.class,SparePartController.class, RepairStaffController.class,
+        LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class, OnlineCameraController.class,
+        AttachmentController.class})
 public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View, GenerateAcceptanceContract.View {
 
     @BindByTag("leftBtn")
@@ -208,6 +210,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private String acceptanceCheckEntities;
     private String tableNo;
     private String __pc__;
+    private ImageView customCameraIv;
 
     @Override
     protected int getLayoutID() {
@@ -264,6 +267,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
+        customCameraIv = yhGalleryView.findViewById(R.id.customCameraIv);
         initPicPath();
     }
 
@@ -412,7 +416,6 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
         leftBtn.setOnClickListener(v -> onBackPressed());
 
-
         acceptChkStaff.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
@@ -498,6 +501,13 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
                         ToastUtils.show(context, "无设备可生成验收单！");
                     }
                 }
+            }
+        });
+
+        customCameraIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getController(OnlineCameraController.class).showCustomDialog();
             }
         });
     }

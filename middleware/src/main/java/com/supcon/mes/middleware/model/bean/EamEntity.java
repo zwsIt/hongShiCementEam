@@ -40,8 +40,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     public String specialtyNew;//专业
     public ValueEntity fileState;//建档标记
     public Long validDate;//有效期
-    public String abc;//资产abc
-    public String abcForDisplay;//资产abc
+    public SystemCodeEntity abc;// 重要等级
     public float score;//分数
 
     public Staff electricStaff;//电气责任人

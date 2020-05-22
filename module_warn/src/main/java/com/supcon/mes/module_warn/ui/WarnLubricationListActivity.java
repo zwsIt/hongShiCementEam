@@ -45,7 +45,6 @@ import java.util.Map;
  * Desc 预警润滑
  */
 @Router(Constant.Router.LUBRICATION_EARLY_WARN)
-@Controller(value = {UserPowerCheckController.class})
 public class WarnLubricationListActivity extends BaseFragmentActivity {
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;

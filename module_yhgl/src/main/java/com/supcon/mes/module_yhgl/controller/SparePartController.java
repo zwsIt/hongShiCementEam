@@ -11,6 +11,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.YHEntity;
@@ -185,7 +186,7 @@ public class SparePartController extends BaseViewController implements SparePart
         sparePartListWidget.clear();
     }
 
-    public void upEam(WXGDEam wxgdEam) {
-        mYHEntity.eamID = wxgdEam;
+    public void upEam(EamEntity eamEntity) {
+        mYHEntity.eamID = eamEntity;
     }
 }

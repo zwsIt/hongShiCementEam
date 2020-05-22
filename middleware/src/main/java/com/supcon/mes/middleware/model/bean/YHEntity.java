@@ -16,7 +16,7 @@ public class YHEntity extends BaseEntity {
     public Staff chargeStaff;//负责人
     public Long cid;
     public String describe;
-    public WXGDEam eamID;
+    public EamEntity eamID;
     public SystemCodeEntity faultInfoType; // 隐患类型:
     public SystemCodeEntity faultState; // 隐患状态
     public SystemCodeEntity downStream; // 处理方式
@@ -35,9 +35,9 @@ public class YHEntity extends BaseEntity {
     public List<AttachmentEntity> attachmentEntities;
     public boolean isOffApply; // 是否需要停电
 
-    public WXGDEam getEamID() {
+    public EamEntity getEamID() {
         if (eamID == null) {
-            eamID = new WXGDEam();
+            eamID = new EamEntity();
         }
         return eamID;
     }

@@ -2,6 +2,7 @@ package com.supcon.mes.module_warn.presenter;
 
 import android.text.TextUtils;
 
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
@@ -49,6 +50,7 @@ public class DailyLubricationWarnPresenter extends DailyLubricationWarnContract.
         if (params.containsKey(Constant.BAPQuery.NAME)) {
             Map<String, Object> paramsName = new HashMap<>();
             paramsName.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
+            paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
             JoinSubcondEntity joinSubcondEntityStaff = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "base_staff,ID,EAM_BaseInfo,INSPECTION_STAFF");
             joinSubcondEntity.subconds.add(joinSubcondEntityStaff);
         }

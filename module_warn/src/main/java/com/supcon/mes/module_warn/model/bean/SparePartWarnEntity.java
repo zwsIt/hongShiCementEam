@@ -2,6 +2,7 @@ package com.supcon.mes.module_warn.model.bean;
 
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.AccessoryEamId;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.Good;
 import com.supcon.mes.middleware.model.bean.SparePartId;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
@@ -16,7 +17,7 @@ import com.supcon.mes.middleware.model.bean.WXGDEam;
 public class SparePartWarnEntity extends BaseEntity {
 
     public Long id;
-    public WXGDEam eamID;
+    public EamEntity eamID;
     public String spareMemo;
     public ValueEntity sparePartStatus;
     public ValueEntity periodUnit;
@@ -43,9 +44,9 @@ public class SparePartWarnEntity extends BaseEntity {
     }
 
 
-    public WXGDEam getEamID() {
+    public EamEntity getEamID() {
         if (eamID == null) {
-            eamID = new WXGDEam();
+            eamID = new EamEntity();
         }
         return eamID;
     }

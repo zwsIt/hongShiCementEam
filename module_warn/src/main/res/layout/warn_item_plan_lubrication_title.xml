@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_10"
+    android:id="@+id/titleRl"
+    android:tag="titleRl"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:id="@+id/itemIndex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_5"
+        android:tag="itemIndex"
+        android:text="序号"
+        android:textColor="#e89300"
+        android:textSize="18dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/eam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:tag="eam"
+        android:textColor="@color/black"/>
+
+    <ImageView
+        android:id="@+id/expend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_expand"
+        android:tag="expend" />
+
+</RelativeLayout>

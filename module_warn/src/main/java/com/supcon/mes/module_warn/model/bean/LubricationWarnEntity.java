@@ -3,6 +3,7 @@ package com.supcon.mes.module_warn.model.bean;
 import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.AccessoryEamId;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.LubricateOil;
 import com.supcon.mes.middleware.model.bean.SparePartId;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class LubricationWarnEntity extends BaseEntity {
 
     public Long id;
-    public WXGDEam eamID;
+    public EamEntity eamID;
     public String content;
     public String claim;
     public String lubricatePart;
@@ -53,9 +54,9 @@ public class LubricationWarnEntity extends BaseEntity {
 
     public List<LubricationWarnEntity> lubricationWarnEntities = new LinkedList<>();
 
-    public WXGDEam getEamID() {
+    public EamEntity getEamID() {
         if (eamID == null) {
-            eamID = new WXGDEam();
+            eamID = new EamEntity();
         }
         return eamID;
     }

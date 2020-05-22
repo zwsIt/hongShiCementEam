@@ -24,7 +24,7 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public String content; //内容
 
-    public WXGDEam eamID; //设备
+    public EamEntity eamID; //设备
 
     public FaultInfo faultInfo; //隐患信息
 

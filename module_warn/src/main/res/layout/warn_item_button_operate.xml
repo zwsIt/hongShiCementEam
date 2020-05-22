@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/btnLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:padding="@dimen/dp_10"
+    android:gravity="center"
+    android:tag="btnLayout">
+
+    <Button
+        android:id="@+id/finish"
+        android:layout_width="120dp"
+        android:layout_height="@dimen/dp_35"
+        android:background="@drawable/warn_sh_lubrication_button"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:tag="finish"
+        android:text="@string/warn_finish"
+        android:textColor="@color/white"/>
+
+    <Button
+        android:id="@+id/delay"
+        android:layout_width="120dp"
+        android:layout_height="@dimen/dp_35"
+        android:background="@drawable/warn_sh_lubrication_button"
+        android:layout_marginStart="@dimen/dp_10"
+        android:tag="delay"
+        android:text="@string/warn_delay_setting"
+        android:textColor="@color/white"/>
+
+    <Button
+        android:id="@+id/overdue"
+        style="@style/RedButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dp_1"
+        android:layout_marginEnd="@dimen/dp_1"
+        android:layout_weight="1"
+        android:tag="overdue"
+        android:text="@string/warn_delay_records"
+        android:visibility="gone"/>
+</LinearLayout>

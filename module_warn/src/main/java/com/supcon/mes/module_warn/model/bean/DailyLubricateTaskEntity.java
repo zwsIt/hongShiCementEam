@@ -2,10 +2,12 @@ package com.supcon.mes.module_warn.model.bean;
 
 import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.LubricateOil;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.Map;
 
 public class DailyLubricateTaskEntity extends BaseEntity {
     public Long id;
-    public WXGDEam eamID;
+    public EamEntity eamID;
     public String lubricatePart;//润滑部位
     public ValueEntity oilType;
     public LubricateOil lubricateOil;
@@ -39,9 +41,24 @@ public class DailyLubricateTaskEntity extends BaseEntity {
     @Expose
     public Map<String, List<DailyLubricateTaskEntity>> lubricationPartMap = new LinkedHashMap<>();
 
-    public WXGDEam getEamID() {
+    // 当前设备润滑部位new
+    private List<DailyLubricateTaskEntity> expendList = new ArrayList<>();
+
+    // 权限操作按钮：完成、延期设置
+    public boolean finish;
+    public boolean delaySetting;
+
+    public List<DailyLubricateTaskEntity> getExpendList() {
+        return expendList;
+    }
+
+    public void setExpendList(List<DailyLubricateTaskEntity> expendList) {
+        this.expendList = expendList;
+    }
+
+    public EamEntity getEamID() {
         if (eamID == null) {
-            eamID = new WXGDEam();
+            eamID = new EamEntity();
         }
         return eamID;
     }

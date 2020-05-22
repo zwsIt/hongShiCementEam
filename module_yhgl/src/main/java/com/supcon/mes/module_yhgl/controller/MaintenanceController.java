@@ -11,6 +11,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.view.CustomListWidget;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.MaintainEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.YHEntity;
@@ -167,7 +168,7 @@ public class MaintenanceController extends BaseViewController implements Mainten
         maintenanceListWidget.clear();
     }
 
-    public void upEam(WXGDEam wxgdEam) {
-        mYHEntity.eamID = wxgdEam;
+    public void upEam(EamEntity eamEntity) {
+        mYHEntity.eamID = eamEntity;
     }
 }
