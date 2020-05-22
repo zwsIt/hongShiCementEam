@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.module_main.model.contract.MyEamContract;
 import com.supcon.mes.module_main.model.network.MainClient;
 
 import java.util.HashMap;
