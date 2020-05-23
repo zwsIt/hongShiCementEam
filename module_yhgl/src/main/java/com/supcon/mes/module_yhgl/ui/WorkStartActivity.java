@@ -2,46 +2,70 @@ package com.supcon.mes.module_yhgl.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.TimeUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseControllerActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.StatusBarUtils;
+import com.supcon.common.view.util.ToastUtils;
+import com.supcon.common.view.view.picker.DateTimePicker;
+import com.supcon.common.view.view.picker.SinglePicker;
+import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.mbap.utils.GsonUtil;
+import com.supcon.mes.mbap.utils.controllers.DatePickController;
+import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
+import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.mbap.view.CustomVerticalEditText;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
+import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
+import com.supcon.mes.module_yhgl.model.api.WorkStartAPI;
+import com.supcon.mes.module_yhgl.model.contract.WorkStartContract;
+import com.supcon.mes.module_yhgl.model.dto.WorkStartDTO;
+import com.supcon.mes.module_yhgl.presenter.WorkStartPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import common.Assert;
 import io.reactivex.functions.Consumer;
 
 @Router(value = Constant.Router.WORK_START_EDIT)
-public class WorkStartActivity extends BaseControllerActivity {
+@Presenter(value = {WorkStartPresenter.class})
+public class WorkStartActivity extends BaseControllerActivity implements WorkStartContract.View {
 
     @BindByTag("leftBtn")
     CustomImageButton leftBtn;
     @BindByTag("titleText")
     TextView titleText;
-    @BindByTag("rightBtn")
-    CustomImageButton rightBtn;
-    @BindByTag("titleLayout")
-    RelativeLayout titleLayout;
     @BindByTag("workStartStaff")
     CustomTextView workStartStaff;
     @BindByTag("eamCode")
@@ -54,12 +78,37 @@ public class WorkStartActivity extends BaseControllerActivity {
     CustomDateView workEndTime;
     @BindByTag("workPriority")
     CustomSpinner workPriority;
+    @BindByTag("workContent")
+    CustomVerticalEditText workContent;
+    @BindByTag("submitBtn")
+    Button submitBtn;
+
+    private WorkStartDTO mWorkStartDTO;
+    private String mWorkStartDTOInit;
+    private DatePickController mDatePickController;
+    private SinglePickController mSinglePickController;
+    private List<SystemCodeEntity> mPriority;  // 优先级
+    private List<String> mPriorityList = new ArrayList<>();
 
     @Override
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        StatusBarUtils.setWindowStatusBarColor(this,R.color.themeColor);
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
+        mWorkStartDTO = new WorkStartDTO();
+        mWorkStartDTO.setInitStaffId(EamApplication.getAccountInfo().staffId);
+        mWorkStartDTOInit = GsonUtil.gsonString(mWorkStartDTO);
+
+        mDatePickController = new DatePickController(this);
+        mDatePickController.textSize(18);
+        mDatePickController.setCanceledOnTouchOutside(true);
+        mDatePickController.setCycleDisable(false);
+        mDatePickController.setSecondVisible(false);
+
+        mSinglePickController = new SinglePickController<String>(this);
+        mSinglePickController.textSize(18);
+        mSinglePickController.setCanceledOnTouchOutside(true);
     }
 
     @Override
@@ -71,6 +120,16 @@ public class WorkStartActivity extends BaseControllerActivity {
     protected void initView() {
         super.initView();
         titleText.setText(getResources().getString(R.string.fault_work_start_edit));
+        workStartStaff.setContent(EamApplication.getAccountInfo().staffName);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        mPriority = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.YH_PRIORITY);
+        for (SystemCodeEntity systemCodeEntity : mPriority){
+            mPriorityList.add(systemCodeEntity.value);
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -78,62 +137,154 @@ public class WorkStartActivity extends BaseControllerActivity {
     protected void initListener() {
         super.initListener();
         leftBtn.setOnClickListener(v -> onBackPressed());
-        workStartStaff.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF,true);
-                bundle.putBoolean(Constant.IntentKey.IS_MULTI,false);
-                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,workStartStaff.getTag().toString());
-                IntentRouter.go(context,Constant.Router.CONTACT_SELECT,bundle);
+        workStartStaff.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1){
+                mWorkStartDTO.setInitStaffId(null);
             }
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+            bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, workStartStaff.getTag().toString());
+            IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
         });
-        eamCode.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM,true);
-                bundle.putBoolean(Constant.IntentKey.IS_MULTI,false);
-                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,eamCode.getTag().toString());
-                IntentRouter.go(context,Constant.Router.EAM,bundle);
+        eamCode.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1){
+                mWorkStartDTO.setEamId(null);
             }
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+            bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamCode.getTag().toString());
+            IntentRouter.go(context, Constant.Router.EAM, bundle);
         });
-        workContactStaff.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
+        workContactStaff.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1){
+                mWorkStartDTO.setWorkContactStaffId(null);
+            }else {
                 Bundle bundle = new Bundle();
-                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF,true);
-                bundle.putBoolean(Constant.IntentKey.IS_MULTI,false);
-                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,workContactStaff.getTag().toString());
-                IntentRouter.go(context,Constant.Router.CONTACT_SELECT,bundle);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, workContactStaff.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
 
+        workEndTime.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1){
+                mWorkStartDTO.setPlanFinishTime(null);
+            }else {
+                mDatePickController.listener((year, month, day, hour, minute, second) -> {
+                    String dateStr = year + "-" + month + "-" + day + " " + hour + ":" + minute;
+                    workEndTime.setContent(dateStr);
+                    mWorkStartDTO.setPlanFinishTime(DateUtil.dateFormat(dateStr,Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN));
+                }).show(mWorkStartDTO.getPlanFinishTime() == null ? new Date().getTime() : mWorkStartDTO.getPlanFinishTime());
+            }
+        });
+        workPriority.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1){
+                mWorkStartDTO.setPriority(null);
+            }
+            if (mPriority.size() <= 0) {
+                ToastUtils.show(context, "优先级列表数据为空,请退出重新加载页面！");
+                return;
+            }
+            mSinglePickController.list(mPriorityList)
+                    .listener((index, item) -> {
+                        workPriority.setContent(String.valueOf(item));
+                        mWorkStartDTO.setPriority(mPriority.get(index).id);
+                    }).show(workPriority.getContent());
+        });
+
+        RxTextView.textChanges(workContent.editText())
+                .skipInitialValue()
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        mWorkStartDTO.setContent(charSequence.toString());
+                    }
+                });
+        RxView.clicks(submitBtn).throttleFirst(300, TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        doSubmit();
+                    }
+                });
     }
+
+    private void doSubmit() {
+        if (checkResult()){
+            return;
+        }
+        onLoading(context.getResources().getString(R.string.dealing));
+        presenterRouter.create(WorkStartAPI.class).workStartSubmit(GsonUtil.gsonString(mWorkStartDTO));
+    }
+    private boolean checkResult() {
+        if (mWorkStartDTO.getInitStaffId() == null) {
+            ToastUtils.show(context, "请填写发起人");
+            return true;
+        }
+        if (mWorkStartDTO.getEamId() == null) {
+            ToastUtils.show(context, "请填写设备信息");
+            return true;
+        }
+        if (TextUtils.isEmpty(mWorkStartDTO.getPriority())) {
+            ToastUtils.show(context, "请填写优先级");
+            return true;
+        }
+        if (TextUtils.isEmpty(mWorkStartDTO.getContent())) {
+            ToastUtils.show(context, "请填写工作内容");
+            return true;
+        }
+        return false;
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEntity(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
             CommonSearchStaff staff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
             if (workStartStaff.getTag().toString().equals(commonSearchEvent.flag)) {
                 workStartStaff.setContent(staff.name);
-            }else if (workContactStaff.getTag().toString().equals(commonSearchEvent.flag)){
+                mWorkStartDTO.setInitStaffId(staff.id);
+            } else if (workContactStaff.getTag().toString().equals(commonSearchEvent.flag)) {
                 workContactStaff.setContent(staff.name);
+                mWorkStartDTO.setWorkContactStaffId(staff.id);
             }
-        }else if (commonSearchEvent.commonSearchEntity instanceof EamEntity){
+        } else if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
             EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
             eamName.setContent(eamEntity.name);
             eamCode.setContent(eamEntity.eamAssetCode);
+            mWorkStartDTO.setEamId(eamEntity.id);
         }
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (!mWorkStartDTOInit.equals(GsonUtil.gsonString(mWorkStartDTO))){
+            new CustomDialog(this).twoButtonAlertDialog("页面内容已修改，是否提交？")
+                    .bindView(R.id.redBtn,context.getResources().getString(R.string.submit))
+                    .bindClickListener(R.id.grayBtn, v -> finish(), true)
+                    .bindClickListener(R.id.redBtn, v -> doSubmit(), true)
+                    .show();
+        }else {
+            finish();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void workStartSubmitSuccess(CommonEntity entity) {
+        onLoadSuccess(getResources().getString(R.string.deal_success));
+        finish();
+    }
+
+    @Override
+    public void workStartSubmitFailed(String errorMsg) {
+        onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
     }
 }

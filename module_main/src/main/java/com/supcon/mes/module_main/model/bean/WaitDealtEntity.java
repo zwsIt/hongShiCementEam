@@ -18,7 +18,9 @@ public class WaitDealtEntity extends BaseEntity {
     public Long tableId;     //tableId
 
     @SerializedName(value = "eamcode")
-    public String eamCode;     //设备编码
+    public String eamCode;     // 设备资产编码
+
+    public String eamAssetcode; // 设备编码
 
     @SerializedName(value = "eamname")
     public String eamName;   //设备名
