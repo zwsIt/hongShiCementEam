@@ -21,10 +21,10 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
-import com.supcon.mes.module_main.model.api.EamAPI;
+import com.supcon.mes.module_main.model.api.MyEamAPI;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.module_main.model.contract.EamContract;
-import com.supcon.mes.module_main.presenter.EamPresenter;
+import com.supcon.mes.module_main.model.contract.MyEamContract;
+import com.supcon.mes.module_main.presenter.MyEamPresenter;
 import com.supcon.mes.module_main.ui.adaper.EamListAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,8 +34,8 @@ import org.greenrobot.eventbus.ThreadMode;
 /**
  * 设备
  */
-@Presenter(value = EamPresenter.class)
-public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implements EamContract.View {
+@Presenter(value = MyEamPresenter.class)
+public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implements MyEamContract.View {
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -83,7 +83,7 @@ public class EamFragment extends BaseRefreshRecyclerFragment<EamEntity> implemen
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(EamAPI.class).getEams(pageIndex);
+                presenterRouter.create(MyEamAPI.class).getEams(pageIndex);
             }
         });
 

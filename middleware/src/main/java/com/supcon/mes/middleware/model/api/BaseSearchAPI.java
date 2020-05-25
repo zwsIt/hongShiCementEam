@@ -2,7 +2,6 @@ package com.supcon.mes.middleware.model.api;
 
 import com.app.annotation.apt.ContractFactory;
 import com.supcon.mes.middleware.model.bean.BaseSearchListEntity;
-import com.supcon.mes.middleware.model.contract.BaseSearchContract;
 
 /**
  * Created by wangshizhan on 2017/12/28.
