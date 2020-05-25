@@ -3,6 +3,7 @@ package com.supcon.mes.module_yhgl.model.network;
 import com.app.annotation.apt.ApiFactory;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
@@ -139,5 +140,16 @@ public interface NetworkAPI {
      */
     @POST("/BEAM2/workList/sparePart/generateSparePartApply.action")
     Flowable<ResultEntity> generateSparePartApply(@Query("sparePartJsons") String listStr);
+
+     /**
+      * @method
+      * @description 工作发起提交
+      * @author: zhangwenshuai
+      * @date: 2020/5/23 11:10
+      * @param  * @param null
+      * @return
+      */
+    @POST("/BEAM2/faultInfo/faultInfo/workInitiation.action")
+    Flowable<CommonEntity> workInitiation(@Query(value = "workStartDTO") String workStartDTO);
 
 }

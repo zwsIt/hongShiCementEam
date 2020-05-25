@@ -411,7 +411,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                 }
                 switch (position) {
                     case 0:
-                        IntentRouter.go(context, Constant.Router.WORK_START);
+                        IntentRouter.go(context, Constant.Router.WORK_START_EDIT);
                         break;
                     case 1:
 //                        if (!menuPopwindow.refreshList(aewMenu)) return;

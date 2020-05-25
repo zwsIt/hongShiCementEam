@@ -60,6 +60,7 @@ import io.reactivex.Flowable;
  * ------------- Description -------------
  * 计划润滑
  */
+@Deprecated
 @Router(Constant.Router.PLAN_LUBRICATION_EARLY_WARN)
 @Presenter(value = {DailyLubricationWarnPresenter.class, DailyReceivePresenter.class})
 public class PlanLubricationWarnActivity extends BaseRefreshRecyclerActivity<DailyLubricateTaskEntity> implements DailyLubricationWarnContract.View {

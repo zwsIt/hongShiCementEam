@@ -56,5 +56,8 @@
     <string name="sbda_area_no">工艺编码</string>
     <string name="eam_code">设备编码</string>
     <string name="eam_name">设备名称</string>
+    <string name="dealing">处理中…</string>
+    <string name="deal_success">处理成功</string>
+    <string name="submit">提交</string>
 
 </resources>
