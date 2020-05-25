@@ -17,5 +17,5 @@ public interface WaitDealtAPI {
 
     void getWaitDealt(int page, int pageSize, Map<String, Object> params);
 
-    void proxyPending(long pendingId, long proxyUserId,String proxDesc);
+    void proxyPending(long pendingId, String proxyUserIds,String proxDesc);
 }

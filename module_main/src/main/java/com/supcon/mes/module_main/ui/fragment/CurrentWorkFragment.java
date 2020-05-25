@@ -32,6 +32,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.UserPowerCheckController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.CustomFilterBean;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
@@ -93,6 +94,7 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
     private List<String> repairGroupList = new ArrayList<>();
     private Map<String, Object> queryParam = new HashMap<>();
     private CommonSearchStaff searchStaff;
+    private List<CommonSearchEntity> mSelectStaffList;
     private CustomDialog proxyDialog, dispatchDialog;
     private String reason;
     private CustomTextView dispatchGroup;
@@ -280,10 +282,10 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
                     @Override
                     public void onChildViewClick(View childView, int action, Object obj) {
                         if (action == -1) {
-                            searchStaff = null;
+                            mSelectStaffList = null;
                         }
                         Bundle bundle = new Bundle();
-                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, true);
                         bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
 //                        IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                         IntentRouter.go(context, Constant.Router.STAFF,bundle);
@@ -298,16 +300,20 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
                 .bindClickListener(R.id.blueBtn, new View.OnClickListener() {
                     @Override
                     public void onClick(View v12) {
-                        if (searchStaff == null) {
-                            ToastUtils.show(context, "请选择委托人");
+                        if (mSelectStaffList == null) {
+                            ToastUtils.show(context, getResources().getString(R.string.main_select_assignor));
                             return;
                         }
                         if (waitDealtEntity.pendingId == null) {
-                            ToastUtils.show(context, "未获取当前代办信息");
+                            ToastUtils.show(context, context.getResources().getString(R.string.no_get_pending));
                             return;
                         }
-                        onLoading("正在委托...");
-                        presenterRouter.create(WaitDealtAPI.class).proxyPending(waitDealtEntity.pendingId, searchStaff.userId, reason);
+                        onLoading(getResources().getString(R.string.main_do_proxying));
+                        StringBuilder sb = new StringBuilder();
+                        for (CommonSearchEntity commonSearchEntity : mSelectStaffList){
+                            sb.append(((CommonSearchStaff)commonSearchEntity).userId).append(",");
+                        }
+                        presenterRouter.create(WaitDealtAPI.class).proxyPending(waitDealtEntity.pendingId, sb.toString(), reason);
                         proxyDialog.dismiss();
                     }
                 }, false)
@@ -394,6 +400,19 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
                     CustomTextView person = dispatchDialog.getDialog().findViewById(R.id.dispatchPerson);
                     person.setContent(Util.strFormat(searchStaff.name));
                 }
+            }
+        }else if (commonSearchEvent.mCommonSearchEntityList != null){
+            mSelectStaffList = commonSearchEvent.mCommonSearchEntityList;
+            StringBuilder searchStaffs = new StringBuilder();
+            for (CommonSearchEntity commonSearchEntity : mSelectStaffList){
+                searchStaffs.append(((CommonSearchStaff)commonSearchEntity).getName()).append(",");
+            }
+            if (proxyDialog != null && proxyDialog.getDialog().isShowing()) {
+                CustomTextView person = proxyDialog.getDialog().findViewById(R.id.proxyPerson);
+                person.setContent(Util.strFormat(searchStaffs.substring(0,searchStaffs.length()-1)));
+            } else if (dispatchDialog != null && dispatchDialog.getDialog().isShowing()) {
+                CustomTextView person = dispatchDialog.getDialog().findViewById(R.id.dispatchPerson);
+                person.setContent(Util.strFormat(searchStaff.name));
             }
         }
     }

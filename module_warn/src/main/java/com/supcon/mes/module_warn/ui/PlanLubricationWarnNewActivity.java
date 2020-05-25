@@ -169,16 +169,7 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
                         planLubricationListAdapter.notifyItemRangeRemoved(position + 1, expandList.size());
                         planLubricationListAdapter.notifyItemRangeChanged(position, planLubricationListAdapter.getItemCount());
                     } else {
-                        item.isExpand = true;
-
-//                        if (expandList.get(expandList.size()-1).getExpendList().size() <= 0){
-//                            expandList.get(expandList.size()-1).getExpendList().addAll(expandList); // 将当前设备的润滑部位list存入按钮行所在实体中
-//                        }
-
-                        planLubricationListAdapter.getList().addAll(position + 1, expandList);
-                        planLubricationListAdapter.notifyItemRangeInserted(position + 1, expandList.size());
-                        planLubricationListAdapter.notifyItemRangeChanged(position, expandList.size());
-                        contentView.scrollToPosition(position + item.getExpendList().size());
+                        doExpand(item,position);
                     }
                     break;
                 case "finish":
@@ -313,8 +304,12 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
         int count = 0;
         for (DailyLubricateTaskEntity dailyLubricateTaskEntity : list) {
             if (dailyLubricateTaskEntity.getEamID().code.equals(code)) {
-                count++;
-                break;
+                if (!dailyLubricateTaskEntity.isExpand){
+                    doExpand(dailyLubricateTaskEntity,list.indexOf(dailyLubricateTaskEntity));
+                }else {
+                    count++;
+                    break;
+                }
             }
         }
         if (count == 0){
@@ -322,6 +317,16 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
         }else {
             finishLubrication(null,code);
         }
+    }
+
+    private void doExpand(DailyLubricateTaskEntity dailyLubricateTaskEntity, int position) {
+        List<DailyLubricateTaskEntity> expandList = dailyLubricateTaskEntity.getExpendList();
+
+        dailyLubricateTaskEntity.isExpand = true;
+        planLubricationListAdapter.getList().addAll(position + 1, expandList);
+        planLubricationListAdapter.notifyItemRangeInserted(position + 1, expandList.size());
+        planLubricationListAdapter.notifyItemRangeChanged(position, expandList.size());
+        contentView.scrollToPosition(position + expandList.size());
     }
 
     @SuppressLint("CheckResult")

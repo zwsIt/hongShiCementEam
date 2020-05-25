@@ -59,5 +59,9 @@
     <string name="dealing">处理中…</string>
     <string name="deal_success">处理成功</string>
     <string name="submit">提交</string>
+    <string name="no_data">暂无数据</string>
+    <string name="middleware_select_staff">请选择人员</string>
+    <string name="middleware_confirm">确定</string>
+    <string name="middleware_cancel">取消</string>
 
 </resources>

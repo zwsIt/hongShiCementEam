@@ -413,7 +413,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         workSource.setText(mWXGDEntity.workSource == null ? "" : mWXGDEntity.workSource.value);
         if (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) {
             eamName.setValue(mWXGDEntity.eamID.name);
-            eamCode.setValue(mWXGDEntity.eamID.code);
+            eamCode.setValue(mWXGDEntity.eamID.eamAssetCode);
             eamArea.setValue(mWXGDEntity.eamID.installPlace == null ? "" : mWXGDEntity.eamID.installPlace.name);
             eamNameEdit.setValue(mWXGDEntity.eamID.name);
             eamCodeEdit.setValue(mWXGDEntity.eamID.code);

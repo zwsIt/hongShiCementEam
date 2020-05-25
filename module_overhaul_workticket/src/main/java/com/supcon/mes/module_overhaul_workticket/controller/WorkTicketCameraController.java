@@ -115,14 +115,11 @@ public class WorkTicketCameraController extends BaseCameraController {
 
     }
 
-
-
     @Override
     public void initListener() {
         super.initListener();
         addListener(0, galleryView);
     }
-
 
     @Override
     protected void onFileDelete(GalleryBean galleryBean, int position) {

@@ -351,7 +351,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         workSource.setText(mWXGDEntity.workSource == null ? "" : mWXGDEntity.workSource.value);
         if (mWXGDEntity.eamID != null && mWXGDEntity.eamID.id != null) {
             eamName.setValue(mWXGDEntity.eamID.name);
-            eamCode.setValue(mWXGDEntity.eamID.code);
+            eamCode.setValue(mWXGDEntity.eamID.eamAssetCode);
             eamArea.setValue(mWXGDEntity.eamID.installPlace == null ? "" : mWXGDEntity.eamID.installPlace.name);
             new EamPicController().initEamPic(eamIc, mWXGDEntity.eamID.id);
         }

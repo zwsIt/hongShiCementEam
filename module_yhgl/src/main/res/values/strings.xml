@@ -8,6 +8,7 @@
     <string name="fault_work_start_staff">发起人</string>
     <string name="fault_work_contact_staff">工作联络人</string>
     <string name="fault_work_end_time">计划完成时间</string>
+    <string name="fault_plan_repair_time">计划检修时间</string>
     <string name="fault_work_priority">优先级</string>
     <string name="fault_work_start_edit">工作发起</string>
     <string name="fault_work_content">工作内容</string>

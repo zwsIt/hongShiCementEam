@@ -8,4 +8,8 @@
     <string name="main_table_type">单据类型</string>
     <string name="main_processed_table_no_view">该单据暂不支持查看详情!</string>
     <string name="main_data_exception">数据异常_processKey:</string>
+    <string name="main_do_proxying">正在委托…</string>
+    <string name="main_select_assignor">请选择委托人</string>
+    <string name="no_get_pending">未获取当前代办信息</string>
+    <string name="main_work_proxy">工作交接</string>
 </resources>

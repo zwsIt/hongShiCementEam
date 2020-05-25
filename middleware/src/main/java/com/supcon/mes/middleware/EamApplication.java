@@ -112,11 +112,11 @@ public class EamApplication extends MBapApp {
         String port = " ";
         String ip  = SharedPreferencesUtils.getParam(getAppContext(), MBapConstant.SPKey.IP, "");
         LogUtil.d("channel:"+channel+" ip:"+ip);
-        if(TextUtils.isEmpty(ip) && BuildConfig.DEBUG){
+        if(TextUtils.isEmpty(ip)){
 
             if (channel.equals("hongshi")) {
                 ip = "218.75.97.170";
-                port = "8181";
+                port = "8183";
             }
             else if(channel.equals("hailuo")){
                 ip = "60.167.69.246";
@@ -145,19 +145,19 @@ public class EamApplication extends MBapApp {
             setIp(ip);
             setPort(port);
 
-            String zzIp = SharedPreferencesUtils.getParam(getApplicationContext(), Constant.ZZ.IP, "");
+            /*String zzIp = SharedPreferencesUtils.getParam(getApplicationContext(), Constant.ZZ.IP, "");
             LogUtil.d("channel:"+channel+" zzip:"+zzIp);
             if(!TextUtils.isEmpty(zzIp)){
                 return;
             }
             if (channel.equals("hongshi")) {
-                SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.IP, "zhizhi.hssn.hz.supos.net"/*"192.168.13.113"*/);
+                SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.IP, "zhizhi.hssn.hz.supos.net"*//*"192.168.13.113"*//*);
                 SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.PORT, "8181");
             }
             else if(channel.equals("hailuo")){
-                SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.IP, "60.167.69.246"/*"192.168.13.113"*/);
+                SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.IP, "60.167.69.246"*//*"192.168.13.113"*//*);
                 SharedPreferencesUtils.setParam(getApplicationContext(), Constant.ZZ.PORT, "38043");
-            }
+            }*/
 
         }
 

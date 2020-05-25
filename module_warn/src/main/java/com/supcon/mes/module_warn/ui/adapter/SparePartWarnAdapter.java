@@ -105,7 +105,7 @@ public class SparePartWarnAdapter extends BaseListDataRecyclerViewAdapter<SpareP
         @Override
         protected void update(SparePartWarnEntity data) {
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getEamID().name)
-                    , Util.strFormat(data.getEamID().code));
+                    , Util.strFormat(data.getEamID().eamAssetCode));
             itemSpareEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             String product = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getProductID().productName)

@@ -35,7 +35,7 @@ import io.reactivex.Flowable;
 public class OLXJAreaListAdapter extends BaseListDataRecyclerViewAdapter<OLXJAreaEntity> {
 
     // 用于格式化日期,作为日志文件名的一部分
-    private SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
+//    private SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
     private TipPopwindow tipPopwindow;
 
     public OLXJAreaListAdapter(Context context) {

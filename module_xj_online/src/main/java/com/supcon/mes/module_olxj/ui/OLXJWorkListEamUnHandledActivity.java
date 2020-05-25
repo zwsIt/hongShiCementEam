@@ -160,7 +160,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
 
     private String thermometervalue = ""; // 全局测温值
 
-    WXGDEam mEam;
+    EamEntity mEam;
     private OLXJCameraController mCameraController;
     private CustomGalleryView customGalleryView;
     boolean isSmoothScroll = false;
@@ -616,7 +616,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
                 xjWorkItemEntity.conclusionID = TextUtils.isEmpty(xjWorkItemEntity.conclusionID) ? "realValue/01" : xjWorkItemEntity.conclusionID;
             }
             if (xjWorkItemEntity.eamID == null) {
-                xjWorkItemEntity.eamID = new WXGDEam();
+                xjWorkItemEntity.eamID = new EamEntity();
             }
         }
         return true;

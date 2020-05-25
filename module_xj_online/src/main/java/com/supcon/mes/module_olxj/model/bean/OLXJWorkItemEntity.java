@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
@@ -84,7 +85,7 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
     public String content;//内容
     public boolean control; //是否重录
     public String defaultVal;
-    public WXGDEam eamID;
+    public EamEntity eamID;
 
     public OLXJInputStandard inputStandardID;
 

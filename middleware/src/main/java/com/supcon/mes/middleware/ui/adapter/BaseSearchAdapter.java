@@ -34,7 +34,10 @@ public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSea
      * 搜索模式：单选，多选
      */
     private boolean isMulti;
-    
+
+    public BaseSearchAdapter(Context context) {
+        super(context);
+    }
     public BaseSearchAdapter(Context context, boolean isMulti) {
         super(context);
         this.isMulti = isMulti;
@@ -115,7 +118,7 @@ public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSea
             super.initView();
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) itemProperty.getLayoutParams();
             if (isMulti){
-                layoutParams.setMarginEnd(DisplayUtil.dip2px(40,context));
+                layoutParams.setMarginEnd(DisplayUtil.dip2px(35,context));
             }else {
                 layoutParams.setMarginEnd(0);
             }

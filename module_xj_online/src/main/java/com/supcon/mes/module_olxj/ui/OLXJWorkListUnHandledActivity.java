@@ -43,6 +43,7 @@ import com.supcon.mes.middleware.controller.ModifyController;
 import com.supcon.mes.middleware.model.api.DeviceDCSParamQueryAPI;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.DeviceDCSEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.XJHistoryEntity;
@@ -147,7 +148,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 
     private String thermometervalue = ""; // 全局测温值
 
-    WXGDEam mEam; // 注：用于记录同设备归类
+    EamEntity mEam; // 注：用于记录同设备归类
     private OLXJCameraController mCameraController;
     private CustomGalleryView customGalleryView;
     boolean isSmoothScroll = false;
@@ -668,7 +669,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                 xjWorkItemEntity.conclusionID = TextUtils.isEmpty(xjWorkItemEntity.conclusionID) ? "realValue/01" : xjWorkItemEntity.conclusionID;
             }
             if (xjWorkItemEntity.eamID == null) {
-                xjWorkItemEntity.eamID = new WXGDEam();
+                xjWorkItemEntity.eamID = new EamEntity();
             }
         }
         return true;

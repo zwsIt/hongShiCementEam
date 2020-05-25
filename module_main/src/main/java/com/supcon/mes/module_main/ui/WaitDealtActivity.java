@@ -77,6 +77,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * @date 2019/7/25
  * ------------- Description -------------
  */
+@Deprecated
 @Presenter(value = {WaitDealtPresenter.class, WaitDealtSubmitPresenter.class})
 @Router(value = Constant.Router.WAIT_DEALT)
 public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEntity> implements WaitDealtContract.View, WaitDealtSubmitContract.View {
@@ -395,7 +396,7 @@ public class WaitDealtActivity extends BaseRefreshRecyclerActivity<WaitDealtEnti
                             return;
                         }
                         onLoading("正在委托...");
-                        presenterRouter.create(WaitDealtAPI.class).proxyPending(waitDealtEntity.pendingId, searchStaff.userId, reason);
+//                        presenterRouter.create(WaitDealtAPI.class).proxyPending(waitDealtEntity.pendingId, searchStaff.userId, reason);
                         proxyDialog.dismiss();
                     }
                 }, false)

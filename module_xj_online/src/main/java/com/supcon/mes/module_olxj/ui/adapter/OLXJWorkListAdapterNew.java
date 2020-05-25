@@ -318,7 +318,9 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
             ufItemPhotoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ufItemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
+                    mOLXJCameraController.setCurrAdapterPosition(getAdapterPosition(),ufItemPics);
+                    mOLXJCameraController.showCustomDialog();
+//                    ufItemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
                 }
             });
 
@@ -921,7 +923,11 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
             if (data.eamID == null || TextUtils.isEmpty(data.eamID.name)) {
                 itemRecyclerTitle.setText("无关联设备");
             } else {
-                itemRecyclerTitle.setText(String.format("%s(%s)", data.eamID.name, data.eamID.eamAssetCode));
+                if (TextUtils.isEmpty(data.eamID.areaNum)){
+                    itemRecyclerTitle.setText(String.format("%s(%s)", data.eamID.name, data.eamID.eamAssetCode));
+                }else {
+                    itemRecyclerTitle.setText(String.format("%s(%s) 工艺编码：%s", data.eamID.name, data.eamID.eamAssetCode, data.eamID.areaNum));
+                }
 
                 if (!hashSet.contains(data.eamID.id)) {
                     hashSet.add(data.eamID.id);

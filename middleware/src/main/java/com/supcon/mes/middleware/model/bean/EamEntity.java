@@ -49,7 +49,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
 
     public ScoreMerity scoreMerity;//设备评分
 
-    @SerializedName(value = "eamAssetcode")
+    @SerializedName(value = "eamAssetcode", alternate={"eamAssetCode"})
     public String eamAssetCode; // 设备编码
 
     public ScoreMerity getScoreMerity() {

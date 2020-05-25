@@ -104,7 +104,7 @@ public class MaintenanceWarnAdapter extends BaseListDataRecyclerViewAdapter<Main
         @Override
         protected void update(MaintenanceWarnEntity data) {
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getEamID().name)
-                    , Util.strFormat(data.getEamID().code));
+                    , Util.strFormat(data.getEamID().eamAssetCode));
             itemMaintenanceEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().name)) {

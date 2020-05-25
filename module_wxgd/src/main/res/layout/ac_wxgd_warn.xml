@@ -103,13 +103,13 @@
             style="@style/HintTextColor"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:paddingLeft="20dp"
             android:paddingTop="@dimen/dp_3"
             android:paddingBottom="@dimen/dp_3"
             android:tag="commentInput"
             app:edit_hint="填写意见"
             app:text_color="@color/textColorlightblack"
-            app:text_size="14" />
+            app:text_size="14"
+            app:text_width="0dp"/>
 
         <com.supcon.mes.mbap.view.CustomWorkFlowView
             android:id="@+id/transition"

@@ -75,13 +75,16 @@ public class WaitDealtPresenter extends WaitDealtContract.Presenter {
 
     //工作提醒委托
     @Override
-    public void proxyPending(long pendingId, long proxyUserId, String proxDesc) {
+    public void proxyPending(long pendingId, String proxyUserIds, String proxDesc) {
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("pendingId", pendingId);
-        pageQueryParams.put("proxyUsers", proxyUserId);
+        pageQueryParams.put("pendingIds", "");
+        pageQueryParams.put("proxyUsers", proxyUserIds);
         pageQueryParams.put("proxyType", 2);
-        pageQueryParams.put("proxyUsers_MultiIDs", proxyUserId);
-        pageQueryParams.put("proxyUsers_AddIds", proxyUserId);
+        pageQueryParams.put("proxyUsers_MultiIDs", proxyUserIds);
+        pageQueryParams.put("proxyUsers_DeleteIds", "");
+        pageQueryParams.put("proxyUsers_AddIds", proxyUserIds);
+        pageQueryParams.put("proxyUsers_", "");
         if (!TextUtils.isEmpty(proxDesc)) {
             pageQueryParams.put("proxDesc", proxDesc);
         }

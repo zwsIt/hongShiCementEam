@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_olxj.R;
@@ -180,14 +181,11 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
                     onItemChildViewClick(taskExpandBtn, 0, getItem(position));
                 }
 
-
             });
 
             mOLXJAreaListAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
                 onItemChildViewClick(taskAreaListView, action, obj);
             });
-
-
 //            if(webView!=null){
 //                webView.registerHandler("areaClick", new BridgeHandler() {
 //
@@ -251,8 +249,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 
 
             if (mOLXJAreaEntities == null || mOLXJAreaEntities.size() == 0) {
-
-//                ToastUtils.show(context,"无巡检区域列表");
+                ToastUtils.show(context,"无巡检区域数据，请检查系统或联系相关人员咨询 ");
                 return;
             }
 
@@ -260,7 +257,6 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             mOLXJAreaListAdapter.notifyDataSetChanged();
 
             currentId = taskEntity.id;
-
 
         }
 
@@ -299,7 +295,6 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 //            listLayout.setVisibility(View.VISIBLE);
             taskExpandBtn.setVisibility(View.VISIBLE);
 //            }
-
 
             if (data.isStart) {
                 taskStatus.setBackgroundResource(R.drawable.sh_task_status_going);

@@ -1,11 +1,13 @@
 package com.supcon.mes.module_yhgl.model.dto;
 
+import com.supcon.common.com_http.BaseEntity;
+
 /**
  * @Description: 工作发起提交实体
  * @Author: zhangwenshuai
  * @CreateDate: 2020/5/23 9:10
  */
-public class WorkStartDTO {
+public class WorkStartDTO extends BaseEntity {
     private Long initStaffId;       // 工作发起人
     private Long workContactStaffId;// 工作联络人
     private Long eamId;             // 设备ID

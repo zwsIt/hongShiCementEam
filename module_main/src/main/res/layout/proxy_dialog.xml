@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="工作交接"
+        android:text="@string/main_work_proxy"
         android:textSize="@dimen/fontSize_20sp" />
 
     <include layout="@layout/ly_line" />
@@ -41,7 +41,7 @@
         android:tag="proxyReason"
         app:text_width="0dp"
         app:edit_hint="请输入委托原因"
-        app:gravity="top" />
+        app:gravity="center_vertical" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -54,8 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/sl_common"
-            android:text="确定"
-            android:textColor="@color/customBlue4"
+            android:text="@string/middleware_confirm"
+            android:textColor="@color/themeColor"
             android:textSize="@dimen/fontSize_16sp" />
 
         <Button
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/sl_common"
-            android:text="取消"
+            android:text="@string/middleware_cancel"
             android:textColor="@color/gray"
             android:textSize="@dimen/fontSize_16sp" />
 

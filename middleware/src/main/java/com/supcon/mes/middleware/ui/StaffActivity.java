@@ -5,10 +5,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
@@ -40,6 +42,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
 
 @Router(value = Constant.Router.STAFF)
 @Presenter(value = StaffPresenter.class)
@@ -66,13 +69,18 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
     @BindByTag("pinyinSearchBar")
     PinyinSearchBar pinyinSearchBar;
 
+    @BindByTag("rightBtn_1")
+    TextView rightBtn_1; // 确定
+
     private BaseSearchAdapter mBaseSearchAdapter;
     private String searchTag;
     private ArrayList<String> addedRSList; // 已添加数据
+    private boolean isMulti;
+    private List<CommonSearchEntity> selectStaffList = new ArrayList<>();
 
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
-        mBaseSearchAdapter = new BaseSearchAdapter(this, false);
+        mBaseSearchAdapter = new BaseSearchAdapter(this);
         return mBaseSearchAdapter;
     }
 
@@ -81,9 +89,11 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
         super.onInit();
         searchTag = getIntent().getStringExtra(Constant.IntentKey.COMMON_SEARCH_TAG);
         addedRSList = getIntent().getStringArrayListExtra(Constant.IntentKey.ADD_DATA_LIST);
+        isMulti = getIntent().getBooleanExtra(Constant.IntentKey.IS_MULTI,false);
+        mBaseSearchAdapter.setMulti(isMulti);
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "没有信息哦~"));
+        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context,context.getResources().getString(R.string.no_data)));
     }
 
 
@@ -109,6 +119,7 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
         recyclerView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
         recyclerView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
         recyclerView.setScrollBarSize(2);
+        rightBtn_1.setVisibility(isMulti ? View.VISIBLE : View.GONE);
     }
 
     @SuppressLint("CheckResult")
@@ -123,11 +134,19 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
                     return;
                 }
             }
-            CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
-            commonSearchEvent.commonSearchEntity = commonSearchEntity;
-            commonSearchEvent.flag = searchTag;
-            finish();
-            EventBus.getDefault().post(commonSearchEvent);
+            if (isMulti){
+                if (selectStaffList.contains(commonSearchEntity)) {
+                    selectStaffList.remove(commonSearchEntity);
+                } else {
+                    selectStaffList.add(commonSearchEntity);
+                }
+            }else {
+                CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
+                commonSearchEvent.commonSearchEntity = commonSearchEntity;
+                commonSearchEvent.flag = searchTag;
+                finish();
+                EventBus.getDefault().post(commonSearchEvent);
+            }
         });
 
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
@@ -161,6 +180,22 @@ public class StaffActivity extends BaseRefreshRecyclerActivity<CommonSearchEntit
                 titleSearchView.setInputTextColor(R.color.black);
             }
         });
+        RxView.clicks(rightBtn_1)
+                .throttleFirst(300,TimeUnit.MILLISECONDS)
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        if (selectStaffList.size() == 0) {
+                            ToastUtils.show(context, getResources().getString(R.string.middleware_select_staff));
+                            return;
+                        }
+                        CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
+                        commonSearchEvent.mCommonSearchEntityList = selectStaffList;
+                        commonSearchEvent.flag = searchTag;
+                        EventBus.getDefault().post(commonSearchEvent);
+                        finish();
+                    }
+                });
     }
 
     @SuppressLint("CheckResult")

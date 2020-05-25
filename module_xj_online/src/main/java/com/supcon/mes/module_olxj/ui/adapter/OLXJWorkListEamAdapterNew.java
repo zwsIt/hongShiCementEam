@@ -312,7 +312,9 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
             ufItemPhotoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ufItemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
+                    mOLXJCameraController.setCurrAdapterPosition(getAdapterPosition(),ufItemPics);
+                    mOLXJCameraController.showCustomDialog();
+//                    ufItemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
                 }
             });
 
@@ -529,9 +531,12 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                 ufBtnLayout.setVisibility(View.VISIBLE);
                 ufContentLine.setVisibility(View.VISIBLE);
                 ufItemPics.setVisibility(View.VISIBLE);
+                ufItemDirectDealBtn.setVisibility(View.VISIBLE);
             } else {
                 ufBtnLayout.setVisibility(View.GONE);
                 ufContentLine.setVisibility(View.GONE);
+                ufItemPics.setVisibility(View.GONE);
+                ufItemDirectDealBtn.setVisibility(View.GONE);
                 ufItemPics.clear();
                 xjWorkItemEntity.xjImgUrl = "";
             }
@@ -853,7 +858,11 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
             if (data.eamID == null || TextUtils.isEmpty(data.eamID.name)) {
                 itemRecyclerTitle.setText("无关联设备");
             } else {
-                itemRecyclerTitle.setText(String.format("%s(%s)", data.eamID.name, data.eamID.code));
+                if (TextUtils.isEmpty(data.eamID.areaNum)){
+                    itemRecyclerTitle.setText(String.format("%s(%s)", data.eamID.name, data.eamID.eamAssetCode));
+                }else {
+                    itemRecyclerTitle.setText(String.format("%s(%s) 工艺编码：%s", data.eamID.name, data.eamID.eamAssetCode, data.eamID.areaNum));
+                }
 
                 if (!hashSet.contains(data.eamID.id)) {
                     hashSet.add(data.eamID.id);

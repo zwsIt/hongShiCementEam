@@ -666,7 +666,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 //        Gson gson = new Gson();
 //        nfcJson = gson.fromJson(nfcEvent.getNfc(),Map.class);
 
-        dealSign((String) nfcJson.get("id"));
+        dealSign((String) nfcJson.get("textRecord"));
     }
 
     /**
@@ -683,26 +683,23 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         List<OLXJTaskEntity> list = mOLXJTaskListAdapter.getList();//获取当前页面列表
         if (list == null)
             return;
-        if (list.size() <= 0) {
-            SnackbarHelper.showMessage(contentView, "暂无任务数据列表");
-            return;
-        }
-
-
-        if (mAreaEntities.size() <= 0) {
-            SnackbarHelper.showMessage(contentView, "不存在对应的签到编码");
+        if (list.size() <= 0 || mAreaEntities.size() <= 0) {
+            ToastUtils.show(context, "暂无任务数据列表");
             return;
         }
         int index = 0;
         for (OLXJAreaEntity areaEntity : mAreaEntities) {
             if (code.equals(areaEntity.signCode)) {
-                updateXJAreaEntity(areaEntity);//update数据
-                LogUtil.i("BarcodeEvent1", code);
+                updateXJAreaEntity(areaEntity,true);//update数据
                 enterPosition = index;
                 updateTaskStatus();
                 doGoArea(areaEntity);  //跳转
+                return;
             }
             index++;
+        }
+        if (index == mAreaEntities.size()) {
+            ToastUtils.show(context, "不存在对应的签到编码");
         }
     }
 
@@ -799,10 +796,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
             singlePickController.setCanceledOnTouchOutside(true);
             singlePickController.list(cartReasonList).listener((index, item) -> {
                 xjAreaEntity.signReason = cartReasonInfoList.get(index).id;
-                xjAreaEntity.isSign = true;
-                xjAreaEntity.signType = "cardType/02";
-                xjAreaEntity.signedTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
-
+                updateXJAreaEntity(xjAreaEntity,false);
                 goArea(xjAreaEntity);
 
             }).show();
@@ -816,11 +810,17 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
      * @author zhangwenshuai1
      * @date 2018/6/15
      */
-    private void updateXJAreaEntity(OLXJAreaEntity xjAreaEntity) {
-        xjAreaEntity.signType = "cardType/01";
+    private void updateXJAreaEntity(OLXJAreaEntity xjAreaEntity,boolean isCard) {
+        if (isCard){
+            xjAreaEntity.signType = "cardType/01";
+        }else {
+            xjAreaEntity.signType = "cardType/02";
+        }
         xjAreaEntity.isSign = true;
         xjAreaEntity.signedTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
-        Log.i("XJArea:update", xjAreaEntity.toString());
+
+        // 更新签到区域缓存信息
+        saveAreaCache(mAreaEntities.toString());
     }
 
     private int getEnterPosition(OLXJAreaEntity areaEntity) {
