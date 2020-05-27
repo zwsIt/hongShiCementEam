@@ -12,6 +12,7 @@ import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
+import com.supcon.mes.middleware.util.PageParamUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 public class EamPresenter extends EamContract.Presenter {
     @Override
-    public void getEam(Map<String, Object> params, boolean nfcCard, int page) {
+    public void getEam(Map<String, Object> params, boolean nfcCard, int page,int pageSize) {
         BAPQueryParamsHelper.setNfcCard(nfcCard);
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
 
@@ -49,10 +50,8 @@ public class EamPresenter extends EamContract.Presenter {
             fastQuery.subconds.add(joinSubcondEntity);
         }
         fastQuery.modelAlias = "baseInfo";
-        Map<String, Object> pageQueryParams = new HashMap<>();
-        pageQueryParams.put("page.pageNo", page);
-        pageQueryParams.put("page.pageSize", 20);
-        pageQueryParams.put("page.maxPageSize", 500);
+        Map<String, Object> pageQueryParams = PageParamUtil.pageQueryParam(page,pageSize);
+
         mCompositeSubscription.add(MiddlewareHttpClient.getEam(fastQuery, pageQueryParams)
                 .onErrorReturn(throwable -> {
                     CommonListEntity<EamEntity> commonListEntity = new CommonListEntity();

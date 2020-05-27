@@ -219,7 +219,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
                     if (!TextUtils.isEmpty(eamCodeStr)) {
                         Map<String, Object> params = new HashMap<>();
                         params.put(Constant.IntentKey.EAM_CODE, eamCodeStr);
-                        presenterRouter.create(EamAPI.class).getEam(params, true,1);
+                        presenterRouter.create(EamAPI.class).getEam(params, true,1,20);
                     }
                     presenterRouter.create(ScoreEamPerformanceAPI.class).getScorPerformance(scoreId);
                 } else {

@@ -76,5 +76,10 @@
           android:screenOrientation="portrait"
           android:theme="@style/AppNoTitleBarTheme"
           android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity android:name=".ui.LubricationRecordsFinishListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
     </application>
 </manifest>

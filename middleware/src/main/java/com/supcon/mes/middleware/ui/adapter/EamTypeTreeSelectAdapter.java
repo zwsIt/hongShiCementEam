@@ -1,4 +1,4 @@
-package com.supcon.mes.module_contact.ui.adapter;
+package com.supcon.mes.middleware.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,14 +8,15 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.supcon.common.view.base.adapter.BaseRecyclerViewAdapter;
+import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.utils.ViewUtil;
 import com.supcon.mes.mbap.view.CustomCircleTextImageView;
 import com.supcon.mes.middleware.EamApplication;
-import com.supcon.mes.middleware.model.bean.DepartmentInfo;
+import com.supcon.mes.middleware.R;
+import com.supcon.mes.middleware.model.bean.Area;
+import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.ICustomTreeView;
-import com.supcon.mes.module_contact.R;
 
 import org.reactivestreams.Publisher;
 
@@ -40,16 +41,16 @@ import static android.view.View.VISIBLE;
  * @Related-classes
  * @Desc
  */
-public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICustomTreeView<DepartmentInfo>> {
-    private List<ICustomTreeView<DepartmentInfo>> contentList = new ArrayList<>();
+public class EamTypeTreeSelectAdapter extends /*BaseRecyclerViewAdapter*/BaseListDataRecyclerViewAdapter<ICustomTreeView<EamType>> {
+    private List<ICustomTreeView<EamType>> contentList = new ArrayList<>();
 
-    public void setRootEntity(ICustomTreeView<DepartmentInfo> customMultiStageEntity) {
+    public void setRootEntity(ICustomTreeView<EamType> customMultiStageEntity) {
         contentList.clear();
         initContentList(customMultiStageEntity);
         notifyDataSetChanged();
     }
 
-    public void initContentList(ICustomTreeView<DepartmentInfo> rootEntity) {
+    public void initContentList(ICustomTreeView<EamType> rootEntity) {
         rootEntity.setExpanded(true);
         contentList.add(rootEntity);
         rootEntity.getChildNodeList().subscribe(list -> contentList.addAll(list));
@@ -58,11 +59,12 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
     private int getLastChildNodeIndex(int pos) {
         int leftIndex = pos;
         int rightIndex = contentList.size() - 1;
-        String fullPathName = getItem(pos).getFullPathName();
+//        String fullPathName = getItem(pos).getFullPathName();
+        String layRec = getItem(pos).getInfo();
         while (true) {
             if (leftIndex >= rightIndex) return leftIndex;
             int midIndex = (leftIndex + rightIndex + 1) / 2;
-            if (contentList.get(midIndex).getFullPathName().contains(fullPathName)) {
+            if (contentList.get(midIndex).getInfo().contains(layRec) /*contentList.get(midIndex).getFullPathName().contains(fullPathName)*/) {
                 leftIndex = midIndex;
             } else {
                 rightIndex = midIndex - 1;
@@ -70,12 +72,13 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
         }
     }
 
-    public ContactDepartTreeSelectAdapter(Context context) {
+    public EamTypeTreeSelectAdapter(Context context) {
         super(context);
     }
 
     private int getSpanSize(int position) {
-        return getItem(position).getFullPathName().split("/").length;
+//        return getItem(position).getFullPathName().split("/").length;
+        return getItem(position).getLayNo();
     }
 
     @Override
@@ -90,7 +93,7 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
     }
 
     @Override
-    public ICustomTreeView<DepartmentInfo> getItem(int position) {
+    public ICustomTreeView<EamType> getItem(int position) {
         return contentList.get(position);
     }
 
@@ -99,14 +102,14 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
         return contentList.size();
     }
 
-    class TreeViewHolder extends BaseRecyclerViewHolder<ICustomTreeView<DepartmentInfo>> {
+    class TreeViewHolder extends BaseRecyclerViewHolder<ICustomTreeView<EamType>> {
 
         @BindByTag("areaName")
         TextView areaName;
 
         @BindByTag("areaIconContainer")
         LinearLayout areaIconContainer;
-        ICustomTreeView<DepartmentInfo> data;
+        ICustomTreeView<Area> data;
         @BindByTag("areaIcon")
         ImageView areaIcon;
         @BindByTag("userIcon")
@@ -122,7 +125,7 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
 
         @Override
         protected int layoutId() {
-            return R.layout.item_depart_tree_contact;
+            return R.layout.item_eam_tree;
         }
 
         @SuppressLint("CheckResult")
@@ -133,18 +136,18 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
                     .throttleFirst(200, TimeUnit.MILLISECONDS)
                     .subscribe(o -> {
 
-                        ICustomTreeView<DepartmentInfo> customMultiStageEntity = getItem(getAdapterPosition());
+                        ICustomTreeView<EamType> customMultiStageEntity = getItem(getAdapterPosition());
                         customMultiStageEntity.changeExpandStatus();
-                        Flowable<List<ICustomTreeView<DepartmentInfo>>> customMultiStageEntities = customMultiStageEntity.getChildNodeList();
+                        Flowable<List<ICustomTreeView<EamType>>> customMultiStageEntities = customMultiStageEntity.getChildNodeList();
                         customMultiStageEntities
-                                .flatMap((Function<List<ICustomTreeView<DepartmentInfo>>,
-                                        Publisher<ICustomTreeView<DepartmentInfo>>>)
+                                .flatMap((Function<List<ICustomTreeView<EamType>>,
+                                        Publisher<ICustomTreeView<EamType>>>)
                                         customMultiStageEntities1 -> Flowable.fromIterable(customMultiStageEntities1))
                                 .subscribe(customMultiStageEntity1 -> customMultiStageEntity1.setExpanded(false));
                         int childNodeListSize = getItem(getAdapterPosition()).getChildListSize();
                         if (!customMultiStageEntity.isExpanded()) {
                             int lastIndex = getLastChildNodeIndex(getAdapterPosition());
-                            List<ICustomTreeView<DepartmentInfo>> sub = new ArrayList<>();
+                            List<ICustomTreeView<EamType>> sub = new ArrayList<>();
                             sub.addAll(contentList.subList(getAdapterPosition() + 1, lastIndex + 1));
                             contentList.removeAll(sub);
                             notifyItemRangeRemoved(getAdapterPosition() + 1, lastIndex - getAdapterPosition());
@@ -160,11 +163,11 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(Object o) throws Exception {
-                            ICustomTreeView<DepartmentInfo> data = getItem(getAdapterPosition());
-                            if (data != null && data.getCurrentEntity() != null && data.getCurrentEntity().userInfo != null) {
+                            ICustomTreeView<EamType> data = getItem(getAdapterPosition());
+                            if (data != null && data.getCurrentEntity() != null && data.getCurrentEntity().eamEntity != null) {
                                 onItemChildViewClick(userIcon, 0, data);
-                                data.getCurrentEntity().userInfo.updateTime = System.currentTimeMillis();
-                                EamApplication.dao().getContactEntityDao().insertOrReplaceInTx(data.getCurrentEntity().userInfo);
+//                                data.getCurrentEntity().eamEntity.updateTime = System.currentTimeMillis();
+                                EamApplication.dao().getEamEntityDao().insertOrReplaceInTx(data.getCurrentEntity().eamEntity);
                             }
                         }
                     });
@@ -174,26 +177,26 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
                     .subscribe(new Consumer<Object>() {
                         @Override
                         public void accept(Object o) throws Exception {
-                            ICustomTreeView<DepartmentInfo> data = getItem(getAdapterPosition());
-                            if (data != null && data.getCurrentEntity() != null && data.getCurrentEntity().userInfo != null) {
+                            ICustomTreeView<EamType> data = getItem(getAdapterPosition());
+                            if (data != null && data.getCurrentEntity() != null && data.getCurrentEntity().eamEntity != null) {
                                 onItemChildViewClick(areaName, 0, data);
-                                data.getCurrentEntity().userInfo.updateTime = System.currentTimeMillis();
-                                EamApplication.dao().getContactEntityDao().insertOrReplaceInTx(data.getCurrentEntity().userInfo);
+//                                data.getCurrentEntity().userInfo.updateTime = System.currentTimeMillis();
+                                EamApplication.dao().getEamEntityDao().insertOrReplaceInTx(data.getCurrentEntity().eamEntity);
                             }
                         }
                     });
         }
 
         @Override
-        protected void update(ICustomTreeView<DepartmentInfo> data) {
+        protected void update(ICustomTreeView<EamType> data) {
             itemView.setClickable(!data.isLeafNode());
             int type = getItemViewType();
 
             if (data.isLeafNode()) {
                 userIcon.setVisibility(VISIBLE);
                 areaIcon.setVisibility(GONE);
-                String name = data.getCurrentEntity().userInfo.getNAME();
-                areaName.setText(name);
+                String name = data.getCurrentEntity().eamEntity.name;
+                areaName.setText(String.format("%s(%s)", name, data.getCurrentEntity().eamEntity.eamAssetCode));
                 userIcon.setText(name.substring((name.length() - 2 < 0 ? 0 : name.length() - 2)));
                 detailInfo.setVisibility(VISIBLE);
 //                detailInfo.setText(data.getCurrentEntity().userInfo.et());
@@ -222,7 +225,7 @@ public class ContactDepartTreeSelectAdapter extends BaseRecyclerViewAdapter<ICus
             );
         }
 
-        public void changeStatus(ICustomTreeView<DepartmentInfo> data) {
+        public void changeStatus(ICustomTreeView<EamType> data) {
             if (data.isRootEntity()) {
 //                areaIcon.setImageResource(R.drawable.ic_multi_home);
             } else if (data.getChildListSize() <= 0) {

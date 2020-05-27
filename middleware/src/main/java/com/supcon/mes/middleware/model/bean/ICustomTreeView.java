@@ -38,4 +38,6 @@ public interface ICustomTreeView<Data> {
 
     List<ICustomTreeView<Data>> getActualChildNodeList();
 
+    Integer getLayNo();
+
 }

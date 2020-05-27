@@ -8,24 +8,25 @@ import io.reactivex.Flowable;
 /**
  * Created by wangshizhan on 2019/12/11
  * Email:wangshizhan@supcom.com
+ * 设备区域展示View
  */
-public class PositionTreeViewEntity implements ICustomTreeView<PositionEntity>, Cloneable {
-    private ICustomTreeView<PositionEntity> fatherNode;
-    private PositionEntity positionEntity;
-    private List<ICustomTreeView<PositionEntity>> childNodeList = new ArrayList<>();
+public class EamAreaTreeViewEntity implements ICustomTreeView<Area>, Cloneable {
+    private ICustomTreeView<Area> fatherNode;
+    private Area mArea;
+    private List<ICustomTreeView<Area>> childNodeList = new ArrayList<>();
     private Boolean isExpanded = false;
 
-    public PositionTreeViewEntity setCurrentEntity(PositionEntity currentEntity) {
-        this.positionEntity = currentEntity;
+    public EamAreaTreeViewEntity setCurrentEntity(Area currentEntity) {
+        this.mArea = currentEntity;
         return this;
     }
 
-    public PositionTreeViewEntity setFatherNode(ICustomTreeView<PositionEntity> fatherNode) {
+    public EamAreaTreeViewEntity setFatherNode(ICustomTreeView<Area> fatherNode) {
         this.fatherNode = fatherNode;
         return this;
     }
 
-    public PositionTreeViewEntity setChildNodeList(List<ICustomTreeView<PositionEntity>> childNodeList) {
+    public EamAreaTreeViewEntity setChildNodeList(List<ICustomTreeView<Area>> childNodeList) {
         this.childNodeList = childNodeList;
         return this;
     }
@@ -38,7 +39,7 @@ public class PositionTreeViewEntity implements ICustomTreeView<PositionEntity>, 
 
     @Override
     public Boolean isRootEntity() {
-        return positionEntity.id == null;
+        return mArea.id == null;
     }
 
     @Override
@@ -48,22 +49,22 @@ public class PositionTreeViewEntity implements ICustomTreeView<PositionEntity>, 
 
     @Override
     public String getInfo() {
-        return positionEntity.layRec;
+        return mArea.layRec;
     }
 
     @Override
     public void setInfo(String info) {
-        positionEntity.layRec = info;
+        mArea.layRec = info;
     }
 
     @Override
     public String getFullPathName() {
-        return positionEntity.fullPathName;
+        return mArea.fullPathName;
     }
 
     @Override
     public void setFullPathName(String fullPathName) {
-        positionEntity.fullPathName = fullPathName;
+        mArea.fullPathName = fullPathName;
     }
 
     @Override
@@ -77,13 +78,13 @@ public class PositionTreeViewEntity implements ICustomTreeView<PositionEntity>, 
     }
 
     @Override
-    public ICustomTreeView<PositionEntity> fatherNode() {
+    public ICustomTreeView<Area> fatherNode() {
         return fatherNode;
     }
 
     @Override
-    public PositionEntity getCurrentEntity() {
-        return positionEntity;
+    public Area getCurrentEntity() {
+        return mArea;
     }
 
     @Override
@@ -94,12 +95,19 @@ public class PositionTreeViewEntity implements ICustomTreeView<PositionEntity>, 
 
 
     @Override
-    public Flowable<List<ICustomTreeView<PositionEntity>>> getChildNodeList() {
+    public Flowable<List<ICustomTreeView<Area>>> getChildNodeList() {
         return Flowable.just(childNodeList)
                 .doOnNext(customMultiStageEntities -> {
                     if (customMultiStageEntities == null)
                         customMultiStageEntities = new ArrayList<>();
                     if (customMultiStageEntities.size() == 0) {
+                        //Todo: For test,
+//                            List<ICustomTreeView<DepartmentInfo>> finalCustomMultiStageEntities = customMultiStageEntities;
+//                            Log.e("ciruy", getCurrentEntity().fullPathName + "\n"
+//                                    + SupPlantApplication.dao()
+//                                    .getTxlEntityDao().queryBuilder()
+//                                    .where(TxlEntityDao.Properties.FULLPATHNAME.eq(getCurrentEntity().fullPathName))
+//                                    .list().toString());
                     }
                 });
 
@@ -107,20 +115,20 @@ public class PositionTreeViewEntity implements ICustomTreeView<PositionEntity>, 
     }
 
     @Override
-    public PositionTreeViewEntity clone() throws CloneNotSupportedException {
-        PositionTreeViewEntity DepartmentTreeViewEntity = (PositionTreeViewEntity) super.clone();
-        DepartmentTreeViewEntity.setChildNodeList(new ArrayList<>());
-        return DepartmentTreeViewEntity;
+    public EamAreaTreeViewEntity clone() throws CloneNotSupportedException {
+        EamAreaTreeViewEntity eamAreaTreeViewEntity = (EamAreaTreeViewEntity) super.clone();
+        eamAreaTreeViewEntity.setChildNodeList(new ArrayList<>());
+        return eamAreaTreeViewEntity;
     }
 
     @Override
-    public List<ICustomTreeView<PositionEntity>> getActualChildNodeList() {
+    public List<ICustomTreeView<Area>> getActualChildNodeList() {
         return childNodeList;
     }
 
     @Override
     public Integer getLayNo() {
-        return positionEntity.layNo;
+        return mArea.layNo;
     }
 
 

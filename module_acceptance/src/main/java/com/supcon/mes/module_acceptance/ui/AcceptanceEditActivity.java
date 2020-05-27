@@ -256,7 +256,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             } else {
                 Map<String, Object> params = new HashMap<>();
                 params.put(Constant.IntentKey.EAM_CODE, eamCodeStr);
-                presenterRouter.create(EamAPI.class).getEam(params, true,1);
+                presenterRouter.create(EamAPI.class).getEam(params, true,1,20);
                 eamCodeStr = null;
             }
         });
@@ -303,7 +303,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             if (mEamEntity != null) {
                 acceptanceEntity.beamID = mEamEntity;
                 acceptanceEntity.dept = mEamEntity.getUseDept();
-                acceptanceEntity.area = mEamEntity.getInstallPlace();
+                acceptanceEntity.area = mEamEntity.installPlace;
             } else {
                 acceptanceEntity.getBeamID().id = -1L;
             }
@@ -353,10 +353,10 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
                 eamCode.setContent(Util.strFormat(eamEntity.eamAssetCode));
                 eamName.setContent(Util.strFormat(eamEntity.name));
                 acceptanceDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
-                acceptanceArea.setContent(Util.strFormat(eamEntity.getInstallPlace().name));
+                acceptanceArea.setContent(eamEntity.installPlace == null ? "--" : eamEntity.installPlace.name);
                 acceptanceEntity.beamID = eamEntity;
                 acceptanceEntity.dept = eamEntity.getUseDept();
-                acceptanceEntity.area = eamEntity.getInstallPlace();
+                acceptanceEntity.area = eamEntity.installPlace;
                 refreshListController.refreshBegin();
             }
         }
@@ -389,10 +389,10 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             eamCode.setContent(Util.strFormat(eamEntity.eamAssetCode));
             eamName.setContent(Util.strFormat(eamEntity.name));
             acceptanceDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
-            acceptanceArea.setContent(Util.strFormat(eamEntity.getInstallPlace().name));
+            acceptanceArea.setContent(eamEntity.installPlace == null ? "--" : eamEntity.installPlace.name);
             acceptanceEntity.beamID = eamEntity;
             acceptanceEntity.dept = eamEntity.getUseDept();
-            acceptanceEntity.area = eamEntity.getInstallPlace();
+            acceptanceEntity.area = eamEntity.installPlace;
             presenterRouter.create(AcceptanceEditAPI.class).getAcceptanceEdit(acceptanceEntity.getBeamID().id);
             return;
         }

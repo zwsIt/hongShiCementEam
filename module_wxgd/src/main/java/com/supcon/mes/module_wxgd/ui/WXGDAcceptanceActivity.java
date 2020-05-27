@@ -496,7 +496,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
                         presenterRouter.create(GenerateAcceptanceAPI.class).generateCheckApply(mWXGDEntity.id != null ? mWXGDEntity.id : 0
                                 , mWXGDEntity.eamID.id != null ? mWXGDEntity.eamID.id : 0
                                 , Util.strFormat2(mWXGDEntity.faultInfo != null ? mWXGDEntity.faultInfo.describe : "")
-                                , mWXGDEntity.eamID.getInstallPlace().id);
+                                , (mWXGDEntity.eamID.installPlace == null ? 0L : mWXGDEntity.eamID.installPlace.id));
                     } else {
                         ToastUtils.show(context, "无设备可生成验收单！");
                     }
@@ -711,17 +711,20 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
             if (list.size() > 0 && mWXGDEntity.repairSum != null && list.size() == mWXGDEntity.repairSum) {
                 // 已存在保存数据
                 currentAcceptChkEntity = (AcceptanceCheckEntity) list.get(list.size() - 1); // 获取最后一个为当前可编辑
-            } else {
-                // 未存在保存数据
-                currentAcceptChkEntity.checkTime = new Date().getTime();
-
+            }
+            if (currentAcceptChkEntity.checkStaff == null) {
                 AccountInfo accountInfo = EamApplication.getAccountInfo();
                 Staff staff = new Staff();
                 staff.id = accountInfo.staffId;
                 staff.name = accountInfo.staffName;
                 staff.code = accountInfo.staffCode;
                 currentAcceptChkEntity.checkStaff = staff;
-
+            }
+            if (currentAcceptChkEntity.checkTime == null) {
+                currentAcceptChkEntity.checkTime = new Date().getTime();
+            }
+            if (currentAcceptChkEntity.checkResult == null){
+                currentAcceptChkEntity.checkResult = checkResultList.get(0); // 默认第一个
             }
             setView();
             acceptanceCheckEntities = currentAcceptChkEntity.toString();
@@ -745,18 +748,6 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 //        if (currentAcceptChkEntity.checkApplyId != null) {
 //            acceptApplyBtn.setVisibility(View.GONE);
 //        }
-        if (currentAcceptChkEntity.checkStaff == null) {
-            AccountInfo accountInfo = EamApplication.getAccountInfo();
-            Staff staff = new Staff();
-            staff.id = accountInfo.staffId;
-            staff.name = accountInfo.staffName;
-            staff.code = accountInfo.staffCode;
-            currentAcceptChkEntity.checkStaff = staff;
-        }
-        if (currentAcceptChkEntity.checkTime == null) {
-            currentAcceptChkEntity.checkTime = new Date().getTime();
-        }
-
         acceptChkStaff.setValue(currentAcceptChkEntity.getCheckStaff().name);
         acceptChkStaffCode.setValue(currentAcceptChkEntity.getCheckStaff().code);
 //        if (currentAcceptChkEntity.getCheckResult().value.equals("不合格")) {

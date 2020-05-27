@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout style="@style/xl_select_linear">
+
+            <ImageView
+                android:id="@+id/areaIv"
+                style="@style/txl_select_icon"
+                android:src="@drawable/ic_location_blue"
+                android:tag="areaIv" />
+            <TextView
+                style="@style/txl_select_text"
+                android:id="@+id/areaTv"
+                android:tag="areaTv"
+                android:text="区域位置" />
+            <include layout="@layout/ly_vertical_line" />
+            <ImageView
+                android:id="@+id/eamTypeIv"
+                style="@style/txl_select_icon"
+                android:src="@drawable/ic_eam_type"
+                android:tag="eamTypeIv" />
+            <TextView
+                style="@style/txl_select_text"
+                android:id="@+id/eamTypeTv"
+                android:tag="eamTypeTv"
+                android:text="设备类型" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line" />
+
+        <LinearLayout style="@style/xl_select_linear">
+
+<!--            <ImageView-->
+<!--                android:id="@+id/ivPosition"-->
+<!--                style="@style/txl_select_icon"-->
+<!--                android:src="@drawable/ic_txl_sub_staff"-->
+<!--                android:tag="ivPosition" />-->
+
+<!--            <TextView-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:id="@+id/position"-->
+<!--                android:tag="position"-->
+<!--                android:text="岗位" />-->
+
+            <include layout="@layout/ly_vertical_line" />
+
+            <ImageView
+                android:id="@+id/allEamIv"
+                style="@style/txl_select_icon"
+                android:src="@drawable/ic_eam_blue"
+                android:tag="allEamIv" />
+
+            <TextView
+                style="@style/txl_select_text"
+                android:id="@+id/allEamTv"
+                android:tag="allEamTv"
+                android:text="所有设备" />
+        </LinearLayout>
+
+        <include layout="@layout/ly_line" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:background="@color/line_gray"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_10"
+        android:text="最近"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/fontSize_16sp" />
+
+    <include layout="@layout/ly_recyclerview_with_scrollbar" />
+</LinearLayout>

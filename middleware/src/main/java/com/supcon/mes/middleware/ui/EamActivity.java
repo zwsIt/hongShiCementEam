@@ -229,7 +229,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 if (isMainEam) {
                     queryParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
                 }
-                presenterRouter.create(EamAPI.class).getEam(queryParam, mNfcCard,pageIndex);
+                presenterRouter.create(EamAPI.class).getEam(queryParam, mNfcCard,pageIndex,20);
             }
         });
         KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () -> {

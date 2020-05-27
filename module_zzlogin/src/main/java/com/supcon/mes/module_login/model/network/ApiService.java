@@ -56,8 +56,8 @@ public interface ApiService {
      * 用户心跳接口
      * @return
      */
-//    @GET("/foundation/refreshSession.action")
-    @GET("/foundation/workbench/timer.action?old=")
+    @GET("/foundation/refreshSession.action")
+//    @GET("/foundation/workbench/timer.action?old=")
     Flowable<JSONObject> heartbeat();
 
    /**

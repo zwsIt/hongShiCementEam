@@ -185,7 +185,8 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @POST("/BEAM/area/area/areaNoCheckListRef-query.action?page.pageSize=500")
+//    @POST("/BEAM/area/area/areaNoCheckListRef-query.action?page.pageNo=1&page.pageSize=5000") // 参照视图
+    @POST("/BEAM/area/area/areaList-query.action?1=1&permissionCode=BEAM_1.0.0_area_arealayout?page.pageNo=1&page.pageSize=5000") // 设备台账-区域位置
     Flowable<AreaListEntity> listArea();
 
     /**
@@ -425,11 +426,12 @@ public interface NetworkAPI {
     Flowable<CommonBAPListEntity<LubricatingPartEntity>> listLubricatePartRef(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
-     * 获取设备类型参照页面
+     * 获取设备类型参照页面（不受权限控制）
      *
      * @return
      */
-    @POST("/BEAM/eamType/eamType/typeRef-query.action?&permissionCode=BEAM_1.0.0_eamType_typeRef&crossCompanyFlag=false")
+//    @POST("/BEAM/eamType/eamType/typeRef-query.action?&permissionCode=BEAM_1.0.0_eamType_typeRef&crossCompanyFlag=false")
+    @POST("/BEAM/eamType/eamType/typePart-query.action?1=1&permissionCode=BEAM_1.0.0_eamType_typeLayout")  // 设备台账-设备类型
     Flowable<CommonBAPListEntity<EamType>> listEamTypeRef(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**

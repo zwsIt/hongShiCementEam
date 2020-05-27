@@ -83,13 +83,8 @@ public class ContactCommonFragment extends BaseRefreshRecyclerFragment<ContactEn
 
         refreshListController.setAutoPullDownRefresh(false);
         refreshListController.setPullDownRefreshEnabled(false);
-        refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
-            @Override
-            public void onRefresh(int pageIndex) {
-                presenterRouter.create(ContactAPI.class).getContactList(pageIndex, 20, getSearchType(),
-                        (title.equals("同部门") || title.equals("我的下属")) ? EamApplication.getAccountInfo().departmentName : "");
-            }
-        });
+        refreshListController.setOnRefreshPageListener(pageIndex -> presenterRouter.create(ContactAPI.class).getContactList(pageIndex, 20, getSearchType(),
+                (title.equals("同部门") || title.equals("我的下属")) ? EamApplication.getAccountInfo().departmentName : ""));
     }
 
     @Override

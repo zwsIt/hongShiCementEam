@@ -234,8 +234,9 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                             // 通过摘要summary解析停电tableInfoId
                                             if (!TextUtils.isEmpty(item.summary)) {
                                                 try {
-                                                    if (GsonUtil.gsonToMaps(item.summary).get("offApplyTableinfoid") != null) {
-                                                        Double offApplyTableInfoId = (Double) GsonUtil.gsonToMaps(item.summary).get("offApplyTableinfoid");
+                                                    String json = item.summary.substring(item.summary.indexOf("*") +1);
+                                                    if (GsonUtil.gsonToMaps(json).get("offApplyTableinfoid") != null) {
+                                                        Double offApplyTableInfoId = (Double) GsonUtil.gsonToMaps(json).get("offApplyTableinfoid");
                                                         bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, Objects.requireNonNull(offApplyTableInfoId).longValue()); // 停电作业票tableInfoId
                                                     }
                                                 } catch (Exception e) {

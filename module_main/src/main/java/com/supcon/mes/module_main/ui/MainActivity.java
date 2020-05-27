@@ -18,6 +18,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AreaController;
 import com.supcon.mes.middleware.controller.BuildVersionController;
 import com.supcon.mes.middleware.controller.DepartmentController;
+import com.supcon.mes.middleware.controller.EamController;
 import com.supcon.mes.middleware.controller.OnlineStaffListController;
 import com.supcon.mes.middleware.controller.PositionController;
 import com.supcon.mes.middleware.controller.RepairGroupController;
@@ -59,8 +60,8 @@ import java.util.List;
  */
 
 @Router(Constant.Router.MAIN_REDLION)
-@Controller(value = {BuildVersionController.class,
-        SystemCodeController.class, AreaController.class, RepairGroupController.class,
+@Controller(value = {BuildVersionController.class,AreaController.class, EamController.class,
+        SystemCodeController.class, RepairGroupController.class,
         UserInfoListController.class, DepartmentController.class, DeviceTokenController.class,
         SilentLoginController.class, PendingController.class, OnlineStaffListController.class,
         PositionController.class})

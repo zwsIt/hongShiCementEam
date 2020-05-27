@@ -125,5 +125,10 @@ public class DepartmentTreeViewEntity implements ICustomTreeView<DepartmentInfo>
         return childNodeList;
     }
 
+    @Override
+    public Integer getLayNo() {
+        return departmentInfo.layNo;
+    }
+
 
 }

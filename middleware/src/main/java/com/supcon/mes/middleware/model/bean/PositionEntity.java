@@ -27,6 +27,7 @@ public class PositionEntity extends BaseEntity implements CommonSearchEntity, Cl
     public String searchPinyin;
     public String layRec;
     public String fullPathName;
+    public Integer layNo; // 层次
     public long cid;
 
     @Convert(converter = DepartmentPositionConverter.class, columnType = String.class)
@@ -38,15 +39,16 @@ public class PositionEntity extends BaseEntity implements CommonSearchEntity, Cl
     @Transient
     public ContactEntity userInfo;
 
-    @Generated(hash = 1150586148)
+    @Generated(hash = 745183119)
     public PositionEntity(Long id, String name, String code, String searchPinyin, String layRec, String fullPathName,
-                          long cid, DepartmentPosition department) {
+            Integer layNo, long cid, DepartmentPosition department) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.searchPinyin = searchPinyin;
         this.layRec = layRec;
         this.fullPathName = fullPathName;
+        this.layNo = layNo;
         this.cid = cid;
         this.department = department;
     }
@@ -168,6 +170,14 @@ public class PositionEntity extends BaseEntity implements CommonSearchEntity, Cl
 
     public void setDepartment(DepartmentPosition department) {
         this.department = department;
+    }
+
+    public Integer getLayNo() {
+        return this.layNo;
+    }
+
+    public void setLayNo(Integer layNo) {
+        this.layNo = layNo;
     }
 
 

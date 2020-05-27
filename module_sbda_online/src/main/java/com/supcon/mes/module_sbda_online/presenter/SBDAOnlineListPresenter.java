@@ -72,7 +72,7 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.pageSize", 20);
         pageQueryParams.put("page.maxPageSize", 500);
-        mCompositeSubscription.add(SBDAOnlineHttpClient.getPartForview(fastQuery, pageQueryParams)
+        mCompositeSubscription.add( SBDAOnlineHttpClient.getPartForview(fastQuery, pageQueryParams)
                 .onErrorReturn(throwable -> {
                     SBDAOnlineListEntity sbdaOnlineListEntity = new SBDAOnlineListEntity();
                     sbdaOnlineListEntity.errMsg = throwable.toString();

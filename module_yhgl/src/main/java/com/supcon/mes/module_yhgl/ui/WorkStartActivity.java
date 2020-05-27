@@ -98,6 +98,8 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
 
         mWorkStartDTO = new WorkStartDTO();
         mWorkStartDTO.setInitStaffId(EamApplication.getAccountInfo().staffId);
+        mWorkStartDTO.setPriority("BEAM2007/001");
+        workPriority.setContent("普通");
         mWorkStartDTOInit = GsonUtil.gsonString(mWorkStartDTO);
 
         mDatePickController = new DatePickController(this);
@@ -155,6 +157,8 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
             bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
             bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
             bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamCode.getTag().toString());
+            bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+//            IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
             IntentRouter.go(context, Constant.Router.EAM, bundle);
         });
         workContactStaff.setOnChildViewClickListener((childView, action, obj) -> {

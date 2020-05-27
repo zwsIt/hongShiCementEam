@@ -35,6 +35,7 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.DataModule;
+import com.supcon.mes.middleware.controller.CompanyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.Company;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorization;
@@ -75,7 +76,7 @@ import io.reactivex.schedulers.Schedulers;
 
 @Router(Constant.Router.LOGIN)
 @Presenter(value = {LoginPresenter.class, ZhiZhiUrlQueryPresenter.class, MinePresenter.class})
-@Controller(DeviceTokenController.class)
+@Controller(value = {CompanyController.class, DeviceTokenController.class})
 public class LoginActivity extends BaseControllerActivity implements LoginContract.View, ZhiZhiUrlQueryContract.View, MineContract.View {
 
     @BindByTag("companySpinner")
@@ -263,11 +264,9 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
     protected void onResume() {
         super.onResume();
 
-
         if (loginInvalid) {
-            SnackbarHelper.showError(rootView, "登陆已失效，请重新登陆！");
+            ToastUtils.show(context, "登陆已失效，请重新登陆！");
         }
-
 
         HeartBeatService.stopLoginLoop(this);
 

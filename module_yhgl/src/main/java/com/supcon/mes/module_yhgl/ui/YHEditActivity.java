@@ -961,8 +961,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         //处理区域位置
         yhEditArea.setEditable(false);
-        yhEditArea.setSpinner(eamEntity.getInstallPlace().name);
-        mYHEntity.areaInstall = eamEntity.getInstallPlace();
+        yhEditArea.setSpinner(eamEntity.installPlace == null ? "" : eamEntity.installPlace.name);
+        mYHEntity.areaInstall = eamEntity.installPlace;
 
     }
 

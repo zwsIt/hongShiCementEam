@@ -161,12 +161,12 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
             setTextValue(eamCode, sbdaOnlineEntity.eamAssetCode);
             setTextValue(eamName, sbdaOnlineEntity.name);
             setTextValue(eamModel, sbdaOnlineEntity.model);
-            setTextValue(eamType, sbdaOnlineEntity.getEamType().name);
+            setTextValue(eamType, sbdaOnlineEntity.eamType == null ? "" : sbdaOnlineEntity.eamType.name);
             setTextValue(eamState, EAMStatusHelper.getType(sbdaOnlineEntity.state));
             setTextValue(eamUserDept, sbdaOnlineEntity.getUseDept().name);
             setTextValue(eamDutyStaff, sbdaOnlineEntity.getDutyStaff().name);
             setTextValue(eamAbc, sbdaOnlineEntity.abc == null ? "" : sbdaOnlineEntity.abc.value);
-            setTextValue(installPlace, sbdaOnlineEntity.getInstallPlace().name);
+            setTextValue(installPlace, sbdaOnlineEntity.installPlace == null ? "" : sbdaOnlineEntity.installPlace.name);
             setTextValue(areaNum, sbdaOnlineEntity.areaNum);
             setTextValue(electricStaff, sbdaOnlineEntity.getElectricStaff().name);
             setTextValue(inspectionStaff, sbdaOnlineEntity.getInspectionStaff().name);

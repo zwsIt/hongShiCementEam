@@ -434,7 +434,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         repairAdvise.setContent(mWXGDEntity.repairAdvise);
         chargeStaff.setValue(Util.strFormat2(mWXGDEntity.getChargeStaff().name));
         repairGroup.setValue(mWXGDEntity.repairGroup == null ? "" : mWXGDEntity.repairGroup.name);
-        planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planStartDate, "yyyy-MM-dd HH:mm:ss"));
+        planStartTime.setDate(mWXGDEntity.planStartDate == null ? DateUtil.dateTimeFormat(new Date().getTime()) : DateUtil.dateFormat(mWXGDEntity.planStartDate, "yyyy-MM-dd HH:mm:ss"));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
@@ -1010,7 +1010,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
         eamCodeEdit.setContent(eamEntity.eamAssetCode);
         eamNameEdit.setContent(eamEntity.name);
-        eamAreaEdit.setContent(eamEntity.getInstallPlace().name);
+        eamAreaEdit.setContent(eamEntity.installPlace == null ? "" : eamEntity.installPlace.name);
 
         mWXGDEntity.eamID.id = eamEntity.id;
         mWXGDEntity.eamID.code = eamEntity.code;
@@ -1038,6 +1038,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         List<WXGDEntity> wxgdEntityList = entity.result;
         if (wxgdEntityList.size() > 0) {
             mWXGDEntity = wxgdEntityList.get(0);
+            if (mWXGDEntity.planStartDate == null){ mWXGDEntity.planStartDate = new Date().getTime();} // 计划开始时间默认当前系统时间
             initTableHeadView();
             initLink();
             initTableHeadData();

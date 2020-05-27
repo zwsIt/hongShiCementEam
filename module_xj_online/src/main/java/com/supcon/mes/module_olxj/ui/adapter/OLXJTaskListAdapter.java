@@ -247,9 +247,8 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
 
             mOLXJAreaListAdapter.clear();
 
-
             if (mOLXJAreaEntities == null || mOLXJAreaEntities.size() == 0) {
-                ToastUtils.show(context,"无巡检区域数据，请检查系统或联系相关人员咨询 ");
+//                ToastUtils.show(context,"无巡检区域数据，请检查系统或联系相关人员咨询 ");
                 return;
             }
 

@@ -16,8 +16,7 @@ import com.supcon.mes.module_contact.R;
  * @Desc
  */
 @Router(value = Constant.Router.CONTACT_DEPART_TREE_SELECT)
-public class ContactDepartTreeSelectActivity extends BasePresenterActivity
-{
+public class ContactDepartTreeSelectActivity extends BasePresenterActivity {
     @Override
     protected void initView() {
         super.initView();

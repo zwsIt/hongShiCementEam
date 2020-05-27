@@ -24,7 +24,7 @@ public class HttpErrorReturnUtil {
         String msg = throwable.toString();
         if (throwable instanceof HttpException) {
             ResponseBody responseBody = ((HttpException) throwable).response().errorBody();
-            if (responseBody != null) {
+            if (responseBody != null && responseBody.charStream() != null) {
                 /*try {
                     return responseBody.string();
                 } catch (IOException e) {

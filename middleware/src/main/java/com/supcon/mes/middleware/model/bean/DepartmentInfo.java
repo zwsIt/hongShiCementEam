@@ -24,6 +24,7 @@ public class DepartmentInfo extends BaseEntity implements CommonSearchEntity, Cl
     public String searchPinyin;
     public String layRec;
     public String fullPathName;
+    public Integer layNo; // 层次
     public long useFre;
     public long cid;
 
@@ -34,15 +35,16 @@ public class DepartmentInfo extends BaseEntity implements CommonSearchEntity, Cl
     public ContactEntity userInfo;
 
 
-    @Generated(hash = 502187093)
+    @Generated(hash = 886111425)
     public DepartmentInfo(Long id, String name, String code, String searchPinyin, String layRec, String fullPathName,
-            long useFre, long cid) {
+            Integer layNo, long useFre, long cid) {
         this.id = id;
         this.name = name;
         this.code = code;
         this.searchPinyin = searchPinyin;
         this.layRec = layRec;
         this.fullPathName = fullPathName;
+        this.layNo = layNo;
         this.useFre = useFre;
         this.cid = cid;
     }
@@ -167,6 +169,14 @@ public class DepartmentInfo extends BaseEntity implements CommonSearchEntity, Cl
 
         }
         return this.parentId;
+    }
+
+    public Integer getLayNo() {
+        return this.layNo;
+    }
+
+    public void setLayNo(Integer layNo) {
+        this.layNo = layNo;
     }
 
 }

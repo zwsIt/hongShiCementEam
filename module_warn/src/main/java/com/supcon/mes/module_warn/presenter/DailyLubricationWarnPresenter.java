@@ -47,13 +47,13 @@ public class DailyLubricationWarnPresenter extends DailyLubricationWarnContract.
             paramsEam.put(Constant.BAPQuery.EAM_ID, Objects.requireNonNull(params.get(Constant.BAPQuery.EAM_ID)));
         }
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsEam, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
-        if (params.containsKey(Constant.BAPQuery.NAME)) {
-            Map<String, Object> paramsName = new HashMap<>();
-            paramsName.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
-            paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
-            JoinSubcondEntity joinSubcondEntityStaff = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "base_staff,ID,EAM_BaseInfo,INSPECTION_STAFF");
-            joinSubcondEntity.subconds.add(joinSubcondEntityStaff);
-        }
+//        if (params.containsKey(Constant.BAPQuery.NAME)) {  // 通过设备权限控制，不需要查询设备巡检责任人筛选
+//            Map<String, Object> paramsName = new HashMap<>();
+//            paramsName.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));
+//            paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
+//            JoinSubcondEntity joinSubcondEntityStaff = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "base_staff,ID,EAM_BaseInfo,INSPECTION_STAFF");
+//            joinSubcondEntity.subconds.add(joinSubcondEntityStaff);
+//        }
         fastQuery.subconds.add(joinSubcondEntity);
         fastQuery.modelAlias = "jWXItem";
         pageQueryParams.put("page.pageSize", 500);
