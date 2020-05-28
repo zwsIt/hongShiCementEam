@@ -166,7 +166,7 @@ public class EamAreaTreeSelectAdapter extends /*BaseRecyclerViewAdapter*/BaseLis
                             ICustomTreeView<Area> data = getItem(getAdapterPosition());
                             if (data != null && data.getCurrentEntity() != null && data.getCurrentEntity().eamEntity != null) {
                                 onItemChildViewClick(userIcon, 0, data);
-//                                data.getCurrentEntity().eamEntity.updateTime = System.currentTimeMillis();
+                                data.getCurrentEntity().eamEntity.updateTime = System.currentTimeMillis();
                                 EamApplication.dao().getEamEntityDao().insertOrReplaceInTx(data.getCurrentEntity().eamEntity);
                             }
                         }
@@ -180,7 +180,7 @@ public class EamAreaTreeSelectAdapter extends /*BaseRecyclerViewAdapter*/BaseLis
                             ICustomTreeView<Area> data = getItem(getAdapterPosition());
                             if (data != null && data.getCurrentEntity() != null && data.getCurrentEntity().eamEntity != null) {
                                 onItemChildViewClick(areaName, 0, data);
-//                                data.getCurrentEntity().userInfo.updateTime = System.currentTimeMillis();
+                                data.getCurrentEntity().eamEntity.updateTime = System.currentTimeMillis();
                                 EamApplication.dao().getEamEntityDao().insertOrReplaceInTx(data.getCurrentEntity().eamEntity);
                             }
                         }

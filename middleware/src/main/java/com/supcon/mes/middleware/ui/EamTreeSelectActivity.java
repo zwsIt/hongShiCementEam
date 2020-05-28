@@ -21,6 +21,7 @@ import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.ui.fragment.EamPortalSelectFragment;
+import com.supcon.mes.middleware.ui.fragment.EamSearchSelectFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -51,7 +52,7 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
     CustomSearchView searchView;
 
     private EamPortalSelectFragment mEamPortalSelectFragment; // 设备选择门户入口
-//    private ContactSearchFragment mContactSearchFragment;
+    private EamSearchSelectFragment mEamSearchSelectFragment; // 设备搜索入口
 //    private ContactCommonFragment mContactCommonFragment;
 
     private String searchTag;
@@ -70,11 +71,12 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
     @Override
     public void createFragments() {
         mEamPortalSelectFragment = new EamPortalSelectFragment();
-//        mContactSearchFragment = new ContactSearchFragment();
+        mEamSearchSelectFragment = new EamSearchSelectFragment();
 //        mContactCommonFragment = new ContactCommonFragment();
         fragments.add(mEamPortalSelectFragment);
+        fragments.add(mEamSearchSelectFragment);
 //        fragments.add(mContactCommonFragment);
-//        fragments.add(mContactSearchFragment);
+
     }
 
 
@@ -88,7 +90,7 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
             rightBtn.setVisibility(View.VISIBLE);
             rightBtn.setImageResource(R.drawable.sl_top_submit);
         }
-        showFragment(2);
+        showFragment(1);
 //        showFragment(1);
         showFragment(0);
     }
@@ -131,8 +133,6 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-
-
                         Map<String, ContactEntity> contactEntityMap = null;
 //                        if (selectIndex == 0) {
 //                            contactEntityMap = mEamPortalSelectFragment.getContactAdapter().getSelectStaffs();
@@ -173,19 +173,16 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 
     @SuppressLint("CheckResult")
     private void doSearch(String searchContent) {
-
         Flowable.timer(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        showFragment(2);
-//                        mContactSearchFragment.doSearch(searchContent);
+                        showFragment(1);
+                        mEamSearchSelectFragment.doSearch(searchContent);
                     }
                 });
-
     }
-
 
     public void showFragment(int selectIndex, String title) {
         showFragment(selectIndex);
@@ -198,12 +195,10 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 
     @Override
     public void onBackPressed() {
-
         if (selectIndex != 0) {
             showFragment(0);
             return;
         }
-
         super.onBackPressed();
     }
 }

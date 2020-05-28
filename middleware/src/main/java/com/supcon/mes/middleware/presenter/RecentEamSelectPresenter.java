@@ -7,6 +7,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.middleware.model.bean.ContactEntityDao;
 import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.bean.EamEntityDao;
 import com.supcon.mes.middleware.model.contract.RecentEamSelectContract;
 
 import java.util.List;
@@ -22,22 +23,21 @@ import io.reactivex.functions.Consumer;
  */
 public class RecentEamSelectPresenter extends RecentEamSelectContract.Presenter {
 
-
 //    private static final long MONTH_TIME = 2592000000L;
 
     @SuppressLint("CheckResult")
     @Override
     public void getRecentEamList(int pageNo, int pageSize, String content) {
-//        Flowable.timer(100, TimeUnit.MILLISECONDS)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(aLong -> {
-//                    List<EamEntity>  recentContactEntities = EamApplication.dao().getContactEntityDao().queryBuilder()
-//                            .where(ContactEntityDao.Properties.UpdateTime.ge(1L))
-//                            .orderDesc(ContactEntityDao.Properties.UpdateTime)
-//                            .offset((pageNo-1)* pageSize)
-//                            .limit(pageSize)
-//                            .list();
-//                    getView().getRecentContactListSuccess(recentContactEntities);
-//                });
+        Flowable.timer(100, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aLong -> {
+                    List<EamEntity>  recentEamList = EamApplication.dao().getEamEntityDao().queryBuilder()
+                            .where(EamEntityDao.Properties.UpdateTime.ge(1L))
+                            .orderDesc(EamEntityDao.Properties.UpdateTime)
+                            .offset((pageNo-1)* pageSize)
+                            .limit(pageSize)
+                            .list();
+                    getView().getRecentEamListSuccess(recentEamList);
+                });
     }
 }

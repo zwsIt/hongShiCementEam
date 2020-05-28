@@ -79,8 +79,7 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
 
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "无记录"));
         refreshListController.setPullDownRefreshEnabled(true);
-        refreshListController.setOnRefreshPageListener(pageIndex -> doFilter(pageIndex));
-        refreshListController.setAutoPullDownRefresh(false);
+        refreshListController.setAutoPullDownRefresh(true);
     }
 
     @Override
@@ -102,7 +101,7 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
     @Override
     protected void initListener() {
         super.initListener();
-
+        refreshListController.setOnRefreshPageListener(pageIndex -> doFilter(pageIndex));
         areaIv.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putBoolean(Constant.IntentKey.IS_SELECT, isSelect);
@@ -156,15 +155,14 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
 
     @Override
     public void getRecentEamListSuccess(List entity) {
-
-        List<ContactEntity> contactEntities = entity;
-        refreshListController.refreshComplete(contactEntities);
+//        List<ContactEntity> contactEntities = entity;
+        refreshListController.refreshComplete(entity);
     }
 
     @Override
     public void getRecentEamListFailed(String errorMsg) {
         ToastUtils.show(context, errorMsg);
-        refreshListController.refreshComplete(null);
+        refreshListController.refreshComplete();
     }
 
 //    public ContactAdapter getContactAdapter() {

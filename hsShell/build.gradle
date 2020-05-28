@@ -1,5 +1,10 @@
 import java.text.SimpleDateFormat
 
+tasks.whenTaskAdded{ task->
+    if(task.name == "lint") {
+        task.enabled=false
+    }
+}
 apply plugin: 'com.android.application'
 
 

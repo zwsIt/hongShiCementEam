@@ -27,6 +27,8 @@
             <ImageView
                 android:id="@+id/eamTypeIv"
                 style="@style/txl_select_icon"
+                android:maxHeight="@dimen/dp_30"
+                android:maxWidth="@dimen/dp_30"
                 android:src="@drawable/ic_eam_type"
                 android:tag="eamTypeIv" />
             <TextView

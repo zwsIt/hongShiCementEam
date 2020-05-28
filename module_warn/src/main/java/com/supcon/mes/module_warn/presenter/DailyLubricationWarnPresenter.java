@@ -2,6 +2,7 @@ package com.supcon.mes.module_warn.presenter;
 
 import android.text.TextUtils;
 
+import com.supcon.mes.mbap.network.Api;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
@@ -56,15 +57,16 @@ public class DailyLubricationWarnPresenter extends DailyLubricationWarnContract.
 //        }
         fastQuery.subconds.add(joinSubcondEntity);
         fastQuery.modelAlias = "jWXItem";
-        pageQueryParams.put("page.pageSize", 500);
+        pageQueryParams.put("page.pageSize", 5000);
         pageQueryParams.put("page.maxPageSize", 500);
-
+        Api.getInstance().setTimeOut(600000);
         mCompositeSubscription.add(EarlyWarnHttpClient.getLubrications(fastQuery, pageQueryParams)
                 .onErrorReturn(throwable -> {
                     DailyLubricateTaskListEntity lubricationWarnListEntity = new DailyLubricateTaskListEntity();
                     lubricationWarnListEntity.errMsg = throwable.toString();
                     return lubricationWarnListEntity;
                 }).subscribe(lubricationWarnListEntity -> {
+                    Api.getInstance().setTimeOut(300000);
                     if (TextUtils.isEmpty(lubricationWarnListEntity.errMsg)) {
                         getView().getLubricationsSuccess(lubricationWarnListEntity);
                     } else {

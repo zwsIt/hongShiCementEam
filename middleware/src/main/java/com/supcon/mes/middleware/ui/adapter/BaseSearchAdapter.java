@@ -24,7 +24,7 @@ import java.util.Objects;
  * Email:ciruy_victory@gmail.com
  */
 
-public class BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSearchEntity> {
+public class    BaseSearchAdapter extends BaseListDataRecyclerViewAdapter<CommonSearchEntity> {
     
     private static final int[] COLORS = {R.color.random_1, R.color.random_2, R.color.random_3};
     public static final int SINGLE = 0;

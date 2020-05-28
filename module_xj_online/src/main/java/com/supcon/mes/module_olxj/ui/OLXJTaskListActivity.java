@@ -666,7 +666,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 //        Gson gson = new Gson();
 //        nfcJson = gson.fromJson(nfcEvent.getNfc(),Map.class);
 
-        dealSign((String) nfcJson.get("textRecord"));
+        dealSign((String) nfcJson.get("id"));
     }
 
     /**

@@ -90,6 +90,10 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
 
     @SerializedName(value = "eamAssetcode", alternate = {"eamAssetCode"})
     public String eamAssetCode; // 设备编码
+
+
+    public long updateTime; // 本地近期使用时间
+
     /**
      * Used to resolve relations
      */
@@ -102,12 +106,12 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     private transient EamEntityDao myDao;
 
 
-    @Generated(hash = 729480532)
+    @Generated(hash = 825639564)
     public EamEntity(Long id, String code, String name, String state, String stateForDisplay,
             Long eamTypeId, Long areaId, String specif, String model, Long useDate, Long produceDate,
             String produceCode, String produceFirm, String installFirm, String areaNum, Long fileDate,
             Float useYear, boolean haveRunState, String specialtyNew, Long validDate, float score,
-            String eamAssetCode) {
+            String eamAssetCode, long updateTime) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -130,6 +134,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
         this.validDate = validDate;
         this.score = score;
         this.eamAssetCode = eamAssetCode;
+        this.updateTime = updateTime;
     }
 
     @Generated(hash = 933313075)
@@ -488,6 +493,14 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
             eamTypeId = eamType == null ? null : eamType.getId();
             eamType__resolvedKey = eamTypeId;
         }
+    }
+
+    public long getUpdateTime() {
+        return this.updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
     }
 
     /** called by internal mechanisms, do not call yourself. */

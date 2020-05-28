@@ -152,7 +152,7 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
         refreshListController.setOnRefreshPageListener((page) -> {
-            queryParam.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
+//            queryParam.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
             Map<String, Object> pageQueryParams = new HashMap<>();
             pageQueryParams.put("page.pageNo", page);
             presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam, pageQueryParams);

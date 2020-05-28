@@ -135,7 +135,6 @@ public class EamTypeTreeSelectAdapter extends /*BaseRecyclerViewAdapter*/BaseLis
             RxView.clicks(itemView)
                     .throttleFirst(200, TimeUnit.MILLISECONDS)
                     .subscribe(o -> {
-
                         ICustomTreeView<EamType> customMultiStageEntity = getItem(getAdapterPosition());
                         customMultiStageEntity.changeExpandStatus();
                         Flowable<List<ICustomTreeView<EamType>>> customMultiStageEntities = customMultiStageEntity.getChildNodeList();
@@ -166,8 +165,8 @@ public class EamTypeTreeSelectAdapter extends /*BaseRecyclerViewAdapter*/BaseLis
                             ICustomTreeView<EamType> data = getItem(getAdapterPosition());
                             if (data != null && data.getCurrentEntity() != null && data.getCurrentEntity().eamEntity != null) {
                                 onItemChildViewClick(userIcon, 0, data);
-//                                data.getCurrentEntity().eamEntity.updateTime = System.currentTimeMillis();
-                                EamApplication.dao().getEamEntityDao().insertOrReplaceInTx(data.getCurrentEntity().eamEntity);
+                                data.getCurrentEntity().eamEntity.updateTime = System.currentTimeMillis();
+                                EamApplication.dao().getEamEntityDao().save(data.getCurrentEntity().eamEntity);
                             }
                         }
                     });
@@ -180,8 +179,8 @@ public class EamTypeTreeSelectAdapter extends /*BaseRecyclerViewAdapter*/BaseLis
                             ICustomTreeView<EamType> data = getItem(getAdapterPosition());
                             if (data != null && data.getCurrentEntity() != null && data.getCurrentEntity().eamEntity != null) {
                                 onItemChildViewClick(areaName, 0, data);
-//                                data.getCurrentEntity().userInfo.updateTime = System.currentTimeMillis();
-                                EamApplication.dao().getEamEntityDao().insertOrReplaceInTx(data.getCurrentEntity().eamEntity);
+                                data.getCurrentEntity().eamEntity.updateTime = System.currentTimeMillis();
+                                EamApplication.dao().getEamEntityDao().save(data.getCurrentEntity().eamEntity);
                             }
                         }
                     });
