@@ -111,68 +111,54 @@ public class ContactSelectActivity extends BaseMultiFragmentActivity {
         RxTextView.textChanges(searchView.editText())
                 .skipInitialValue()
                 .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<CharSequence>() {
-                    @Override
-                    public void accept(CharSequence charSequence) throws Exception {
-
-                        if (TextUtils.isEmpty(charSequence)) {
-                            showFragment(0);
-                        } else {
-                            doSearch(charSequence.toString());
-                        }
+                .subscribe(charSequence -> {
+                    if (TextUtils.isEmpty(charSequence)) {
+                        showFragment(0);
+                    } else {
+                        doSearch(charSequence.toString());
                     }
                 });
 
         RxView.clicks(leftBtn)
                 .throttleFirst(200, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        back();
-                    }
-                });
+                .subscribe(o -> back());
 
         RxView.clicks(rightBtn)
                 .throttleFirst(200, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
+                .subscribe(o -> {
 
+                    Map<String, ContactEntity> contactEntityMap = null;
+                    if (selectIndex == 0) {
+                        contactEntityMap = mContactSelectFragment.getContactAdapter().getSelectStaffs();
 
-                        Map<String, ContactEntity> contactEntityMap = null;
-                        if (selectIndex == 0) {
-                            contactEntityMap = mContactSelectFragment.getContactAdapter().getSelectStaffs();
-
-                        } else if (selectIndex == 1) {
-                            contactEntityMap = mContactCommonFragment.getContactAdapter().getSelectStaffs();
-                        } else if (selectIndex == 2) {
-                            contactEntityMap = mContactSearchFragment.getContactAdapter().getSelectStaffs();
-                        }
-
-
-                        if (contactEntityMap == null) {
-                            ToastUtils.show(context, "请选择人员！");
-                        }
-
-                        CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
-                        commonSearchEvent.flag = searchTag;
-                        List<CommonSearchEntity> list = new LinkedList<>();
-                        for (Map.Entry<String, ContactEntity> entry : contactEntityMap.entrySet()) {
-                            ContactEntity value = entry.getValue();
-                            CommonSearchStaff commonSearchStaff = new CommonSearchStaff();
-                            commonSearchStaff.id = value.getSTAFFID();
-                            commonSearchStaff.code = value.getCODE();
-                            commonSearchStaff.name = value.getNAME();
-                            commonSearchStaff.pinyin = value.getSearchPinyin();
-                            commonSearchStaff.department = value.getDEPARTMENTNAME();
-                            commonSearchStaff.mainPosition = value.getPOSITIONNAME();
-                            list.add(commonSearchStaff);
-                        }
-                        commonSearchEvent.mCommonSearchEntityList = list;
-
-                        EventBus.getDefault().post(commonSearchEvent);
-                        finish();
+                    } else if (selectIndex == 1) {
+                        contactEntityMap = mContactCommonFragment.getContactAdapter().getSelectStaffs();
+                    } else if (selectIndex == 2) {
+                        contactEntityMap = mContactSearchFragment.getContactAdapter().getSelectStaffs();
                     }
+
+                    if (contactEntityMap == null) {
+                        ToastUtils.show(context, "请选择人员！");
+                    }
+
+                    CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
+                    commonSearchEvent.flag = searchTag;
+                    List<CommonSearchEntity> list = new LinkedList<>();
+                    for (Map.Entry<String, ContactEntity> entry : contactEntityMap.entrySet()) {
+                        ContactEntity value = entry.getValue();
+                        CommonSearchStaff commonSearchStaff = new CommonSearchStaff();
+                        commonSearchStaff.id = value.getSTAFFID();
+                        commonSearchStaff.code = value.getCODE();
+                        commonSearchStaff.name = value.getNAME();
+                        commonSearchStaff.pinyin = value.getSearchPinyin();
+                        commonSearchStaff.department = value.getDEPARTMENTNAME();
+                        commonSearchStaff.mainPosition = value.getPOSITIONNAME();
+                        list.add(commonSearchStaff);
+                    }
+                    commonSearchEvent.mCommonSearchEntityList = list;
+
+                    EventBus.getDefault().post(commonSearchEvent);
+                    finish();
                 });
 
     }

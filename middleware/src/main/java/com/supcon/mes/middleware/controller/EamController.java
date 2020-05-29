@@ -50,6 +50,7 @@ public class EamController extends BasePresenterController implements EamContrac
         EamEntity eamEntity;
         for (Object object : entity.result){
             eamEntity = (EamEntity) object;
+            eamEntity.setPinYin(PinYinUtils.getPinyin(eamEntity.name));
             eamEntity.setAreaId(eamEntity.installPlace == null ? 0L : eamEntity.installPlace.id);
             eamEntity.setEamTypeId(eamEntity.eamType == null ? 0L : eamEntity.eamType.id);
         }

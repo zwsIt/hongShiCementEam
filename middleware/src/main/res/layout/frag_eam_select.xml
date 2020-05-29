@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout style="@style/xl_select_linear">
@@ -16,26 +16,26 @@
             <ImageView
                 android:id="@+id/areaIv"
                 style="@style/txl_select_icon"
-                android:src="@drawable/ic_location_blue"
+                android:src="@drawable/middleware_ic_area"
                 android:tag="areaIv" />
             <TextView
                 style="@style/txl_select_text"
                 android:id="@+id/areaTv"
                 android:tag="areaTv"
-                android:text="区域位置" />
+                android:text="@string/middleware_area" />
             <include layout="@layout/ly_vertical_line" />
             <ImageView
                 android:id="@+id/eamTypeIv"
                 style="@style/txl_select_icon"
                 android:maxHeight="@dimen/dp_30"
                 android:maxWidth="@dimen/dp_30"
-                android:src="@drawable/ic_eam_type"
+                android:src="@drawable/middleware_ic_eam_type"
                 android:tag="eamTypeIv" />
             <TextView
                 style="@style/txl_select_text"
                 android:id="@+id/eamTypeTv"
                 android:tag="eamTypeTv"
-                android:text="设备类型" />
+                android:text="@string/middleware_eam_type" />
         </LinearLayout>
 
         <include layout="@layout/ly_line" />
@@ -60,14 +60,14 @@
             <ImageView
                 android:id="@+id/allEamIv"
                 style="@style/txl_select_icon"
-                android:src="@drawable/ic_eam_blue"
+                android:src="@drawable/middleware_ic_eam"
                 android:tag="allEamIv" />
 
             <TextView
                 style="@style/txl_select_text"
                 android:id="@+id/allEamTv"
                 android:tag="allEamTv"
-                android:text="所有设备" />
+                android:text="@string/middleware_all_eam" />
         </LinearLayout>
 
         <include layout="@layout/ly_line" />
@@ -79,10 +79,10 @@
         android:layout_height="@dimen/dp_30"
         android:background="@color/line_gray"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/dp_10"
-        android:text="最近"
+        android:paddingStart="@dimen/dp_10"
+        android:text="@string/middleware_recently"
         android:textColor="@color/gray"
         android:textSize="@dimen/fontSize_16sp" />
 
-    <include layout="@layout/ly_recyclerview_with_scrollbar" />
+    <include layout="@layout/ly_recyclerview" />
 </LinearLayout>

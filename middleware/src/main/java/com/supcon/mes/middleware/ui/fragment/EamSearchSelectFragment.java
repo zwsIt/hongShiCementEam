@@ -1,5 +1,6 @@
 package com.supcon.mes.middleware.ui.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -16,15 +17,20 @@ import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.middleware.EamApplication;
+import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.api.EamQueryLocalAPI;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.contract.EamQueryLocalContract;
+import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.presenter.EamQueryLocalPresenter;
+import com.supcon.mes.middleware.ui.EamTreeSelectActivity;
 import com.supcon.mes.middleware.ui.adapter.BaseSearchAdapter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -44,6 +50,7 @@ public class EamSearchSelectFragment extends BaseRefreshRecyclerFragment<EamEnti
 
     private boolean isSelect = false;
     private boolean isMulti = false;
+    private String searchTag;
     private String title;
 
     @Override
@@ -69,6 +76,7 @@ public class EamSearchSelectFragment extends BaseRefreshRecyclerFragment<EamEnti
 
         isSelect = getActivity().getIntent().getBooleanExtra(Constant.IntentKey.IS_SELECT, false);
         isMulti = getActivity().getIntent().getBooleanExtra(Constant.IntentKey.IS_MULTI, false);
+        searchTag = getActivity().getIntent().getStringExtra(Constant.IntentKey.COMMON_SEARCH_TAG);
         mBaseSearchAdapter.setMulti(isMulti);
 
         mSearchContent = getActivity().getIntent().getStringExtra(Constant.IntentKey.SEARCH_CONTENT);
@@ -92,14 +100,29 @@ public class EamSearchSelectFragment extends BaseRefreshRecyclerFragment<EamEnti
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(EamQueryLocalAPI.class).listEamLocal(pageIndex, 20, mSearchContent,"");
+                presenterRouter.create(EamQueryLocalAPI.class).listEamLocal(pageIndex, 20, mSearchContent,"",((EamTreeSelectActivity)context).isCard());
             }
         });
         mBaseSearchAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (isSelect && !isMulti)
-                    getActivity().finish();
+                EamEntity eamEntity = (EamEntity) obj;
+                if (isSelect) {
+                    eamEntity.updateTime = System.currentTimeMillis();
+                    EamApplication.dao().getEamEntityDao().save(eamEntity);
+
+                    CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
+                    commonSearchEvent.commonSearchEntity = eamEntity;
+                    commonSearchEvent.flag = searchTag;
+                    EventBus.getDefault().post(commonSearchEvent);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID,eamEntity.id);
+                    bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE,eamEntity.code);
+                    IntentRouter.go(context, Constant.Router.SBDA_ONLINE_VIEW, bundle);
+                }
+                getActivity().finish();
+
             }
         });
     }
@@ -114,11 +137,13 @@ public class EamSearchSelectFragment extends BaseRefreshRecyclerFragment<EamEnti
 
     @Override
     public void listEamLocalSuccess(List entity) {
+        ((EamTreeSelectActivity)context).setCard(false);
         refreshListController.refreshComplete(entity);
     }
 
     @Override
     public void listEamLocalFailed(String errorMsg) {
+        ((EamTreeSelectActivity)context).setCard(false);
         refreshListController.refreshComplete(null);
         LogUtil.e("CommonContact error:" + errorMsg);
     }

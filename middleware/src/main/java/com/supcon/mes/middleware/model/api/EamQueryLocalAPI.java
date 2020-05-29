@@ -11,6 +11,6 @@ import java.util.List;
 @ContractFactory(entites = {List.class})
 public interface EamQueryLocalAPI {
 
-    void listEamLocal(int pageNo, int pageSize, String search, String other);
+    void listEamLocal(int pageNo, int pageSize, String search, String other, boolean isCard);
 
 }

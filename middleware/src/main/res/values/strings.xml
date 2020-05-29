@@ -63,5 +63,9 @@
     <string name="middleware_select_staff">请选择人员</string>
     <string name="middleware_confirm">确定</string>
     <string name="middleware_cancel">取消</string>
+    <string name="middleware_all_eam">所有设备</string>
+    <string name="middleware_eam_type">设备类型</string>
+    <string name="middleware_area">区域位置</string>
+    <string name="middleware_recently">最近</string>
 
 </resources>

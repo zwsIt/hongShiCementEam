@@ -28,6 +28,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     public Long id;
     public String code; // 设备资产编码
     public String name;
+    public String pinYin;
 
     public String state;//设备状态
     public String stateForDisplay;
@@ -106,15 +107,16 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     private transient EamEntityDao myDao;
 
 
-    @Generated(hash = 825639564)
-    public EamEntity(Long id, String code, String name, String state, String stateForDisplay,
-            Long eamTypeId, Long areaId, String specif, String model, Long useDate, Long produceDate,
-            String produceCode, String produceFirm, String installFirm, String areaNum, Long fileDate,
-            Float useYear, boolean haveRunState, String specialtyNew, Long validDate, float score,
-            String eamAssetCode, long updateTime) {
+    @Generated(hash = 634273359)
+    public EamEntity(Long id, String code, String name, String pinYin, String state,
+            String stateForDisplay, Long eamTypeId, Long areaId, String specif, String model,
+            Long useDate, Long produceDate, String produceCode, String produceFirm, String installFirm,
+            String areaNum, Long fileDate, Float useYear, boolean haveRunState, String specialtyNew,
+            Long validDate, float score, String eamAssetCode, long updateTime) {
         this.id = id;
         this.code = code;
         this.name = name;
+        this.pinYin = pinYin;
         this.state = state;
         this.stateForDisplay = stateForDisplay;
         this.eamTypeId = eamTypeId;
@@ -501,6 +503,14 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
 
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getPinYin() {
+        return this.pinYin;
+    }
+
+    public void setPinYin(String pinYin) {
+        this.pinYin = pinYin;
     }
 
     /** called by internal mechanisms, do not call yourself. */

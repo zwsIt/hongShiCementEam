@@ -14,19 +14,27 @@ import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.view.CustomSearchView;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.api.RecentEamSelectAPI;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.contract.RecentEamSelectContract;
+import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.presenter.RecentEamSelectPresenter;
 import com.supcon.mes.middleware.ui.EamTreeSelectActivity;
 import com.supcon.mes.middleware.ui.adapter.BaseSearchAdapter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -72,10 +80,10 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
 
     @Override
     protected void onInit() {
+        super.onInit();
         isSelect = getActivity().getIntent().getBooleanExtra(Constant.IntentKey.IS_SELECT, false);
         isMulti = getActivity().getIntent().getBooleanExtra(Constant.IntentKey.IS_MULTI, false);
         searchTag = getActivity().getIntent().getStringExtra(Constant.IntentKey.COMMON_SEARCH_TAG);
-        super.onInit();
 
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "无记录"));
         refreshListController.setPullDownRefreshEnabled(true);
@@ -93,8 +101,7 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
         super.initView();
 
         contentView.setLayoutManager(new LinearLayoutManager(context));
-        final int spacingInPixels = 10;
-        contentView.addItemDecoration(new SpaceItemDecoration(spacingInPixels));
+        contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5,context)));
     }
 
     @SuppressLint("CheckResult")
@@ -127,22 +134,41 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
             IntentRouter.go(context, Constant.Router.EAM_TYPE_TREE_SELECT, bundle);
         });
 
-        allEamIv.setOnClickListener(v -> {
-            if (isSelect) {
-                ((EamTreeSelectActivity) getActivity()).showFragment(1, "所有设备");
-            }
+        allEamTv.setOnClickListener(v -> {
+
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+            bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, searchTag);
+//            bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+            IntentRouter.go(context, Constant.Router.EAM, bundle);
+
+//            if (isSelect) {
+//                ((EamTreeSelectActivity) getActivity()).showFragment(1, "所有设备");
+//            }
         });
         allEamIv.setOnClickListener(v -> {
-            if (isSelect) {
-                ((EamTreeSelectActivity) getActivity()).showFragment(1, "所有设备");
-            }
+//            if (isSelect) {
+//                ((EamTreeSelectActivity) getActivity()).showFragment(1, "所有设备");
+//            }
 
         });
         mBaseSearchAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                if (isSelect && !isMulti)
-                    getActivity().finish();
+                EamEntity eamEntity = (EamEntity) obj;
+                if (isSelect) {
+                    CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
+                    commonSearchEvent.commonSearchEntity = eamEntity;
+                    commonSearchEvent.flag = searchTag;
+                    EventBus.getDefault().post(commonSearchEvent);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID,eamEntity.id);
+                    bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE,eamEntity.code);
+                    IntentRouter.go(context, Constant.Router.SBDA_ONLINE_VIEW, bundle);
+                }
+                getActivity().finish();
             }
         });
     }
@@ -155,7 +181,6 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
 
     @Override
     public void getRecentEamListSuccess(List entity) {
-//        List<ContactEntity> contactEntities = entity;
         refreshListController.refreshComplete(entity);
     }
 

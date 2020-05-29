@@ -11,7 +11,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         greendao {
-            schemaVersion 12//2020/05/26
+            schemaVersion 13//2020/05/28
         }
     }
 

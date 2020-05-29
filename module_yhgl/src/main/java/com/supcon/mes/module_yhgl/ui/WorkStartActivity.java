@@ -158,8 +158,8 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
             bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
             bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamCode.getTag().toString());
             bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
-//            IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
-            IntentRouter.go(context, Constant.Router.EAM, bundle);
+            IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
+//            IntentRouter.go(context, Constant.Router.EAM, bundle);
         });
         workContactStaff.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1){

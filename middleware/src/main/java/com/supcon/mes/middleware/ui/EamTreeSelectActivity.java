@@ -1,6 +1,7 @@
 package com.supcon.mes.middleware.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -14,16 +15,22 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.mbap.view.CustomSearchView;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.R;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.ContactEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.ui.fragment.EamPortalSelectFragment;
 import com.supcon.mes.middleware.ui.fragment.EamSearchSelectFragment;
+import com.supcon.mes.middleware.util.NFCHelper;
+import com.supcon.mes.middleware.util.Util;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -56,11 +63,53 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 //    private ContactCommonFragment mContactCommonFragment;
 
     private String searchTag;
-
+    private NFCHelper mNFCHelper;
+    private boolean mIsCard;
+    public void setCard(boolean card) {
+        mIsCard = card;
+    }
+    public boolean isCard() {
+        return mIsCard;
+    }
     @Override
     protected void onInit() {
         super.onInit();
+        EventBus.getDefault().register(this);
         searchTag = getIntent().getStringExtra(Constant.IntentKey.COMMON_SEARCH_TAG);
+
+        mNFCHelper = NFCHelper.getInstance();
+        mNFCHelper.setup(this);
+        mNFCHelper.setOnNFCListener(nfc -> {
+            Map<String, Object> nfcJson = Util.gsonToMaps(nfc);
+            if (nfcJson.get("textRecord") == null) {
+                ToastUtils.show(context, "标签内容空！");
+                return;
+            }
+            mIsCard = true;
+            searchView.setInput((String) nfcJson.get("textRecord"));
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mNFCHelper != null)
+            mNFCHelper.onResumeNFC(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mNFCHelper != null)
+            mNFCHelper.onPauseNFC(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //获取到Tag对象
+        if (mNFCHelper != null)
+            mNFCHelper.dealNFCTag(intent);
     }
 
     @Override
@@ -78,7 +127,6 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 //        fragments.add(mContactCommonFragment);
 
     }
-
 
     @Override
     protected void initView() {
@@ -107,15 +155,11 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
         RxTextView.textChanges(searchView.editText())
                 .skipInitialValue()
                 .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<CharSequence>() {
-                    @Override
-                    public void accept(CharSequence charSequence) throws Exception {
-
-                        if (TextUtils.isEmpty(charSequence)) {
-                            showFragment(0);
-                        } else {
-                            doSearch(charSequence.toString());
-                        }
+                .subscribe(charSequence -> {
+                    if (TextUtils.isEmpty(charSequence)) {
+                        showFragment(0);
+                    } else {
+                        doSearch(charSequence.toString());
                     }
                 });
 
@@ -186,11 +230,10 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 
     public void showFragment(int selectIndex, String title) {
         showFragment(selectIndex);
-        if (selectIndex == 1) {
+//        if (selectIndex == 1) {
 //            mContactSearchFragment.setTitle(title);
 //            mContactCommonFragment.setTitle(title);
-        }
-
+//        }
     }
 
     @Override
@@ -201,4 +244,23 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
         }
         super.onBackPressed();
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        if (mNFCHelper != null) {
+            mNFCHelper.release();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveEntity(CommonSearchEvent commonSearchEvent) {
+        // 全部设备选择返回后 销毁当前页面
+        EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+        eamEntity.updateTime = System.currentTimeMillis();
+        EamApplication.dao().getEamEntityDao().save(eamEntity);
+        finish();
+    }
+
+
 }

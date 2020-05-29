@@ -67,7 +67,8 @@
         <activity android:name=".ui.EamTreeSelectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
+            android:launchMode="singleTask"/>
         <activity android:name=".ui.EamAreaTreeSelectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"

@@ -93,7 +93,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     private String searchTag;
 
     private List<CommonSearchEntity> searchEntities = new ArrayList<>();
-    private boolean mNfcCard = true;
+    private boolean mNfcCard = false;
 
     @Override
     protected IListAdapter<CommonSearchEntity> createAdapter() {
@@ -170,9 +170,7 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
     @Override
     protected void initListener() {
         super.initListener();
-
         mBaseSearchAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
-
             //如果当前模式为多选模式,则不响应单选模式触发返回事件
             final CommonSearchEntity commonSearchEntity = (CommonSearchEntity) obj;
             if (isMulti) {
@@ -183,7 +181,6 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
                 }
                 return;
             }
-
             CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
             commonSearchEvent.commonSearchEntity = commonSearchEntity;
             commonSearchEvent.flag = searchTag;
@@ -191,59 +188,52 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
             EventBus.getDefault().post(commonSearchEvent);
         });
 
-        rightBtn_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (searchEntities.size() == 0) {
-                    ToastUtils.show(EamActivity.this, "请选择设备!");
-                    return;
-                }
-                CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
-                commonSearchEvent.mCommonSearchEntityList = searchEntities;
-                commonSearchEvent.IS_MULTI = true;
-                EventBus.getDefault().post(commonSearchEvent);
-                back();
+        rightBtn_1.setOnClickListener(v -> {
+            if (searchEntities.size() == 0) {
+                ToastUtils.show(EamActivity.this, "请选择设备!");
+                return;
             }
+            CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
+            commonSearchEvent.mCommonSearchEntityList = searchEntities;
+            commonSearchEvent.IS_MULTI = true;
+            EventBus.getDefault().post(commonSearchEvent);
+            back();
         });
 
-        refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
-            @Override
-            public void onRefresh(int pageIndex) {
-                final String blurMes = titleSearchView.editText().getText().toString().trim();
-                if (queryParam.containsKey(Constant.BAPQuery.EAM_CODE)) {
-                    queryParam.remove(Constant.BAPQuery.EAM_CODE);
-                }
-                if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
-                    queryParam.remove(Constant.BAPQuery.EAM_NAME);
-                }
-                if (!TextUtils.isEmpty(blurMes)) {
-                    if (Util.isContainChinese(blurMes)) {
-                        queryParam.put(Constant.BAPQuery.EAM_NAME, blurMes);
-                    } else {
-                        queryParam.put(Constant.BAPQuery.EAM_CODE, blurMes);
-                    }
-                }
-                if (!TextUtils.isEmpty(areaName)) {
-                    queryParam.put(Constant.BAPQuery.EAM_AREANAME, areaName);
-                }
-                if (isMainEam) {
-                    queryParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
-                }
-                presenterRouter.create(EamAPI.class).getEam(queryParam, mNfcCard,pageIndex,20);
+        refreshListController.setOnRefreshPageListener(pageIndex -> {
+            final String blurMes = titleSearchView.editText().getText().toString().trim();
+            if (queryParam.containsKey(Constant.BAPQuery.EAM_CODE)) {
+                queryParam.remove(Constant.BAPQuery.EAM_CODE);
             }
+            if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
+                queryParam.remove(Constant.BAPQuery.EAM_NAME);
+            }
+            if (!TextUtils.isEmpty(blurMes)) {
+                if (Util.isContainChinese(blurMes)) {
+                    queryParam.put(Constant.BAPQuery.EAM_NAME, blurMes);
+                } else {
+                    queryParam.put(Constant.BAPQuery.EAM_CODE, blurMes);
+                }
+            }
+            if (!TextUtils.isEmpty(areaName)) {
+                queryParam.put(Constant.BAPQuery.EAM_AREANAME, areaName);
+            }
+            if (isMainEam) {
+                queryParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
+            }
+            presenterRouter.create(EamAPI.class).getEam(queryParam, mNfcCard,pageIndex,20);
         });
-        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () -> {
-            mNfcCard = false;
-            refreshListController.refreshBegin();
-        });
+//        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () -> {
+//            mNfcCard = false;
+//            refreshListController.refreshBegin();
+//        });
 
-//        RxTextView.textChanges(titleSearchView.editText())
-//                .skipInitialValue()
-//                .debounce(500, TimeUnit.MILLISECONDS)
-//                .subscribe(charSequence -> {
-//                    mNfcCard = false;
-//                    refreshListController.refreshBegin();
-//                });
+        RxTextView.textChanges(titleSearchView.editText())
+                .skipInitialValue()
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .subscribe(charSequence -> {
+                    refreshListController.refreshBegin();
+                });
 
         leftBtn.setOnClickListener(v -> back());
 
@@ -265,11 +255,13 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
 
     @Override
     public void getEamSuccess(CommonListEntity entity) {
+        mNfcCard = false;
         refreshListController.refreshComplete(entity.result);
     }
 
     @Override
     public void getEamFailed(String errorMsg) {
+        mNfcCard = false;
         refreshListController.refreshComplete(null);
         ToastUtils.show(context, errorMsg);
     }
@@ -289,8 +281,8 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
             return;
         }
         eamCode = (String) nfcJson.get("textRecord");
+        mNfcCard = true;
         titleSearchView.setInput(eamCode);
-        refreshListController.refreshBegin();
     }
 
     @Override
