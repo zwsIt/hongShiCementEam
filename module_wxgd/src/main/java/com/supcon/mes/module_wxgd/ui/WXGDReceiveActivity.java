@@ -150,7 +150,7 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
     private LinkController mLinkController;
 
-    private RoleController roleController;
+//    private RoleController roleController;
     private String tip;
     private WXGDSubmitController wxgdSubmitController;
     private Map<String, SystemCodeEntity> wxTypes;
@@ -241,9 +241,9 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
         super.onRegisterController();
         mLinkController = new LinkController();
         registerController(Constant.Controller.LINK, mLinkController);
-        roleController = new RoleController();
-        registerController(Constant.Controller.ROLE, roleController);
-        roleController.queryRoleList(EamApplication.getUserName());
+//        roleController = new RoleController();
+//        registerController(Constant.Controller.ROLE, roleController);
+//        roleController.queryRoleList(EamApplication.getUserName());
         wxgdSubmitController = new WXGDSubmitController(this);
         registerController(WXGDSubmitController.class.getName(), wxgdSubmitController);
     }

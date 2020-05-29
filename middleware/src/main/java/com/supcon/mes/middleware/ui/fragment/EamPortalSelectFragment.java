@@ -135,7 +135,6 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
         });
 
         allEamTv.setOnClickListener(v -> {
-
             Bundle bundle = new Bundle();
             bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
             bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
@@ -143,15 +142,14 @@ public class EamPortalSelectFragment extends BaseRefreshRecyclerFragment<Contact
 //            bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
             IntentRouter.go(context, Constant.Router.EAM, bundle);
 
-//            if (isSelect) {
-//                ((EamTreeSelectActivity) getActivity()).showFragment(1, "所有设备");
-//            }
         });
         allEamIv.setOnClickListener(v -> {
-//            if (isSelect) {
-//                ((EamTreeSelectActivity) getActivity()).showFragment(1, "所有设备");
-//            }
-
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+            bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, searchTag);
+//            bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+            IntentRouter.go(context, Constant.Router.EAM, bundle);
         });
         mBaseSearchAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override

@@ -117,12 +117,9 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null) {
             nfcHelper.setup(this);
-            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
-                @Override
-                public void onNFCReceived(String nfc) {
-                    LogUtil.d("NFC Received : " + nfc);
-                    EventBus.getDefault().post(new NFCEvent(nfc));
-                }
+            nfcHelper.setOnNFCListener(nfc -> {
+                LogUtil.d("NFC Received : " + nfc);
+                EventBus.getDefault().post(new NFCEvent(nfc));
             });
         }
     }

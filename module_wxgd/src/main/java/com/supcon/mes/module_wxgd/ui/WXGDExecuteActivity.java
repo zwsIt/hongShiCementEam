@@ -187,7 +187,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     private SinglePickController mSinglePickController;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private RoleController roleController;
+//    private RoleController roleController;
     private String tip;
     private WXGDSubmitController wxgdSubmitController;
     private boolean isActivate = true;//当前是否是激活状态 true:激活
@@ -222,9 +222,9 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         super.onRegisterController();
         mLinkController = new LinkController();
         registerController(Constant.Controller.LINK, mLinkController);
-        roleController = new RoleController();
-        registerController(Constant.Controller.ROLE, roleController);
-        roleController.queryRoleList(EamApplication.getUserName());
+//        roleController = new RoleController();
+//        registerController(Constant.Controller.ROLE, roleController);
+//        roleController.queryRoleList(EamApplication.getUserName());
 
         wxgdSubmitController = new WXGDSubmitController(this);
         registerController(WXGDSubmitController.class.getName(), wxgdSubmitController);

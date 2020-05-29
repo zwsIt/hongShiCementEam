@@ -193,7 +193,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private MaintenanceController maintenanceController;
     private AttachmentController mAttachmentController;
 
-    private List<Long> dgDeletedIds_acceptance = new ArrayList<>();
+//    private List<Long> dgDeletedIds_acceptance = new ArrayList<>();
 
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
     private WXGDSubmitController wxgdSubmitController;
@@ -205,7 +205,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private String currentAcceptChkDateTime = ""; // 当前验收时间
     private List<SystemCodeEntity> checkResultList = new ArrayList<>();
     private List<String> checkResultListStr = new ArrayList<>();
-    private RoleController roleController;
+//    private RoleController roleController;
     private AcceptanceCheckEntity currentAcceptChkEntity = new AcceptanceCheckEntity();  //当前验收数据
     private String acceptanceCheckEntities;
     private String tableNo;
@@ -240,9 +240,9 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         mAttachmentController = getController(AttachmentController.class);
         mLinkController = getController(LinkController.class);
 
-        roleController = new RoleController();  //角色
-        roleController.queryRoleList(EamApplication.getUserName());
-        registerController(Constant.Controller.ROLE, roleController);
+//        roleController = new RoleController();  //角色
+//        roleController.queryRoleList(EamApplication.getUserName());
+//        registerController(Constant.Controller.ROLE, roleController);
 
         mSinglePickController = new SinglePickController(this);
         mSinglePickController.setDividerVisible(true);

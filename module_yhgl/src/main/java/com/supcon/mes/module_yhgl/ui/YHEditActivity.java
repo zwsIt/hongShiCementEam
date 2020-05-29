@@ -725,7 +725,11 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 if (mYHEntity.areaInstall != null) {
                     bundle.putString(Constant.IntentKey.AREA_NAME, mYHEntity.areaInstall.name);
                 }
-                IntentRouter.go(this, Constant.Router.EAM, bundle);
+                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, yhEditEamCode.getTag().toString());
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
             }
         });
 
@@ -948,12 +952,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
         yhEditEamName.setValue(eamEntity.name);
         yhEditEamCode.setValue(eamEntity.eamAssetCode);
-//            yhEditEamModel.setValue(eamType.model);
-//        WXGDEam wxgdEam = new WXGDEam();
-//        wxgdEam.name = eamEntity.name;
-//        wxgdEam.code = eamEntity.code;
-//        wxgdEam.model = eamEntity.model;
-//        wxgdEam.id = eamEntity.id;
         mYHEntity.eamID = eamEntity;
         mSparePartController.upEam(eamEntity);
         mLubricateOilsController.upEam(eamEntity);

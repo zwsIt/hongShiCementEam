@@ -87,6 +87,7 @@ import io.reactivex.functions.Consumer;
  * created by zhangwenshuai1 2018/8/9
  */
 
+@Deprecated
 @Router(value = Constant.Router.WXGD_LIST)
 @Presenter(value = {WXGDListPresenter.class})
 @Controller(value = PcController.class)
@@ -471,19 +472,19 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         String workStateId = "";
         switch (workState) {
             case Constant.WxgdStatus_CH.DISPATCH:
-                workStateId = Constant.WxgdStatus.DISPATCH;
+                workStateId = Constant.WorkState_ENG.DISPATCH;
                 break;
             case Constant.WxgdStatus_CH.CONFIRM:
-                workStateId = Constant.WxgdStatus.CONFIRM;
+                workStateId = Constant.WorkState_ENG.CONFIRM;
                 break;
             case Constant.WxgdStatus_CH.IMPLEMENT:
-                workStateId = Constant.WxgdStatus.IMPLEMENT;
+                workStateId = Constant.WorkState_ENG.EXECUTE;
                 break;
             case Constant.WxgdStatus_CH.ACCEPTANCE:
-                workStateId = Constant.WxgdStatus.ACCEPTANCE;
+                workStateId = Constant.WorkState_ENG.ACCEPT;
                 break;
             case Constant.WxgdStatus_CH.COMPLETE:
-                workStateId = Constant.WxgdStatus.COMPLETE;
+                workStateId = Constant.WorkState_ENG.TAKE_EFFECT;
                 break;
             default:
                 break;

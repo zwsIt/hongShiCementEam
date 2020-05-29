@@ -38,8 +38,8 @@ public class WXGDMapManager {
 
     @SuppressLint("SimpleDateFormat")
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    @SuppressLint("SimpleDateFormat")
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//    @SuppressLint("SimpleDateFormat")
+//    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 
     public static Map<String, Object> createMap(WXGDEntity mWXGDEntity) {

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">module_wxgd</string>
+    <string name="workName">维修工单</string>
     <string name="tableStatus">单据状态</string>
     <string name="eamName">设备名称:</string>
     <string name="location">区域位置:</string>
@@ -48,4 +49,8 @@
     <string name="content_workList">内容:</string>
     <string name="claim_workList">要求:</string>
     <string name="remark">备注</string>
+    <string name="work_finished">已完成</string>
+    <string name="work_dispatch">待派工</string>
+    <string name="work_executing">执行中</string>
+    <string name="work_acceptance">待验收</string>
 </resources>

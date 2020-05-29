@@ -19,6 +19,7 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
@@ -146,7 +147,10 @@ public class TemporaryTaskFragment extends BaseRefreshFragment implements Tempor
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
-                IntentRouter.go(getActivity(), Constant.Router.EAM, bundle);
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamCode.getTag().toString());
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
             }
         });
         eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
@@ -154,7 +158,10 @@ public class TemporaryTaskFragment extends BaseRefreshFragment implements Tempor
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
-                IntentRouter.go(getActivity(), Constant.Router.EAM, bundle);
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamCode.getTag().toString());
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
             }
         });
     }
@@ -183,11 +190,11 @@ public class TemporaryTaskFragment extends BaseRefreshFragment implements Tempor
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void search(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity != null) {
-            if (commonSearchEvent.commonSearchEntity instanceof EamType) {
-                EamType eamType = (EamType) commonSearchEvent.commonSearchEntity;
-                eamCode.setContent(Util.strFormat(eamType.code));
-                eamName.setContent(Util.strFormat(eamType.name));
-                queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(eamType.code));
+            if (commonSearchEvent.commonSearchEntity instanceof EamEntity) {
+                EamEntity eamEntity = (EamEntity) commonSearchEvent.commonSearchEntity;
+                eamCode.setContent(Util.strFormat(eamEntity.code));
+                eamName.setContent(Util.strFormat(eamEntity.name));
+                queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(eamEntity.code));
                 refreshController.refreshBegin();
             }
         }

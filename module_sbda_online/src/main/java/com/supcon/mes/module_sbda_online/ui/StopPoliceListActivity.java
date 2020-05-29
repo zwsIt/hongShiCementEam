@@ -38,6 +38,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.DatePickController;
 import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.ScreenEntity;
@@ -285,8 +286,11 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
                             return;
                         }
                         Bundle bundle = new Bundle();
-                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, true);
-                        IntentRouter.go(context, Constant.Router.EAM, bundle);
+                        bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                        bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, childView.getTag().toString());
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                        IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
                     })
                     .bindClickListener(R.id.btn_stop_police_save, v -> {
                         if (paramMap.containsKey(STOP_POLICE_STAFF_ID) && paramMap.containsKey(STOP_POLICE_ID) && paramMap.containsKey(STOP_POLICE_STOP_TYPE) && paramMap.containsKey(STOP_POLICE_STOP_EXPLAIN)) {
@@ -360,13 +364,13 @@ public class StopPoliceListActivity extends BaseRefreshRecyclerActivity<StopPoli
             StringBuilder stringBuilderId = new StringBuilder();
             StringBuilder stringBuilderName = new StringBuilder();
             for (int i = 0; i < commonSearchEntities.size(); i++) {
-                EamType eamType = (EamType) commonSearchEntities.get(i);
+                EamEntity eamEntity = (EamEntity) commonSearchEntities.get(i);
                 if (i != 0) {
                     stringBuilderName.append(",");
                     stringBuilderId.append(",");
                 }
-                stringBuilderName.append(eamType.getSearchName());
-                stringBuilderId.append(eamType.id);
+                stringBuilderName.append(eamEntity.getSearchName());
+                stringBuilderId.append(eamEntity.id);
             }
             paramMap.put(STOP_POLICE_EAM_IDS, stringBuilderId.toString());
             itemStopPoliceEamIds.setContent(stringBuilderName.toString());

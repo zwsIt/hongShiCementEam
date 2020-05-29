@@ -222,11 +222,11 @@ public class WXGDStatisticsActivity extends BaseRefreshRecyclerActivity<WXGDEnti
                     .subscribe(new Consumer<WorkCountEntity>() {
                         @Override
                         public void accept(WorkCountEntity workCountEntity) throws Exception {
-                            if (workCountEntity.tagName.equals(Constant.WxgdStatus.DISPATCH)) {
+                            if (workCountEntity.tagName.equals(Constant.WorkState_ENG.DISPATCH)) {
                                 statisticsWaitNum.setText(String.valueOf(workCountEntity.num));
-                            } else if (workCountEntity.tagName.equals(Constant.WxgdStatus.CONFIRM)) {
+                            } else if (workCountEntity.tagName.equals(Constant.WorkState_ENG.CONFIRM)) {
                                 statisticsProcessingNum.setText(String.valueOf(workCountEntity.num));
-                            } else if (workCountEntity.tagName.equals(Constant.WxgdStatus.COMPLETE)) {
+                            } else if (workCountEntity.tagName.equals(Constant.WorkState_ENG.TAKE_EFFECT)) {
                                 statisticsCompletedNum.setText(String.valueOf(workCountEntity.num));
                             }
                         }

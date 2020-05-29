@@ -212,7 +212,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private MaintenanceController maintenanceController;
 
     private WXGDSubmitController mWxgdSubmitController;
-    private RoleController roleController;
+//    private RoleController roleController;
     //表体修改前的列表数据
     private String sparePartListStr; // 备件列表
     private String repairStaffListStr; // 维修人员列表
@@ -261,8 +261,8 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         maintenanceController.setEditable(true);
 
 
-        roleController = new RoleController();  //角色
-        roleController.queryRoleList(EamApplication.getUserName());
+//        roleController = new RoleController();  //角色
+//        roleController.queryRoleList(EamApplication.getUserName());
 
         mWxgdSubmitController = new WXGDSubmitController(this);  //工作流提交Controller
 
@@ -283,7 +283,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         //获取维修组
         initRepairGroup();
 
-        registerController(Constant.Controller.ROLE, roleController);
+//        registerController(Constant.Controller.ROLE, roleController);
         registerController(WXGDSubmitController.class.getName(), mWxgdSubmitController);
     }
 
@@ -526,7 +526,12 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                     eamCodeEdit.setContent(null);
                     eamAreaEdit.setContent(null);
                 }else {
-                    IntentRouter.go(context,Constant.Router.EAM);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamNameEdit.getTag().toString());
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                    IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
                 }
             }
         });
@@ -937,7 +942,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshSparePart(SparePartEvent event) {
-
         mSparePartController.updateSparePartEntities(event.getList());
 
         //若列表数据为list.size=0，CustomListWidget.setData(list) 方法会return导致数据没有清空，现widget.clear()
@@ -956,7 +960,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 //            repairStaffListWidget.clear();
             mRepairStaffController.clear();
         }
-
         dgDeletedIds_repairStaff = event.getDgDeletedIds();
     }
 
@@ -1012,13 +1015,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         eamNameEdit.setContent(eamEntity.name);
         eamAreaEdit.setContent(eamEntity.installPlace == null ? "" : eamEntity.installPlace.name);
 
-        mWXGDEntity.eamID.id = eamEntity.id;
-        mWXGDEntity.eamID.code = eamEntity.code;
-        mWXGDEntity.eamID.name = eamEntity.name;
-        mWXGDEntity.eamID.model = eamEntity.model;
-        mWXGDEntity.eamID.eamType = eamEntity.eamType;
-        mWXGDEntity.eamID.installPlace = eamEntity.installPlace;
-        mWXGDEntity.eamID.inspectionStaff = eamEntity.inspectionStaff;
+        mWXGDEntity.eamID = eamEntity;
 
     }
 

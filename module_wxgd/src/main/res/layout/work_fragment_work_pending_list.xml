@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/list_bg_color"
+    android:orientation="vertical">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:fillViewport="true">
+        <RadioGroup
+            android:id="@+id/workStateRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_5"
+            android:tag="workStateRadioGroup">
+
+            <RadioButton
+                android:id="@+id/allRBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:button="@null"
+                android:tag="allRBtn"
+                android:text="@string/middleware_all"
+                android:textSize="@dimen/fontSize_14sp"
+                android:textColor="@drawable/sl_radio_text"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/dispatchRBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:button="@null"
+                android:tag="dispatchRBtn"
+                android:text="@string/work_dispatch"
+                android:textColor="@drawable/sl_radio_text"
+                android:textSize="@dimen/fontSize_14sp" />
+            <RadioButton
+                android:id="@+id/executingRBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:button="@null"
+                android:tag="executingRBtn"
+                android:text="@string/work_executing"
+                android:textColor="@drawable/sl_radio_text"
+                android:textSize="@dimen/fontSize_14sp" />
+            <RadioButton
+                android:id="@+id/acceptanceRBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:button="@null"
+                android:tag="acceptanceRBtn"
+                android:text="@string/work_acceptance"
+                android:textColor="@drawable/sl_radio_text"
+                android:textSize="@dimen/fontSize_14sp" />
+        </RadioGroup>
+    </HorizontalScrollView>
+    <include layout="@layout/ly_recyclerview" />
+
+</LinearLayout>

@@ -85,7 +85,7 @@ public class WorkHelper {
                     break;
                 case Constant.WorkType.WXGD:
                     workInfo.iconResId = R.drawable.ic_work_wxgd;
-                    workInfo.router = Constant.Router.WXGD_LIST;
+                    workInfo.router = Constant.Router.WXGD_LIST_NEW;
                     break;
                 case Constant.WorkType.SJSC:
                     workInfo.iconResId = R.drawable.ic_work_sjsc;

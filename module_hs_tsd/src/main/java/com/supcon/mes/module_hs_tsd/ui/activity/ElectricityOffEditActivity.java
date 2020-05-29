@@ -274,10 +274,12 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
                     mElectricityOffOnEntity.getEamID().id = null;
                     eamCode.setContent(null);
                 } else {
-                    IntentRouter.go(context, Constant.Router.EAM);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putBoolean(Constant.IntentKey.ELE_OFF_ON_TEMPLATE,false); // 停电模板
-//                    IntentRouter.go(context, Constant.Router.ELE_OFF_TEMPLATE,bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamName.getTag().toString());
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                    IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
                 }
             }
         });
@@ -304,10 +306,6 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
                 bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
                 bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,operateStaff.getTag().toString());
                 IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
-
-//                Bundle bundle = new Bundle();
-//                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,operateStaff.getTag().toString());
-//                IntentRouter.go(context, Constant.Router.STAFF,bundle);
             }
         });
         RxTextView.textChanges(workTask.editText()).skipInitialValue()

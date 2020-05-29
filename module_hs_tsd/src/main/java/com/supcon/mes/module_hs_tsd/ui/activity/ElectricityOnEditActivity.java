@@ -266,10 +266,12 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
                     mElectricityOffOnEntity.getEamID().id = null;
                     eamCode.setContent(null);
                 } else {
-                    IntentRouter.go(context,Constant.Router.EAM);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putBoolean(Constant.IntentKey.ELE_OFF_ON_TEMPLATE,true); // 送电模板
-//                    IntentRouter.go(context, Constant.Router.ELE_OFF_TEMPLATE,bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamName.getTag().toString());
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                    IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
                 }
             }
         });

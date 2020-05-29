@@ -80,7 +80,7 @@ public class MenuHelper {
                     case Constant.HSWorkType.DAILY_WXGD:
                     case Constant.HSWorkType.REPAIR_WXGD:
                     case Constant.HSWorkType.OHAUL_WXGD:
-                        menuPopwindowBean.setRouter(Constant.Router.WXGD_LIST);
+                        menuPopwindowBean.setRouter(Constant.Router.WXGD_LIST_NEW);
                         break;
                     case Constant.HSWorkType.SPARE_EARLY_WARN:
                         menuPopwindowBean.setRouter(Constant.Router.SPARE_EARLY_WARN);

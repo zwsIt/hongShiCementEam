@@ -26,7 +26,7 @@ public class WXGDListPresenter extends WXGDListContract.Presenter {
 
         String url = "/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
         if (queryParam.containsKey(Constant.BAPQuery.WORK_STATE)
-                && queryParam.get(Constant.BAPQuery.WORK_STATE).equals(Constant.WxgdStatus.COMPLETE)) {
+                && queryParam.get(Constant.BAPQuery.WORK_STATE).equals(Constant.WorkState_ENG.TAKE_EFFECT)) {
             url = "/BEAM2/workList/workRecord/workList-query.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
         }
         mCompositeSubscription.add(

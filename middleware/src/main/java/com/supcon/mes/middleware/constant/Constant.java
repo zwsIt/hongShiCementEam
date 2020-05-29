@@ -90,6 +90,7 @@ public interface Constant {
         String ADD_DEVICE = "AddDevice";
 
         String WXGD_LIST = "WXGDList";  //维修工单列表
+        String WXGD_LIST_NEW = "WXGD_LIST_NEW"; // 新版维修工单list
         String WXGD_STATISTICS = "WXGD_STATISTICS";//工单统计
         String WXGD_DISPATCHER = "WXGD_DISPATCHER";//维修工单派单
         String WXGD_RECEIVE = "WXGD_RECEIVE";//维修工单接单
@@ -763,17 +764,6 @@ public interface Constant {
         String WAIT = "BEAM2004/01";//待处理
         String IMPLEMENT = "BEAM2004/02";//处理中
         String COMPLETE = "BEAM2004/04";//已处理
-    }
-
-    /**
-     * 维修工单单据状态
-     */
-    interface WxgdStatus {
-        String DISPATCH = "BEAM049/01";//派单
-        String CONFIRM = "BEAM049/02";//接单
-        String IMPLEMENT = "BEAM049/03";
-        String ACCEPTANCE = "BEAM049/04";
-        String COMPLETE = "BEAM049/05";//完成
     }
 
     /**

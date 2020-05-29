@@ -293,7 +293,12 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                     mWorkTicketEntity.getEamId().id = null;
                     eamCode.setContent(null);
                 } else {
-                    IntentRouter.go(context, Constant.Router.EAM);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamCode.getTag().toString());
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                    IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
                 }
             }
         });
@@ -626,9 +631,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             eamName.setContent(eam.name);
             eamCode.setContent(eam.eamAssetCode);
 
-            mWorkTicketEntity.getEamId().id = eam.id;
-            mWorkTicketEntity.getEamId().name = eam.name;
-            mWorkTicketEntity.getEamId().code = eam.code;
+            mWorkTicketEntity.setEamId(eam);
         }
     }
 

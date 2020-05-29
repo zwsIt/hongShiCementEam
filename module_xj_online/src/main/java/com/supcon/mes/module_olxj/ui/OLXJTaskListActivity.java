@@ -663,9 +663,6 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         LogUtil.d("NFC_TAG", nfcEvent.getNfc());
         isFront = true;
         Map<String, Object> nfcJson = Util.gsonToMaps(nfcEvent.getNfc());
-//        Gson gson = new Gson();
-//        nfcJson = gson.fromJson(nfcEvent.getNfc(),Map.class);
-
         dealSign((String) nfcJson.get("id"));
     }
 
