@@ -132,40 +132,33 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
 
             receiveBtn.setOnClickListener(this::onClick);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    WXGDEntity wxgdEntity = getItem(getAdapterPosition());
-
-                    if (wxgdEntity == null) {
-                        return;
+            itemView.setOnClickListener(v -> {
+                WXGDEntity wxgdEntity = getItem(getAdapterPosition());
+                if (wxgdEntity == null) { return; }
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
+                if (wxgdEntity.pending != null && !TextUtils.isEmpty(wxgdEntity.pending.openUrl)) {
+                    switch (wxgdEntity.pending.openUrl) {
+                        case Constant.WxgdView.RECEIVE_OPEN_URL:
+                            IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);
+                            break;
+                        case Constant.WxgdView.DISPATCH_OPEN_URL:
+                            IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
+                            break;
+                        case Constant.WxgdView.VIEW_OPEN_URL:
+                            bundle.putBoolean(Constant.IntentKey.isEdit, false);
+                        case Constant.WxgdView.EXECUTE_OPEN_URL:
+                            IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
+                            break;
+                        case Constant.WxgdView.ACCEPTANCE_OPEN_URL:
+                            IntentRouter.go(context, Constant.Router.WXGD_ACCEPTANCE, bundle);
+                            break;
+                        default:
+                            IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
+                            break;
                     }
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
-
-                    if (wxgdEntity.pending != null && !TextUtils.isEmpty(wxgdEntity.pending.openUrl)) {
-                        switch (wxgdEntity.pending.openUrl) {
-                            case Constant.WxgdView.RECEIVE_OPEN_URL:
-                                IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);
-                                break;
-                            case Constant.WxgdView.DISPATCH_OPEN_URL:
-                                IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
-                                break;
-                            case Constant.WxgdView.VIEW_OPEN_URL:
-                                bundle.putBoolean(Constant.IntentKey.isEdit, false);
-                            case Constant.WxgdView.EXECUTE_OPEN_URL:
-                                IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
-                                break;
-                            case Constant.WxgdView.ACCEPTANCE_OPEN_URL:
-                                IntentRouter.go(context, Constant.Router.WXGD_ACCEPTANCE, bundle);
-                                break;
-                            default:
-                                IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
-                                break;
-                        }
-                    } else {
-                        IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-                    }
+                } else {
+                    IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
                 }
             });
 

@@ -61,7 +61,8 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
 
     @BindByTag("leftBtn")
     protected ImageButton leftBtn;
-
+    @BindByTag("refBtn")
+    protected ImageButton refBtn;
     @BindByTag("rightBtn")
     protected ImageButton rightBtn;
 
@@ -127,6 +128,8 @@ public class WXGDAcceptanceListActivity extends BaseRefreshRecyclerActivity<Acce
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
 
+        refBtn.setVisibility(View.GONE);
+        rightBtn.setVisibility(View.GONE);
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
 
         initEmptyView();

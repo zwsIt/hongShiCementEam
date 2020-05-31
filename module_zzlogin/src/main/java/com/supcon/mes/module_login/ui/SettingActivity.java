@@ -134,7 +134,7 @@ public class SettingActivity extends BasePresenterActivity implements MineContra
 
         if (BuildConfig.HAS_SUPOS /*|| BuildConfig.DEBUG*/) {
             ((ViewGroup) SupOSSwitchBtn.getParent()).setVisibility(View.VISIBLE);
-            SupOSSwitchBtn.setChecked(SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, BuildConfig.HAS_SUPOS));
+            SupOSSwitchBtn.setChecked(SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, true));
         }
 
     }

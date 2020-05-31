@@ -59,6 +59,8 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
 
     @BindByTag("leftBtn")
     protected ImageButton leftBtn;
+    @BindByTag("refBtn")
+    protected ImageButton refBtn;
 
     @BindByTag("rightBtn")
     protected ImageButton rightBtn;
@@ -116,8 +118,9 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
-        if (editable) {
-            rightBtn.setVisibility(View.VISIBLE);
+        if (!editable) {
+            refBtn.setVisibility(View.GONE);
+            rightBtn.setVisibility(View.GONE);
         }
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
 

@@ -462,7 +462,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                 } else {
                     queryParam.put(Constant.BAPQuery.TABLE_NO, mWXGDEntity.tableNo);
                 }
-                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam);
+                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam,false);
             }
         });
 
@@ -1052,7 +1052,8 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
     @Override
     public void listWxgdsFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, errorMsg);
+        refreshController.refreshComplete();
+        ToastUtils.show(context, errorMsg);
     }
 
     @Override

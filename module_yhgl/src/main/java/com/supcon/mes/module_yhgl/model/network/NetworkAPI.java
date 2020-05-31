@@ -26,6 +26,7 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * Created by Administrator on 2016/3/23.
@@ -38,8 +39,8 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @POST("/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW")
-    Flowable<YHListEntity> faultInfoListPending(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
+    @POST
+    Flowable<YHListEntity> faultInfoList(@Url String url, @QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
     /**
      * 查询隐患管理全部

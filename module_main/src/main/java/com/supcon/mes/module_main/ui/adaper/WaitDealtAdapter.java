@@ -232,7 +232,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                             bundle.putLong(Constant.IntentKey.TABLE_ID, item.tableId);
                                             bundle.putLong(Constant.IntentKey.PENDING_ID, item.pendingId);
                                             // 通过摘要summary解析停电tableInfoId
-                                            if (!TextUtils.isEmpty(item.summary)) {
+                                            if (!TextUtils.isEmpty(item.summary) && item.summary.contains("offApplyTableinfoid")) {
                                                 try {
                                                     String json = item.summary.substring(item.summary.indexOf("*") +1);
                                                     if (GsonUtil.gsonToMaps(json).get("offApplyTableinfoid") != null) {

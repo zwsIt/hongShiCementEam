@@ -14,6 +14,7 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.module_login.BuildConfig;
 import com.supcon.mes.module_login.model.api.SilentLoginAPI;
 import com.supcon.mes.module_login.model.bean.LoginEntity;
 import com.supcon.mes.module_login.model.contract.SilentLoginContract;
@@ -52,7 +53,6 @@ public class SilentLoginController extends BasePresenterController implements Si
     @Override
     public void dologinFailed(String errorMsg) {
         LogUtil.e("后台登陆错误：" + errorMsg);
-//        Toast.makeText(EamApplication.getAppContext(), "后台登陆错误：" + errorMsg, Toast.LENGTH_SHORT).show();
         isLogining = false;
     }
 
@@ -83,7 +83,7 @@ public class SilentLoginController extends BasePresenterController implements Si
         if (isLogining) {
             return;
         }
-        boolean hasSupOS = SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, true);
+        boolean hasSupOS = SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, BuildConfig.HAS_SUPOS);
         if (hasSupOS) {
             dologinWithSuposPW(EamApplication.getUserName(), EamApplication.getPassword());
         } else {

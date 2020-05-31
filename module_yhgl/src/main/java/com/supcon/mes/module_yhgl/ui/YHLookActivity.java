@@ -16,8 +16,10 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
+import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
@@ -59,8 +61,12 @@ import com.supcon.mes.module_yhgl.controller.LubricateOilsController;
 import com.supcon.mes.module_yhgl.controller.MaintenanceController;
 import com.supcon.mes.module_yhgl.controller.RepairStaffController;
 import com.supcon.mes.module_yhgl.controller.SparePartController;
+import com.supcon.mes.module_yhgl.model.api.YHListAPI;
 import com.supcon.mes.module_yhgl.model.api.YHSubmitAPI;
+import com.supcon.mes.module_yhgl.model.bean.YHListEntity;
+import com.supcon.mes.module_yhgl.model.contract.YHListContract;
 import com.supcon.mes.module_yhgl.model.contract.YHSubmitContract;
+import com.supcon.mes.module_yhgl.presenter.YHListPresenter;
 import com.supcon.mes.module_yhgl.presenter.YHSubmitPresenter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -79,9 +85,10 @@ import java.util.concurrent.TimeUnit;
  * created by zhangwenshuai1 2019/10/9
  */
 @Router(Constant.Router.YH_LOOK)
-@Presenter(YHSubmitPresenter.class)
-@Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class, MaintenanceController.class, OnlineCameraController.class, AttachmentController.class})
-public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContract.View {
+@Presenter({YHSubmitPresenter.class, YHListPresenter.class})
+@Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class,
+        MaintenanceController.class, OnlineCameraController.class, AttachmentController.class})
+public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContract.View, YHListContract.View {
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -156,16 +163,14 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     @Override
     protected void onInit() {
         super.onInit();
-        refreshController.setAutoPullDownRefresh(false);
-        refreshController.setPullDownRefreshEnabled(false);
+        refreshController.setAutoPullDownRefresh(true);
+        refreshController.setPullDownRefreshEnabled(true);
         mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY);
-        mOriginalEntity = mYHEntity;
 
         getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH, Constant.PicType.YH_PIC);
         mAttachmentController = getController(AttachmentController.class);
 
     }
-
 
     @Override
     protected void onRegisterController() {
@@ -177,6 +182,17 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         titleText.setText(context.getResources().getString(R.string.fault_look));
+    }
+
+     /**
+      * @method  视图内容填充
+      * @description
+      * @author: zhangwenshuai
+      * @date: 2020/5/30 17:07
+      * @param  * @param null
+      * @return
+      */
+    private void setView(){
         yhViewFindStaff.setValue(mYHEntity.findStaffID != null ? mYHEntity.findStaffID.name : "");
         yhViewFindTime.setDate(DateUtil.dateTimeFormat(mYHEntity.findTime));
         yhViewPriority.setSpinner(mYHEntity.priority != null ? mYHEntity.priority.value : "");
@@ -205,13 +221,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         if (!TextUtils.isEmpty(mYHEntity.remark)) {
             yhViewMemo.setInput(mYHEntity.remark);
         }
-
         initPic();
-
-//        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) refreshFrameLayout.getLayoutParams();
-//        layoutParams.bottomMargin = 0;
-//        refreshFrameLayout.setLayoutParams(layoutParams);
-//        yhDealBar.setVisibility(View.GONE);
     }
 
     /**
@@ -242,9 +252,13 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         super.initListener();
 
         RxView.clicks(leftBtn)
-                .throttleFirst(2, TimeUnit.SECONDS)
+                .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
-
+        refreshController.setOnRefreshListener(() -> {
+            Map<String, Object> queryParam = new HashMap<>();
+            queryParam.put(Constant.BAPQuery.TABLE_NO,mYHEntity.tableNo);
+            presenterRouter.create(YHListAPI.class).queryYHList(1, queryParam,true);
+        });
 
         /*yhViewGalleryView.setOnChildViewClickListener((childView, action, obj) -> {
 
@@ -362,8 +376,6 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     @Override
     protected void initData() {
         super.initData();
-//        getController(LinkController.class).initPendingTransition(yhViewTransition, mYHEntity.pending.id);
-
     }
 
     @Override
@@ -374,23 +386,23 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Override
     public void onBackPressed() {
-
+        finish();
         //退出前校验表单是否修改过
         //如果修改过, 提示是否保存
-        if (checkIsModified()) {
-            new CustomDialog(context)
-                    .twoButtonAlertDialog("页面已经被修改，是否要保存?")
-                    .bindView(R.id.grayBtn, "保存")
-                    .bindView(R.id.redBtn, "离开")
-                    .bindClickListener(R.id.grayBtn, view ->doSave(), true)
-                    .bindClickListener(R.id.redBtn, v3 -> {
-                        //关闭页面
-                        finish();
-                    }, true)
-                    .show();
-        } else {
-            finish();
-        }
+//        if (checkIsModified()) {
+//            new CustomDialog(context)
+//                    .twoButtonAlertDialog("页面已经被修改，是否要保存?")
+//                    .bindView(R.id.grayBtn, "保存")
+//                    .bindView(R.id.redBtn, "离开")
+//                    .bindClickListener(R.id.grayBtn, view ->doSave(), true)
+//                    .bindClickListener(R.id.redBtn, v3 -> {
+//                        //关闭页面
+//                        finish();
+//                    }, true)
+//                    .show();
+//        } else {
+//            finish();
+//        }
 
     }
 
@@ -533,17 +545,6 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
 
     }
 
-    /**
-     * 判断是否填写过表单
-     */
-    private boolean checkIsModified() {
-        if (!GsonUtil.gsonString(mYHEntity).equals(mOriginalEntity.toString())) {
-            return true;
-        }
-
-        return !TextUtils.isEmpty(yhViewCommentInput.getInput());
-    }
-
 
     @Override
     public void doSubmitSuccess(BapResultEntity entity) {
@@ -560,5 +561,24 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         LogUtil.e("errorMsg:" + errorMsg);
         onLoadFailed(errorMsg);
         SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    @Override
+    public void queryYHListSuccess(YHListEntity entity) {
+        if (entity.result.size() > 0){
+            mYHEntity = entity.result.get(0);
+            mOriginalEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
+            setView();
+            getController(SparePartController.class).refreshData(mYHEntity);
+            getController(LubricateOilsController.class).refreshData(mYHEntity);
+            getController(RepairStaffController.class).refreshData(mYHEntity);
+            getController(MaintenanceController.class).refreshData(mYHEntity);
+        }
+        refreshController.refreshComplete();
+    }
+
+    @Override
+    public void queryYHListFailed(String errorMsg) {
+        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
     }
 }

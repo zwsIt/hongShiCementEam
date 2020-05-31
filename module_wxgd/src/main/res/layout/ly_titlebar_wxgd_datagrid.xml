@@ -44,7 +44,7 @@
             android:scaleType="center"
             android:src="@drawable/ic_ref_add"
             android:tag="refBtn"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <com.supcon.mes.mbap.view.CustomImageButton
             android:id="@+id/rightBtn"
@@ -55,6 +55,6 @@
             android:scaleType="center"
             android:src="@drawable/sl_top_add"
             android:tag="rightBtn"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </LinearLayout>
 </RelativeLayout>

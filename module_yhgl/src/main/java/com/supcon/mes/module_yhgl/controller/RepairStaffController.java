@@ -106,23 +106,6 @@ public class RepairStaffController extends BaseViewController implements RepairS
                         }
                         IntentRouter.go(context, Constant.Router.YHGL_REPAIR_STAFF_LIST, bundle);
                         break;
-//                    case CustomListWidget.ACTION_ITEM_DELETE:
-//                        break;
-//                    case CustomListWidget.ACTION_EDIT:
-//                        bundle.putString(Constant.IntentKey.REPAIR_STAFF_ENTITIES, repairStaffListStr);
-//                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-//                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
-//                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-//                        IntentRouter.go(context, Constant.Router.WXGD_REPAIR_STAFF_LIST, bundle);
-//                        break;
-//                    case CustomListWidget.ACTION_ADD:
-//                        bundle.putString(Constant.IntentKey.REPAIR_STAFF_ENTITIES, repairStaffListStr);
-//                        bundle.putBoolean(Constant.IntentKey.IS_ADD, true);
-//                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-//                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
-//                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-//                        IntentRouter.go(context, Constant.Router.WXGD_REPAIR_STAFF_LIST, bundle);
-//                        break;
                     default:
                         break;
                 }
@@ -154,7 +137,7 @@ public class RepairStaffController extends BaseViewController implements RepairS
         }
     }
 
-    public void setYHEntity(YHEntity mYHEntity) {
+    public void refreshData(YHEntity mYHEntity) {
         this.mYHEntity = mYHEntity;
         listRepairStaffList(mYHEntity.id);
     }

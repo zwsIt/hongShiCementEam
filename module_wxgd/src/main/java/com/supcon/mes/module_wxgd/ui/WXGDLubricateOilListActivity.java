@@ -137,9 +137,9 @@ public class WXGDLubricateOilListActivity extends BaseRefreshRecyclerActivity<Lu
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
-        if (editable) {
-            rightBtn.setVisibility(View.VISIBLE);
-            refBtn.setVisibility(View.VISIBLE);
+        if (!editable) {
+            refBtn.setVisibility(View.GONE);
+            rightBtn.setVisibility(View.GONE);
         }
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
 

@@ -55,6 +55,8 @@ public class YHGLMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
 
     @BindByTag("refBtn")
     protected ImageButton refBtn;
+    @BindByTag("rightBtn")
+    protected ImageButton rightBtn;
 
     @BindByTag("titleText")
     protected TextView titleText;
@@ -105,8 +107,9 @@ public class YHGLMaintenanceListActivity extends BaseRefreshRecyclerActivity<Mai
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
-        if (editable) {
-            refBtn.setVisibility(View.VISIBLE);
+        if (!editable) {
+            refBtn.setVisibility(View.GONE);
+            rightBtn.setVisibility(View.GONE);
         }
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
 

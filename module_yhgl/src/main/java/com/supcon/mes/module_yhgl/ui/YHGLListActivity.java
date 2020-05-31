@@ -207,7 +207,7 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
                 pageIndex -> {
                     if (mAdapter != null)
                         mAdapter.onDestroy();//刷新时暂停下载图片
-                    presenterRouter.create(YHListAPI.class).queryYHList(pageIndex, queryParam);
+                    presenterRouter.create(YHListAPI.class).queryYHList(pageIndex, queryParam,false);
                 });
 
         RxTextView.textChanges(customSearchView.editText())

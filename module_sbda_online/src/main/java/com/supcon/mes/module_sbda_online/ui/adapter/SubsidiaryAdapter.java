@@ -69,18 +69,18 @@ public class SubsidiaryAdapter extends BaseListDataRecyclerViewAdapter<Subsidiar
         @Override
         protected void initListener() {
             super.initListener();
-            itemView.setOnClickListener(v -> onItemChildViewClick(itemView,0,getItem(getLayoutPosition())));
+            itemView.setOnClickListener(v -> onItemChildViewClick(itemView, 0, getItem(getLayoutPosition())));
         }
 
         @Override
         protected void update(SubsidiaryEntity data) {
 
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getAttachEamId().name)
-                    , Util.strFormat(data.attachEamId.code));
+                    , Util.strFormat(data.attachEamId.eamAssetCode));
             itemEquipmentNameTv.contentView().setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
 
             itemEquipmentNumTv.setText(String.format(context.getString(R.string.device_style1), "数量:", Util.big2(data.sum)));
-            itemEquipmentTypeTv.setText(String.format(context.getString(R.string.device_style1), "设备类型:", Util.strFormat(data.getAttachEamId().getEamType().name)));
+            itemEquipmentTypeTv.setText(String.format(context.getString(R.string.device_style1), "设备类型:", Util.strFormat(data.getAttachEamId().eamType.name)));
             itemEquipmentModelTv.setValue(Util.strFormat(data.getAttachEamId().model));
             itemEquipmentProduceFirmTv.setValue(Util.strFormat(data.getAttachEamId().produceFirm));
             itemEquipmentProduceCodeTv.setValue(Util.strFormat(data.getAttachEamId().produceCode));
@@ -90,10 +90,10 @@ public class SubsidiaryAdapter extends BaseListDataRecyclerViewAdapter<Subsidiar
                 itemEquipmentMemoTv.setVisibility(View.VISIBLE);
                 itemEquipmentMemoTv.setValue(String.format(context.getString(R.string.device_style2), "备注:", Util.strFormat(data.attachMemo)));
             }
-            if (TextUtils.isEmpty(data.getAttachEamId().stateForDisplay)) {
+            if (TextUtils.isEmpty(data.getAttachEamId().state)) {
                 eamStatus.setVisibility(View.GONE);
             } else {
-                int statusBackgroundRes = R.drawable.eam_status_use;
+                int statusBackgroundRes;
                 eamStatus.setText(data.getAttachEamId().stateForDisplay);
                 String status = data.getAttachEamId().state == null ? "" : data.getAttachEamId().state;
                 if (status.equals("01"))
@@ -104,7 +104,9 @@ public class SubsidiaryAdapter extends BaseListDataRecyclerViewAdapter<Subsidiar
                     statusBackgroundRes = R.drawable.eam_status_delay;
                 else if (status.equals("02"))
                     statusBackgroundRes = R.drawable.eam_status_stop;
-
+                else {
+                    statusBackgroundRes = R.drawable.eam_status_use;
+                }
                 eamStatus.setBackgroundResource(statusBackgroundRes);
             }
         }

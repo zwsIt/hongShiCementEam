@@ -53,7 +53,6 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void onInit() {
         super.onInit();
-        EventBus.getDefault().register(this);
         mYHEntity = (YHEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY);
     }
 
@@ -66,29 +65,26 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void initListener() {
         super.initListener();
-        sparePartListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                Bundle bundle = new Bundle();
-                switch (action) {
-                    case CustomListWidget.ACTION_VIEW_ALL:
-                    case 0:
-                        bundle.putString(Constant.IntentKey.SPARE_PART_ENTITIES, mSparePartEntities.toString());
-                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, editable);
-                        bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
-                        if (mYHEntity.pending != null) {
-                            bundle.putString(Constant.IntentKey.TABLE_STATUS, mYHEntity.pending.taskDescription);
-                            bundle.putString(Constant.IntentKey.TABLE_ACTION, mYHEntity.pending.openUrl);
-                        }
-                        bundle.putLong(Constant.IntentKey.LIST_ID, mYHEntity.id == null ? -1L : mYHEntity.id);
-                        if (mYHEntity.getEamID().id != null) {
-                            bundle.putLong(Constant.IntentKey.EAM_ID, mYHEntity.getEamID().id);
-                        }
-                        IntentRouter.go(context, Constant.Router.YHGL_SPARE_PART_LIST, bundle);
-                        break;
-                    default:
-                        break;
-                }
+        sparePartListWidget.setOnChildViewClickListener((childView, action, obj) -> {
+            Bundle bundle = new Bundle();
+            switch (action) {
+                case CustomListWidget.ACTION_VIEW_ALL:
+                case 0:
+                    bundle.putString(Constant.IntentKey.SPARE_PART_ENTITIES, mSparePartEntities.toString());
+                    bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, editable);
+                    bundle.putBoolean(Constant.IntentKey.IS_ADD, false);
+                    if (mYHEntity.pending != null) {
+                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mYHEntity.pending.taskDescription);
+                        bundle.putString(Constant.IntentKey.TABLE_ACTION, mYHEntity.pending.openUrl);
+                    }
+                    bundle.putLong(Constant.IntentKey.LIST_ID, mYHEntity.id == null ? -1L : mYHEntity.id);
+                    if (mYHEntity.getEamID().id != null) {
+                        bundle.putLong(Constant.IntentKey.EAM_ID, mYHEntity.getEamID().id);
+                    }
+                    IntentRouter.go(context, Constant.Router.YHGL_SPARE_PART_LIST, bundle);
+                    break;
+                default:
+                    break;
             }
         });
     }
@@ -132,12 +128,9 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void initData() {
         super.initData();
-        if (mYHEntity.id != null) {
-            presenterRouter.create(SparePartAPI.class).listSparePartList(mYHEntity.id);
-        }
     }
 
-    public void setYHEntity(YHEntity mYHEntity) {
+    public void refreshData(YHEntity mYHEntity) {
         this.mYHEntity = mYHEntity;
         presenterRouter.create(SparePartAPI.class).listSparePartList(mYHEntity.id);
     }
@@ -145,11 +138,6 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(BaseEvent baseEvent) {
     }
 
     //获取备件数据

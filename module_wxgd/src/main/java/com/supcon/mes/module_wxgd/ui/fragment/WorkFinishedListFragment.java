@@ -135,7 +135,7 @@ public class WorkFinishedListFragment extends BaseRefreshRecyclerFragment<WXGDEn
 
         refreshListController.setOnRefreshPageListener(pageIndex -> {
             queryParam.put(Constant.BAPQuery.WORK_STATE,Constant.WorkState_ENG.TAKE_EFFECT);
-            presenterRouter.create(WXGDListAPI.class).listWxgds(pageIndex, queryParam);
+            presenterRouter.create(WXGDListAPI.class).listWxgds(pageIndex, queryParam,true);
         });
     }
 

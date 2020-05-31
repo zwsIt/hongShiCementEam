@@ -11,10 +11,13 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
+import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
+import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
@@ -38,9 +41,16 @@ import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
 import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
 import com.supcon.mes.module_wxgd.controller.SparePartController;
+import com.supcon.mes.module_wxgd.model.api.WXGDListAPI;
+import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
+import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
+import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * WXGDCompleteActivity 完成Activity
@@ -49,8 +59,10 @@ import java.util.List;
  */
 
 @Router(value = Constant.Router.WXGD_COMPLETE)
-@Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class, MaintenanceController.class, AcceptanceCheckController.class})
-public class WXGDCompleteActivity extends BaseRefreshActivity {
+@Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class,
+        MaintenanceController.class, AcceptanceCheckController.class})
+@Presenter(value = {WXGDListPresenter.class})
+public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDListContract.View {
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -109,13 +121,12 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
     @BindByTag("eleOff")
     CustomTextView eleOff;
 
-
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
 
-    private DatePickController mDatePickController;
-    private List<SystemCodeEntity> checkResultList = new ArrayList<>();
-    private List<String> checkResultListStr = new ArrayList<>();
-    private boolean mStatisticSource; // 是否来自报表统计跳转
+//    private DatePickController mDatePickController;
+//    private List<SystemCodeEntity> checkResultList = new ArrayList<>();
+//    private List<String> checkResultListStr = new ArrayList<>();
+//    private boolean mStatisticSource; // 是否来自报表统计跳转
 
     @Override
     protected int getLayoutID() {
@@ -126,47 +137,41 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
     protected void onInit() {
         super.onInit();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        refreshController.setPullDownRefreshEnabled(false);
-        refreshController.setAutoPullDownRefresh(false);
+        refreshController.setPullDownRefreshEnabled(true);
+        refreshController.setAutoPullDownRefresh(true);
         mWXGDEntity = (WXGDEntity) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        mStatisticSource = getIntent().getBooleanExtra(Constant.IntentKey.STATISTIC_SORCE,false);
+//        mStatisticSource = getIntent().getBooleanExtra(Constant.IntentKey.STATISTIC_SORCE,false);
 
-        SparePartController mSparePartController = getController(SparePartController.class);
-        mSparePartController.setEditable(false);
-        RepairStaffController mRepairStaffController = getController(RepairStaffController.class);
-        mRepairStaffController.setEditable(false);
-        LubricateOilsController mLubricateOilsController = getController(LubricateOilsController.class);
-        mLubricateOilsController.setEditable(false);
-        AcceptanceCheckController mAcceptanceCheckController = getController(AcceptanceCheckController.class);
-        mAcceptanceCheckController.setEditable(false);
-        MaintenanceController maintenanceController = getController(MaintenanceController.class);
-        maintenanceController.setEditable(false);
+        getController(SparePartController.class).setEditable(false);
+        getController(RepairStaffController.class).setEditable(false);
+        getController(LubricateOilsController.class).setEditable(false);
+        getController(AcceptanceCheckController.class).setEditable(false);
+        getController(MaintenanceController.class).setEditable(false);
 
-        mDatePickController = new DatePickController(this);
-        mDatePickController.setSecondVisible(true);
-        mDatePickController.setDividerVisible(true);
-        mDatePickController.setCanceledOnTouchOutside(true);
+//        mDatePickController = new DatePickController(this);
+//        mDatePickController.setSecondVisible(true);
+//        mDatePickController.setDividerVisible(true);
+//        mDatePickController.setCanceledOnTouchOutside(true);
 
-        initCheckResult();
+//        initCheckResult();
     }
 
-    private void initCheckResult() {
-        checkResultList = EamApplication.dao().getSystemCodeEntityDao().queryBuilder().where(SystemCodeEntityDao.Properties.EntityCode.eq(Constant.SystemCode.CHECK_RESULT)).list();
-        for (SystemCodeEntity entity : checkResultList) {
-            checkResultListStr.add(entity.value);
-        }
-    }
+//    private void initCheckResult() {
+//        checkResultList = EamApplication.dao().getSystemCodeEntityDao().queryBuilder().where(SystemCodeEntityDao.Properties.EntityCode.eq(Constant.SystemCode.CHECK_RESULT)).list();
+//        for (SystemCodeEntity entity : checkResultList) {
+//            checkResultListStr.add(entity.value);
+//        }
+//    }
 
     @Override
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-        if (mStatisticSource){
+//        if (mStatisticSource){
             titleText.setText("工单查看");
-        }else {
-            titleText.setText("生效");
-        }
-        initTableHeadView();
+//        }else {
+//            titleText.setText("生效");
+//        }
     }
 
 
@@ -199,7 +204,6 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
     @Override
     protected void initData() {
         super.initData();
-        initTableHeadData();
     }
 
     /**
@@ -247,8 +251,11 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
     protected void initListener() {
         super.initListener();
         leftBtn.setOnClickListener(v -> onBackPressed());
-
-
+        refreshController.setOnRefreshListener(() -> {
+            Map<String,Object> queryParam = new HashMap<>();
+            queryParam.put(Constant.BAPQuery.TABLE_NO,mWXGDEntity.tableNo);
+            presenterRouter.create(WXGDListAPI.class).listWxgds(1,queryParam,true);
+        });
         eamName.getCustomValue().setOnClickListener(v -> goSBDA());
         eamIc.setOnClickListener(v -> goSBDA());
         eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
@@ -264,5 +271,29 @@ public class WXGDCompleteActivity extends BaseRefreshActivity {
         bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID, mWXGDEntity.eamID.id);
         bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE, mWXGDEntity.eamID.code);
         IntentRouter.go(context, Constant.Router.SBDA_ONLINE_VIEW, bundle);
+    }
+
+    @Override
+    public void listWxgdsSuccess(WXGDListEntity entity) {
+        List<WXGDEntity> wxgdEntityList = entity.result;
+        if (wxgdEntityList.size() > 0) {
+            mWXGDEntity = wxgdEntityList.get(0);
+            initTableHeadView();
+            initTableHeadData();
+            getController(RepairStaffController.class).setWxgdEntity(mWXGDEntity);
+            getController(SparePartController.class).setWxgdEntity(mWXGDEntity);
+            getController(LubricateOilsController.class).setWxgdEntity(mWXGDEntity);
+            getController(MaintenanceController.class).setWxgdEntity(mWXGDEntity);
+            getController(MaintenanceController.class).setWxgdEntity(mWXGDEntity);
+        } else {
+            ToastUtils.show(this, "未查到当前单据信息");
+        }
+        refreshController.refreshComplete();
+    }
+
+    @Override
+    public void listWxgdsFailed(String errorMsg) {
+        refreshController.refreshComplete();
+        ToastUtils.show(context, errorMsg);
     }
 }

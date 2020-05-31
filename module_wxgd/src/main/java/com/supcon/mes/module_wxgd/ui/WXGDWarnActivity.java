@@ -333,7 +333,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         refreshController.setOnRefreshListener(() -> {
             Map<String, Object> queryParam = new HashMap<>();
             queryParam.put(Constant.BAPQuery.TABLE_NO, TextUtils.isEmpty(tmpTableNum) ? mWXGDEntity.tableNo : tmpTableNum);
-            presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam);
+            presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam,false);
         });
         repairGroup.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1) {

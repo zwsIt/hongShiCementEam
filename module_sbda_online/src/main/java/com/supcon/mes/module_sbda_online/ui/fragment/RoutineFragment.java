@@ -115,13 +115,15 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
 
     private static Long eamId;
     private static String eamCodes;
+    private static boolean isSubsidiary; // 是否附属
 
     private Handler handler = new Handler();
     private Runnable runnable;
 
-    public static RoutineFragment newInstance(Long id, String code) {
+    public static RoutineFragment newInstance(Long id, String code, boolean isSubsidiary) {
         eamId = id;
         eamCodes = code;
+        RoutineFragment.isSubsidiary = isSubsidiary;
         return new RoutineFragment();
     }
 
@@ -140,17 +142,14 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
     @Override
     protected void initListener() {
         super.initListener();
-        refreshController.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!TextUtils.isEmpty(eamCodes)) {
-                    Map<String, Object> queryParam = new HashMap<>();
-                    queryParam.put(Constant.BAPQuery.EAM_CODE, eamCodes);
-                    queryParam.put(Constant.BAPQuery.EAM_ID, eamId);
-                    presenterRouter.create(SBDAOnlineListAPI.class).getSearchSBDA(queryParam, 1);
-                }
-                presenterRouter.create(RoutineAPI.class).getEamOtherInfo(eamId);
+        refreshController.setOnRefreshListener(() -> {
+            if (!TextUtils.isEmpty(eamCodes)) {
+                Map<String, Object> queryParam = new HashMap<>();
+                queryParam.put(Constant.BAPQuery.EAM_CODE, eamCodes);
+                queryParam.put(Constant.BAPQuery.EAM_ID, eamId);
+                presenterRouter.create(SBDAOnlineListAPI.class).getSearchSBDA(queryParam, 1,isSubsidiary);
             }
+            presenterRouter.create(RoutineAPI.class).getEamOtherInfo(eamId);
         });
     }
 
@@ -165,7 +164,7 @@ public class RoutineFragment extends BaseRefreshFragment implements RoutineContr
             setTextValue(eamState, EAMStatusHelper.getType(sbdaOnlineEntity.state));
             setTextValue(eamUserDept, sbdaOnlineEntity.getUseDept().name);
             setTextValue(eamDutyStaff, sbdaOnlineEntity.getDutyStaff().name);
-            setTextValue(eamAbc, sbdaOnlineEntity.abc == null ? "" : sbdaOnlineEntity.abc.value);
+            setTextValue(eamAbc, sbdaOnlineEntity.abc == null ? "" : sbdaOnlineEntity.stateForDisplay);
             setTextValue(installPlace, sbdaOnlineEntity.installPlace == null ? "" : sbdaOnlineEntity.installPlace.name);
             setTextValue(areaNum, sbdaOnlineEntity.areaNum);
             setTextValue(electricStaff, sbdaOnlineEntity.getElectricStaff().name);

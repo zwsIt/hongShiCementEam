@@ -43,6 +43,7 @@ public class SBDAOnlineViewActivity extends BaseFragmentActivity {
     NoScrollViewPager sbdaViewPager;
     private Long eamId;
     private String eamCode;
+    private boolean isSubsidiary; // 是否附属
 
     @Override
     protected int getLayoutID() {
@@ -54,6 +55,7 @@ public class SBDAOnlineViewActivity extends BaseFragmentActivity {
         super.onInit();
         eamId = getIntent().getLongExtra(Constant.IntentKey.SBDA_ONLINE_EAMID, 0L);
         eamCode = getIntent().getStringExtra(Constant.IntentKey.SBDA_ONLINE_EAMCODE);
+        isSubsidiary = getIntent().getBooleanExtra(Constant.IntentKey.SBDA_ONLINE_SUBSIDIARY,false);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class SBDAOnlineViewActivity extends BaseFragmentActivity {
         titleText.setText("设备档案");
         tablayout.setupWithViewPager(sbdaViewPager);
         SBDAOnlineViewAdapter sbdaOnlineViewAdapter = new SBDAOnlineViewAdapter(getSupportFragmentManager());
-        sbdaOnlineViewAdapter.addFragment(RoutineFragment.newInstance(eamId, eamCode), "常规信息");
+        sbdaOnlineViewAdapter.addFragment(RoutineFragment.newInstance(eamId, eamCode, isSubsidiary), "常规信息");
         sbdaOnlineViewAdapter.addFragment(RepairFragment.newInstance(eamId), "维修信息");
         sbdaOnlineViewAdapter.addFragment(SubsidiaryFragment.newInstance(eamId), "附属设备");
         sbdaOnlineViewAdapter.addFragment(SparePartFragment.newInstance(eamId), "零部件");

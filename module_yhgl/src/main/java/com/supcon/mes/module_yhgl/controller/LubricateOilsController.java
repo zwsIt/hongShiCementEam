@@ -89,23 +89,6 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                         }
                         IntentRouter.go(context, Constant.Router.YHGL_LUBRICATE_OIL_LIST, bundle);
                         break;
-//                    case CustomListWidget.ACTION_ITEM_DELETE:
-//                        break;
-//                    case CustomListWidget.ACTION_EDIT:
-//                        bundle.putString(Constant.IntentKey.LUBRICATE_OIL_ENTITIES, lubricateOilsListStr);
-//                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-//                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
-//                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-//                        IntentRouter.go(context, Constant.Router.WXGD_LUBRICATE_OIL_LIST, bundle);
-//                        break;
-//                    case CustomListWidget.ACTION_ADD:
-//                        bundle.putString(Constant.IntentKey.LUBRICATE_OIL_ENTITIES, lubricateOilsListStr);
-//                        bundle.putBoolean(Constant.IntentKey.IS_ADD, true);
-//                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-//                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
-//                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-//                        IntentRouter.go(context, Constant.Router.WXGD_LUBRICATE_OIL_LIST, bundle);
-//                        break;
                     default:
                         break;
                 }
@@ -151,12 +134,9 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     @Override
     public void initData() {
         super.initData();
-        if (mYHEntity.id != null){
-            presenterRouter.create(LubricateOilsAPI.class).listLubricateOilsList(mYHEntity.id);
-        }
     }
 
-    public void setYHEntity(YHEntity mYHEntity) {
+    public void refreshData(YHEntity mYHEntity) {
         this.mYHEntity = mYHEntity;
         presenterRouter.create(LubricateOilsAPI.class).listLubricateOilsList(mYHEntity.id);
     }

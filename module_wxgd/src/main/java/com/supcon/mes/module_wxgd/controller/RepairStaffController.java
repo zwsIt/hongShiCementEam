@@ -36,11 +36,9 @@ import java.util.List;
  * Email:wangshizhan@supcom.com
  */
 @Presenter(RepairStaffPresenter.class)
-public class RepairStaffController extends BaseViewController implements RepairStaffContract.View, RepairStaffAPI {
-    //    private CustomListWidget<RepairStaffEntity> repairStaffListWidget;
+public class RepairStaffController extends BaseViewController implements RepairStaffContract.View {
     private List<RepairStaffEntity> staffEntities = new ArrayList<>();
 
-    private Long id = -1L;
     private boolean isEditable;
     private WXGDEntity mWXGDEntity;
 
@@ -56,9 +54,6 @@ public class RepairStaffController extends BaseViewController implements RepairS
         super.onInit();
         EventBus.getDefault().register(this);
         mWXGDEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        if (mWXGDEntity.id != null) {
-            this.id = mWXGDEntity.id;
-        }
     }
 
     @Override
@@ -108,23 +103,6 @@ public class RepairStaffController extends BaseViewController implements RepairS
                         bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.getPending().taskDescription);
                         IntentRouter.go(context, Constant.Router.WXGD_REPAIR_STAFF_LIST, bundle);
                         break;
-//                    case CustomListWidget.ACTION_ITEM_DELETE:
-//                        break;
-//                    case CustomListWidget.ACTION_EDIT:
-//                        bundle.putString(Constant.IntentKey.REPAIR_STAFF_ENTITIES, repairStaffListStr);
-//                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-//                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
-//                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-//                        IntentRouter.go(context, Constant.Router.WXGD_REPAIR_STAFF_LIST, bundle);
-//                        break;
-//                    case CustomListWidget.ACTION_ADD:
-//                        bundle.putString(Constant.IntentKey.REPAIR_STAFF_ENTITIES, repairStaffListStr);
-//                        bundle.putBoolean(Constant.IntentKey.IS_ADD, true);
-//                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-//                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
-//                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-//                        IntentRouter.go(context, Constant.Router.WXGD_REPAIR_STAFF_LIST, bundle);
-//                        break;
                     default:
                         break;
                 }
@@ -142,22 +120,14 @@ public class RepairStaffController extends BaseViewController implements RepairS
         this.repairStaffListWidget = customListWidget;
     }
 
-
-    @Override
-    public void listRepairStaffList(long id) {
-        presenterRouter.create(RepairStaffAPI.class).listRepairStaffList(id);
-    }
-
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(RepairStaffAPI.class).listRepairStaffList(id);
     }
 
     public void setWxgdEntity(WXGDEntity mWxgdEntity) {
         this.mWXGDEntity = mWxgdEntity;
-        this.id = mWxgdEntity.id;
-        presenterRouter.create(RepairStaffAPI.class).listRepairStaffList(id);
+        presenterRouter.create(RepairStaffAPI.class).listRepairStaffList(mWXGDEntity.id);
     }
 
     @Override

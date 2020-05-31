@@ -581,10 +581,17 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        Bundle bundle = new Bundle();
+//                        Bundle bundle = new Bundle();
 //                    bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+//                        bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "Main");
+//                        IntentRouter.go(getActivity(), Constant.Router.EAM, bundle);
+                        Bundle bundle = new Bundle();
+//                        bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                         bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "Main");
-                        IntentRouter.go(getActivity(), Constant.Router.EAM, bundle);
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                        com.supcon.mes.middleware.IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
+
                     }
                 });
 

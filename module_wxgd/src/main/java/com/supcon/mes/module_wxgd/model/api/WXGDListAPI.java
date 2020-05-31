@@ -13,5 +13,5 @@ import java.util.Map;
 @ContractFactory(entites = {WXGDListEntity.class})
 public interface WXGDListAPI {
 
-    void listWxgds(int pageNum, Map<String,Object> queryParam);
+    void listWxgds(int pageNum, Map<String,Object> queryParam, boolean all);
 }

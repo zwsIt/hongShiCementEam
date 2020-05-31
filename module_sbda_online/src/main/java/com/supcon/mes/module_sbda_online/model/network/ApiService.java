@@ -37,13 +37,17 @@ import retrofit2.http.Url;
 public interface ApiService {
 
 
-    //档案查看
-    @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action")
+    //档案查看list
+    @GET("/BEAM/baseInfo/baseInfo/baseInfoPartForview-query.action") // PC默认只查询主设备
     Flowable<SBDAOnlineListEntity> getPartForview(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
+    //档案list
+    @GET("/BEAM/baseInfo/baseInfo/baseInfoViewForYD-query.action") // 所有设备档案list
+    Flowable<SBDAOnlineListEntity> getBaseInfo(@Query("advQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
     //附属
-    @GET("/BEAM/baseInfo/baseInfo/data-dg1461551623906.action")
-    Flowable<SubsidiaryListEntity> attachPart(@Query("baseInfo.id") Long beamID);
+    @GET("/BEAM/baseInfo/attachPart/data-dg1543374150818.action?1=1") // 档案查看-附属设备（自定义）
+    Flowable<SubsidiaryListEntity> attachPart(@Query("beamID") Long beamID);
 
     //备件
     @GET("/BEAM/baseInfo/baseInfo/data-dg1461551624000.action")

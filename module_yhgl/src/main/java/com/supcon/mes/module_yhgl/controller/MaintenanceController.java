@@ -117,12 +117,12 @@ public class MaintenanceController extends BaseViewController implements Mainten
     @Override
     public void initData() {
         super.initData();
-        if (mYHEntity.id != null){
-            presenterRouter.create(MaintenanceAPI.class).listMaintenance(mYHEntity.id);
-        }
+//        if (mYHEntity.id != null){
+//            presenterRouter.create(MaintenanceAPI.class).listMaintenance(mYHEntity.id);
+//        }
     }
 
-    public void setYHEntity(YHEntity mYHEntity) {
+    public void refreshData(YHEntity mYHEntity) {
         this.mYHEntity = mYHEntity;
         presenterRouter.create(MaintenanceAPI.class).listMaintenance(mYHEntity.id);
     }

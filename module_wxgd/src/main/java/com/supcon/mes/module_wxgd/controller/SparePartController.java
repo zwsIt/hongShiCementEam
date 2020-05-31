@@ -37,8 +37,6 @@ import java.util.List;
 @Presenter(SparePartPresenter.class)
 public class SparePartController extends BaseViewController implements SparePartContract.View {
 
-    //    private CustomListWidget<SparePartEntity> sparePartListWidget;
-    private Long id = -1L;
     private ArrayList<SparePartEntity> mSparePartOldEntities = new ArrayList<>();
     private List<SparePartEntity> mSparePartEntities = new ArrayList<>();
     private boolean editable;
@@ -55,12 +53,8 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void onInit() {
         super.onInit();
-        EventBus.getDefault().register(this);
         mWXGDEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
         iswarn = ((Activity) context).getIntent().getBooleanExtra(Constant.IntentKey.ISWARN, false);
-        if (mWXGDEntity.id != null) {
-            this.id = mWXGDEntity.id;
-        }
     }
 
     @Override
@@ -86,7 +80,7 @@ public class SparePartController extends BaseViewController implements SparePart
                         bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum != null ? mWXGDEntity.repairSum : 1);
                         bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.getPending().taskDescription);
                         bundle.putString(Constant.IntentKey.TABLE_ACTION, mWXGDEntity.pending.openUrl);
-                        bundle.putLong(Constant.IntentKey.LIST_ID, id);
+                        bundle.putLong(Constant.IntentKey.LIST_ID, mWXGDEntity.id == null ? -1L : mWXGDEntity.id );
                         bundle.putLong(Constant.IntentKey.EAM_ID, mWXGDEntity.eamID.id != null ? mWXGDEntity.eamID.id : -1);
                         bundle.putSerializable(Constant.IntentKey.WXGD_WARN_ENTITIES, mSparePartOldEntities);
                         IntentRouter.go(context, Constant.Router.WXGD_SPARE_PART_LIST, bundle);
@@ -142,23 +136,16 @@ public class SparePartController extends BaseViewController implements SparePart
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(SparePartAPI.class).listSparePartList(id);
     }
 
     public void setWxgdEntity(WXGDEntity mWxgdEntity) {
         this.mWXGDEntity = mWxgdEntity;
-        this.id = mWxgdEntity.id;
-        presenterRouter.create(SparePartAPI.class).listSparePartList(id);
+        presenterRouter.create(SparePartAPI.class).listSparePartList(mWXGDEntity.id);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(BaseEvent baseEvent) {
     }
 
     //获取备件数据

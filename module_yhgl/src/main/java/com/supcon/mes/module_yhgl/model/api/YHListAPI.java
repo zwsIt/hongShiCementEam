@@ -12,6 +12,6 @@ import java.util.Map;
 @ContractFactory(entites = YHListEntity.class)
 public interface YHListAPI {
 
-    void queryYHList(int pageNum, Map<String, Object> queryParams);
+    void queryYHList(int pageNum, Map<String, Object> queryParams, boolean all);
 
 }

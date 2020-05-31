@@ -108,13 +108,6 @@ public class EamAreaTreeSelectActivity extends BaseRefreshRecyclerActivity<ICust
             EamEntity eamEntity = item.getCurrentEntity().eamEntity;
             if (isSelect) {
                 CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
-//                    CommonSearchStaff commonSearchStaff = new CommonSearchStaff();
-//                    commonSearchStaff.id = eamEntity.getSTAFFID();
-//                    commonSearchStaff.code = eamEntity.getCODE();
-//                    commonSearchStaff.name = eamEntity.getNAME();
-//                    commonSearchStaff.pinyin = eamEntity.getSearchPinyin();
-//                    commonSearchStaff.department = eamEntity.getDEPARTMENTNAME();
-//                    commonSearchStaff.mainPosition = eamEntity.getPOSITIONNAME();
                 commonSearchEvent.commonSearchEntity = eamEntity;
                 commonSearchEvent.flag = searchTag;
                 EventBus.getDefault().post(commonSearchEvent);

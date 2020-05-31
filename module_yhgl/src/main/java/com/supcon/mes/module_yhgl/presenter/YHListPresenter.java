@@ -21,7 +21,7 @@ import io.reactivex.functions.Function;
 public class YHListPresenter extends YHListContract.Presenter {
 
     @Override
-    public void queryYHList(int pageNum, Map<String, Object> queryParams) {
+    public void queryYHList(int pageNum, Map<String, Object> queryParams, boolean all) {
         FastQueryCondEntity fastQueryCondEntity = YHQueryParamsHelper.createFastCondEntity(queryParams);
         fastQueryCondEntity.modelAlias = "faultInfo";
 
@@ -29,8 +29,14 @@ public class YHListPresenter extends YHListContract.Presenter {
         pageQueryParams.put("page.pageNo", pageNum);
         pageQueryParams.put("page.pageSize", 20);
         pageQueryParams.put("page.maxPageSize", 500);
+        String url;
+        if (all){
+            url = "/BEAM2/faultInfo/faultInfo/faultInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_faultInfo_faultInfoList";
+        }else {
+            url = "/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW";
+        }
         mCompositeSubscription.add(
-                YHGLHttpClient.faultInfoListPending(pageQueryParams, fastQueryCondEntity)
+                YHGLHttpClient.faultInfoList(url,pageQueryParams, fastQueryCondEntity)
                         .onErrorReturn(new Function<Throwable, YHListEntity>() {
                             @Override
                             public YHListEntity apply(Throwable throwable) throws Exception {

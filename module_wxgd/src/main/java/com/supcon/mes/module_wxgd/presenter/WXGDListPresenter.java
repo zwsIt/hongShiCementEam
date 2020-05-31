@@ -13,7 +13,12 @@ import java.util.Map;
 
 public class WXGDListPresenter extends WXGDListContract.Presenter {
     @Override
-    public void listWxgds(int pageNum, Map<String, Object> queryParam) {
+    public void listWxgds(int pageNum, Map<String, Object> queryParam, boolean all) {
+        String url = "/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
+        if (all) {
+            url = "/BEAM2/workList/workRecord/workList-query.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
+        }
+
         FastQueryCondEntity fastQueryCondEntity = WXGDFastQueryCondHelper.createFastQueryCond(queryParam);
         fastQueryCondEntity.modelAlias = "workRecord";
 
@@ -21,14 +26,8 @@ public class WXGDListPresenter extends WXGDListContract.Presenter {
         pageQueryParam.put("page.pageSize", 20);
         pageQueryParam.put("page.maxPageSize", 500);
         pageQueryParam.put("page.pageNo", pageNum);
-
         pageQueryParam.put("fastQueryCond", fastQueryCondEntity);
 
-        String url = "/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
-        if (queryParam.containsKey(Constant.BAPQuery.WORK_STATE)
-                && queryParam.get(Constant.BAPQuery.WORK_STATE).equals(Constant.WorkState_ENG.TAKE_EFFECT)) {
-            url = "/BEAM2/workList/workRecord/workList-query.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
-        }
         mCompositeSubscription.add(
                 HttpClient.listWxgds(url, pageQueryParam)
                         .onErrorReturn(throwable -> {

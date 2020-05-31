@@ -30,7 +30,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     public String name;
     public String pinYin;
 
-    public String state;//设备状态
+    public String state;//设备状态 (本是系统编码，pc勾选了高级)
     public String stateForDisplay;
 
     public Long eamTypeId;
@@ -68,7 +68,10 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     //    public String abcId;
 //    @ToOne(joinProperty = "abcId")
     @Transient
-    public SystemCodeEntity abc;// 重要等级
+    public String abc;// 重要等级 (本是系统编码，pc勾选了高级)
+    @Transient
+    public String abcForDisplay;// 重要等级
+
     public float score;//分数
 
     //    public Long electricStaffId;

@@ -410,7 +410,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
                 } else {
                     queryParam.put(Constant.BAPQuery.TABLE_NO, mWXGDEntity.tableNo);
                 }
-                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam);
+                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam,false);
             }
         });
 

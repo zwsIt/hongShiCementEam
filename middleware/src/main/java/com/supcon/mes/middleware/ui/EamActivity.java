@@ -114,6 +114,10 @@ public class EamActivity extends BaseRefreshRecyclerActivity<CommonSearchEntity>
         searchTag = getIntent().getStringExtra(Constant.IntentKey.COMMON_SEARCH_TAG);
         isMulti = getIntent().getBooleanExtra(Constant.IntentKey.IS_MULTI, false);
 
+        if (!TextUtils.isEmpty(eamCode)){
+            mNfcCard = true;
+        }
+
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null) {
             nfcHelper.setup(this);

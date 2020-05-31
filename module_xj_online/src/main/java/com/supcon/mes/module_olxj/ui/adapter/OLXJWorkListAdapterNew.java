@@ -343,13 +343,21 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                         }
                     });
 
-            ufItemSelectResultSwitch.setOnSwitchDataListener(new CustomSwitchButton.OnSwitchDataListener() {
-                @Override
-                public void onSwitchDataChanged(boolean isSwichOn, String data) {
-                    OLXJWorkItemEntity xjWorkItemEntity = getItem(getAdapterPosition());
-                    xjWorkItemEntity.result = data;
+            ufItemSelectResultSwitch.setOnSwitchDataListener((isSwichOn, data) -> {
+                OLXJWorkItemEntity xjWorkItemEntity = getItem(getAdapterPosition());
+                xjWorkItemEntity.result = data;
+                if (!TextUtils.isEmpty(xjWorkItemEntity.defaultVal)){
+                    if (data.equals(xjWorkItemEntity.defaultVal)){
+                        xjWorkItemEntity.conclusionID = "realValue/01";
+                        xjWorkItemEntity.conclusionName = "正常";
+                        changeState(xjWorkItemEntity, false);
+                    }else {
+                        changeState(xjWorkItemEntity, true);
+                        xjWorkItemEntity.conclusionID = "realValue/02";
+                        xjWorkItemEntity.conclusionName = "异常";
+                    }
+                }else {
                     if (xjWorkItemEntity.autoJudge && xjWorkItemEntity.normalRange != null) {
-
                         String[] normalRangeArr = xjWorkItemEntity.normalRange.split(",");
                         if (Arrays.asList(normalRangeArr).contains(xjWorkItemEntity.result)) {
                             xjWorkItemEntity.conclusionID = "realValue/01";
@@ -362,6 +370,7 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
                         }
                     }
                 }
+
             });
             ufItemPriorityLayout.setOnClickListener(new View.OnClickListener() {
                 @Override

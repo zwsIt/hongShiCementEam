@@ -20,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_30"
-            android:paddingLeft="@dimen/dp_5"
             android:tag="itemEquipmentNameTv"
             app:content_hint="--"
             app:key="设      备:"
@@ -29,7 +28,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_5"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/dp_5">
 
@@ -57,7 +56,6 @@
             android:id="@+id/itemEquipmentModelTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp_5"
             android:tag="itemEquipmentModelTv"
             app:content_hint="--"
             app:key="规格型号:"
@@ -98,7 +96,6 @@
                 app:necessary="false" />
 
         </LinearLayout>
-
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/itemEquipmentDateTv"

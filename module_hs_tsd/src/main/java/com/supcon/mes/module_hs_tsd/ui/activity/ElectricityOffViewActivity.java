@@ -463,7 +463,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
                         getController(OnlineCameraController.class).setPicData(mElectricityOffOnEntity.attachmentEntities,"BEAMEle_1.0.0_onOrOff");
                     }
                 }
-            }, mElectricityOffOnEntity.getTableInfoId());
+            }, mElectricityOffOnEntity.getTableInfoId() == null ? -1 : mElectricityOffOnEntity.getTableInfoId());
         }
     }
 

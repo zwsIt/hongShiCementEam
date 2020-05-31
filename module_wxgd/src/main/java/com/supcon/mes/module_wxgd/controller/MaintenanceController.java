@@ -31,11 +31,10 @@ import java.util.List;
  * Email:wangshizhan@supcom.com
  */
 @Presenter(MaintenancePresenter.class)
-public class MaintenanceController extends BaseViewController implements MaintenanceContract.View, MaintenanceAPI {
+public class MaintenanceController extends BaseViewController implements MaintenanceContract.View {
     @BindByTag("maintenanceListWidget")
     CustomListWidget<MaintainEntity> maintenanceListWidget;
 
-    private Long id = -1L;
     private List<MaintainEntity> maintenanceOldEntities = new ArrayList<>();
     private List<MaintainEntity> maintenanceEntities = new ArrayList<>();
     private boolean isEditable;
@@ -49,9 +48,6 @@ public class MaintenanceController extends BaseViewController implements Mainten
     public void onInit() {
         super.onInit();
         wxgdEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        if (wxgdEntity.id != null) {
-            this.id = wxgdEntity.id;
-        }
     }
 
     @Override
@@ -86,11 +82,6 @@ public class MaintenanceController extends BaseViewController implements Mainten
     }
 
     @Override
-    public void listMaintenance(long id) {
-        presenterRouter.create(MaintenanceAPI.class).listMaintenance(id);
-    }
-
-    @Override
     public void listMaintenanceSuccess(MaintenanceListEntity entity) {
         maintenanceEntities = entity.result;
         maintenanceEntities.addAll(maintenanceOldEntities);
@@ -117,13 +108,11 @@ public class MaintenanceController extends BaseViewController implements Mainten
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(MaintenanceAPI.class).listMaintenance(id);
     }
 
     public void setWxgdEntity(WXGDEntity mWxgdEntity) {
         this.wxgdEntity = mWxgdEntity;
-        this.id = mWxgdEntity.id;
-        presenterRouter.create(MaintenanceAPI.class).listMaintenance(id);
+        presenterRouter.create(MaintenanceAPI.class).listMaintenance(wxgdEntity.id);
     }
 
     /**

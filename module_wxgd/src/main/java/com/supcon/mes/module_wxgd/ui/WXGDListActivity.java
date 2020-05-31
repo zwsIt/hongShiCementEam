@@ -266,7 +266,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-                presenterRouter.create(WXGDListAPI.class).listWxgds(pageIndex, queryParam);
+                presenterRouter.create(WXGDListAPI.class).listWxgds(pageIndex, queryParam,false);
                 setRadioEnable(false);
             }
         });

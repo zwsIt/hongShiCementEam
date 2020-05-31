@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.reactivex.Flowable;
+
 
 /**
  * Environment: hongruijun
@@ -27,7 +29,7 @@ import java.util.Objects;
 public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
     @SuppressLint("CheckResult")
     @Override
-    public void getSearchSBDA(Map<String, Object> params, int page) {
+    public void getSearchSBDA(Map<String, Object> params, int page, boolean subsidiaryQuery) {
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
 
         if (params.containsKey(Constant.BAPQuery.IS_MAIN_EQUIP)) {
@@ -72,12 +74,19 @@ public class SBDAOnlineListPresenter extends SBDAOnlineListContract.Presenter {
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.pageSize", 20);
         pageQueryParams.put("page.maxPageSize", 500);
-        mCompositeSubscription.add( SBDAOnlineHttpClient.getPartForview(fastQuery, pageQueryParams)
-                .onErrorReturn(throwable -> {
-                    SBDAOnlineListEntity sbdaOnlineListEntity = new SBDAOnlineListEntity();
-                    sbdaOnlineListEntity.errMsg = throwable.toString();
-                    return sbdaOnlineListEntity;
-                }).subscribe(sbdaOnlineListEntity -> {
+        Flowable<SBDAOnlineListEntity> flowable;
+        if (subsidiaryQuery) {
+            flowable = SBDAOnlineHttpClient.getBaseInfo(fastQuery, pageQueryParams);
+        } else {
+            flowable = SBDAOnlineHttpClient.getPartForview(fastQuery, pageQueryParams);
+        }
+        mCompositeSubscription.add(
+                flowable
+                        .onErrorReturn(throwable -> {
+                            SBDAOnlineListEntity sbdaOnlineListEntity = new SBDAOnlineListEntity();
+                            sbdaOnlineListEntity.errMsg = throwable.toString();
+                            return sbdaOnlineListEntity;
+                        }).subscribe(sbdaOnlineListEntity -> {
                     if (TextUtils.isEmpty(sbdaOnlineListEntity.errMsg)) {
                         getView().getSearchSBDASuccess(sbdaOnlineListEntity);
                     } else {

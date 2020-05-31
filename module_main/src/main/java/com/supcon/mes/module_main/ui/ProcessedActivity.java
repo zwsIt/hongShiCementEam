@@ -50,6 +50,7 @@ import io.reactivex.functions.Consumer;
  * ------------- Description -------------
  * 已处理的activity
  */
+@Deprecated
 @Presenter(value = ProcessedPresenter.class)
 @Router(value = Constant.Router.PROCESSED)
 public class ProcessedActivity extends BaseRefreshRecyclerActivity<ProcessedEntity> implements ProcessedContract.View {

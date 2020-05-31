@@ -155,9 +155,9 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(context));
-        if (editable) {
-            rightBtn.setVisibility(View.VISIBLE);
-            refBtn.setVisibility(View.VISIBLE);
+        if (!editable) {
+            refBtn.setVisibility(View.GONE);
+            rightBtn.setVisibility(View.GONE);
         }
         //接单、验收环节隐藏更新现存量及生成领用出库单按钮行
         if (Constant.WxgdView.RECEIVE_OPEN_URL.equals(tableAction) || Constant.WxgdView.ACCEPTANCE_OPEN_URL.equals(tableAction)) {

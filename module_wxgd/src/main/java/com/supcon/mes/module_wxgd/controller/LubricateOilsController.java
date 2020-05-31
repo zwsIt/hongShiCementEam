@@ -34,12 +34,11 @@ import java.util.List;
  * Email:wangshizhan@supcom.com
  */
 @Presenter(LubricateOilsPresenter.class)
-public class LubricateOilsController extends BaseViewController implements LubricateOilsContract.View, LubricateOilsAPI {
+public class LubricateOilsController extends BaseViewController implements LubricateOilsContract.View {
     //    private CustomListWidget<LubricateOilsEntity> lubricateOilsListWidget;
     @BindByTag("lubricateOilsListWidget")
     CustomListWidget<LubricateOilsEntity> lubricateOilsListWidget;
 
-    private Long id = -1L;
     private List<LubricateOilsEntity> mLubricateOilsOldEntities = new ArrayList<>();
     private List<LubricateOilsEntity> mLubricateOilsEntities = new ArrayList<>();
     private boolean isEditable;
@@ -53,11 +52,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
     @Override
     public void onInit() {
         super.onInit();
-        EventBus.getDefault().register(this);
         mWXGDEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        if (mWXGDEntity.id != null) {
-            this.id = mWXGDEntity.id;
-        }
     }
 
     @Override
@@ -84,23 +79,6 @@ public class LubricateOilsController extends BaseViewController implements Lubri
                         bundle.putLong(Constant.IntentKey.EAM_ID,mWXGDEntity.eamID.id != null ? mWXGDEntity.eamID.id : -1);
                         IntentRouter.go(context, Constant.Router.WXGD_LUBRICATE_OIL_LIST, bundle);
                         break;
-//                    case CustomListWidget.ACTION_ITEM_DELETE:
-//                        break;
-//                    case CustomListWidget.ACTION_EDIT:
-//                        bundle.putString(Constant.IntentKey.LUBRICATE_OIL_ENTITIES, lubricateOilsListStr);
-//                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-//                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
-//                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-//                        IntentRouter.go(context, Constant.Router.WXGD_LUBRICATE_OIL_LIST, bundle);
-//                        break;
-//                    case CustomListWidget.ACTION_ADD:
-//                        bundle.putString(Constant.IntentKey.LUBRICATE_OIL_ENTITIES, lubricateOilsListStr);
-//                        bundle.putBoolean(Constant.IntentKey.IS_ADD, true);
-//                        bundle.putBoolean(Constant.IntentKey.IS_EDITABLE, true);
-//                        bundle.putLong(Constant.IntentKey.REPAIR_SUM, mWXGDEntity.repairSum);
-//                        bundle.putString(Constant.IntentKey.TABLE_STATUS, mWXGDEntity.pending.taskDescription);
-//                        IntentRouter.go(context, Constant.Router.WXGD_LUBRICATE_OIL_LIST, bundle);
-//                        break;
                     default:
                         break;
                 }
@@ -138,33 +116,20 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         this.lubricateOilsListWidget = customListWidget;
     }
 
-
-    @Override
-    public void listLubricateOilsList(long id) {
-        presenterRouter.create(LubricateOilsAPI.class).listLubricateOilsList(id);
-    }
-
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(LubricateOilsAPI.class).listLubricateOilsList(id);
     }
 
     public void setWxgdEntity(WXGDEntity mWxgdEntity) {
         this.mWXGDEntity = mWxgdEntity;
-        this.id = mWxgdEntity.id;
-        presenterRouter.create(LubricateOilsAPI.class).listLubricateOilsList(id);
+        presenterRouter.create(LubricateOilsAPI.class).listLubricateOilsList(mWXGDEntity.id);
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refresh(BaseEvent baseEvent) {
     }
 
     /**

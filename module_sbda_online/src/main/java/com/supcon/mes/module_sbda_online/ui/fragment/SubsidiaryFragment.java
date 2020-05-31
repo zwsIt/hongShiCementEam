@@ -73,6 +73,7 @@ public class SubsidiaryFragment extends BaseRefreshRecyclerFragment<SubsidiaryEn
                 Bundle bundle = new Bundle();
                 bundle.putLong(Constant.IntentKey.SBDA_ONLINE_EAMID, item.getAttachEamId().id);
                 bundle.putString(Constant.IntentKey.SBDA_ONLINE_EAMCODE, item.getAttachEamId().code);
+                bundle.putBoolean(Constant.IntentKey.SBDA_ONLINE_SUBSIDIARY, true);
                 IntentRouter.go(context, Constant.Router.SBDA_ONLINE_VIEW, bundle);
                 getActivity().finish();
             }

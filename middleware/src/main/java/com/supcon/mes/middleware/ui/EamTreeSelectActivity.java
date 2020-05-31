@@ -177,7 +177,7 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        Map<String, ContactEntity> contactEntityMap = null;
+                        Map<String, EamEntity> contactEntityMap = null;
 //                        if (selectIndex == 0) {
 //                            contactEntityMap = mEamPortalSelectFragment.getContactAdapter().getSelectStaffs();
 //
@@ -189,22 +189,15 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 
 
                         if (contactEntityMap == null) {
-                            ToastUtils.show(context, "请选择人员！");
+                            ToastUtils.show(context, "请选择设备！");
                         }
 
                         CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
                         commonSearchEvent.flag = searchTag;
                         List<CommonSearchEntity> list = new LinkedList<>();
-                        for (Map.Entry<String, ContactEntity> entry : contactEntityMap.entrySet()) {
-                            ContactEntity value = entry.getValue();
-                            CommonSearchStaff commonSearchStaff = new CommonSearchStaff();
-                            commonSearchStaff.id = value.getSTAFFID();
-                            commonSearchStaff.code = value.getCODE();
-                            commonSearchStaff.name = value.getNAME();
-                            commonSearchStaff.pinyin = value.getSearchPinyin();
-                            commonSearchStaff.department = value.getDEPARTMENTNAME();
-                            commonSearchStaff.mainPosition = value.getPOSITIONNAME();
-                            list.add(commonSearchStaff);
+                        for (Map.Entry<String, EamEntity> entry : contactEntityMap.entrySet()) {
+                            EamEntity value = entry.getValue();
+                            list.add(value);
                         }
                         commonSearchEvent.mCommonSearchEntityList = list;
 

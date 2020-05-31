@@ -112,19 +112,16 @@ public class EamAreaTreeSelectPresenter extends EamAreaTreeSelectContract.Presen
     @SuppressLint("CheckResult")
     private void insertDirectBelongsNode(EamAreaTreeViewEntity currentNode) {
         List<EamEntity> list = EamApplication.dao().getEamEntityDao().queryBuilder().where(EamEntityDao.Properties.AreaId.eq(currentNode.getCurrentEntity().id))
-                .orderAsc(EamEntityDao.Properties.Id)
+                .orderAsc(EamEntityDao.Properties.EamAssetCode)
                 .list();
         Flowable.fromIterable(list)
-                .subscribe(new Consumer<EamEntity>() {
-                    @Override
-                    public void accept(EamEntity eamEntity) throws Exception {
-                        EamAreaTreeViewEntity directNodeClone = currentNode.clone();
-                        directNodeClone.setFatherNode(currentNode);
-                        Area cloneArea = directNodeClone.getCurrentEntity().clone();
-                        cloneArea.eamEntity = eamEntity;
-                        directNodeClone.setCurrentEntity(cloneArea);
-                        currentNode.getActualChildNodeList().add(directNodeClone);
-                    }
+                .subscribe(eamEntity -> {
+                    EamAreaTreeViewEntity directNodeClone = currentNode.clone();
+                    directNodeClone.setFatherNode(currentNode);
+                    Area cloneArea = directNodeClone.getCurrentEntity().clone();
+                    cloneArea.eamEntity = eamEntity;
+                    directNodeClone.setCurrentEntity(cloneArea);
+                    currentNode.getActualChildNodeList().add(directNodeClone);
                 });
     }
 

@@ -277,18 +277,22 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-        refreshController.setAutoPullDownRefresh(true);
-        refreshController.setPullDownRefreshEnabled(true);
         mYHEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY); // 制定、隐患单列表、隐患统计列表、工作提醒待办、异常记录传参
         deploymentId = getIntent().getLongExtra(DEPLOYMENT_ID, 0L);
 
-        if (TextUtils.isEmpty(mYHEntity.tableNo)) { // 制定时赋值
+        if (mYHEntity.id == null) { // 制定时赋值
+            refreshController.setAutoPullDownRefresh(false);
+            refreshController.setPullDownRefreshEnabled(false);
+
             mYHEntity.isOffApply = true;
             iniTransition();
             yhEditFindStaff.setValue(mYHEntity.findStaffID != null ? mYHEntity.findStaffID.name : "");
             yhEditFindTime.setDate(mYHEntity.findTime != null ? DateUtil.dateTimeFormat(mYHEntity.findTime) : "");
             yhEditWXType.setContent(mYHEntity.repairType.value);
             oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
+        }else {
+            refreshController.setAutoPullDownRefresh(true);
+            refreshController.setPullDownRefreshEnabled(true);
         }
 
         mSparePartController = getController(SparePartController.class);
@@ -488,7 +492,20 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(leftBtn)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
+        refreshController.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Map<String, Object> queryParam = new HashMap<>();
 
+                if (mYHEntity != null && mYHEntity.id != null) { // 隐患列表、隐患统计列表
+                    queryParam.put(Constant.BAPQuery.TABLE_NO, mYHEntity.tableNo);
+                }
+
+                if (queryParam.containsKey(Constant.BAPQuery.TABLE_NO)) {
+                    presenterRouter.create(YHListAPI.class).queryYHList(1, queryParam,false);
+                }
+            }
+        });
         yhEditArea.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1) {
                 mYHEntity.areaInstall = null;
@@ -743,23 +760,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                 bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
                 IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
-            }
-        });
-
-        refreshController.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Map<String, Object> queryParam = new HashMap<>();
-
-                if (mYHEntity != null && !TextUtils.isEmpty(mYHEntity.tableNo)) { // 隐患列表、隐患统计列表
-                    queryParam.put(Constant.BAPQuery.TABLE_NO, mYHEntity.tableNo);
-                }
-
-                if (queryParam.containsKey(Constant.BAPQuery.TABLE_NO)) {
-                    presenterRouter.create(YHListAPI.class).queryYHList(1, queryParam);
-                } else {
-                    refreshController.refreshComplete(); // 制定单据
-                }
             }
         });
 
@@ -1444,10 +1444,10 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             updateInitView();
             updateInitData();
             oldYHEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
-            mSparePartController.setYHEntity(mYHEntity);
-            mLubricateOilsController.setYHEntity(mYHEntity);
-            mRepairStaffController.setYHEntity(mYHEntity);
-            maintenanceController.setYHEntity(mYHEntity);
+            mSparePartController.refreshData(mYHEntity);
+            mLubricateOilsController.refreshData(mYHEntity);
+            mRepairStaffController.refreshData(mYHEntity);
+            maintenanceController.refreshData(mYHEntity);
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }

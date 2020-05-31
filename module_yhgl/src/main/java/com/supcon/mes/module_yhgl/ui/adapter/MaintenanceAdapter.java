@@ -158,12 +158,12 @@ public class MaintenanceAdapter extends BaseListDataRecyclerViewAdapter<Maintain
 
             if (data.getJwxItem().isDuration()) {
                 durationLayout.setVisibility(View.VISIBLE);
-                lastDuration.setValue(Util.big2(data.getJwxItem().lastDuration));
-                nextDuration.setValue(Util.big2(data.getJwxItem().nextDuration));
+                lastDuration.setValue(Util.bigDecimal2Str(data.lastDuration,0));
+                nextDuration.setValue(Util.bigDecimal2Str(data.nextDuration,0));
             } else {
                 timeLayout.setVisibility(View.VISIBLE);
-                lastTime.setContent(data.getJwxItem().lastTime != null ? DateUtil.dateFormat(data.getJwxItem().lastTime) : "");
-                nextTime.setContent(data.getJwxItem().nextTime != null ? DateUtil.dateFormat(data.getJwxItem().nextTime) : "");
+                lastTime.setContent(data.lastTime != null ? DateUtil.dateFormat(data.lastTime) : "");
+                nextTime.setContent(data.nextTime != null ? DateUtil.dateFormat(data.nextTime) : "");
             }
 
 

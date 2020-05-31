@@ -11,5 +11,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = {SBDAOnlineListEntity.class})
 public interface SBDAOnlineListAPI {
-    void getSearchSBDA(Map<String, Object> params, int page);
+    void getSearchSBDA(Map<String, Object> params, int page,boolean subsidiaryQuery);
 }

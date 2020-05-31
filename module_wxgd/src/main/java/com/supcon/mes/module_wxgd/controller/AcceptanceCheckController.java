@@ -37,7 +37,6 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
     CustomListWidget<AcceptanceCheckEntity> mCustomListWidget;
 
     private WXGDEntity mWxgdEntity;
-    private long id = -1;
     private List<AcceptanceCheckEntity> mAcceptanceCheckEntities = new ArrayList<>();
     private boolean isEditable;
 
@@ -49,9 +48,6 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
     public void onInit() {
         super.onInit();
         mWxgdEntity = (WXGDEntity) ((Activity) context).getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        if (mWxgdEntity.id != null) {
-            this.id = mWxgdEntity.id;
-        }
     }
 
     @Override
@@ -114,13 +110,11 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
     @Override
     public void initData() {
         super.initData();
-        presenterRouter.create(AcceptanceCheckAPI.class).listAcceptanceCheckList(id);
     }
 
     public void setWxgdEntity(WXGDEntity mWxgdEntity) {
         this.mWxgdEntity = mWxgdEntity;
-        this.id = mWxgdEntity.id;
-        presenterRouter.create(AcceptanceCheckAPI.class).listAcceptanceCheckList(id);
+        presenterRouter.create(AcceptanceCheckAPI.class).listAcceptanceCheckList(mWxgdEntity.id);
     }
 
     /**

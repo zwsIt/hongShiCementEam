@@ -370,6 +370,7 @@ public interface Constant {
         String ElE_OFF_TABLE_INFO_ID = "ElE_OFF_TABLE_INFO_ID"; // 停电票tableInfoId
         String ACTIVITY_NAME = "ACTIVITY_NAME"; // 活动名称
         String IS_SELECT = "IS_SELECT"; // 选择模式
+        String SBDA_ONLINE_SUBSIDIARY = "SBDA_ONLINE_SUBSIDIARY"; // 是否附属设备
     }
 
     interface FilterSearchParam {

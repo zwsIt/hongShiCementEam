@@ -15,7 +15,7 @@ public class ProcessedEntity extends BaseEntity {
     public String name; // 流程名称
     @SerializedName(value = "staffname")
     public String staffName; // 待办人名称
-    public String tableno; // 单据编号
+//    public String tableno; // 单据编号
     @SerializedName(value = "eamid")
     public EamEntity eamId; // 设备ID
     public String content; // 内容
@@ -37,6 +37,9 @@ public class ProcessedEntity extends BaseEntity {
     public String workTableNo; // 单据编号，（注：最终统一使用）
     public String newUrl;
     public String summary; // 摘要
+
+    @SerializedName(value = "dataId")
+    public Long tableId;
 
     public EamEntity getEamId() {
         if (eamId == null) {

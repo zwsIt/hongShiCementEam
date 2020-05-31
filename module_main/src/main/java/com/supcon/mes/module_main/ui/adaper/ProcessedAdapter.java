@@ -78,18 +78,14 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
         protected void initListener() {
             super.initListener();
             RxView.clicks(itemView)
-                    .subscribe(new Consumer<Object>() {
-                @Override
-                public void accept(Object o) throws Exception {
-                    // TODO...现场讨论
-//                    ProcessedEntity processedEntity = getItem(getAdapterPosition());
-//                    if (TextUtils.isEmpty(processedEntity.processKey)){
-//                        ToastUtils.show(context,context.getString(R.string.main_data_exception) + processedEntity.processKey);
-//                        return;
-//                    }
-//                    onItemChildViewClick(itemView,getAdapterPosition(),processedEntity);
-                }
-            });
+                    .subscribe(o -> {
+                        ProcessedEntity processedEntity = getItem(getAdapterPosition());
+                        if (TextUtils.isEmpty(processedEntity.processKey)){
+                            ToastUtils.show(context,context.getString(R.string.main_data_exception) + processedEntity.processKey);
+                            return;
+                        }
+                        onItemChildViewClick(itemView,getAdapterPosition(),processedEntity);
+                    });
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
