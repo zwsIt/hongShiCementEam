@@ -213,16 +213,13 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
                 IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
             }
         });
-        eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
-                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
-                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamName.getTag().toString());
-                bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
-                IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
-            }
+        eamName.setOnChildViewClickListener((childView, action, obj) -> {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+            bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+            bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamName.getTag().toString());
+            bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+            IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
         });
     }
 

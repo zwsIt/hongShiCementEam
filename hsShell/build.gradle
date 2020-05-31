@@ -115,7 +115,7 @@ android {
             signingConfig signingConfigs.keystore
             applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "HSSN-VxEAM-Mobile V${rootProject.ext.ProductCode}.${rootProject.ext.MobileCode}-${releaseTime()}-C.apk"
+                    outputFileName = "HSSN-VxEAM-Mobile V${rootProject.ext.versionName}-${releaseTime()}-C.apk"
                 }
             }
             multiDexEnabled true
