@@ -206,7 +206,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
-                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+//                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
                 bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                 bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamCode.getTag().toString());
                 bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
@@ -215,7 +215,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
         });
         eamName.setOnChildViewClickListener((childView, action, obj) -> {
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
+//            bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
             bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
             bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamName.getTag().toString());
             bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);

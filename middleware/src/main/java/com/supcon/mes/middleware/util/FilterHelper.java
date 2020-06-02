@@ -208,10 +208,10 @@ public class FilterHelper {
         return filterBeanList;
     }
 
-    public static List<CustomFilterBean> createFilterBySystemCode(String systemCode,String checkId,boolean multi) {
+    public static List<CustomFilterBean> createFilterBySystemCode(List<SystemCodeEntity> systemCodeEntityList,String checkId,boolean multi) {
 
         List<CustomFilterBean> list = new ArrayList<>();
-        List<SystemCodeEntity> systemCodeEntityList = SystemCodeManager.getInstance().getSystemCodeListByCode(systemCode);
+//        List<SystemCodeEntity> systemCodeEntityList = SystemCodeManager.getInstance().getSystemCodeListByCode(systemCode);
 
         CustomFilterBean filterBean;
         for (int i=0;i<systemCodeEntityList.size();i++){

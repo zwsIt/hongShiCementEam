@@ -136,6 +136,7 @@ public class ProcessedFragment extends BaseRefreshRecyclerFragment<ProcessedEnti
         processedAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
             ProcessedEntity processedEntity = (ProcessedEntity) obj;
             Bundle bundle = new Bundle();
+            processedEntity.tableId = processedEntity.tableId == null ? -1L : processedEntity.tableId;
             switch (processedEntity.processKey){
                 case Constant.ProcessKey.WORK_TICKET:
                     goWorkTicket(processedEntity, bundle);

@@ -88,7 +88,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import io.reactivex.functions.Consumer;
 
 /**
@@ -149,11 +151,9 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     private Long pendingId; // 代办Id
     private WorkTicketEntity mWorkTicketEntity;
     private WorkTicketEntity mWorkTicketEntityOld;
-    private String hazardContrlPointValue;
     private List<SystemCodeEntity> mRiskAssessmentList;
     private List<SystemCodeEntity> mHazardList;
     private SinglePickController mSinglePickController;
-    private HazardPointAdapter hazardPointAdapter;
     private String name = ""; // 当前活动名称
     private SafetyMeasuresController safetyMeasuresController;
     private String oldSafetyMeasDetailListStr;
@@ -297,7 +297,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                     bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
                     bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                     bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, eamCode.getTag().toString());
-                    bundle.putBoolean(Constant.IntentKey.IS_SELECT,true);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT, true);
                     IntentRouter.go(context, Constant.Router.EAM_TREE_SELECT, bundle);
                 }
             }
@@ -317,9 +317,9 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             public void onChildViewClick(View childView, int action, Object obj) {
                 StringBuilder sbValue = new StringBuilder();
                 StringBuilder sbIds = new StringBuilder();
-                for (int i = 0 ;i < hazardCtrlPointFlowLy.getChildCount() ;i++){
+                for (int i = 0; i < hazardCtrlPointFlowLy.getChildCount(); i++) {
                     CheckBox checkBox = (CheckBox) hazardCtrlPointFlowLy.getChildAt(i);
-                    if (checkBox.isChecked()){
+                    if (checkBox.isChecked()) {
                         sbValue.append(checkBox.getText()).append(",");
                         sbIds.append(mHazardList.get(checkBox.getId() % 1000).id).append(",");
                     }
@@ -360,7 +360,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                         mWorkTicketEntity.setContent(charSequence.toString());
                     }
                 });
-        RxView.clicks(rightTv).throttleFirst(200,TimeUnit.MILLISECONDS)
+        RxView.clicks(rightTv).throttleFirst(200, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
@@ -373,7 +373,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     private void retrialEleOff() {
         new CustomDialog(this)
                 .twoButtonAlertDialog("确定弃审停电票？")
-                .bindClickListener(R.id.grayBtn,null,true)
+                .bindClickListener(R.id.grayBtn, null, true)
                 .bindClickListener(R.id.redBtn, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -404,6 +404,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
     /**
      * 提交参数
+     *
      * @param workFlowEntities
      */
     private void submit(List<WorkFlowEntity> workFlowEntities) {
@@ -422,7 +423,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         map.put("modelName", "Ohworkticket");
         map.put("datagridKey", "WorkTicket_workTicket_ohworkticket_workTicketEdit_datagrids");
         map.put("viewselect", "workTicketEdit");
-        map.put("id", tableId.equals(-1L)? "" : tableId);
+        map.put("id", tableId.equals(-1L) ? "" : tableId);
         map.put("deploymentId", mWorkTicketEntity.getDeploymentId());
         map.put("ohworkticket.version", mWorkTicketEntity.getVersion());
         if (workFlowEntities != null) {//保存为空
@@ -431,7 +432,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             map.put("workFlowVar.outcome", workFlowEntity.outcome);
             map.put("operateType", "submit");
             if (Constant.Transition.CANCEL_CN.equals(workFlowEntity.dec)) {
-                map.put("workFlowVarStatus",Constant.Transition.CANCEL);
+                map.put("workFlowVarStatus", Constant.Transition.CANCEL);
             }
         } else {
             map.put("operateType", "save");
@@ -439,18 +440,18 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         map.put("workFlowVar.comment", Util.strFormat2(workFlowView.getComment()));
 //        map.put("taskDescription", "WorkTicket_8.20.3.03.workflow.randon1575618721430.flag");
         map.put("activityName", name);
-        if (!pendingId.equals(-1L)){
-            map.put("pendingId",pendingId);
+        if (!pendingId.equals(-1L)) {
+            map.put("pendingId", pendingId);
         }
         //表头信息,取修改后最新数据
         map.put("ohworkticket.chargeStaff.id", Util.strFormat2(mWorkTicketEntity.getChargeStaff().id));
         map.put("ohworkticket.workList.id", Util.strFormat2(mWorkTicketEntity.getWorkList().id));
-        map.put("ohworkticket.eamId.id",Util.strFormat2(mWorkTicketEntity.getEamId().id));
+        map.put("ohworkticket.eamId.id", Util.strFormat2(mWorkTicketEntity.getEamId().id));
         map.put("ohworkticket.workShop.id", Util.strFormat2(mWorkTicketEntity.getChargeStaff().getMainPosition().getDepartment().id));
         map.put("ohworkticket.riskAssessment.id", mWorkTicketEntity.getRiskAssessment().id);
         map.put("ohworkticket.content", content.getContent());
-        map.put("ohworkticket.hazardsourContrpoint",mWorkTicketEntity.getHazardsourContrpoint());
-        map.put("ohworkticket.value",mWorkTicketEntity.getHazardsourContrpointForDisplay());
+        map.put("ohworkticket.hazardsourContrpoint", mWorkTicketEntity.getHazardsourContrpoint());
+        map.put("ohworkticket.value", mWorkTicketEntity.getHazardsourContrpointForDisplay());
         map.put("__file_upload", true);
 
         // 表单
@@ -467,7 +468,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 //        }
 
         onLoading("单据处理中...");
-        presenterRouter.create(WorkTicketSubmitAPI.class).submit("workTicketEdit", map, attachmentMap,__pc__);
+        presenterRouter.create(WorkTicketSubmitAPI.class).submit("workTicketEdit", map, attachmentMap, __pc__);
     }
 
     private boolean checkTableBlank() {
@@ -523,7 +524,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         // 停电隐藏
         if (TextUtils.isEmpty(entity.getOffApplyTableNo())) {
             eleOffTableNo.setVisibility(View.GONE);
-        }else {
+        } else {
             rightTv.setVisibility(View.VISIBLE);
             rightTv.setText("停电弃审");
         }
@@ -539,16 +540,24 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
         //初始化风险评估
 //        if (riskAssessmentRadioGroup.getChildCount() <= 0){
-            riskAssessmentRadioGroup.removeAllViews();
-            FilterHelper.addRadioView(this, riskAssessmentRadioGroup,
-                    FilterHelper.createFilterBySystemCode(Constant.SystemCode.RISK_ASSESSMENT,mWorkTicketEntity.getRiskAssessment().id,false), 50, WRAP_CONTENT);
+        if (mWorkTicketEntity.getOffApplyId() != null) { // 若关联停电票，风险等级无“低”选项
+            for (SystemCodeEntity systemCodeEntity : mRiskAssessmentList) {
+                if (systemCodeEntity.value.contains("低")) {
+                    mRiskAssessmentList.remove(systemCodeEntity);
+                    break;
+                }
+            }
+        }
+        riskAssessmentRadioGroup.removeAllViews();
+        FilterHelper.addRadioView(this, riskAssessmentRadioGroup,
+                FilterHelper.createFilterBySystemCode(mRiskAssessmentList, mWorkTicketEntity.getRiskAssessment().id, false), 50, WRAP_CONTENT);
 //        }
 
         // 初始化危险源控制点
 //        if (hazardCtrlPointFlowLy.getChildCount() <= 0){
-            hazardCtrlPointFlowLy.removeAllViews();
-            FilterHelper.addCheckBoxView(this, hazardCtrlPointFlowLy,
-                    FilterHelper.createFilterBySystemCode(Constant.SystemCode.HAZARD_CON_POINT,mWorkTicketEntity.getHazardsourContrpoint(),true), WRAP_CONTENT, WRAP_CONTENT);
+        hazardCtrlPointFlowLy.removeAllViews();
+        FilterHelper.addCheckBoxView(this, hazardCtrlPointFlowLy,
+                FilterHelper.createFilterBySystemCode(mHazardList, mWorkTicketEntity.getHazardsourContrpoint(), true), WRAP_CONTENT, WRAP_CONTENT);
 //        }
 
         mWorkTicketEntityOld = GsonUtil.gsonToBean(mWorkTicketEntity.toString(), WorkTicketEntity.class);
@@ -565,42 +574,43 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 //        if (drawer_layout.isDrawerOpen(Gravity.START)) {
 //            drawer_layout.closeDrawers();
 //        } else {
-            if (isUpdated()){
-                CustomDialog customDialog = new CustomDialog(context);
-                customDialog.getDialog().setCanceledOnTouchOutside(true);
-                customDialog.twoButtonAlertDialog("单据数据已经被修改，是否要保存?")
-                        .bindView(R.id.grayBtn, "离开")
-                        .bindView(R.id.redBtn, "保存")
-                        .bindClickListener(R.id.grayBtn, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                EventBus.getDefault().post(new RefreshEvent());
-                                finish();
-                            }
-                        }, true)
-                        .bindClickListener(R.id.redBtn, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                doSave();
-                            }
-                        }, true)
-                        .show();
-            }else {
-                finish();
-                EventBus.getDefault().post(new RefreshEvent());
-            }
+        if (isUpdated()) {
+            CustomDialog customDialog = new CustomDialog(context);
+            customDialog.getDialog().setCanceledOnTouchOutside(true);
+            customDialog.twoButtonAlertDialog("单据数据已经被修改，是否要保存?")
+                    .bindView(R.id.grayBtn, "离开")
+                    .bindView(R.id.redBtn, "保存")
+                    .bindClickListener(R.id.grayBtn, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            EventBus.getDefault().post(new RefreshEvent());
+                            finish();
+                        }
+                    }, true)
+                    .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doSave();
+                        }
+                    }, true)
+                    .show();
+        } else {
+            finish();
+            EventBus.getDefault().post(new RefreshEvent());
+        }
 //        }
     }
 
     /**
      * 是否单据发生更新
+     *
      * @return
      */
     private boolean isUpdated() {
-        if (mWorkTicketEntityOld != null && mWorkTicketEntity != null && !mWorkTicketEntityOld.toString().equals(mWorkTicketEntity.toString())){
+        if (mWorkTicketEntityOld != null && mWorkTicketEntity != null && !mWorkTicketEntityOld.toString().equals(mWorkTicketEntity.toString())) {
             return true;
         }
-        if (!TextUtils.isEmpty(oldSafetyMeasDetailListStr) && !oldSafetyMeasDetailListStr.equals(safetyMeasuresController.getSafetyMeasuresEntityList().toString())){
+        if (!TextUtils.isEmpty(oldSafetyMeasDetailListStr) && !oldSafetyMeasDetailListStr.equals(safetyMeasuresController.getSafetyMeasuresEntityList().toString())) {
             return true;
         }
         return false;
@@ -611,15 +621,15 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
             CommonSearchStaff staff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
 
-            if (chargeStaff.getTag().toString().equals(commonSearchEvent.flag)){
+            if (chargeStaff.getTag().toString().equals(commonSearchEvent.flag)) {
                 chargeStaff.setContent(staff.name);
                 workShop.setContent(staff.department);
 
                 mWorkTicketEntity.getChargeStaff().id = staff.id;
                 mWorkTicketEntity.getChargeStaff().name = staff.name;
                 mWorkTicketEntity.getChargeStaff().code = staff.code;
-            } else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
-                workFlowView.addStaff(staff.name,staff.userId);
+            } else if ("selectPeopleInput".equals(commonSearchEvent.flag)) {
+                workFlowView.addStaff(staff.name, staff.userId);
             }
         }
     }
@@ -639,8 +649,8 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
      * 接收初始化的检修工作票明细PT
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveList(ListEvent listEvent){
-        if (Constant.EventFlag.WORK_TICKET_PT.equals(listEvent.getFlag())){
+    public void receiveList(ListEvent listEvent) {
+        if (Constant.EventFlag.WORK_TICKET_PT.equals(listEvent.getFlag())) {
             oldSafetyMeasDetailListStr = listEvent.getList().toString();
         }
     }
