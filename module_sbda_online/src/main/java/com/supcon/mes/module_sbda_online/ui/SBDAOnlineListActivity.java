@@ -31,6 +31,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.NFCHelper;
+import com.supcon.mes.middleware.util.PinYinUtils;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sbda_online.IntentRouter;
@@ -53,6 +54,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -174,7 +180,12 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<EamEntit
                 queryParam.remove(Constant.BAPQuery.EAM_CODE);
             }
             if (!TextUtils.isEmpty(selecStr)) {
-                queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
+                if (Util.isContainChinese(selecStr)){
+                    queryParam.put(Constant.BAPQuery.EAM_NAME, selecStr);
+                }else {
+                    queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
+                }
+
             }
             queryParam.put(Constant.BAPQuery.IS_MAIN_EQUIP, "1");
             presenterRouter.create(SBDAOnlineListAPI.class).getSearchSBDA(queryParam, page,false);
@@ -191,10 +202,11 @@ public class SBDAOnlineListActivity extends BaseRefreshRecyclerActivity<EamEntit
 
         RxTextView.textChanges(titleSearchView.editText())
                 .skipInitialValue()
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(charSequence -> {
-                    if (TextUtils.isEmpty(charSequence)) {
-                        doSearchTableNo(charSequence.toString());
-                    }
+                    doSearchTableNo(charSequence.toString());
                 });
         KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () ->
                 doSearchTableNo(titleSearchView.getInput()));

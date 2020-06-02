@@ -95,6 +95,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     @SerializedName(value = "eamAssetcode", alternate = {"eamAssetCode"})
     public String eamAssetCode; // 设备编码
 
+    public boolean isMainEquip; // 是否主设备
 
     public long updateTime; // 本地近期使用时间
 
@@ -110,12 +111,12 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
     private transient EamEntityDao myDao;
 
 
-    @Generated(hash = 634273359)
+    @Generated(hash = 950208334)
     public EamEntity(Long id, String code, String name, String pinYin, String state,
             String stateForDisplay, Long eamTypeId, Long areaId, String specif, String model,
             Long useDate, Long produceDate, String produceCode, String produceFirm, String installFirm,
             String areaNum, Long fileDate, Float useYear, boolean haveRunState, String specialtyNew,
-            Long validDate, float score, String eamAssetCode, long updateTime) {
+            Long validDate, float score, String eamAssetCode, boolean isMainEquip, long updateTime) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -139,6 +140,7 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
         this.validDate = validDate;
         this.score = score;
         this.eamAssetCode = eamAssetCode;
+        this.isMainEquip = isMainEquip;
         this.updateTime = updateTime;
     }
 
@@ -514,6 +516,14 @@ public class EamEntity extends BaseEntity implements CommonSearchEntity {
 
     public void setPinYin(String pinYin) {
         this.pinYin = pinYin;
+    }
+
+    public boolean getIsMainEquip() {
+        return this.isMainEquip;
+    }
+
+    public void setIsMainEquip(boolean isMainEquip) {
+        this.isMainEquip = isMainEquip;
     }
 
     /** called by internal mechanisms, do not call yourself. */

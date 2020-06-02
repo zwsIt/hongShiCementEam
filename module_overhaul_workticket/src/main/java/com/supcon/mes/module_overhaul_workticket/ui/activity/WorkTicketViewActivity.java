@@ -332,7 +332,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     }
 
     private void doSubmit(WorkFlowVar workFlowVar) {
-        if (editable && checkTableBlank()) {
+        if ( !Constant.Transition.REJECT_CN.equals(workFlowVar.dec) && editable && checkTableBlank()) {
             return;
         }
         List<WorkFlowEntity> workFlowEntityList = new ArrayList<>();

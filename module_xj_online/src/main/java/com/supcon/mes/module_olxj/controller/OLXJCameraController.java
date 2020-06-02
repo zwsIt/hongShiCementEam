@@ -53,7 +53,7 @@ public class OLXJCameraController extends BaseCameraController {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void deleteImage(ImageDeleteEvent imageDeleteEvent) {
-        CustomGalleryView customGalleryView = currItemCustomGalleryView;
+        CustomGalleryView customGalleryView = actionGalleryView;
         List<String> picStrs = FaultPicHelper.getImagePathList(customGalleryView.getGalleryAdapter().getList());
         int position = -1;
         boolean isMatch = false;
@@ -69,7 +69,7 @@ public class OLXJCameraController extends BaseCameraController {
             customGalleryView.deletePic(position);
             deleteFile(imageDeleteEvent.getPicName());
 
-            OLXJWorkItemEntity xjWorkItemEntity = mOLXJWorkListAdapter.getItem(currAdapterPosition);
+            OLXJWorkItemEntity xjWorkItemEntity = mOLXJWorkListAdapter.getItem(actionPosition);
             String xjImgUrl = xjWorkItemEntity.xjImgUrl;
             if (xjImgUrl.startsWith(imageDeleteEvent.getPicName())) {
                 if (xjImgUrl.equals(imageDeleteEvent.getPicName())) {
@@ -84,7 +84,7 @@ public class OLXJCameraController extends BaseCameraController {
                 xjWorkItemEntity.isPhonere = false;
             }
 
-            mOLXJWorkListAdapter.notifyItemChanged(currAdapterPosition);
+            mOLXJWorkListAdapter.notifyItemChanged(actionPosition);
 
         }
     }
@@ -123,16 +123,16 @@ public class OLXJCameraController extends BaseCameraController {
     @Override
     protected void onFileDelete(GalleryBean galleryBean, int position) {
 
-        if(currAdapterPosition == -1){
+        if(actionPosition == -1){
             LogUtil.e("adapterPosition == -1");
             return;
         }
 
-        OLXJWorkItemEntity xjWorkItemEntity = mOLXJWorkListAdapter.getItem(currAdapterPosition);
+        OLXJWorkItemEntity xjWorkItemEntity = mOLXJWorkListAdapter.getItem(actionPosition);
         if(xjWorkItemEntity == null){
             return;
         }
-        currItemCustomGalleryView.deletePic(position);
+        actionGalleryView.deletePic(position);
         List<String> imgNamesList = Arrays.asList(xjWorkItemEntity.xjImgUrl.split(","));
         String xjImgUrl = xjWorkItemEntity.xjImgUrl;
         String imgName = imgNamesList.get(position);
@@ -151,7 +151,7 @@ public class OLXJCameraController extends BaseCameraController {
             xjWorkItemEntity.isPhonere = false;
         }
 
-        mOLXJWorkListAdapter.notifyItemChanged(currAdapterPosition);
+        mOLXJWorkListAdapter.notifyItemChanged(actionPosition);
     }
 
     private static final String[] SHEET_ENTITY = {"拍摄照片", "拍摄短视频"};

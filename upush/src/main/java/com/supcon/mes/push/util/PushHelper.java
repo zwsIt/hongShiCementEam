@@ -44,7 +44,7 @@ public class PushHelper {
         this.context = context;
 
         //设置LOG开关，默认为false
-        UMConfigure.setLogEnabled(false);
+        UMConfigure.setLogEnabled(true);
         try {
             Class<?> aClass = Class.forName("com.umeng.commonsdk.UMConfigure");
             Field[] fs = aClass.getDeclaredFields();

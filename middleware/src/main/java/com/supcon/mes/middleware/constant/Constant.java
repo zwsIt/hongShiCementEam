@@ -233,7 +233,7 @@ public interface Constant {
         String PENDING_LIST = "PENDING_LIST"; // 工作提醒
         String WARN_PLAN_LUBRICATION_NEW = "WARN_PLAN_LUBRICATION_NEW"; // 计划润滑新
         String WORK_START_EDIT = "WORK_START_EDIT"; // 工作发起
-        String EAM_TREE_SELECT = "EAM_TREE_SELECT"; // 设备层级选择（按照区域位置）
+        String EAM_TREE_SELECT = "EAM_TREE_SELECT"; // 设备层级选择
         String EAM_AREA_TREE_SELECT = "EAM_AREA_TREE_SELECT"; // 设备区域位置层级选择
         String EAM_TYPE_TREE_SELECT = "EAM_TYPE_TREE_SELECT"; // 设备类型层级选择
     }

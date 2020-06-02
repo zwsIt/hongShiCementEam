@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.LogUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.adapter.GalleryAdapter;
 import com.supcon.mes.mbap.beans.GalleryBean;
@@ -17,12 +18,15 @@ import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.BaseCameraController;
 import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.PicUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,6 +51,7 @@ public class WorkTicketCameraController extends BaseCameraController {
 
     public WorkTicketCameraController(View rootView) {
         super(rootView);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -55,6 +60,7 @@ public class WorkTicketCameraController extends BaseCameraController {
     }
 
     public void addGalleryView(int position, CustomGalleryView customGalleryView){
+        currAdapterPosition = position;
         galleryView = customGalleryView;
         galleryViewHashMap.put(String.valueOf(position),customGalleryView);
         addListener(position, customGalleryView);
@@ -105,7 +111,7 @@ public class WorkTicketCameraController extends BaseCameraController {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        EventBus.getDefault().unregister(this);
         if(mDownloadController!=null)
             mDownloadController.dispose();
     }
@@ -118,7 +124,7 @@ public class WorkTicketCameraController extends BaseCameraController {
     @Override
     public void initListener() {
         super.initListener();
-        addListener(0, galleryView);
+//        addListener(0, galleryView);
     }
 
     @Override
@@ -144,12 +150,12 @@ public class WorkTicketCameraController extends BaseCameraController {
     @Override
     public void deleteGalleryBean(GalleryBean galleryBean, int position) {
         super.deleteGalleryBean(galleryBean, position);
-//        galleryView.deletePic(position);
-        galleryViewHashMap.get(String.valueOf(currAdapterPosition)).deletePic(position);
+        actionGalleryView.deletePic(position);
+//        galleryViewHashMap.get(String.valueOf(currAdapterPosition)).deletePic(position);
         delete(galleryBean);
         // 附件删除监听
-        if(onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition))!= null){
-            onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition)).onSuccess(new File(galleryBean.localPath));
+        if(onSuccessListenerHashMap.get(String.valueOf(actionPosition))!= null){
+            onSuccessListenerHashMap.get(String.valueOf(actionPosition)).onSuccess(new File(galleryBean.localPath));
         }
     }
 
@@ -177,6 +183,15 @@ public class WorkTicketCameraController extends BaseCameraController {
                     }, attachmentEntity.id);
                 }
             }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void deleteImage(ImageDeleteEvent imageDeleteEvent) {
+        actionGalleryView.deletePic(imageDeleteEvent.getPos());
+        // 附件删除监听
+        if(onSuccessListenerHashMap.get(String.valueOf(actionPosition))!= null){
+            onSuccessListenerHashMap.get(String.valueOf(actionPosition)).onSuccess(new File(imageDeleteEvent.getPicName())); // 本地照片路径
+        }
     }
 
 

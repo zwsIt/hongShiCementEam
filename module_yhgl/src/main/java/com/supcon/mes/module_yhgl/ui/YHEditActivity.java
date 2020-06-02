@@ -497,7 +497,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             public void onRefresh() {
                 Map<String, Object> queryParam = new HashMap<>();
 
-                if (mYHEntity != null && mYHEntity.id != null) { // 隐患列表、隐患统计列表
+                if (mYHEntity != null && mYHEntity.id != null) { // 隐患列表、隐患统计列表、工作提醒
                     queryParam.put(Constant.BAPQuery.TABLE_NO, mYHEntity.tableNo);
                 }
 

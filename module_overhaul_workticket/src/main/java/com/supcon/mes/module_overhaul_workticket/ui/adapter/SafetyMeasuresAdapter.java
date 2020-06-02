@@ -49,9 +49,7 @@ import io.reactivex.functions.Consumer;
  * Desc 编辑adapter
  */
 public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<SafetyMeasuresEntity> {
-
     private WorkTicketCameraController workTicketCameraController;
-
     private Long eleApplyTableInfoId; // 停电单据tableInfoId
 
     public SafetyMeasuresAdapter(Context context) {
@@ -75,7 +73,6 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
             return new ConfirmSafetyMeasViewHolder(context);
         }
     }
-
     public void initCamera() {
         if (context instanceof WorkTicketEditActivity) {
             workTicketCameraController = ((WorkTicketEditActivity) context).getController(WorkTicketCameraController.class);
@@ -84,7 +81,6 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
         }
         workTicketCameraController.init(Constant.IMAGE_SAVE_WORKTICKETPATH, Constant.PicType.WORK_TICKET_PIC);
     }
-
     public void setEleOffTableInfoId(Long eleApplyTableInfoId) {
         this.eleApplyTableInfoId = eleApplyTableInfoId;
     }
@@ -299,12 +295,10 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
             super.initListener();
             RxView.clicks(photoIv)
                     .throttleFirst(300, TimeUnit.MILLISECONDS)
-                    .subscribe(new Consumer<Object>() {
-                        @Override
-                        public void accept(Object o) throws Exception {
+                    .subscribe(o -> {
 //                            onItemChildViewClick(videoGalleryView,0,getItem(getAdapterPosition()));
-                            workTicketCameraController.setCurrAdapterPosition(getAdapterPosition());
-                            workTicketCameraController.showCustomDialog();
+                        workTicketCameraController.setCurrAdapterPosition(getAdapterPosition());
+                        workTicketCameraController.showCustomDialog();
 //                            photoGalleryView.findViewById(R.id.customCameraIv).performClick();
 //                            if (photoGalleryView.getGalleryAdapter() != null && photoGalleryView.getGalleryAdapter().getItemCount() == 1) {
 //                                new CustomDialog(context).twoButtonAlertDialog("只支持一个附件,是否重拍?")
@@ -318,7 +312,6 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
 //                            } else {
 //                                workTicketCameraController.startCamera();
 //                            }
-                        }
                     });
         }
 
@@ -326,11 +319,11 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
         protected void update(SafetyMeasuresEntity data) {
             index.setText(String.valueOf(getAdapterPosition() + 1));
             content.setContent(data.getSafetyMeasure());
+            // 初始化附件
+            initAttachFiles(data, mDownloadController, photoGalleryView, gifIv);
             // 初始化事件
             setViewAndListener(getAdapterPosition(), photoGalleryView);
 
-            // 初始化附件
-            initAttachFiles(data, mDownloadController, photoGalleryView, gifIv);
         }
     }
 
@@ -368,33 +361,36 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
 //                    videoIv.setVisibility(View.GONE);
             SafetyMeasuresEntity data = getItem(adapterPosition);
                 StringBuilder picPath = new StringBuilder();
+            StringBuilder picLocalPaths = new StringBuilder();
                 for (GalleryBean galleryBean : galleryView.getGalleryAdapter().getList()) {
                     if (!TextUtils.isEmpty(galleryBean.url)) {
                         picPath.append(galleryBean.url).append(",");
                     }
+                    picLocalPaths.append(galleryBean.localPath).append(",");
                 }
-                if (!picPath.toString().contains(file.getName())) {
+                if (!picLocalPaths.toString().contains(file.getName())) {
                     // 删除
-                    if (picPath.length() == 0) {
+                    if (picLocalPaths.length() == 0) {
                         data.setIsExecuted(false);
                         data.setAttachFileFileAddPaths(null);
                         if (!TextUtils.isEmpty(data.getAttachFileMultiFileIds())) {
                             data.setAttachFileFileDeleteIds(data.getAttachFileMultiFileIds());
                         }
                     } else {
-                        List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
-                        List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
-                        List<String> attachFileFileAddPathsList = Arrays.asList(data.getAttachFileFileAddPaths().split(","));
                         // 删除已保存
-                        if (data.getAttachFileMultiFileNames().contains(file.getName())){
+                        if (!TextUtils.isEmpty(data.getAttachFileMultiFileIds()) && data.getAttachFileMultiFileNames().contains(file.getName())){
+                            List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
+                            List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
                             for (String name : attachFileNameList){
                                 if (name.contains(file.getName())){
-                                    String fileFileDeleteIds = data.getAttachFileFileDeleteIds() == null ? "" : data.getAttachFileFileDeleteIds();
-                                    data.setAttachFileFileDeleteIds(fileFileDeleteIds + ","+ attachFileIdList.get(attachFileNameList.indexOf(name)));
+//                                    String fileFileDeleteIds = data.getAttachFileFileDeleteIds() == null ? "" : data.getAttachFileFileDeleteIds();
+                                    data.setAttachFileFileDeleteIds(TextUtils.isEmpty(data.getAttachFileFileDeleteIds()) ?
+                                            attachFileIdList.get(attachFileNameList.indexOf(name)) : data.getAttachFileFileDeleteIds() + ","+ attachFileIdList.get(attachFileNameList.indexOf(name)));
                                     break;
                                 }
                             }
                         }else { // 本地删除
+                            ArrayList<String> attachFileFileAddPathsList = new ArrayList<>(Arrays.asList(data.getAttachFileFileAddPaths().split(",")));
                             for (String path : attachFileFileAddPathsList){
                                 if (path.contains(file.getName())){
                                     attachFileFileAddPathsList.remove(path);
@@ -430,7 +426,7 @@ public class SafetyMeasuresAdapter extends BaseListDataRecyclerViewAdapter<Safet
                     attachmentEntity = new AttachmentEntity();
                     attachmentEntity.id = Long.parseLong(id);
                     attachmentEntity.name = attachFileNameList.get(attachFileIdList.indexOf(id));
-                    attachmentEntity.deploymentId = attachmentEntity.id; // 赋值附近id,防止下载过滤
+                    attachmentEntity.deploymentId = attachmentEntity.id; // 赋值附件id,防止下载过滤
                     attachmentEntities.add(attachmentEntity);
                 }
                 data.setAttachmentEntityList(attachmentEntities);

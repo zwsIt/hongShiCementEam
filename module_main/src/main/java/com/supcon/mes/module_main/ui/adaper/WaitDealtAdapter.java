@@ -197,6 +197,7 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                                         }
                                     } else if (Constant.ProcessKey.FAULT_INFO.equals(item.processKey)) {  // 隐患单跳转
                                         YHEntity yhEntity = new YHEntity();
+                                        yhEntity.id = item.tableId;
                                         yhEntity.tableNo = item.workTableNo;
                                         bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, yhEntity);
                                         IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);

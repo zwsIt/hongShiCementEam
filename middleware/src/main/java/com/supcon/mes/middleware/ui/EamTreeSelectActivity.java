@@ -40,11 +40,12 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @Author zhangwenshuai
  * @Date 2020/05/25
- * @Desc 设备层级选择(区域位置)
+ * @Desc 设备层级选择
  */
 @Router(value = Constant.Router.EAM_TREE_SELECT)
 public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
@@ -58,7 +59,6 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
     @BindByTag("searchView")
     CustomSearchView searchView;
 
-    private EamPortalSelectFragment mEamPortalSelectFragment; // 设备选择门户入口
     private EamSearchSelectFragment mEamSearchSelectFragment; // 设备搜索入口
 //    private ContactCommonFragment mContactCommonFragment;
 
@@ -119,10 +119,11 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 
     @Override
     public void createFragments() {
-        mEamPortalSelectFragment = new EamPortalSelectFragment();
+        // 设备选择门户入口
+        EamPortalSelectFragment eamPortalSelectFragment = new EamPortalSelectFragment();
         mEamSearchSelectFragment = new EamSearchSelectFragment();
 //        mContactCommonFragment = new ContactCommonFragment();
-        fragments.add(mEamPortalSelectFragment);
+        fragments.add(eamPortalSelectFragment);
         fragments.add(mEamSearchSelectFragment);
 //        fragments.add(mContactCommonFragment);
 
@@ -165,19 +166,12 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 
         RxView.clicks(leftBtn)
                 .throttleFirst(200, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        back();
-                    }
-                });
+                .subscribe(o -> back());
 
         RxView.clicks(rightBtn)
                 .throttleFirst(200, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        Map<String, EamEntity> contactEntityMap = null;
+                .subscribe(o -> {
+//                        Map<String, EamEntity> contactEntityMap = null;
 //                        if (selectIndex == 0) {
 //                            contactEntityMap = mEamPortalSelectFragment.getContactAdapter().getSelectStaffs();
 //
@@ -186,24 +180,20 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
 //                        } else if (selectIndex == 2) {
 //                            contactEntityMap = mContactSearchFragment.getContactAdapter().getSelectStaffs();
 //                        }
-
-
-                        if (contactEntityMap == null) {
-                            ToastUtils.show(context, "请选择设备！");
-                        }
-
-                        CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
-                        commonSearchEvent.flag = searchTag;
-                        List<CommonSearchEntity> list = new LinkedList<>();
-                        for (Map.Entry<String, EamEntity> entry : contactEntityMap.entrySet()) {
-                            EamEntity value = entry.getValue();
-                            list.add(value);
-                        }
-                        commonSearchEvent.mCommonSearchEntityList = list;
-
-                        EventBus.getDefault().post(commonSearchEvent);
-                        finish();
-                    }
+//                        if (contactEntityMap == null) {
+//                            ToastUtils.show(context, "请选择设备！");
+//                        }
+//                        CommonSearchEvent commonSearchEvent = new CommonSearchEvent();
+//                        commonSearchEvent.flag = searchTag;
+//                        List<CommonSearchEntity> list = new LinkedList<>();
+//                        for (Map.Entry<String, EamEntity> entry : contactEntityMap.entrySet()) {
+//                            EamEntity value = entry.getValue();
+//                            list.add(value);
+//                        }
+//                        commonSearchEvent.mCommonSearchEntityList = list;
+//
+//                        EventBus.getDefault().post(commonSearchEvent);
+//                        finish();
                 });
 
     }
@@ -211,7 +201,7 @@ public class EamTreeSelectActivity extends BaseMultiFragmentActivity {
     @SuppressLint("CheckResult")
     private void doSearch(String searchContent) {
         Flowable.timer(200, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
