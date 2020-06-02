@@ -385,8 +385,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             yhEditMemo.setInput(mYHEntity.remark);
         }
 
-        mYHEntity.isOffApply = true;
-        eleOffChkBox.setChecked(true); // 默认true
+//        mYHEntity.isOffApply = true;
+//        eleOffChkBox.setChecked(true); // 默认true
 
         initCheckView();
         // 加载图片

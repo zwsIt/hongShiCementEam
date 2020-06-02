@@ -445,8 +445,8 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             eleOffChkBox.setClickable(true);
             eleOffChkBox.setButtonDrawable(R.drawable.sl_checkbox_selector_small);
         }
-        mWXGDEntity.isOffApply = true;
-        eleOffChkBox.setChecked(true); // 默认true
+//        mWXGDEntity.isOffApply = true;
+//        eleOffChkBox.setChecked(true); // 默认true
     }
 
     @SuppressLint("CheckResult")
