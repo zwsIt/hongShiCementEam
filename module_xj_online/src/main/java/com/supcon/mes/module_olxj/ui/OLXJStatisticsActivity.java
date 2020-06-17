@@ -18,11 +18,13 @@ import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.picker.DateTimePicker;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.DatePickController;
 import com.supcon.mes.middleware.model.bean.AreaMultiStageEntity;
@@ -57,7 +59,7 @@ import java.util.concurrent.TimeUnit;
  * @ClassName hongShiCementEam
  * @date 2019/8/14
  * ------------- Description -------------
- * 巡检统计
+ * 巡检统计zws
  */
 @Router(Constant.Router.XJ_STATISTICS)
 @Presenter(value = {OLXJStatisticsPresenter.class, MultiDepartSelectPresenter.class})
@@ -79,22 +81,14 @@ public class OLXJStatisticsActivity extends BaseRefreshRecyclerActivity implemen
     @BindByTag("statisticsCirPro4")
     HsCircleProgress statisticsCirPro4;
 
-    @BindByTag("depotLayout")
-    LinearLayout depotLayout;
     @BindByTag("depotTv")
     TextView depotTv;
-    @BindByTag("depotExpend")
-    ImageView depotExpend;
-
-    @BindByTag("dateLayout")
-    LinearLayout dateLayout;
-    @BindByTag("expend")
-    ImageView expend;
-    @BindByTag("dateTv")
-    TextView dateTv;
+    @BindByTag("endTimeTv")
+    TextView endTimeTv;
+    @BindByTag("startTimeTv")
+    TextView startTimeTv;
 
     private DatePickController datePickController;
-
     Map<String, Object> queryParam = new HashMap<>();
     private OLXJStatisticsAdapter olxjStatisticsAdapter;
     private MultiStagePopwindow multiStagePopwindow;
@@ -114,12 +108,6 @@ public class OLXJStatisticsActivity extends BaseRefreshRecyclerActivity implemen
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void initView() {
-        super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         refreshListController.setAutoPullDownRefresh(true);
@@ -136,18 +124,31 @@ public class OLXJStatisticsActivity extends BaseRefreshRecyclerActivity implemen
             @Override
             public void onDismiss() {
                 super.onDismiss();
-                AnimatorUtil.rotationExpandIcon(depotExpend, 0, 180);
+//                AnimatorUtil.rotationExpandIcon(depotExpend, 0, 180);
             }
         };
+
+        queryParam.put("startDate", getTimeOfMonthStart());
+        queryParam.put("endDate", getTimeOfMonthEnd());
+        queryParam.put("deptName", EamApplication.getAccountInfo().departmentName);
+        queryParam.put("deptId", EamApplication.getAccountInfo().departmentId);
+    }
+
+    @SuppressLint("CutPasteId")
+    @Override
+    protected void initView() {
+        super.initView();
+        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
+        titleText.setText(getResources().getString(R.string.inspection_statistics));
+        depotTv.setText(EamApplication.getAccountInfo().departmentName);
+        startTimeTv.setText(DateUtil.dateFormat(getTimeOfMonthStart(), Constant.TimeString.YEAR_MONTH_DAY));
+        endTimeTv.setText(DateUtil.dateFormat(System.currentTimeMillis(), Constant.TimeString.YEAR_MONTH_DAY));
     }
 
     @Override
     protected void initData() {
         super.initData();
-        titleText.setText("巡检统计");
-        queryParam.put("rangeTime", DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM"));
-        dateTv.setText(DateUtil.dateFormat(getTimeOfMonthStart(), "yyyy-MM"));
-
         presenterRouter.create(XJMultiDepartSelectAPI.class).getDepartmentInfoList("");
     }
 
@@ -158,35 +159,42 @@ public class OLXJStatisticsActivity extends BaseRefreshRecyclerActivity implemen
         RxView.clicks(leftBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
-        refreshListController.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenterRouter.create(OLXJStatisticsAPI.class).getInspectStaticsInfo(queryParam);
-            }
-        });
-        dateLayout.setOnClickListener(new View.OnClickListener() {
+        refreshListController.setOnRefreshListener(() -> presenterRouter.create(OLXJStatisticsAPI.class).getInspectStaticsInfo(queryParam));
+        startTimeTv.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
-                AnimatorUtil.rotationExpandIcon(expend, 0, 180);
-                datePickController.listener(new DateTimePicker.OnYearMonthTimePickListener() {
+//                AnimatorUtil.rotationExpandIcon(expend, 0, 180);
+                datePickController.listener((year, month, day, hour, minute, second) -> {
+                    startTimeTv.setText(year + "-" + month + "-" + day);
+                    queryParam.put("startDate", DateUtil.dateFormat(startTimeTv.getText().toString(), Constant.TimeString.YEAR_MONTH_DAY));
+                    refreshListController.refreshBegin();
+                }).show(DateUtil.dateFormat(startTimeTv.getText().toString(), Constant.TimeString.YEAR_MONTH_DAY));/*.showMonth(DateUtil.dateFormat(dateTv.getText().toString(), "yyyy-MM"), expend)*/;
+            }
+        });
+        endTimeTv.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View v) {
+//                AnimatorUtil.rotationExpandIcon(expend, 0, 180);
+                datePickController.listener(new DateTimePicker.OnYearMonthDayTimePickListener() {
                     @Override
-                    public void onDateTimePicked(String year, String month, String hour, String minute, String second) {
-                        dateTv.setText(year + "-" + month);
-                        queryParam.put("rangeTime", year + "-" + month);
+                    public void onDateTimePicked(String year, String month, String day, String hour, String minute, String second) {
+                        endTimeTv.setText(year + "-" + month + "-" + day);
+                        queryParam.put("endDate", DateUtil.dateFormat(endTimeTv.getText().toString() + Constant.TimeString.END_TIME, Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC));
                         refreshListController.refreshBegin();
                     }
-                }).showMonth(DateUtil.dateFormat(dateTv.getText().toString(), "yyyy-MM"), expend);
+                }).show(DateUtil.dateFormat(endTimeTv.getText().toString(), Constant.TimeString.YEAR_MONTH_DAY));/*.showMonth(DateUtil.dateFormat(dateTv.getText().toString(), "yyyy-MM"), expend)*/;
             }
         });
 
-        depotLayout.setOnClickListener(new View.OnClickListener() {
+        depotTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!multiStagePopwindow.isShowing()) {
-                    AnimatorUtil.rotationExpandIcon(depotExpend, 0, 180);
+//                    AnimatorUtil.rotationExpandIcon(depotExpend, 0, 180);
                 }
-                multiStagePopwindow.showPopupWindow(depotLayout);
+                multiStagePopwindow.showPopupWindow(depotTv);
             }
         });
         multiStagePopwindow.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
@@ -196,8 +204,10 @@ public class OLXJStatisticsActivity extends BaseRefreshRecyclerActivity implemen
                 AreaMultiStageEntity areaMultiStageEntity = (AreaMultiStageEntity) obj;
                 depotTv.setText(areaMultiStageEntity.getCurrentEntity().getName());
                 queryParam.put("deptName", areaMultiStageEntity.getCurrentEntity().getName());
-                if (areaMultiStageEntity.getCurrentEntity().getName().equals("集团")) {
+                queryParam.put("deptId", areaMultiStageEntity.getCurrentEntity().getId());
+                if (areaMultiStageEntity.getCurrentEntity().getName().equals(EamApplication.getAccountInfo().companyName)) {
                     queryParam.put("deptName", "");
+                    queryParam.put("deptId", "");
                 }
                 refreshListController.refreshBegin();
             }
@@ -206,7 +216,6 @@ public class OLXJStatisticsActivity extends BaseRefreshRecyclerActivity implemen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
         refreshListController.refreshBegin();
     }
 
@@ -231,17 +240,28 @@ public class OLXJStatisticsActivity extends BaseRefreshRecyclerActivity implemen
         statisticsCirPro2.setPrefixText("");
         statisticsCirPro3.setPrefixText("");
         statisticsCirPro4.setPrefixText("");
-        SnackbarHelper.showError(rootView, ErrorMsgHelper.msgParse(errorMsg));
+        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
     }
 
+    // 月初0点
     public static long getTimeOfMonthStart() {
         Calendar ca = Calendar.getInstance();
-        ca.set(Calendar.HOUR_OF_DAY, 0);
-        ca.clear(Calendar.MINUTE);
-        ca.clear(Calendar.SECOND);
-        ca.clear(Calendar.MILLISECOND);
+//        ca.set(Calendar.HOUR_OF_DAY, 0);
+//        ca.clear(Calendar.MINUTE);
+//        ca.clear(Calendar.SECOND);
+//        ca.clear(Calendar.MILLISECOND);
         ca.set(Calendar.DAY_OF_MONTH, 1);
+        ca.add(Calendar.MONTH,0);
         return ca.getTimeInMillis();
+    }
+    // 当天24点
+    public static long getTimeOfMonthEnd() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTimeInMillis();
     }
 
     @Override

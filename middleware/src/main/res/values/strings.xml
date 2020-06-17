@@ -70,5 +70,14 @@
     <string name="middleware_input_eam_name">请输入设备名称</string>
     <string name="middleware_pending">待办</string>
     <string name="middleware_all">全部</string>
+    <string name="middleware_no">否</string>
+    <string name="middleware_yes">是</string>
+    <string name="middleware_more">更多</string>
+    <string name="main_all_menu">全部应用</string>
+    <string name="main_my_menu">我的应用</string>
+    <string name="main_other_menu">其他应用</string>
+    <string name="no_query_eam">未查询到设备</string>
+    <string name="inspection_statistics">巡检统计</string>
+    <string name="deal_info">处理意见</string>
 
 </resources>

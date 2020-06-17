@@ -21,7 +21,6 @@
         app:tabSelectedTextColor="@color/themeColor"
         app:tabTextColor="@color/white" />
 
-
     <com.supcon.mes.mbap.view.NoScrollViewPager
         android:id="@+id/sbdaViewPager"
         android:layout_width="match_parent"

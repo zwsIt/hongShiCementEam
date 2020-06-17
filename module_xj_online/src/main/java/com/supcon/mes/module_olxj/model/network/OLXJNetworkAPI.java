@@ -57,6 +57,23 @@ public interface OLXJNetworkAPI {
     Flowable<CommonBAPListEntity<OLXJTaskEntity>> queryPotrolTaskList(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
     /**
+     * 获取统计分析/巡检记录任务列表 2020/06/12 张文帅
+     * @param queryParam          页数相关key
+     * @param fastQueryCondEntity 已下发快速查询条件
+     * @return
+     */
+    @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/data-dg1540391060579.action")
+    Flowable<CommonBAPListEntity<OLXJTaskEntity>> queryPotrolTaskRecordsList(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
+
+    /**
+     * 获取统计分析/巡检记录任务/区域列表 2020/06/12 张文帅
+     * @param taskIDs          任务id
+     * @return
+     */
+    @GET("/mobileEAM/potrolTaskNew/potrolTPartWF/data-dg1540391293051.action")
+    Flowable<CommonBAPListEntity<OLXJWorkItemEntity>> queryPotrolTaskRecordsAreaList(@Query(value = "taskIDs") Long taskIDs, @QueryMap Map<String, Object> pageParams);
+
+    /**
      * 获取已下发临时任务列表
      *
      * @param queryParam          页数相关key
@@ -76,6 +93,15 @@ public interface OLXJNetworkAPI {
     @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/data-dg1488776891029.action?datagridCode=mobileEAM_1.0.0_potrolTaskNew_tempViewdg1489026162123&rt=json")
 //    @POST("/mobileEAM/potrolTaskNew/potrolTPartWF/taskGatherList-query.action?1=1&permissionCode=mobileEAM_1.0.0_potrolTaskNew_taskGatherList")
     Flowable<CommonBAPListEntity<OLXJWorkItemEntity>> queryWorkList(@QueryMap Map<String, Object> queryParam);
+
+    /**
+     * 获取巡检任务明细
+     *
+     * @param queryParam 页数相关key
+     * @return
+     */
+    @POST("/mobileEAM/potrolTaskNew/potrolTPartWF/taskGatherList-query.action?1=1&permissionCode=mobileEAM_1.0.0_potrolTaskNew_taskGatherList")
+    Flowable<CommonBAPListEntity<OLXJWorkItemEntity>> taskGatherList(@QueryMap Map<String, Object> queryParam);
 
 
     /**

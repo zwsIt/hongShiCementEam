@@ -18,6 +18,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -81,9 +82,9 @@ public class RepairStaffAdapter extends BaseListDataRecyclerViewAdapter<RepairSt
         @BindByTag("workHour")
         CustomTextView workHour;
         @BindByTag("actualStartTime")
-        CustomVerticalDateView actualStartTime;
+        CustomDateView actualStartTime;
         @BindByTag("actualEndTime")
-        CustomVerticalDateView actualEndTime;
+        CustomDateView actualEndTime;
         @BindByTag("remark")
         CustomVerticalEditText remark;
         @BindByTag("itemViewDelBtn")
@@ -117,50 +118,39 @@ public class RepairStaffAdapter extends BaseListDataRecyclerViewAdapter<RepairSt
 
             repairStaffName.setOnChildViewClickListener(this);
 
-            actualStartTime.setOnChildViewClickListener(new OnChildViewClickListener() {
-                @Override
-                public void onChildViewClick(View childView, int action, Object obj) {
-                    onItemChildViewClick(actualStartTime, action, getItem(getAdapterPosition()));
-                }
-            });
+            actualStartTime.setOnChildViewClickListener((childView, action, obj) -> onItemChildViewClick(actualStartTime, action, getItem(getAdapterPosition())));
 //            actualStartTime.setOnChildViewClickListener(this::onChildViewClick);
             actualEndTime.setOnChildViewClickListener(this::onChildViewClick);
 
-            main.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    itemSwipeLayout.open();
-                    return true;
-                }
+            main.setOnLongClickListener(v -> {
+                itemSwipeLayout.open();
+                return true;
             });
 
-            itemViewDelBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RepairStaffEntity repairStaffEntity = getItem(getAdapterPosition());
-                    itemSwipeLayout.close();
-                    if (!editable) {
-                        ToastUtils.show(context, tableStatus + "环节，维修人员不允许删除!");
-                        return;
-                    }
-                    if (repairStaffEntity.timesNum != null && repairStaffEntity.timesNum >= repairSum) {
-                        new CustomDialog(context)
-                                .twoButtonAlertDialog("确认删除该人员：" + (repairStaffEntity.repairStaff == null ? "--" : repairStaffEntity.repairStaff.name))
-                                .bindView(R.id.redBtn, "确认")
-                                .bindView(R.id.grayBtn, "取消")
-                                .bindClickListener(R.id.redBtn, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        List<RepairStaffEntity> list = RepairStaffAdapter.this.getList();
-                                        list.remove(getAdapterPosition());
-                                        EventBus.getDefault().post(new RefreshEvent(repairStaffEntity.id));
-                                    }
-                                }, true)
-                                .bindClickListener(R.id.grayBtn, null, true)
-                                .show();
-                    } else {
-                        ToastUtils.show(context, "历史人员数据,不允许删除!");
-                    }
+            itemViewDelBtn.setOnClickListener(v -> {
+                RepairStaffEntity repairStaffEntity = getItem(getAdapterPosition());
+                itemSwipeLayout.close();
+                if (!editable) {
+                    ToastUtils.show(context, tableStatus + "环节，维修人员不允许删除!");
+                    return;
+                }
+                if (repairStaffEntity.timesNum != null && repairStaffEntity.timesNum >= repairSum) {
+                    new CustomDialog(context)
+                            .twoButtonAlertDialog("确认删除该人员：" + (repairStaffEntity.repairStaff == null ? "--" : repairStaffEntity.repairStaff.name))
+                            .bindView(R.id.redBtn, "确认")
+                            .bindView(R.id.grayBtn, "取消")
+                            .bindClickListener(R.id.redBtn, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    List<RepairStaffEntity> list = RepairStaffAdapter.this.getList();
+                                    list.remove(getAdapterPosition());
+                                    EventBus.getDefault().post(new RefreshEvent(repairStaffEntity.id));
+                                }
+                            }, true)
+                            .bindClickListener(R.id.grayBtn, null, true)
+                            .show();
+                } else {
+                    ToastUtils.show(context, "历史人员数据,不允许删除!");
                 }
             });
 
@@ -208,9 +198,7 @@ public class RepairStaffAdapter extends BaseListDataRecyclerViewAdapter<RepairSt
             } else {
                 actualEndTime.setDate(null);
             }
-
             remark.setInput(data.remark);
-
         }
 
         @Override

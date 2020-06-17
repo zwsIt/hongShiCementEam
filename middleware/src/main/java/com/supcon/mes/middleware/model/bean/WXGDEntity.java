@@ -13,7 +13,7 @@ import java.util.List;
 public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public Long id;
-
+    public Staff createStaff; //创建人
     public Staff chargeStaff; //负责人
 
     public Staff dispatcher; //派单人
@@ -107,7 +107,7 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public OffApplyBean offApply; // 停电申请
     public WorkTicketBean ohWorkTicket; // 检修作业票
-    public boolean isOffApply; // 是否需要停电
+    public Boolean isOffApply; // 是否需要停电
     public OverhaulProjectEntity overhaulProId; // 大修项目ID
     public RepairProjectEntity repairProId; // 检修项目ID
 

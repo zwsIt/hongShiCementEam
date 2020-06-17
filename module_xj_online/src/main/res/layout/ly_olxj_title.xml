@@ -50,6 +50,17 @@
             android:layout_toRightOf="@+id/xjTitleMap"
             android:src="@drawable/sl_top_add"
             android:tag="xjTitleAdd" />
+        <TextView
+            android:id="@+id/todayXjRecordsTv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/xjTitleAdd"
+            android:gravity="center_vertical"
+            android:tag="todayXjRecordsTv"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="@string/today_xj"/>
     </RelativeLayout>
 
 </RelativeLayout>

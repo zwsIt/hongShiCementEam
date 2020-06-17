@@ -24,6 +24,8 @@ import com.supcon.mes.middleware.controller.PositionController;
 import com.supcon.mes.middleware.controller.RepairGroupController;
 import com.supcon.mes.middleware.controller.SystemCodeController;
 import com.supcon.mes.middleware.controller.UserInfoListController;
+import com.supcon.mes.middleware.model.bean.WorkInfo;
+import com.supcon.mes.middleware.model.bean.WorkInfoDao;
 import com.supcon.mes.middleware.model.event.AppExitEvent;
 import com.supcon.mes.middleware.model.event.DownloadDataEvent;
 import com.supcon.mes.middleware.model.event.LoginValidEvent;
@@ -33,6 +35,7 @@ import com.supcon.mes.middleware.util.DeviceManager;
 import com.supcon.mes.middleware.util.NFCHelper;
 import com.supcon.mes.middleware.util.ProcessHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.middleware.util.WorkHelper;
 import com.supcon.mes.module_contact.ui.fragment.ContactFragment;
 import com.supcon.mes.module_login.controller.SilentLoginController;
 import com.supcon.mes.module_login.service.HeartBeatService;
@@ -40,6 +43,7 @@ import com.supcon.mes.module_main.BuildConfig;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.ui.fragment.EamFragment;
+import com.supcon.mes.module_main.ui.fragment.HomeFragment;
 import com.supcon.mes.module_main.ui.fragment.MineFragment;
 import com.supcon.mes.module_main.ui.fragment.WorkFragment;
 import com.supcon.mes.push.controller.DeviceTokenController;
@@ -76,7 +80,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
     private String initIp = ""; // 记录原超时IP
 
     private NFCHelper nfcHelper;
-    private WorkFragment workFragment;
+    private HomeFragment workFragment;
     private EamFragment mEamFragment; // 我的设备
 
     @Override
@@ -107,6 +111,32 @@ public class MainActivity extends BaseMultiFragmentActivity {
         LogUtil.showLog = BuildConfig.DEBUG;
         ProcessHelper.getInstance().startService(this);
         PushAgent.getInstance(context).onAppStart();
+
+        initAllMenu();
+    }
+
+    private void initAllMenu() {
+        List<WorkInfo> dbWorkInfoList = EamApplication.dao().getWorkInfoDao().queryBuilder()
+                .where(WorkInfoDao.Properties.Ip.eq(EamApplication.getIpPort()),WorkInfoDao.Properties.UserId.eq(EamApplication.getAccountInfo().userId))
+                .list();
+        List<WorkInfo> initWorkInfoList = WorkHelper.getDefaultWorkList(EamApplication.getAppContext());
+        if (dbWorkInfoList  == null || dbWorkInfoList.size() == 0){
+            EamApplication.dao().getWorkInfoDao().insertInTx(initWorkInfoList);
+        }else {
+            for (WorkInfo workInfo : initWorkInfoList){
+                for (WorkInfo entity : dbWorkInfoList){
+                    if (entity.name.equals(workInfo.name) && entity.isAdd){
+                        workInfo.isAdd = true;
+                        workInfo.mySort = entity.mySort;
+                        break;
+                    }
+                }
+            }
+            EamApplication.dao().getWorkInfoDao().insertOrReplaceInTx(initWorkInfoList);
+        }
+//        if (dbWorkInfoList == null || dbWorkInfoList.size() != initWorkInfoList.size()){
+//            EamApplication.dao().getWorkInfoDao().insertOrReplaceInTx(initWorkInfoList);
+//        }
     }
 
 
@@ -139,7 +169,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
 
     @Override
     public void createFragments() {
-        workFragment = new WorkFragment();
+        workFragment = new HomeFragment();
 //        TxlListFragment txlListFragment = new TxlListFragment();
 //        txlListFragment.fitInstatusBarEnable(true);
         ContactFragment contactFragment = new ContactFragment();

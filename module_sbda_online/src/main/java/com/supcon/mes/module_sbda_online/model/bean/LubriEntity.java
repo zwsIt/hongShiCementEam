@@ -13,7 +13,6 @@ import com.supcon.mes.middleware.model.bean.ValueEntity;
  */
 public class LubriEntity extends BaseEntity {
 
-
     public Long id;
     public LubricateOil lubricateOil;//润滑油
     public ValueEntity oilType;//加换油
@@ -24,6 +23,7 @@ public class LubriEntity extends BaseEntity {
     public Long nextTime;//下次润滑时间
     public Float sum;//用量
     public ValueEntity periodType;//润滑类型
+    public int lubricatingnumber; // 润滑点数
 
     public SparePartId sparePartId;//备件编码
     public AccessoryEamId accessoryEamId;//附属设备

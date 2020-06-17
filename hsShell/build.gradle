@@ -21,19 +21,19 @@ android {
         ndk{
             abiFilters "armeabi-v7a", "x86", "armeabi"
         }
-        flavorDimensions("dev")
+        flavorDimensions("hongshi")
     }
     productFlavors {
-        dev {
-            applicationId 'com.supcon.mes.cementEam'
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE : name,
-                                    APP_NAME            : "@string/app_name",
-                                    APP_ICON            : "@mipmap/ic_app_launcher",
-                                    APP_ROUND_ICON      : "@drawable/ic_app_launcher_round",
-                                    APP_SHARE_ID        : "com.supcon.mes.cementEam",
-                                    UMENG_APPKEY        : "5cbea853570df3300e000f4a",
-                                    UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
-        }
+//        dev {
+//            applicationId 'com.supcon.mes.cementEam'
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE : name,
+//                                    APP_NAME            : "@string/app_name",
+//                                    APP_ICON            : "@mipmap/ic_app_launcher",
+//                                    APP_ROUND_ICON      : "@drawable/ic_app_launcher_round",
+//                                    APP_SHARE_ID        : "com.supcon.mes.cementEam",
+//                                    UMENG_APPKEY        : "5cbea853570df3300e000f4a",
+//                                    UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
+//        }
         hongshi {
             applicationId 'com.supcon.mes.hongShiCementEam'
             manifestPlaceholders = [UMENG_CHANNEL_VALUE : name,
@@ -44,26 +44,16 @@ android {
                                     UMENG_APPKEY        : "5cbea853570df3300e000f4a",
                                     UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
         }
-        hailuo {
-            applicationId 'com.supcon.mes.hailuoCementEam'
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE : name,
-                                    APP_NAME            : "@string/hl_app_name",
-                                    APP_ICON            : "@drawable/ic_app_launcher_hailuo",
-                                    APP_ROUND_ICON      : "@drawable/ic_app_launcher_round_hl",
-                                    APP_SHARE_ID        : "com.supcon.mes.hailuoCementEam",
-                                    UMENG_APPKEY        : "5cbea853570df3300e000f4a",
-                                    UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
-        }
-        hailuotest {
-            applicationId 'com.supcon.mes.testhailuoCementEam'
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE : name,
-                                    APP_NAME            : "@string/test_hl_app_name",
-                                    APP_ICON            : "@drawable/ic_app_launcher_hailuo",
-                                    APP_ROUND_ICON      : "@drawable/ic_app_launcher_round_hl",
-                                    APP_SHARE_ID        : "com.supcon.mes.testhailuoCementEam",
-                                    UMENG_APPKEY        : "5cbea853570df3300e000f4a",
-                                    UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
-        }
+//        hailuo {
+//            applicationId 'com.supcon.mes.hailuoCementEam'
+//            manifestPlaceholders = [UMENG_CHANNEL_VALUE : name,
+//                                    APP_NAME            : "@string/hl_app_name",
+//                                    APP_ICON            : "@drawable/ic_app_launcher_hailuo",
+//                                    APP_ROUND_ICON      : "@drawable/ic_app_launcher_round_hl",
+//                                    APP_SHARE_ID        : "com.supcon.mes.hailuoCementEam",
+//                                    UMENG_APPKEY        : "5cbea853570df3300e000f4a",
+//                                    UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
+//        }
 
         ynsw {
             applicationId 'com.supcon.mes.ynswEam'
@@ -72,16 +62,6 @@ android {
                                     APP_ICON            : "@mipmap/ic_app_launcher_ynsw",
                                     APP_ROUND_ICON      : "@drawable/ic_app_launcher_ynsw_round",
                                     APP_SHARE_ID        : "com.supcon.mes.ynswEam",
-                                    UMENG_APPKEY        : "5cbea853570df3300e000f4a",
-                                    UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
-        }
-        beiliu {
-            applicationId 'com.supcon.mes.beiliuCementEam'
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE : name,
-                                    APP_NAME            : "@string/app_name",
-                                    APP_ICON            : "@mipmap/ic_app_launcher",
-                                    APP_ROUND_ICON      : "@drawable/ic_app_launcher_round",
-                                    APP_SHARE_ID        : "com.supcon.mes.beiliuCementEam",
                                     UMENG_APPKEY        : "5cbea853570df3300e000f4a",
                                     UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
         }

@@ -35,6 +35,9 @@ public class ElectricityOffOnEntity extends BaseEntity {
     private String remark;
     private EleOffOnTemplate eleTemplateId; // 停送电模板
     private SystemCodeEntity applyType; // 申请类型：BEAMEle001/01：停电；BEAMEle001/02：送电
+    private Staff securityStaff; // 安全员
+    private Staff electrician; // 电工
+    private Staff chargeStaff; // 检修负责人
 
     private Long cid;
     private Staff createStaff;
@@ -56,6 +59,39 @@ public class ElectricityOffOnEntity extends BaseEntity {
 
     public void setAttrMap(Map attrMap) {
         this.attrMap = attrMap;
+    }
+
+    public Staff getSecurityStaff() {
+        if (securityStaff == null){
+            securityStaff = new Staff();
+        }
+        return securityStaff;
+    }
+
+    public void setSecurityStaff(Staff securityStaff) {
+        this.securityStaff = securityStaff;
+    }
+
+    public Staff getElectrician() {
+        if (electrician == null){
+            electrician = new Staff();
+        }
+        return electrician;
+    }
+
+    public void setElectrician(Staff electrician) {
+        this.electrician = electrician;
+    }
+
+    public Staff getChargeStaff() {
+        if (chargeStaff == null){
+            chargeStaff = new Staff();
+        }
+        return chargeStaff;
+    }
+
+    public void setChargeStaff(Staff chargeStaff) {
+        this.chargeStaff = chargeStaff;
     }
 
     public Staff getApplyStaff() {

@@ -136,8 +136,8 @@ public class YHGLSparePartListActivity extends BaseRefreshRecyclerActivity<Spare
         String entityInfo = getIntent().getStringExtra(Constant.IntentKey.SPARE_PART_ENTITIES);
         mSparePartEntityList.addAll(GsonUtil.jsonToList(entityInfo, SparePartEntity.class));
 
-        refreshListController.setAutoPullDownRefresh(true);
-        refreshListController.setPullDownRefreshEnabled(true);
+        refreshListController.setAutoPullDownRefresh(false);
+        refreshListController.setPullDownRefreshEnabled(false);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.supcon.mes.middleware.constant;
 
 import android.os.Environment;
 
+import com.supcon.mes.middleware.EamApplication;
+
 import java.io.File;
 
 /**
@@ -163,10 +165,12 @@ public interface Constant {
 
         String LSXJ_LIST = "LSXJ_LIST";
         String JHXJ_LIST = "JHXJ_LIST";
+        String JHXJ_TODAY_RECORDS_LIST = "JHXJ_TODAY_RECORDS_LIST"; // 今日巡检：巡检任务记录
+        String JHXJ_TODAY_ITEM_LIST = "JHXJ_TODAY_ITEM_LIST"; // 今日巡检：巡检任务明细
         String XJ_STATISTICS = "XJ_STATISTICS";//巡检统计
         String JHXJ_LX_LIST = "JHXJ_LX_LIST";
         String OLXJ_WORK_LIST_UNHANDLED = "OLXJ_WORK_LIST_UNHANDLED";
-        String OLXJ_EAM_UNHANDLED = "OLXJ_EAM_UNHANDLED";//巡检到设备
+        String OLXJ_EAM_UNHANDLED = "OLXJ_EAM_UNHANDLED";//巡检到设备(临时巡检)
         String OLXJ_WORK_LIST_HANDLED = "OLXJ_WORK_LIST_HANDLED";
 
         String STOP_POLICE = "STOP_POLICE";//停机报警
@@ -236,6 +240,8 @@ public interface Constant {
         String EAM_TREE_SELECT = "EAM_TREE_SELECT"; // 设备层级选择
         String EAM_AREA_TREE_SELECT = "EAM_AREA_TREE_SELECT"; // 设备区域位置层级选择
         String EAM_TYPE_TREE_SELECT = "EAM_TYPE_TREE_SELECT"; // 设备类型层级选择
+        String WARN_PENDING_LIST = "WARN_PENDING_LIST"; // 预警工作待办
+        String ALL_MENU_LIST = "ALL_MENU_LIST"; // 所有应用
     }
 
 
@@ -371,6 +377,7 @@ public interface Constant {
         String ACTIVITY_NAME = "ACTIVITY_NAME"; // 活动名称
         String IS_SELECT = "IS_SELECT"; // 选择模式
         String SBDA_ONLINE_SUBSIDIARY = "SBDA_ONLINE_SUBSIDIARY"; // 是否附属设备
+        String WORK_ID = "WORK_ID"; // 巡检区域ID
     }
 
     interface FilterSearchParam {
@@ -381,42 +388,31 @@ public interface Constant {
 
     interface WorkType {//设备功能类型
 
-        int SBDA = 1;  //设备档案
-        int XJGL = 2;  //巡检管理
-        int YXJL = 3;  //运行记录
-        //        int QXGL = 4;  //缺陷管理
-        int YHGL = 4;  //隐患管理
-        int WXGD = 5;  //维修工单
-        int RH = 6;  //缺陷管理
-        int BY = 7;  //维修工单
-        int LXYH = 8;//离线隐患
-        int TD = 9;//停电
-        int SD = 10;//送电
+        int GZFQ = 1;  // 工作发起
+        int JHXJ = 2;  //计划巡检
+        // 设备润滑
+        int JHRH = 3;  //计划润滑
+        int LSRH = 4;  //临时润滑
+        int RHYJ = 5;  //润滑预警
+        // 维修执行
+        int WXGD = 6;  //维修工单
+        int LBJYJ = 7;  //零部件预警
+        int YWYJ = 8;  //运维预警
+        int TDSQ = 9;//停电申请
+        int SDSQ = 10;//送电申请
+        int JXZYP = 11;//检修作业票
+        // 统计报表
+        int XJTJ = 12;  //巡检统计
+        int YHTJ = 13;  //隐患统计
+        int GDTJ = 14;  //工单统计
+        int TJTJ = 15;  //停机统计
+        int SPARE_PART_CONSUME_LEDGER = 16;  //零部件消耗台账
+        int SPARE_PART_RECEIVE_RECORD = 17;  //备件领用记录
+        int TSDTJ = 18;  //停送电统计
 
         int MORE = 99;  //更多
-        int SJXZ = 11;  //数据下载
-        int SJSC = 12;  //数据上传
+        int YHGL = 19; // 隐患单
 
-        int JHXJ = 13;  //计划巡检
-        int LSXJ = 14;  //临时巡检
-        int BJSQ = 15;  //备件申请
-        int XJLX = 16;  //巡检路线
-        int XJQY = 17;  //巡检区域
-        int XJBB = 18;  //巡检报表
-        int SBDA_ONLINE = 19;  //设备档案
-        int STOP_POLICE = 20;  //停机报警
-        int DXJH = 22;
-        int JXJH = 21;
-        int SPARE_EARLY_WARN = 23;//备件更换预警
-        int LUBRICATION_EARLY_WARN = 24;//润滑预警
-        int DAILY_LUBRICATION_EARLY_WARN = 25;//日常润滑预警
-        int MAINTENANCE_EARLY_WARN = 26;//维保预警
-        int SCORE_EAM_LIST = 27;//设备评分
-        int SCORE_INSPECTOR_PERSON_LIST = 28;//巡检人员评分
-        int SCORE_MECHANIC_PERSON_LIST = 29;//巡检人员评分
-        int ACCEPTANCE_LIST = 30;//验收
-
-        int TSD_RECORD = 31;//停送电记录
     }
 
     interface HSWorkType {//设备功能类型
@@ -554,10 +550,11 @@ public interface Constant {
         String YEAR_MONTH_DAY_HOUR_MIN_SEC = "yyyy-MM-dd HH:mm:ss";
         String YEAR_MONTH_DAY_HOUR_MIN = "yyyy-MM-dd HH:mm";
         String YEAR_MONTH_DAY = "yyyy-MM-dd";
+        String MONTH_DAY_HOUR_MIN = "MM-dd HH:mm";
     }
 
     interface PicType {
-        String WORK_TICKET_PIC = "workTicketRecord";
+        String WORK_TICKET_PIC = EamApplication.getAccountInfo().staffName + "_workTicketRecord";
         String WORK_TICKET_SAFER_PIC = "workTicketRecordSafer";
         String ELE_OFF_PIC = "eleOffRecord";
         String ELE_ON_PIC = "eleOnRecord";
@@ -569,6 +566,8 @@ public interface Constant {
     interface RefreshAction {
         String XJ_WORK_END = "XJ_WORK_END";
         String XJ_WORK_REINPUT = "XJ_WORK_REINPUT";
+
+        String HOME_APP_MENU = "HOME_APP_MENU"; // 主页应用菜单
     }
 
     interface BAPQuery {
@@ -718,6 +717,10 @@ public interface Constant {
         // 我处理的
         String NEWSTATE = "NEWSTATE"; // 单据状态
         String PROCESS_KEY = "PROCESS_KEY"; // 工作流程key(单据类型)
+        String SUBORDINATE = "SUBORDINATE"; // 我的下属工作待办
+        String SUBORDINATE_DEPARTMENT = "SUBORDINATE_DEPARTMENT"; // 我的下属部门
+        String SUBORDINATE_POSITION = "SUBORDINATE_POSITION"; // 我的下属岗位
+        String RISK_ASSESSMENT = "RISK_ASSESSMENT"; // 风险评估
     }
 
 
@@ -963,6 +966,12 @@ public interface Constant {
         String WORK_TICKET = "workTicketFW"; // 检修作业票
     }
 
+    interface WarnType {
+        String LUBRICATION_WARN = "润滑提醒";
+        String SPARE_PART_WARN = "零部件提醒";
+        String MAINTENANCE_WARN = "维保提醒";
+    }
+
     /**
      * 隐患状态
      */
@@ -1037,6 +1046,23 @@ public interface Constant {
         String EDIT_URL = "/BEAM2/faultInfo/faultInfo/faultInfoEdit.action";// 编辑
         String PREVIEW_URL = "/BEAM2/faultInfo/faultInfo/faultInfoApproval.action";// 审核
         String VIEW_URL = "/BEAM2/faultInfo/faultInfo/faultInfoView.action"; // 查看
+    }
+
+    /**
+     * 巡检任务状态
+     */
+    interface XJTaskLinkStatus {
+        String status1 = "LinkState/01"; // 未下发
+        String status2 = "LinkState/02"; // 已下发
+        String status3 = "LinkState/03"; // 已完成
+        String status4 = "LinkState/04"; // 已取消
+        String status5 = "LinkState/05"; // 超期未检
+        String status7 = "LinkState/07"; // 已终止
+    }
+
+    interface CARD_TYPE {
+        String cardType1 = "cardType/01"; // 刷卡
+        String cardType2 = "cardType/02"; // 手动
     }
 
 }

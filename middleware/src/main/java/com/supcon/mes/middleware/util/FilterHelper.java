@@ -234,4 +234,24 @@ public class FilterHelper {
         return list;
     }
 
+    public static List<FilterBean> createFilterBySystemCode(String systemCode) {
+
+        List<FilterBean> list = new ArrayList<>();
+        List<SystemCodeEntity> systemCodeEntityList = SystemCodeManager.getInstance().getSystemCodeListByCode(systemCode);
+
+        CustomFilterBean filterBean;
+        filterBean = new CustomFilterBean();
+        filterBean.name = "全部";
+        filterBean.id = "";
+        list.add(filterBean);
+
+        for (int i=0;i<systemCodeEntityList.size();i++){
+            filterBean = new CustomFilterBean();
+            filterBean.name = systemCodeEntityList.get(i).value;
+            filterBean.id = systemCodeEntityList.get(i).id;
+
+            list.add(filterBean);
+        }
+        return list;
+    }
 }

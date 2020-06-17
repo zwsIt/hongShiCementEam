@@ -1,6 +1,7 @@
 package com.supcon.mes.module_wxgd.ui;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -42,6 +44,7 @@ import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.PcController;
@@ -59,6 +62,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
+import com.supcon.mes.module_wxgd.constant.WXGDConstant;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
 import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
@@ -171,15 +175,18 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     @BindByTag("repairLl")
     LinearLayout repairLl;
 
-    @BindByTag("eleOffChkBox")
-    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOffRadioGroup")
+    RadioGroup eleOffRadioGroup; // 是否生成停电票
     @BindByTag("eleOff")
     CustomTextView eleOff;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
     private RepairStaffController mRepairStaffController;
     private SparePartController mSparePartController;
     private LubricateOilsController mLubricateOilsController;
     private MaintenanceController maintenanceController;
+    private DealInfoController mDealInfoController;
 
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
     private LinkController mLinkController;
@@ -259,6 +266,8 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         mSinglePickController = new SinglePickController<String>(this);
         mSinglePickController.textSize(18);
         mSinglePickController.setCanceledOnTouchOutside(true);
+
+        mDealInfoController = new  DealInfoController(context,recyclerView,null);
     }
 
 
@@ -380,13 +389,11 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         realEndTime.setDate(DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
-        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
-            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
-//            eleOffChkBox.setBackgroundResource(R.drawable.ic_checked);
-        }else {
-            eleOffChkBox.setButtonDrawable(null);
+        if (mWXGDEntity.isOffApply != null)
+            eleOffRadioGroup.check(mWXGDEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
+        for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
+            eleOffRadioGroup.getChildAt(i).setEnabled(false);
         }
-        eleOffChkBox.setClickable(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -439,37 +446,20 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     /**
      * @param
      * @return
-     * @description 接收备件表体原始数据
+     * @description 接收原始数据
      * @author zhangwenshuai1 2018/10/11
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveInitSparePartList(ListEvent listEvent) {
-        if ("sparePart".equals(listEvent.getFlag()))
-            sparePartListStr = listEvent.getList().toString();
-    }
-
-    /**
-     * @param
-     * @return
-     * @description 接收维修人员表体原始数据
-     * @author zhangwenshuai1 2018/10/11
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveInitRepairStaffList(ListEvent listEvent) {
-        if ("repairStaff".equals(listEvent.getFlag()))
-            repairStaffListStr = listEvent.getList().toString();
-    }
-
-    /**
-     * @param
-     * @return
-     * @description 接收润滑油表体原始数据
-     * @author zhangwenshuai1 2018/10/11
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveInitLubricateOilsList(ListEvent listEvent) {
-        if ("lubricateOils".equals(listEvent.getFlag()))
+    public void receiveList(ListEvent listEvent) {
+        if ("lubricateOils".equals(listEvent.getFlag())) {
             lubricateOilsListStr = listEvent.getList().toString();
+        } else if ("repairStaff".equals(listEvent.getFlag())) {
+            repairStaffListStr = listEvent.getList().toString();
+        } else if ("sparePart".equals(listEvent.getFlag())) {
+            sparePartListStr = listEvent.getList().toString();
+        } else if ("maintenance".equals(listEvent.getFlag())) {
+            maintenanceListStr = listEvent.getList().toString();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -856,6 +846,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
+            // 加载处理意见
+            if (mWXGDEntity.tableInfoId != null){
+                mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL,mWXGDEntity.tableInfoId);
+            }
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }

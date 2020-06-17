@@ -123,6 +123,48 @@
                     app:editable="true"
                     app:key="操作人"
                     app:key_size="14"
+                    app:necessary="true"/>
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/chargeStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="chargeStaff"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="检修负责人"
+                    app:key_size="14"
+                    app:necessary="true" />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/electrician"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="electrician"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="电工"
+                    app:key_size="14"
+                    app:necessary="true" />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/securityStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="securityStaff"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="安全员"
+                    app:key_size="14"
                     app:necessary="true" />
 
                 <com.supcon.mes.mbap.view.CustomVerticalEditText
@@ -137,7 +179,8 @@
                     app:content_size="13"
                     app:editable="true"
                     app:key="内容"
-                    app:key_size="14"/>
+                    app:key_size="14"
+                    app:necessary="true"/>
                 <com.supcon.mes.mbap.view.CustomGalleryView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -169,6 +212,11 @@
                     app:text_size="14"
                     app:title_bg_color="@color/customBlue"
                     app:widget_name="操作项" />
+                <include layout="@layout/middle_ly_title_recycler"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent" />
+
             </LinearLayout>
 
         </ScrollView>

@@ -463,4 +463,12 @@ public interface NetworkAPI {
     @GET("/public/mobileCommon/foundation/getCompanyList.action")
     Flowable<CommonListEntity<Company>> getCompanyList();
 
+    /**
+     * 获取处理意见
+     * @param url
+     * @param tableInfoId 表单id
+     */
+    @GET("{url}/dealInfo-list.action")
+    Flowable<List> getDealInfoList(@Path(value = "url",encoded = true) String url, @Query("tableInfoId") Long tableInfoId);
+
 }

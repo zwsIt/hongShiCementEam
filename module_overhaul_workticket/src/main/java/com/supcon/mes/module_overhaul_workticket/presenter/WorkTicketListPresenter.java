@@ -2,6 +2,7 @@ package com.supcon.mes.module_overhaul_workticket.presenter;
 
 import android.text.TextUtils;
 
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
@@ -13,6 +14,7 @@ import com.supcon.mes.module_overhaul_workticket.model.network.HttpClient;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.functions.Consumer;
@@ -29,10 +31,23 @@ public class WorkTicketListPresenter extends WorkTicketListContract.Presenter {
     @Override
     public void listWorkTickets(int pageNo, Map<String, Object> queryParams, boolean pendingQuery) {
         FastQueryCondEntity fastQueryCondEntity = new FastQueryCondEntity();
+        if (queryParams.containsKey(Constant.BAPQuery.RISK_ASSESSMENT)){
+            Map<String, Object> map = new HashMap<>();
+            map.put(Constant.BAPQuery.RISK_ASSESSMENT,queryParams.get(Constant.BAPQuery.RISK_ASSESSMENT));
+            fastQueryCondEntity = BAPQueryParamsHelper.createSingleFastQueryCond(map);
+        }
+
+        if(queryParams.containsKey(Constant.BAPQuery.EAM_NAME)){
+            Map<String, Object> map = new HashMap<>();
+            map.put(Constant.BAPQuery.EAM_NAME,queryParams.get(Constant.BAPQuery.EAM_NAME));
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(map,"EAM_BaseInfo,EAM_ID,WORKTICKET_OHWORKTICKETS,EAM_ID");
+            if (fastQueryCondEntity.subconds == null){
+                fastQueryCondEntity.subconds = new ArrayList<>();
+            }
+            fastQueryCondEntity.subconds.add(joinSubcondEntity);
+        }
         fastQueryCondEntity.modelAlias = "ohworkticket";
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(queryParams,"EAM_BaseInfo,EAM_ID,WORKTICKET_OHWORKTICKETS,EAM_ID");
-        fastQueryCondEntity.subconds = new ArrayList<>();
-        fastQueryCondEntity.subconds.add(joinSubcondEntity);
+
         Map<String, Object> pageQueryParam = PageParamUtil.pageQueryParam(pageNo,20);
         pageQueryParam.put("fastQueryCond",fastQueryCondEntity);
         String url;

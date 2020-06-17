@@ -1,6 +1,7 @@
 package com.supcon.mes.module_overhaul_workticket.controller;
 
 import android.annotation.SuppressLint;
+import android.graphics.BitmapFactory;
 import android.view.View;
 
 import com.supcon.common.view.base.activity.BaseActivity;
@@ -23,6 +24,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.PicUtil;
+import com.supcon.mes.middleware.util.WatermarkUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -138,6 +140,7 @@ public class WorkTicketCameraController extends BaseCameraController {
     protected void onFileReceived(File file) {
         super.onFileReceived(file);
 
+
         String fileName = file.getName();
         if(PicUtil.isPic(fileName)){
             uploadLocalPic(file);
@@ -197,6 +200,9 @@ public class WorkTicketCameraController extends BaseCameraController {
 
     private void uploadLocalPic(File file) {
         ((BaseActivity)activity).onLoading("正在上传照片...");
+        // 添加名称水印
+        WatermarkUtil.makeText(context,EamApplication.getAccountInfo().staffName, file);
+
         mAttachmentController.uploadAttachment(new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {

@@ -2,7 +2,7 @@ package com.supcon.mes.module_login.model.api;
 
 import com.app.annotation.apt.ContractFactory;
 import com.supcon.common.com_http.NullEntity;
-import com.supcon.mes.module_login.model.bean.WorkInfo;
+import com.supcon.mes.middleware.model.bean.WorkInfo;
 
 import java.util.List;
 

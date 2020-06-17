@@ -78,6 +78,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * created by zhangwenshuai1 2020/2/12
  * 新版工作提醒
  */
+@Deprecated
 @Presenter(value = {WaitDealtPresenter.class, WaitDealtSubmitPresenter.class})
 @Router(value = Constant.Router.WAIT_DEALT_NEW)
 public class WaitDealNewActivity extends BaseRefreshRecyclerActivity<WaitDealtEntity> implements WaitDealtContract.View, WaitDealtSubmitContract.View {

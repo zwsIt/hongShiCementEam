@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -37,6 +38,7 @@ import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AttachmentController;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
@@ -136,6 +138,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     CustomGalleryView saferGalleryView;
     @BindByTag("content")
     CustomVerticalEditText content;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
 
     private String __pc__;
@@ -151,6 +155,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     private String tableStatus;
     private ImageView customCameraIv;
     private boolean editable;
+    private DealInfoController mDealInfoController;
 
     @Override
     protected void onInit() {
@@ -172,6 +177,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         mSinglePickController.setCanceledOnTouchOutside(true);
 
         getController(SafetyMeasuresController.class).setEditable(false);
+
+        mDealInfoController = new  DealInfoController(context,recyclerView,null);
     }
 
     @Override
@@ -380,6 +387,9 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             if (Constant.Transition.CANCEL_CN.equals(workFlowEntity.dec)) {
                 map.put("workFlowVarStatus", Constant.Transition.CANCEL);
             }
+            if (Constant.Transition.REJECT_CN.equals(workFlowEntity.dec)) {
+                map.put("workFlowVarStatus", Constant.Transition.REJECT);
+            }
         } else {
             map.put("operateType", "save");
         }
@@ -398,6 +408,8 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         map.put("ohworkticket.content", content.getContent());
         map.put("ohworkticket.hazardsourContrpoint", mWorkTicketEntity.getHazardsourContrpoint());
         map.put("ohworkticket.value", mWorkTicketEntity.getHazardsourContrpointForDisplay());
+        map.put("ohworkticket.offApplyId", mWorkTicketEntity.getOffApplyId() == null ? "" : mWorkTicketEntity.getOffApplyId());
+        map.put("ohworkticket.offApplyTableno", mWorkTicketEntity.getOffApplyTableNo() == null ? "" : mWorkTicketEntity.getOffApplyTableNo());
         map.put("__file_upload", true);
 
         // 表单
@@ -437,6 +449,10 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             public void onSuccess(Object result) {
                 WorkTicketEntity entity = GsonUtil.gsonToBean(GsonUtil.gsonString(result), WorkTicketEntity.class);
                 updateTableInfo(entity);
+                // 加载处理意见
+                if (mWorkTicketEntity.getTableInfoId() != null){
+                    mDealInfoController.listTableDealInfo(WorkTicketConstant.URL.PRE_URL,mWorkTicketEntity.getTableInfoId());
+                }
                 refreshController.refreshComplete();
             }
         });
@@ -513,7 +529,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
                         getController(OnlineCameraController.class).setPicData(result.result, "WorkTicket_8.20.3.03_workTicket");
                     }
                 }
-            }, mWorkTicketEntity.getTableInfoId());
+            }, mWorkTicketEntity.getTableInfoId() == null ? -1L : mWorkTicketEntity.getTableInfoId());
         }
     }
 

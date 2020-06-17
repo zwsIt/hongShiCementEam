@@ -2,4 +2,5 @@
 <resources>
     <color name="themeColor">#CE5050</color><!--红狮-->
     <color name="equipmentThemeColor">#CE5050</color>
+    <color name="themeColorDeep">#CF6767</color><!--红狮-->
 </resources>

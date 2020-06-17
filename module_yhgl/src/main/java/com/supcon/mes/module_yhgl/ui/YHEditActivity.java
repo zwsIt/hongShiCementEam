@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -204,8 +205,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     @BindByTag("ysBtn")
     Button ysBtn;
 
-    @BindByTag("eleOffChkBox")
-    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOffRadioGroup")
+    RadioGroup eleOffRadioGroup; // 是否生成停电票
     @BindByTag("eleOff")
     CustomTextView eleOff;
 
@@ -284,7 +285,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             refreshController.setAutoPullDownRefresh(false);
             refreshController.setPullDownRefreshEnabled(false);
 
-            mYHEntity.isOffApply = true;
+//            mYHEntity.isOffApply = true;
             iniTransition();
             yhEditFindStaff.setValue(mYHEntity.findStaffID != null ? mYHEntity.findStaffID.name : "");
             yhEditFindTime.setDate(mYHEntity.findTime != null ? DateUtil.dateTimeFormat(mYHEntity.findTime) : "");
@@ -384,6 +385,9 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         if (!TextUtils.isEmpty(mYHEntity.remark)) {
             yhEditMemo.setInput(mYHEntity.remark);
         }
+
+        if (mYHEntity.isOffApply != null)
+            eleOffRadioGroup.check(mYHEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
 
 //        mYHEntity.isOffApply = true;
 //        eleOffChkBox.setChecked(true); // 默认true
@@ -662,6 +666,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     mYHEntity.downStream.id = "BEAM2_2013/01";
+                    mYHEntity.isOffApply = false;
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
 //                    if (TextUtils.isEmpty(yhEditWXChargeGroup.getValue()) && TextUtils.isEmpty(yhEditWXChargeStaff.getValue())) {
 //                        mYHEntity.chargeStaff = new Staff();
@@ -682,7 +687,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(gdBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    if (mYHEntity.isOffApply && mYHEntity.chargeStaff == null) {
+                    if (mYHEntity.isOffApply != null && mYHEntity.isOffApply && mYHEntity.chargeStaff != null && mYHEntity.chargeStaff.id == null) {
                         ToastUtils.show(context, "勾选生成停电票时，请选择负责人");
                         return;
                     }
@@ -711,7 +716,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(bigRepair)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    eleOffChkBox.setChecked(false);
+                    mYHEntity.isOffApply = false;
                     mYHEntity.downStream.id = "BEAM2_2013/04";
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
                     if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
@@ -721,7 +726,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(checkRepair)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    eleOffChkBox.setChecked(false);
+                    mYHEntity.isOffApply = false;
                     mYHEntity.downStream.id = "BEAM2_2013/05";
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
                     if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
@@ -815,7 +820,14 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             }
         });
 
-        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mYHEntity.isOffApply = isChecked);
+//        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mYHEntity.isOffApply = isChecked);
+        eleOffRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.noRadioButton){
+                mYHEntity.isOffApply = false;
+            }else {
+                mYHEntity.isOffApply = true;
+            }
+        });
 
         customCameraIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1148,15 +1160,17 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             ToastUtils.show(context, "请填写发现时间！");
             return false;
         }
-
-        if (mYHEntity.priority == null) {
-            ToastUtils.show(context, "请选择优先级！");
-            return false;
-        }
-
         //判断必填字段是否为空
         if (mYHEntity.eamID == null || mYHEntity.eamID.code == null) {
             ToastUtils.show(context, "请选择设备！");
+            return false;
+        }
+        if (mYHEntity.isOffApply == null){
+            ToastUtils.show(context,"请选择是否生成停电票！");
+            return false;
+        }
+        if (mYHEntity.priority == null) {
+            ToastUtils.show(context, "请选择优先级！");
             return false;
         }
 
@@ -1194,7 +1208,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     }
 
     private void submit(List<WorkFlowEntity> workFlowEntities) {
-        WorkFlowEntity workFlowEntity = null;
+        WorkFlowEntity workFlowEntity;
         if (workFlowEntities != null && workFlowEntities.size() != 0) {
             workFlowEntity = workFlowEntities.get(0);
         } else {
@@ -1391,8 +1405,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @Override
     public void doSubmitSuccess(BapResultEntity entity) {
-        LogUtil.d("entity:" + entity);
-
         RefreshEvent refreshEvent = new RefreshEvent();
         if (isCancel) {
             refreshEvent.action = Constant.Transition.CANCEL;

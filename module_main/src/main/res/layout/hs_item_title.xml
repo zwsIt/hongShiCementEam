@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
     android:layout_height="30dp"
     android:orientation="vertical">
 
@@ -9,29 +10,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
+        android:paddingStart="10dp"
         android:gravity="center_vertical">
 
         <TextView
             android:layout_width="5dp"
             android:layout_height="13dp"
             android:layout_centerVertical="true"
-            android:background="#e82941"
+            android:background="@color/themeColor"
             android:tag="contentTitleIc" />
 
         <TextView
             android:id="@+id/contentTitleLabel"
-            style="@style/TitleTextColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="13dp"
             android:tag="contentTitleLabel"
-            android:textColor="#333333"
-            android:textStyle="bold"
-            tools:text="测试" />
-
+            android:text="@string/main_warn_work"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <com.supcon.mes.middleware.ui.view.MarqueeTextView
             android:id="@+id/contentTitleTips"

@@ -36,7 +36,6 @@
         </attr>
     </declare-styleable>
 
-
     <!--仿微信字体大小调整 ChangeTextSizeView-->
     <declare-styleable name="ChangeTextSizeView">
         <attr name="lineWidth" format="dimension|reference" />
@@ -51,4 +50,15 @@
         <attr name="bigSize" format="integer" />
         <attr name="defaultPosition" format="integer" />
     </declare-styleable>
+
+    <style name="MyTabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabBackground">@color/white</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabIndicatorColor">@color/themeColor</item>
+        <item name="tabSelectedTextColor">@color/themeColor</item>
+        <item name="tabTextColor">@color/tab_default_gray</item>
+    </style>
+    <style name="TabTextAppearanceStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">@dimen/fontSize_12sp</item>
+    </style>
 </resources>

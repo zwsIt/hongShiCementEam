@@ -2,6 +2,9 @@ package com.supcon.mes.module_main.model.bean;
 
 import com.google.gson.annotations.SerializedName;
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.Department;
+import com.supcon.mes.middleware.model.bean.DepartmentInfo;
+import com.supcon.mes.middleware.model.bean.PositionEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 
@@ -78,6 +81,9 @@ public class WaitDealtEntity extends BaseEntity {
     public String summary; // 摘要
 
     public String activityName; // 活动名称 ：TaskEvent_0u3o22s
+
+    public DepartmentInfo departmentId;  // 人员所属部门
+    public PositionEntity positionId;  // 所属岗位
 
     public Staff getStaffid() {
         if (staffId == null) {

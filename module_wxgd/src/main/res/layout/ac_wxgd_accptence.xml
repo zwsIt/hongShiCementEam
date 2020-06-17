@@ -181,6 +181,11 @@
 
                 <include layout="@layout/ly_line_light_light" />
 
+                <include layout="@layout/middle_ly_title_recycler"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent" />
+
             </LinearLayout>
 
         </ScrollView>

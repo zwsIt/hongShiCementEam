@@ -28,6 +28,7 @@ import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.api.CommonListAPI;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.contract.CommonListContract;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -99,7 +100,8 @@ public class EamFileListActivity extends BaseRefreshRecyclerActivity<EamFileEnti
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(3, context)));
 
-        queryParam.put("baseInfo.id",getIntent().getLongExtra(Constant.IntentKey.EAM_ID,-1));
+        EamEntity eamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        queryParam.put("baseInfo.id",eamEntity.id);
     }
 
     @Override

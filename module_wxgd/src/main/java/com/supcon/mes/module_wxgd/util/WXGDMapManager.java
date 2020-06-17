@@ -38,16 +38,13 @@ public class WXGDMapManager {
 
     @SuppressLint("SimpleDateFormat")
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//    @SuppressLint("SimpleDateFormat")
-//    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
 
     public static Map<String, Object> createMap(WXGDEntity mWXGDEntity) {
         Map<String, Object> map = new HashMap<>();
         map.put("workRecord.createPositionId", EamApplication.getAccountInfo().positionId);
         map.put("modelName", "WorkRecord");
         map.put("bap_validate_user_id", EamApplication.getAccountInfo().userId);
-        map.put("workRecord.createStaffId", EamApplication.getAccountInfo().staffId);
+        map.put("workRecord.createStaffId", mWXGDEntity.createStaff == null ?  EamApplication.getAccountInfo().staffId : mWXGDEntity.createStaff.id);
         map.put("workRecord.createTime", mWXGDEntity.createTime == null ? "" :format.format(mWXGDEntity.createTime));
 //DealInfo di = taskService.take(pendingId, deploymentId, workRecord.getId(), creatorService.getStaffFromSession(), workFlowVar);
         map.put("workRecord.version", mWXGDEntity.version);

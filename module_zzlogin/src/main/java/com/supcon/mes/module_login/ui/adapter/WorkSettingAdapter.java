@@ -9,7 +9,7 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.view.SwitchButton;
 import com.supcon.mes.module_login.R;
-import com.supcon.mes.module_login.model.bean.WorkInfo;
+import com.supcon.mes.middleware.model.bean.WorkInfo;
 
 /**
  * Created by wangshizhan on 2017/8/16.

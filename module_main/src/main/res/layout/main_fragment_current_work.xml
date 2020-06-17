@@ -19,7 +19,6 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/rightLl"
                 android:fillViewport="true">
                 <RadioGroup
                     android:id="@+id/waitStateRadioGroup"
@@ -38,7 +37,7 @@
                         android:layout_gravity="center_vertical"
                         android:button="@null"
                         android:tag="allRBtn"
-                        android:text="全部"
+                        android:text="@string/main_all"
                         android:textSize="@dimen/fontSize_14sp"
                         android:textColor="@drawable/sl_radio_text"
                         android:checked="true"/>
@@ -51,7 +50,7 @@
                         android:layout_marginLeft="@dimen/dp_20"
                         android:button="@null"
                         android:tag="overdueRBtn"
-                        android:text="已超期"
+                        android:text="@string/main_warn_overdue_work"
                         android:textColor="@drawable/sl_radio_text"
                         android:textSize="@dimen/fontSize_14sp" />
                     <RadioButton
@@ -62,7 +61,7 @@
                         android:layout_marginLeft="@dimen/dp_20"
                         android:button="@null"
                         android:tag="pendingRBtn"
-                        android:text="未超期"
+                        android:text="@string/main_warn_notOverdue_work"
                         android:textColor="@drawable/sl_radio_text"
                         android:textSize="@dimen/fontSize_14sp" />
                     <RadioButton
@@ -73,7 +72,7 @@
                         android:layout_marginLeft="@dimen/dp_20"
                         android:button="@null"
                         android:tag="waitDispatchRBtn"
-                        android:text="待派单"
+                        android:text="@string/main_dispatch"
                         android:textColor="@drawable/sl_radio_text"
                         android:textSize="@dimen/fontSize_14sp" />
 
@@ -84,7 +83,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:id="@+id/rightLl">
+                android:id="@+id/rightLl"
+                android:visibility="gone">
                 <View
                     android:layout_width="1dp"
                     android:layout_height="@dimen/dp_25"

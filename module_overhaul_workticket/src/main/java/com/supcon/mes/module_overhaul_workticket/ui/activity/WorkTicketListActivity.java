@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
@@ -15,21 +16,27 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.beans.FilterBean;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.QueryBtnType;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.model.bean.CustomFilterBean;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
+import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_overhaul_workticket.IntentRouter;
 import com.supcon.mes.module_overhaul_workticket.R;
 import com.supcon.mes.module_overhaul_workticket.model.api.WorkTicketListAPI;
@@ -44,6 +51,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -60,7 +68,6 @@ import io.reactivex.functions.Consumer;
 @Presenter(value = {WorkTicketListPresenter.class})
 public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTicketEntity> implements WorkTicketListContract.View {
 
-
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("rightBtn")
@@ -71,8 +78,8 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
     RadioGroup radioGroupFilter;
     @BindByTag("contentView")
     RecyclerView contentView;
-    @BindByTag("refreshFrameLayout")
-    PtrFrameLayout refreshFrameLayout;
+    @BindByTag("riskAssessmentFilter")
+    CustomFilterView<FilterBean> riskAssessmentFilter;
 
     private Map<String,Object> queryParam = new HashMap<>();
     private boolean pendingQuery = true;
@@ -89,6 +96,8 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5,context)));
+
+        queryParam.put(Constant.BAPQuery.RISK_ASSESSMENT,"");
     }
 
     @Override
@@ -119,6 +128,8 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
     @Override
     protected void initData() {
         super.initData();
+//        mRiskAssessmentList = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.RISK_ASSESSMENT);
+        riskAssessmentFilter.setData(FilterHelper.createFilterBySystemCode(Constant.SystemCode.RISK_ASSESSMENT));
     }
 
     @SuppressLint("CheckResult")
@@ -163,6 +174,14 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
                     pendingQuery = true;
                 }
                 doFilter();
+            }
+        });
+        riskAssessmentFilter.setFilterSelectChangedListener(new CustomFilterView.FilterSelectChangedListener<FilterBean>() {
+            @Override
+            public void onFilterSelected(FilterBean filterBean) {
+                CustomFilterBean bean = (CustomFilterBean) filterBean;
+                queryParam.put(Constant.BAPQuery.RISK_ASSESSMENT,bean.id);
+                refreshListController.refreshBegin();
             }
         });
     }

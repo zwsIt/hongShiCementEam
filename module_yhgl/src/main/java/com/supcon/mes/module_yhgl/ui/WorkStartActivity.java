@@ -1,6 +1,7 @@
 package com.supcon.mes.module_yhgl.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TimeUtils;
@@ -16,6 +17,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseControllerActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.picker.DateTimePicker;
@@ -32,13 +34,20 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.api.EamAPI;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
+import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
+import com.supcon.mes.middleware.model.event.NFCEvent;
+import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.NFCHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
+import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
 import com.supcon.mes.module_yhgl.model.api.WorkStartAPI;
@@ -52,15 +61,17 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import common.Assert;
 import io.reactivex.functions.Consumer;
 
 @Router(value = Constant.Router.WORK_START_EDIT)
-@Presenter(value = {WorkStartPresenter.class})
-public class WorkStartActivity extends BaseControllerActivity implements WorkStartContract.View {
+@Presenter(value = {WorkStartPresenter.class, EamPresenter.class})
+public class WorkStartActivity extends BaseControllerActivity implements WorkStartContract.View, EamContract.View {
 
     @BindByTag("leftBtn")
     CustomImageButton leftBtn;
@@ -83,6 +94,7 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
     @BindByTag("submitBtn")
     Button submitBtn;
 
+    private NFCHelper nfcHelper;
     private WorkStartDTO mWorkStartDTO;
     private String mWorkStartDTOInit;
     private DatePickController mDatePickController;
@@ -95,6 +107,17 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
         super.onInit();
         EventBus.getDefault().register(this);
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
+
+        nfcHelper = NFCHelper.getInstance();
+        if (nfcHelper != null) {
+            nfcHelper.setup(this);
+            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
+                @Override
+                public void onNFCReceived(String nfc) {
+                    EventBus.getDefault().post(new NFCEvent(nfc, context.getClass().getName()));
+                }
+            });
+        }
 
         mWorkStartDTO = new WorkStartDTO();
         mWorkStartDTO.setInitStaffId(EamApplication.getAccountInfo().staffId);
@@ -111,6 +134,28 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
         mSinglePickController = new SinglePickController<String>(this);
         mSinglePickController.textSize(18);
         mSinglePickController.setCanceledOnTouchOutside(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (nfcHelper != null)
+            nfcHelper.onResumeNFC(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (nfcHelper != null)
+            nfcHelper.onPauseNFC(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //获取到Tag对象
+        if (nfcHelper != null)
+            nfcHelper.dealNFCTag(intent);
     }
 
     @Override
@@ -262,6 +307,26 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
         }
     }
 
+    /**
+     * @param
+     * @description NFC事件
+     * @author zhangwenshuai1
+     * @date 2018/6/28
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getNFC(NFCEvent nfcEvent) {
+        if (!TextUtils.isEmpty(nfcEvent.getTag()) && nfcEvent.getTag().equals(context.getClass().getName())) {
+            Map<String, Object> nfcJson = Util.gsonToMaps(nfcEvent.getNfc());
+            if (nfcJson.get("textRecord") == null) {
+                ToastUtils.show(context, "标签内容空！");
+                return;
+            }
+            Map<String, Object> params = new HashMap<>();
+            params.put(Constant.IntentKey.EAM_CODE, nfcJson.get("textRecord"));
+            presenterRouter.create(EamAPI.class).getEam(params, true,1,20);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (!mWorkStartDTOInit.equals(GsonUtil.gsonString(mWorkStartDTO))){
@@ -279,6 +344,9 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (nfcHelper != null) {
+            nfcHelper.release();
+        }
     }
 
     @Override
@@ -290,5 +358,23 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
     @Override
     public void workStartSubmitFailed(String errorMsg) {
         onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    @Override
+    public void getEamSuccess(CommonListEntity entity) {
+        if (entity.result.size() == 0){
+            ToastUtils.show(context,"未查询到当前设备信息");
+            return;
+        }
+        EamEntity eamEntity = (EamEntity) entity.result.get(0);
+        eamName.setContent(eamEntity.name);
+        eamCode.setContent(eamEntity.eamAssetCode);
+        mWorkStartDTO.setEamId(eamEntity.id);
+
+    }
+
+    @Override
+    public void getEamFailed(String errorMsg) {
+        ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
     }
 }

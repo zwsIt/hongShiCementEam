@@ -40,25 +40,25 @@ public class MainPendingNumPresenter extends MainPendingNumContract.Presenter {
     }
 
     //提示信息
-    @Override
-    public void getSloganInfo() {
-        mCompositeSubscription.add(MainClient.getSloganInfo()
-                .onErrorReturn(new Function<Throwable, CommonEntity<String>>() {
-                    @Override
-                    public CommonEntity<String> apply(Throwable throwable) throws Exception {
-                        CommonEntity<String> waitDealtEntity = new CommonEntity<>();
-                        waitDealtEntity.errMsg = throwable.toString();
-                        return waitDealtEntity;
-                    }
-                }).subscribe(new Consumer<CommonEntity<String>>() {
-                    @Override
-                    public void accept(CommonEntity<String> result) throws Exception {
-                        if (result.success) {
-                            getView().getSloganInfoSuccess(result);
-                        } else {
-                            getView().getSloganInfoFailed(result.errMsg);
-                        }
-                    }
-                }));
-    }
+//    @Override
+//    public void getSloganInfo() {
+//        mCompositeSubscription.add(MainClient.getSloganInfo()
+//                .onErrorReturn(new Function<Throwable, CommonEntity<String>>() {
+//                    @Override
+//                    public CommonEntity<String> apply(Throwable throwable) throws Exception {
+//                        CommonEntity<String> waitDealtEntity = new CommonEntity<>();
+//                        waitDealtEntity.errMsg = throwable.toString();
+//                        return waitDealtEntity;
+//                    }
+//                }).subscribe(new Consumer<CommonEntity<String>>() {
+//                    @Override
+//                    public void accept(CommonEntity<String> result) throws Exception {
+//                        if (result.success) {
+//                            getView().getSloganInfoSuccess(result);
+//                        } else {
+//                            getView().getSloganInfoFailed(result.errMsg);
+//                        }
+//                    }
+//                }));
+//    }
 }

@@ -23,10 +23,14 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.api.EamAPI;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
+import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
+import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.NFCHelper;
@@ -65,8 +69,8 @@ import io.reactivex.functions.Predicate;
  * 临时润滑
  */
 @Router(Constant.Router.TEMPORARY_LUBRICATION_EARLY_WARN)
-@Presenter(value = {TemporaryPresenter.class, CompletePresenter.class})
-public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implements TemporaryContract.View, CompleteContract.View {
+@Presenter(value = {TemporaryPresenter.class, CompletePresenter.class, EamPresenter.class})
+public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implements TemporaryContract.View, CompleteContract.View, EamContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
@@ -75,7 +79,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
     ImageButton rightBtn;
 
     @BindByTag("contentView")
-    RecyclerView recyclerView;
+    RecyclerView contentView;
     @BindByTag("eamCode")
     CustomVerticalTextView eamCode;
     @BindByTag("eamName")
@@ -125,9 +129,9 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
 
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        contentView.setLayoutManager(new LinearLayoutManager(context));
         temporaryAdapter = new TemporaryAdapter(context);
-        recyclerView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "请刷卡获取设备"));
+        contentView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "请刷卡获取设备"));
     }
 
     @Override
@@ -205,6 +209,11 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
         eamCode.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
+                if (action == -1){
+                    temporaryAdapter.getList().clear();
+                    contentView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
+                    temporaryAdapter.notifyDataSetChanged();
+                }
                 Bundle bundle = new Bundle();
 //                bundle.putBoolean(Constant.IntentKey.IS_MAIN_EAM, true);
                 bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
@@ -239,9 +248,12 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
         eamCode.setContent(String.valueOf(nfcJson.get("textRecord")));
 //        queryParam.put(Constant.IntentKey.EAM_CODE, nfcJson.get("textRecord"));
 //        refreshController.refreshBegin();
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.IntentKey.EAM_CODE, eamCode.getContent());
-        IntentRouter.go(context,Constant.Router.EAM,bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(Constant.IntentKey.EAM_CODE, eamCode.getContent());
+//        IntentRouter.go(context,Constant.Router.EAM,bundle);
+        Map<String, Object> params = new HashMap<>();
+        params.put(Constant.IntentKey.EAM_CODE, eamCode.getContent());
+        presenterRouter.create(EamAPI.class).getEam(params, true,1,20);
 
     }
 
@@ -293,10 +305,10 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
 //            eamCode.setContent(dailyLubricateTaskEntity.getEamID().code);
 //            eamName.setContent(dailyLubricateTaskEntity.getEamID().name);
             temporaryAdapter.setList(entity.result);
-            recyclerView.setAdapter(temporaryAdapter);
+            contentView.setAdapter(temporaryAdapter);
         } else {
             ensure.setVisibility(View.GONE);
-            recyclerView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "当前设备没有待润滑任务"));
+            contentView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, "当前设备没有待润滑任务"));
         }
         refreshController.refreshComplete();
     }
@@ -304,7 +316,7 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
     @Override
     public void getTempLubricationsFailed(String errorMsg) {
         ensure.setVisibility(View.GONE);
-        recyclerView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
+        contentView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         SnackbarHelper.showError(rootView, errorMsg);
     }
 
@@ -315,5 +327,22 @@ public class TemporaryLubricationWarnActivity extends BaseRefreshActivity implem
         if (nfcHelper != null) {
             nfcHelper.release();
         }
+    }
+
+    @Override
+    public void getEamSuccess(CommonListEntity entity) {
+        if (entity.result == null || entity.result.size() == 0){
+            ToastUtils.show(context, context.getResources().getString(R.string.no_query_eam));
+            return;
+        }
+        EamEntity eamEntity = (EamEntity) entity.result.get(0);
+        queryParam.put(Constant.IntentKey.EAM_CODE, Util.strFormat(eamEntity.code));
+        queryParam.put(Constant.IntentKey.EAM_ID, Util.strFormat(eamEntity.id));
+        refreshController.refreshBegin();
+    }
+
+    @Override
+    public void getEamFailed(String errorMsg) {
+        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
     }
 }

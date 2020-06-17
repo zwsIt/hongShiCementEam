@@ -8,7 +8,7 @@ import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.JoinSubcondEntity;
 import com.supcon.mes.middleware.util.BAPQueryParamsHelper;
-import com.supcon.mes.module_main.model.bean.ProcessedEntity;
+import com.supcon.mes.middleware.model.bean.ProcessedEntity;
 import com.supcon.mes.module_main.model.contract.ProcessedContract;
 import com.supcon.mes.module_main.model.network.MainClient;
 
@@ -22,7 +22,7 @@ import io.reactivex.functions.Function;
 public class ProcessedPresenter extends ProcessedContract.Presenter {
 
     @Override
-    public void workflowHandleList(Map<String, Object> queryParam, int page) {
+    public void workflowHandleList(Map<String, Object> queryParam, int page, int pageSize) {
         FastQueryCondEntity fastQueryCond = BAPQueryParamsHelper.createSingleFastQueryCond(queryParam);
         Map<String, Object> paramsName = new HashMap<>();
         paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
@@ -32,7 +32,7 @@ public class ProcessedPresenter extends ProcessedContract.Presenter {
 
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo",page);
-        pageQueryParams.put("page.pageSize",10);
+        pageQueryParams.put("page.pageSize",pageSize);
         pageQueryParams.put("page.maxPageSize",100);
 
         Flowable<CommonBAPListEntity<ProcessedEntity>> mainClient;

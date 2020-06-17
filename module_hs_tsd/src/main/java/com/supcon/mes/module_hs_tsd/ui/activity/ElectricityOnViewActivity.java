@@ -2,6 +2,7 @@ package com.supcon.mes.module_hs_tsd.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AttachmentController;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
@@ -103,6 +105,12 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
     CustomDateView applyDate;
     @BindByTag("operateStaff")
     CustomTextView operateStaff;
+    @BindByTag("chargeStaff")
+    CustomTextView chargeStaff;
+    @BindByTag("electrician")
+    CustomTextView electrician;
+    @BindByTag("securityStaff")
+    CustomTextView securityStaff;
     @BindByTag("workTask")
     CustomVerticalEditText workTask;
     @BindByTag("galleryView")
@@ -115,16 +123,19 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
     PtrFrameLayout refreshFrameLayout;
     @BindByTag("workFlowView")
     CustomWorkFlowView workFlowView;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
     private String __pc__;
     private Long tableId; // 单据ID
     private Long pendingId; // 代办Id
     private ElectricityOffOnEntity mElectricityOffOnEntity = new ElectricityOffOnEntity();
-    private ElectricityOffOnEntity mElectricityOffOnEntityOld;
+//    private ElectricityOffOnEntity mElectricityOffOnEntityOld;
     private DatePickController mDatePickController;
     private String activityName = ""; // 当前活动名称
     private ImageView customCameraIv;
     private String tableStatus;
+    private DealInfoController mDealInfoController;
 
     @Override
     protected void onInit() {
@@ -145,7 +156,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         mDatePickController.setCanceledOnTouchOutside(true);
         mDatePickController.setCycleDisable(false);
         mDatePickController.setSecondVisible(false);
-
+        mDealInfoController = new  DealInfoController(context,recyclerView,null);
     }
 
     @Override
@@ -161,7 +172,11 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         applyStaff.setEditable(false);
         eamName.setEditable(false);
         applyDate.setEditable(false);
+        operateStaff.setVisibility(View.GONE);
         operateStaff.setEditable(false);
+        chargeStaff.setEditable(false);
+        electrician.setEditable(false);
+        securityStaff.setEditable(false);
         workTask.setEditable(false);
 
         if (pendingId == -1) {
@@ -343,11 +358,12 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         map.put("onoroff.createStaffId", mElectricityOffOnEntity.getCreateStaffId());
         map.put("onoroff.createTime", DateUtil.dateTimeFormat(mElectricityOffOnEntity.getCreateTime()));
         map.put("onoroff.createPositionId", EamApplication.getAccountInfo().positionId);
-        map.put("viewCode", "BEAMEle_1.0.0_onOrOff_eleOnEdit");
+        map.put("viewCode", "BEAMEle_1.0.0_onOrOff_eleOnWorkFlow");
         map.put("modelName", "Onoroff");
-        map.put("datagridKey", "BEAMEle_onOrOff_onoroff_eleOnEdit_datagrids");
-        map.put("viewselect", "eleOnEdit");
+        map.put("datagridKey", "BEAMEle_onOrOff_onoroff_eleOnWorkFlow_datagrids");
+        map.put("viewselect", "eleOnWorkFlow");
         map.put("id", tableId.equals(-1L) ? "" : tableId);
+//        map.put("onoroff.id",tableId);
         map.put("deploymentId", mElectricityOffOnEntity.getDeploymentId());
         map.put("onoroff.version", mElectricityOffOnEntity.getVersion());
         if (workFlowEntities != null) {//保存为空
@@ -368,10 +384,14 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
             map.put("pendingId", pendingId);
         }
         //表头信息,取修改后最新数据
+        map.put("onoroff.applyType.id",mElectricityOffOnEntity.getApplyType().id);
         map.put("onoroff.applyStaff.id", Util.strFormat2(mElectricityOffOnEntity.getApplyStaff().id));
         map.put("onoroff.eamID.id", Util.strFormat2(mElectricityOffOnEntity.getEamID().id));
         map.put("onoroff.eleTemplateId.id", Util.strFormat2(mElectricityOffOnEntity.getEleTemplateId().id));
         map.put("onoroff.operateStaff.id", Util.strFormat2(mElectricityOffOnEntity.getOperateStaff().id));
+        map.put("onoroff.securityStaff.id",Util.strFormat2(mElectricityOffOnEntity.getSecurityStaff().id));
+        map.put("onoroff.electrician.id",Util.strFormat2(mElectricityOffOnEntity.getElectrician().id));
+        map.put("onoroff.chargeStaff.id",Util.strFormat2(mElectricityOffOnEntity.getChargeStaff().id));
         map.put("onoroff.applyDate", applyDate.getContent());
         map.put("onoroff.workTask", workTask.getContent());
         map.put("__file_upload", true);
@@ -429,6 +449,10 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
             public void onSuccess(Object result) {
                 ElectricityOffOnEntity entity = GsonUtil.gsonToBean(GsonUtil.gsonString(result), ElectricityOffOnEntity.class);
                 updateTableInfo(entity);
+                // 加载处理意见
+                if (mElectricityOffOnEntity.getTableInfoId() != null){
+                    mDealInfoController.listTableDealInfo(ElectricityConstant.URL.PRE_URL,mElectricityOffOnEntity.getTableInfoId());
+                }
                 refreshController.refreshComplete();
             }
         });
@@ -448,9 +472,12 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         eamCode.setContent(entity.getEamID().eamAssetCode);
         applyDate.setContent(entity.getApplyDate() == null ? "" : DateUtil.dateTimeFormat(entity.getApplyDate()));
         operateStaff.setContent(entity.getOperateStaff().name);
+        chargeStaff.setContent(entity.getChargeStaff().name);
+        electrician.setContent(entity.getElectrician().name);
+        securityStaff.setContent(entity.getSecurityStaff().name);
         workTask.setContent(entity.getWorkTask());
 
-        mElectricityOffOnEntityOld = GsonUtil.gsonToBean(mElectricityOffOnEntity.toString(), ElectricityOffOnEntity.class);
+//        mElectricityOffOnEntityOld = GsonUtil.gsonToBean(mElectricityOffOnEntity.toString(), ElectricityOffOnEntity.class);
 
         initPic();
     }

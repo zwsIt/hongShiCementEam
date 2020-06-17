@@ -51,6 +51,8 @@ public class ElectricityOffOnListAdapter extends BaseListDataRecyclerViewAdapter
         TextView itemEam;
         @BindByTag("itemApplyStaff")
         TextView itemApplyStaff;
+        @BindByTag("content")
+        TextView content;
 
         public WorkTicketViewHolder(Context context) {
             super(context);
@@ -81,6 +83,7 @@ public class ElectricityOffOnListAdapter extends BaseListDataRecyclerViewAdapter
             itemEam.setText(TextUtils.isEmpty(data.getEamID().name) ? "" : String.format("%s(%s)", data.getEamID().name, data.getEamID().eamAssetCode));
             itemApplyStaff.setText(data.getApplyStaff().name);
             itemTableStatus.setTextColor(context.getResources().getColor(R.color.white));
+            content.setText(data.getWorkTask());
             if (Constant.TableStatus_CH.EDIT.equals(data.getPending().taskDescription)) {
                 itemTableStatus.setBackground(context.getResources().getDrawable(R.drawable.sh_edit_bg));
             } else if (Constant.TableStatus_CH.REVIEW.equals(data.getPending().taskDescription)) {

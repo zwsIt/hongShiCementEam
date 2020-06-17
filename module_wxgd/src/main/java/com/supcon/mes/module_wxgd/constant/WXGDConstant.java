@@ -12,4 +12,10 @@ public interface WXGDConstant {
         String emergency =  "BEAM2007/01"; // 紧急
         String priority =  "BEAM2007/02"; // 优先
     }
+
+    interface URL{
+        String PRE_URL =  "/BEAM2/workList/workRecord/";
+    }
+
+
 }

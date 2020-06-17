@@ -34,7 +34,7 @@ public class YHEntity extends BaseEntity {
     public RepairGroupEntity repiarGroup;
 
     public List<AttachmentEntity> attachmentEntities;
-    public boolean isOffApply; // 是否需要停电
+    public Boolean isOffApply; // 是否需要停电
 
     public EamEntity getEamID() {
         if (eamID == null) {

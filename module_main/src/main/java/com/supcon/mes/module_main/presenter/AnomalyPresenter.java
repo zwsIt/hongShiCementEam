@@ -22,6 +22,7 @@ import io.reactivex.functions.Function;
 public class AnomalyPresenter extends AnomalyContract.Presenter {
     @Override
     public void getAnomalyList(int page, int pageSize, Map<String, Object> params) {
+        BAPQueryParamsHelper.setNfcCard(true);
         FastQueryCondEntity fastQueryCond = BAPQueryParamsHelper.createSingleFastQueryCond(params);
 
         fastQueryCond.modelAlias = "allAbnormalInfoOfEam";

@@ -2,6 +2,7 @@ package com.supcon.mes.module_wxgd.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -43,6 +45,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AttachmentController;
 import com.supcon.mes.middleware.controller.AttachmentDownloadController;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
@@ -68,6 +71,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
+import com.supcon.mes.module_wxgd.constant.WXGDConstant;
 import com.supcon.mes.module_wxgd.controller.AcceptanceCheckController;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
 import com.supcon.mes.module_wxgd.controller.MaintenanceController;
@@ -181,10 +185,12 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     @BindByTag("yhGalleryView")
     CustomGalleryView yhGalleryView;
 
-    @BindByTag("eleOffChkBox")
-    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOffRadioGroup")
+    RadioGroup eleOffRadioGroup; // 是否生成停电票
     @BindByTag("eleOff")
     CustomTextView eleOff;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
     private AcceptanceCheckController mAcceptanceCheckController;
     private RepairStaffController mRepairStaffController;
@@ -192,6 +198,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private LubricateOilsController mLubricateOilsController;
     private MaintenanceController maintenanceController;
     private AttachmentController mAttachmentController;
+    private DealInfoController mDealInfoController;
 
 //    private List<Long> dgDeletedIds_acceptance = new ArrayList<>();
 
@@ -239,6 +246,8 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         maintenanceController.setEditable(false);
         mAttachmentController = getController(AttachmentController.class);
         mLinkController = getController(LinkController.class);
+
+        mDealInfoController = new  DealInfoController(context,recyclerView,null);
 
 //        roleController = new RoleController();  //角色
 //        roleController.queryRoleList(EamApplication.getUserName());
@@ -388,13 +397,11 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
-        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
-            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
-//            eleOffChkBox.setBackgroundResource(R.drawable.ic_checked);
-        }else {
-            eleOffChkBox.setButtonDrawable(null);
+        if (mWXGDEntity.isOffApply != null)
+            eleOffRadioGroup.check(mWXGDEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
+        for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
+            eleOffRadioGroup.getChildAt(i).setEnabled(false);
         }
-        eleOffChkBox.setClickable(false);
     }
 
     @Override
@@ -691,10 +698,8 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
      * @author zhangwenshuai1 2018/9/10
      */
     public List<AcceptanceCheckEntity> getCurrentAcceptChk() {
-
         List<AcceptanceCheckEntity> currentAcceptChkList = new ArrayList<>();
         currentAcceptChkList.add(currentAcceptChkEntity);
-
         return currentAcceptChkList;
     }
 
@@ -786,6 +791,10 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
+            // 加载处理意见
+            if (mWXGDEntity.tableInfoId != null){
+                mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL,mWXGDEntity.tableInfoId);
+            }
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }

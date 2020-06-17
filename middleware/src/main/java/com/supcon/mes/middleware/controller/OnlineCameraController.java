@@ -19,6 +19,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.PicUtil;
+import com.supcon.mes.middleware.util.WatermarkUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -175,6 +176,8 @@ public class OnlineCameraController extends BaseCameraController {
 
     private void uploadLocalPic(File file) {
         ((BaseActivity)activity).onLoading("正在上传照片...");
+        // 添加名称水印
+        WatermarkUtil.makeText(context,EamApplication.getAccountInfo().staffName, file);
         mAttachmentController.uploadAttachment(new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {

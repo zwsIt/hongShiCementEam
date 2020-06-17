@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -147,8 +148,8 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     @BindByTag("yhDealBar")
     LinearLayout yhDealBar;
 
-    @BindByTag("eleOffChkBox")
-    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOffRadioGroup")
+    RadioGroup eleOffRadioGroup; // 是否生成停电票
     @BindByTag("eleOff")
     CustomTextView eleOff;
 
@@ -211,12 +212,11 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
             yhViewDescription.setContent(mYHEntity.describe);
         }
 
-        eleOffChkBox.setClickable(false);
-        if (mYHEntity.isOffApply){
-            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
-        }else {
-            eleOffChkBox.setButtonDrawable(null);
+        for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
+            eleOffRadioGroup.getChildAt(i).setEnabled(false);
         }
+        if (mYHEntity.isOffApply != null)
+            eleOffRadioGroup.check(mYHEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
 
         if (!TextUtils.isEmpty(mYHEntity.remark)) {
             yhViewMemo.setInput(mYHEntity.remark);

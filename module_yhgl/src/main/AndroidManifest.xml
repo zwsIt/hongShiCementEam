@@ -61,6 +61,7 @@
         <activity android:name=".ui.WorkStartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppNoTitleBarTheme"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
     </application>
 

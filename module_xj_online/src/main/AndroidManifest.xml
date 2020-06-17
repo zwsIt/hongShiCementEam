@@ -48,6 +48,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/TranslucentTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+        <activity android:name=".ui.OLXJTodayTaskRecordsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+        <activity android:name=".ui.OLXJTodayTaskItemsListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
     </application>
 

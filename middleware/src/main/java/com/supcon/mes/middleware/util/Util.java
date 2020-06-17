@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -472,4 +473,12 @@ public class Util {
         }.getType()));
         return map;
     }
+
+    public static String formatPercent(Double d, int scale){
+        NumberFormat numberFormat = NumberFormat.getPercentInstance();
+        numberFormat.setMaximumFractionDigits(scale);
+        return numberFormat.format(d);
+    }
+
+
 }

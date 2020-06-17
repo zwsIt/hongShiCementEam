@@ -19,6 +19,7 @@ public class DailyLubricateTaskEntity extends BaseEntity {
     public String lubricatePart;//润滑部位
     public ValueEntity oilType;
     public LubricateOil lubricateOil;
+    public int lubricatingnumber; // 润滑点数
 
     public Long nextTime;
     public ValueEntity periodType;//类型
@@ -43,10 +44,6 @@ public class DailyLubricateTaskEntity extends BaseEntity {
 
     // 当前设备润滑部位new
     private List<DailyLubricateTaskEntity> expendList = new ArrayList<>();
-
-    // 权限操作按钮：完成、延期设置
-    public boolean finish;
-    public boolean delaySetting;
 
     public List<DailyLubricateTaskEntity> getExpendList() {
         return expendList;

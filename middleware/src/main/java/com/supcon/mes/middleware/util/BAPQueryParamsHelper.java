@@ -262,16 +262,24 @@ public class BAPQueryParamsHelper {
                 subcondEntity.paramStr = LIKE_OPT_Q;
                 subcondEntity.value = String.valueOf(value);
                 break;
-
-//            case Constant.BAPQuery.BATCH_CODE:
-//                subcondEntity = new SubcondEntity();
-//                subcondEntity.columnName = Constant.BAPQuery.BATCH_CODE;
-//                subcondEntity.type = TYPE_NORMAL;
-//                subcondEntity.dbColumnType = Constant.BAPQuery.TEXT;
-//                subcondEntity.operator = LIKE;
-//                subcondEntity.paramStr = LIKE_OPT_BLUR;
-//                subcondEntity.value = String.valueOf(value);
-//                break;
+            case Constant.BAPQuery.SUBORDINATE_DEPARTMENT:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = Constant.BAPQuery.ID;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = LONG;
+                subcondEntity.operator = "=includeCustSub#BASE_DEPARTMENT";
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
+            case Constant.BAPQuery.SUBORDINATE_POSITION:
+                subcondEntity = new SubcondEntity();
+                subcondEntity.columnName = Constant.BAPQuery.ID;
+                subcondEntity.type = TYPE_NORMAL;
+                subcondEntity.dbColumnType = LONG;
+                subcondEntity.operator = "=includeCustSub#BASE_POSITION";
+                subcondEntity.paramStr = LIKE_OPT_Q;
+                subcondEntity.value = String.valueOf(value);
+                break;
 //            case Constant.BAPQuery.DIRECTION:
 //                subcondEntity = new SubcondEntity();
 //                subcondEntity.columnName = Constant.BAPQuery.DIRECTION;
@@ -316,6 +324,7 @@ public class BAPQueryParamsHelper {
             case Constant.BAPQuery.LINK_STATE:
             case Constant.BAPQuery.EAM_STATE:
             case Constant.BAPQuery.ON_OR_OFF:
+            case Constant.BAPQuery.RISK_ASSESSMENT:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.columnName = key;
                 subcondEntity.type = TYPE_NORMAL;

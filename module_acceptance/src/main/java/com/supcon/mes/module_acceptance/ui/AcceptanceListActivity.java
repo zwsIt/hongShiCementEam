@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -21,7 +22,9 @@ import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -54,6 +57,7 @@ import io.reactivex.functions.Consumer;
  * ------------- Description -------------
  */
 @Router(value = Constant.Router.ACCEPTANCE_LIST)
+@Controller(value = {ModulePermissonCheckController.class})
 @Presenter(value = AcceptanceListPresenter.class)
 public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<AcceptanceEntity> implements AcceptanceListContract.View {
 
@@ -79,6 +83,7 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
     private String selecStr;
     private String tableNo;
     private EamEntity mEamEntity;
+    private Long deploymentId;
 
     @Override
     protected IListAdapter createAdapter() {
@@ -107,7 +112,6 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        searchTitleBar.disableRightBtn();
 
         refreshListController.setAutoPullDownRefresh(true);
         refreshListController.setPullDownRefreshEnabled(true);
@@ -115,8 +119,15 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(15));
         customSearchView.setHint("请输入设备");
-        searchTitleBar.enableRightBtn();
         customSearchView.setInput(selecStr);
+
+        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), "checkApplyFW", result -> {
+            if (result == null){
+                searchTitleBar.disableRightBtn();
+            }
+            deploymentId = result;
+        },null);
+
     }
 
     @SuppressLint("CheckResult")
@@ -138,6 +149,7 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
                     bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
+                    bundle.putLong(Constant.IntentKey.DEPLOYMENT_ID,deploymentId);
                     IntentRouter.go(AcceptanceListActivity.this, Constant.Router.ACCEPTANCE_EDIT, bundle);
                 });
 

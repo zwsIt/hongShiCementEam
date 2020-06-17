@@ -2,6 +2,7 @@ package com.supcon.mes.module_hs_tsd.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +40,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.IntentRouter;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AttachmentController;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
@@ -111,6 +113,12 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
     CustomDateView applyDate;
     @BindByTag("operateStaff")
     CustomTextView operateStaff;
+    @BindByTag("chargeStaff")
+    CustomTextView chargeStaff;
+    @BindByTag("electrician")
+    CustomTextView electrician;
+    @BindByTag("securityStaff")
+    CustomTextView securityStaff;
     @BindByTag("workTask")
     CustomVerticalEditText workTask;
     @BindByTag("galleryView")
@@ -123,6 +131,8 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
     PtrFrameLayout refreshFrameLayout;
     @BindByTag("workFlowView")
     CustomWorkFlowView workFlowView;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
     private String __pc__;
     private Long tableId; // 单据ID
@@ -132,6 +142,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
     private DatePickController mDatePickController;
     private String name = ""; // 当前活动名称
     private ImageView customCameraIv;
+    private DealInfoController mDealInfoController;
 
     @Override
     protected void onInit() {
@@ -155,7 +166,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
         mDatePickController.setCanceledOnTouchOutside(true);
         mDatePickController.setCycleDisable(false);
         mDatePickController.setSecondVisible(false);
-
+        mDealInfoController = new  DealInfoController(context,recyclerView,null);
     }
 
     @Override
@@ -167,6 +178,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
     protected void initView() {
         super.initView();
         titleText.setText("送电申请编辑");
+        operateStaff.setVisibility(View.GONE);
         getController(LinkController.class).setCancelShow(true);
         if (pendingId.equals(-1L)) {
             // 制定单据工作流
@@ -185,6 +197,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
         getController(OnlineCameraController.class).addGalleryView(0,galleryView);
 
         customCameraIv = galleryView.findViewById(R.id.customCameraIv);
+        galleryView.setNecessary(false);
     }
 
     /**
@@ -289,30 +302,44 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
                 }
             }
         });
-        operateStaff.setOnChildViewClickListener((childView, action, obj) -> {
+        chargeStaff.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1) {
-                mElectricityOffOnEntity.getOperateStaff().id = null;
+                mElectricityOffOnEntity.getChargeStaff().id = null;
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                 bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
-                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,operateStaff.getTag().toString());
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,chargeStaff.getTag().toString());
                 IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
-
-//                Bundle bundle = new Bundle();
-//                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,operateStaff.getTag().toString());
-//                IntentRouter.go(context, Constant.Router.STAFF,bundle);
             }
         });
+        electrician.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mElectricityOffOnEntity.getElectrician().id = null;
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,electrician.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+            }
+        });
+        securityStaff.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mElectricityOffOnEntity.getSecurityStaff().id = null;
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,securityStaff.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+            }
+        });
+
         RxTextView.textChanges(workTask.editText()).skipInitialValue()
                .subscribeOn(Schedulers.io())
                .observeOn(AndroidSchedulers.mainThread())
-               .subscribe(new Consumer<CharSequence>() {
-                   @Override
-                   public void accept(CharSequence charSequence) throws Exception {
-                       mElectricityOffOnEntity.setWorkTask(charSequence.toString());
-                   }
-               });
+               .subscribe(charSequence -> mElectricityOffOnEntity.setWorkTask(charSequence.toString()));
 
         workFlowView.setOnChildViewClickListener((childView, action, obj) -> {
             if ("selectPeopleInput".equals(childView.getTag())) {//选人
@@ -402,14 +429,20 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
         map.put("workFlowVar.comment", Util.strFormat2(workFlowView.getComment()));
 //        map.put("taskDescription", "WorkTicket_8.20.3.03.workflow.randon1575618721430.flag");
         map.put("activityName", name);
-        if (!pendingId.equals(-1L)){
+        if (pendingId.equals(-1L)){
+            map.put("onoroff.applyType.id","BEAMEle001/02");
+            map.put("onoroff.applyStatus.id","BEAMEle002/01");
+        }else {
             map.put("pendingId",pendingId);
         }
         //表头信息,取修改后最新数据
         map.put("onoroff.applyStaff.id", Util.strFormat2(mElectricityOffOnEntity.getApplyStaff().id));
         map.put("onoroff.eamID.id",Util.strFormat2(mElectricityOffOnEntity.getEamID().id));
         map.put("onoroff.eleTemplateId.id",Util.strFormat2(mElectricityOffOnEntity.getEleTemplateId().id));
-        map.put("onoroff.operateStaff.id",Util.strFormat2(mElectricityOffOnEntity.getOperateStaff().id));
+//        map.put("onoroff.operateStaff.id",Util.strFormat2(mElectricityOffOnEntity.getOperateStaff().id));
+        map.put("onoroff.securityStaff.id",Util.strFormat2(mElectricityOffOnEntity.getSecurityStaff().id));
+        map.put("onoroff.electrician.id",Util.strFormat2(mElectricityOffOnEntity.getElectrician().id));
+        map.put("onoroff.chargeStaff.id",Util.strFormat2(mElectricityOffOnEntity.getChargeStaff().id));
         map.put("onoroff.applyDate",applyDate.getContent());
         map.put("onoroff.operateDate",applyDate.getContent()); // 操作时间默认申请时间
         map.put("onoroff.workTask",workTask.getContent());
@@ -445,10 +478,22 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
             ToastUtils.show(context, "申请时间不允许为空！");
             return true;
         }
-//        if (TextUtils.isEmpty(operateStaff.getValue())) {
-//            ToastUtils.show(context, "操作人不允许为空！");
-//            return true;
-//        }
+        if (TextUtils.isEmpty(chargeStaff.getValue())) {
+            ToastUtils.show(context, "检修负责人不允许为空！");
+            return true;
+        }
+        if (TextUtils.isEmpty(electrician.getValue())) {
+            ToastUtils.show(context, "电工不允许为空！");
+            return true;
+        }
+        if (TextUtils.isEmpty(securityStaff.getValue())) {
+            ToastUtils.show(context, "安全员不允许为空！");
+            return true;
+        }
+        if (workTask.isNecessary() && TextUtils.isEmpty(workTask.getContent())) {
+            ToastUtils.show(context, "内容不允许为空！");
+            return true;
+        }
         return false;
     }
 
@@ -464,6 +509,10 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
             public void onSuccess(Object result) {
                 ElectricityOffOnEntity entity = GsonUtil.gsonToBean(GsonUtil.gsonString(result), ElectricityOffOnEntity.class);
                 updateTableInfo(entity);
+                // 加载处理意见
+                if (mElectricityOffOnEntity.getTableInfoId() != null){
+                    mDealInfoController.listTableDealInfo(ElectricityConstant.URL.PRE_URL,mElectricityOffOnEntity.getTableInfoId());
+                }
                 refreshController.refreshComplete();
             }
         });
@@ -569,12 +618,24 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
                 mElectricityOffOnEntity.getApplyStaff().id = staff.id;
                 mElectricityOffOnEntity.getApplyStaff().name = staff.name;
                 mElectricityOffOnEntity.getApplyStaff().code = staff.code;
-            }else if (operateStaff.getTag().toString().equals(commonSearchEvent.flag)){
-                operateStaff.setContent(staff.name);
+            }else if (chargeStaff.getTag().toString().equals(commonSearchEvent.flag)){
+                chargeStaff.setContent(staff.name);
 
-                mElectricityOffOnEntity.getOperateStaff().id = staff.id;
-                mElectricityOffOnEntity.getOperateStaff().name = staff.name;
-                mElectricityOffOnEntity.getOperateStaff().code = staff.code;
+                mElectricityOffOnEntity.getChargeStaff().id = staff.id;
+                mElectricityOffOnEntity.getChargeStaff().name = staff.name;
+                mElectricityOffOnEntity.getChargeStaff().code = staff.code;
+            }else if (electrician.getTag().toString().equals(commonSearchEvent.flag)){
+                electrician.setContent(staff.name);
+
+                mElectricityOffOnEntity.getElectrician().id = staff.id;
+                mElectricityOffOnEntity.getElectrician().name = staff.name;
+                mElectricityOffOnEntity.getElectrician().code = staff.code;
+            }else if (securityStaff.getTag().toString().equals(commonSearchEvent.flag)){
+                securityStaff.setContent(staff.name);
+
+                mElectricityOffOnEntity.getSecurityStaff().id = staff.id;
+                mElectricityOffOnEntity.getSecurityStaff().name = staff.name;
+                mElectricityOffOnEntity.getSecurityStaff().code = staff.code;
             }else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
                 workFlowView.addStaff(staff.name,staff.userId);
             }

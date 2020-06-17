@@ -6,6 +6,8 @@ import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.Team;
 
+import java.math.BigDecimal;
+
 /**
  * Created by wangshizhan on 2019/3/29
  * Email:wangshizhan@supcom.com
@@ -89,4 +91,6 @@ public class OLXJTaskEntity extends BaseEntity {
     public String endTimeActual; //实际结束时间
 
     public boolean isStart = false; //是否开始标识
+
+    public BigDecimal xjRate; // 巡检效率
 }

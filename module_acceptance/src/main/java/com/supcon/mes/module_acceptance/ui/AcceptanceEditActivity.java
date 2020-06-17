@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -36,6 +37,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.controller.ModulePowerController;
+import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.model.api.EamAPI;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
@@ -46,6 +48,8 @@ import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -86,6 +90,7 @@ import io.reactivex.Flowable;
  */
 @Router(value = Constant.Router.ACCEPTANCE_EDIT)
 @Presenter(value = {AcceptanceEditPresenter.class, AcceptanceSubmitPresenter.class, EamPresenter.class})
+@Controller(value = {LinkController.class, PcController.class})
 public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<AcceptanceEditEntity> implements AcceptanceEditContract.View, AcceptanceSubmitContract.View, EamContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -150,7 +155,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         acceptanceEntity = (AcceptanceEntity) getIntent().getSerializableExtra(Constant.IntentKey.ACCEPTANCE_ENTITY);
         mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
         isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, false);
-
+        deploymentId = getIntent().getLongExtra(Constant.IntentKey.DEPLOYMENT_ID,-1L);
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null) {
             nfcHelper.setup(this);
@@ -187,9 +192,42 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         eamCode.setEditable(isEdit);
         eamName.setEditable(isEdit);
 
+        mLinkController = getController(LinkController.class);
+        if (isEdit){ // 制定
+            mLinkController.initStartTransition(null, "checkApplyFW");
+            ModulePowerController modulePowerController = new ModulePowerController();
+            modulePowerController.checkModulePermission(deploymentId, new OnSuccessListener<BapResultEntity>() {
+                @Override
+                public void onSuccess(BapResultEntity result1) {
+                    powerCode = result1.powerCode;
+                }
+            });
+        }else {
+            mLinkController.initPendingTransition(null,acceptanceEntity.pending.id);
+            getSubmitPc(acceptanceEntity.pending.activityName);
+        }
+
 //        initLink();
     }
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(PcController.class).queryPc(operateCode, "checkApplyFW", new OnAPIResultListener<String>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
 
+            @Override
+            public void onSuccess(String result) {
+                powerCode = result;
+            }
+        });
+    }
     private void initLink() {
         mLinkController.setCancelShow(acceptanceEntity.faultID == null || TextUtils.isEmpty(acceptanceEntity.faultID.tableNo));
         mLinkController.initPendingTransition(transition, acceptanceEntity.pending.id);
@@ -330,16 +368,6 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         acceptanceTime.setContent(DateUtil.dateFormat(acceptanceEntity.applyDate != null ? acceptanceEntity.applyDate : System.currentTimeMillis()));
         acceptanceItem.setContent(Util.strFormat2(acceptanceEntity.checkItem));
 
-        ModulePermissonCheckController mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "checkApplyFW",
-                result -> {
-                    deploymentId = result;
-                    ModulePowerController modulePowerController = new ModulePowerController();
-                    modulePowerController.checkModulePermission(deploymentId, result1 -> powerCode = result1.powerCode);
-                }, null);
-
-        mLinkController = new LinkController();
-        mLinkController.initStartTransition(null, "checkApplyFW");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -463,17 +491,13 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         map.put("dgLists['dg1561532342588']", list1.toString());
 
         map.put("operateType", Constant.Transition.SUBMIT);
-        map.put("deploymentId", deploymentId != null ? deploymentId : "1228");
+        map.put("deploymentId", deploymentId == -1L ? deploymentId : acceptanceEntity.pending.deploymentId);
 
         map.put("workFlowVar.outcomeMapJson", workFlowEntities.toString());
         map.put("workFlowVar.dec", workFlowEntity.dec);
         map.put("workFlowVar.outcome", workFlowEntity.outcome);
         map.put("operateType", Constant.Transition.SUBMIT);
 
-        if (TextUtils.isEmpty(powerCode)) {
-            ToastUtils.show(this, "当前用户并未拥有创建单据权限！");
-            return;
-        }
         onLoading("正在处理中...");
         presenterRouter.create(AcceptanceSubmitAPI.class).doSubmit(map, powerCode);
     }
@@ -485,6 +509,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         WorkFlowEntity workFlowEntity = new WorkFlowEntity();
         workFlowEntity.dec = linkEntity.description;
         workFlowEntity.outcome = linkEntity.name;
+
         workFlowEntity.type = "normal";
         workFlowEntities.add(workFlowEntity);
         workFlowVar.operateType = "submit";

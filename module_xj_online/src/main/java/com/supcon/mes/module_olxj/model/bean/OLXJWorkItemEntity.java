@@ -4,11 +4,15 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.module_olxj.constant.OLXJConstant;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by wangshizhan on 2019/4/1
@@ -136,7 +140,16 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
 
     private TaskSignBean taskSignID; // 签到
 
-    public long tableInfoId;
+    public BigDecimal leakRate1; // 漏检率
+    public BigDecimal stopTime; // 停留时间(分钟)
+    public int abnormalItem; // 异常项目数
+    public int leakCheckItem; // 漏检项目数
+    public int totalItem; // 所有项目数
+    public int uncheckItem; // 未检项目数
+    public String attachmentId; // 附件id
+    public List<AttachmentEntity> attachmentEntityList;
+
+    public Long tableInfoId;
     @Expose
     public String title;
     @Expose

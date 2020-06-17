@@ -56,7 +56,7 @@ import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
-import com.supcon.mes.module_login.model.bean.WorkInfo;
+import com.supcon.mes.middleware.model.bean.WorkInfo;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.model.api.MainPendingNumAPI;
@@ -106,6 +106,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 /**
  * Created by wangshizhan on 2017/8/11.
  */
+@Deprecated
 @Presenter(value = {WaitDealtPresenter.class, EamPresenter.class, ScoreStaffPresenter.class, MainPendingNumPresenter.class})
 public class WorkFragment extends BaseControllerFragment implements WaitDealtContract.View, EamContract.View, ScoreStaffContract.View
         , MainActivity.WorkOnTouchListener, MainPendingNumContract.View {
@@ -189,7 +190,7 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     @Override
     public void onResume() {
         super.onResume();
-        presenterRouter.create(MainPendingNumAPI.class).getSloganInfo();
+//        presenterRouter.create(MainPendingNumAPI.class).getSloganInfo();
         presenterRouter.create(ScoreStaffAPI.class).getPersonScore(String.valueOf(EamApplication.getAccountInfo().getStaffId()));
         if (atomicBoolean.compareAndSet(true, true)) {
             getWorkData();
@@ -396,63 +397,67 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
     protected void initListener() {
         super.initListener();
 
-        workAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+        workName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+            public void onClick(View v) {
+                IntentRouter.go(context,Constant.Router.WARN_PENDING_LIST);
+            }
+        });
+        workAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
 //                if (isRefreshing) {
 //                    ToastUtils.show(getActivity(), "正在加载待办,请稍后点击!");
 //                    return;
 //                }
-                mChildView = childView;
-                if (oldPosition != -1)
-                    workRecycler.getChildAt(oldPosition).setSelected(false);
-                if (oldPosition == position) {
-                    oldPosition = -1;
-                    menuPopwindow.changeWindowAlfa(1f);
-                    return;
-                }
-                switch (position) {
-                    case 0:
-                        IntentRouter.go(context, Constant.Router.WORK_START_EDIT);
-                        break;
-                    case 1:
+            mChildView = childView;
+            if (oldPosition != -1)
+                workRecycler.getChildAt(oldPosition).setSelected(false);
+            if (oldPosition == position) {
+                oldPosition = -1;
+                menuPopwindow.changeWindowAlfa(1f);
+                return;
+            }
+            switch (position) {
+                case 0:
+                    IntentRouter.go(context, Constant.Router.WORK_START_EDIT);
+                    break;
+                case 1:
 //                        if (!menuPopwindow.refreshList(aewMenu)) return;
 //                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.right, 1);
 //                        childView.setSelected(true);
 
-                        Flowable.fromIterable(aewMenu)
-                                .filter(menuPopwindowBean -> menuPopwindowBean.getType() == Constant.HSWorkType.JHXJ)
-                                .subscribe(menuPopwindowBean -> {
-                                    oldPosition = -1;
-                                    menuPopwindow.changeWindowAlfa(1f);
-                                    if (menuPopwindowBean.isPower()) {
-                                        IntentRouter.go(getContext(), Constant.Router.JHXJ_LIST);
-                                    } else {
-                                        ToastUtils.show(context, "巡检模块未分配操作权限!");
-                                    }
-                                });
-                        return;
-                    case 2:
-                        if (!menuPopwindow.refreshList(lubricateMenu)) return;
-                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.right, 0);
-                        childView.setSelected(true);
-                        break;
-                    case 3:
-                        if (!menuPopwindow.refreshList(repairMenu)) return;
-                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 0);
-                        childView.setSelected(true);
-                        break;
-                    case 4:
-                        if (!menuPopwindow.refreshList(formMenu)) return;
-                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
-                        childView.setSelected(true);
-                        break;
-                    case 5:
+                    Flowable.fromIterable(aewMenu)
+                            .filter(menuPopwindowBean -> menuPopwindowBean.getType() == Constant.HSWorkType.JHXJ)
+                            .subscribe(menuPopwindowBean -> {
+                                oldPosition = -1;
+                                menuPopwindow.changeWindowAlfa(1f);
+                                if (menuPopwindowBean.isPower()) {
+                                    IntentRouter.go(getContext(), Constant.Router.JHXJ_LIST);
+                                } else {
+                                    ToastUtils.show(context, "巡检模块未分配操作权限!");
+                                }
+                            });
+                    return;
+                case 2:
+                    if (!menuPopwindow.refreshList(lubricateMenu)) return;
+                    menuPopwindow.showPopupWindow(childView, MenuPopwindow.right, 0);
+                    childView.setSelected(true);
+                    break;
+                case 3:
+                    if (!menuPopwindow.refreshList(repairMenu)) return;
+                    menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 0);
+                    childView.setSelected(true);
+                    break;
+                case 4:
+                    if (!menuPopwindow.refreshList(formMenu)) return;
+                    menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
+                    childView.setSelected(true);
+                    break;
+                case 5:
 //                        if (!menuPopwindow.refreshList(zzMenu)) return;
 //                        menuPopwindow.showPopupWindow(childView, MenuPopwindow.left, 1);
 //                        childView.setSelected(true);
 //                        break;
-                    default:
+                default:
 //                        WorkInfo workInfo = (WorkInfo) obj;
 //                        MenuPopwindowBean menuPopwindowBean = new MenuPopwindowBean();
 //                        menuPopwindowBean.setType(Constant.HSWorkType.ZZ);
@@ -461,10 +466,9 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
 //                        menuPopwindowBean.setRouter(workInfo.appItem.getAppId());  // 保证不为空，可跳转
 //                        menuPopwindowBean.setAppItem(workInfo.appItem);
 //                        goZZApp(menuPopwindowBean);
-                        break;
-                }
-                oldPosition = position;
+                    break;
             }
+            oldPosition = position;
         });
 
         menuPopwindow.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
@@ -869,20 +873,20 @@ public class WorkFragment extends BaseControllerFragment implements WaitDealtCon
         LogUtil.e(ErrorMsgHelper.msgParse(errorMsg));
     }
 
-    @Override
-    public void getSloganInfoSuccess(CommonEntity entity) {
-        String result = (String) entity.result;
-        if (!TextUtils.isEmpty(result)) {
-            marqueeTextView.setText(result);
-        } else {
-            marqueeTextView.setText("祝您工作愉快，生活幸福!");
-        }
-    }
-
-    @Override
-    public void getSloganInfoFailed(String errorMsg) {
-        marqueeTextView.setText("祝您工作愉快，生活幸福!");
-    }
+//    @Override
+//    public void getSloganInfoSuccess(CommonEntity entity) {
+//        String result = (String) entity.result;
+//        if (!TextUtils.isEmpty(result)) {
+//            marqueeTextView.setText(result);
+//        } else {
+//            marqueeTextView.setText("祝您工作愉快，生活幸福!");
+//        }
+//    }
+//
+//    @Override
+//    public void getSloganInfoFailed(String errorMsg) {
+//        marqueeTextView.setText("祝您工作愉快，生活幸福!");
+//    }
 
     @Override
     public void onPause() {

@@ -312,7 +312,6 @@ public class BaseCameraController extends BaseViewController{
             return;
         }
         try {
-
             Flowable.just(inUri)
                     .map(new Function<Uri, File>() {
                         @Override

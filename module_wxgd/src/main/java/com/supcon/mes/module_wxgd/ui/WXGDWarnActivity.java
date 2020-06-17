@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -143,8 +144,8 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
     @BindByTag("workContext")
     CustomVerticalEditText workContext;
 
-    @BindByTag("eleOffChkBox")
-    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOffRadioGroup")
+    RadioGroup eleOffRadioGroup; // 是否生成停电票
 
     private LinkController mLinkController;
 
@@ -161,8 +162,6 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
     private MaintenanceController maintenanceController;
 
     private WXGDSubmitController mWxgdSubmitController;
-    private RoleController roleController;
-    private boolean saveAndExit;
     private String __pc__;
 
 
@@ -180,7 +179,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         refreshController.setAutoPullDownRefresh(false);
         refreshController.setPullDownRefreshEnabled(false);
         mWXGDEntity = (WXGDEntity) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
-        mWXGDEntity.isOffApply = true;
+//        mWXGDEntity.isOffApply = true;
         oldWxgdEntity = GsonUtil.gsonToBean(mWXGDEntity.toString(), WXGDEntity.class);
 
         mSparePartController = getController(SparePartController.class);
@@ -192,8 +191,8 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         maintenanceController = getController(MaintenanceController.class);
         maintenanceController.setEditable(true);
 
-        roleController = new RoleController();  //角色
-        roleController.queryRoleList(EamApplication.getUserName());
+//        roleController = new RoleController();  //角色
+//        roleController.queryRoleList(EamApplication.getUserName());
 
         mWxgdSubmitController = new WXGDSubmitController(this);  //工作流提交Controller
 
@@ -213,7 +212,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         //获取维修组
         initRepairGroup();
 
-        registerController(Constant.Controller.ROLE, roleController);
+//        registerController(Constant.Controller.ROLE, roleController);
         registerController(WXGDSubmitController.class.getName(), mWxgdSubmitController);
     }
 
@@ -290,9 +289,9 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
     protected void initData() {
         super.initData();
         initTableHeadData();
-        mSparePartController.updateOldSparePart(mWXGDEntity.sparePart);
-        mLubricateOilsController.updateOldLubricateOils(mWXGDEntity.lubricateOils);
-        maintenanceController.updateOldLubricateOils(mWXGDEntity.maintainEntities);
+        mSparePartController.updateSparePartEntities(mWXGDEntity.sparePart);
+        mLubricateOilsController.updateLubricateOilsEntities(mWXGDEntity.lubricateOils);
+        maintenanceController.updateMaintenanceEntities(mWXGDEntity.maintainEntities);
     }
 
     /**
@@ -429,7 +428,13 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         eamName.getCustomValue().setOnClickListener(v -> goSBDA());
         eamIc.setOnClickListener(v -> goSBDA());
         eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
-        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mWXGDEntity.isOffApply = isChecked);
+        eleOffRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.noRadioButton){
+                mWXGDEntity.isOffApply = false;
+            }else {
+                mWXGDEntity.isOffApply = true;
+            }
+        });
     }
 
     private void goSBDA() {
@@ -461,7 +466,6 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
                 .bindClickListener(R.id.redBtn, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        saveAndExit = true;
                         doSave();
                     }
                 }, true)

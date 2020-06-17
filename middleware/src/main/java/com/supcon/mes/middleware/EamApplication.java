@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.LogUtils;
 import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.MBapConstant;
@@ -20,8 +21,11 @@ import com.supcon.mes.middleware.model.bean.AccountInfoDao;
 import com.supcon.mes.middleware.model.bean.DaoMaster;
 import com.supcon.mes.middleware.model.bean.DaoSession;
 import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.model.bean.WorkInfo;
 import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.CrashHandler;
+import com.supcon.mes.middleware.util.CustomDevOpenHelper;
+import com.supcon.mes.middleware.util.WorkHelper;
 
 import java.util.List;
 
@@ -91,6 +95,12 @@ public class EamApplication extends MBapApp {
         initUMeng();
         initIP();
         initTvSize();
+//        initMenu();
+    }
+
+    private void initMenu() {
+        List<WorkInfo> workInfoList = WorkHelper.getDefaultWorkList(this);
+        EamApplication.dao().getWorkInfoDao().insertOrReplaceInTx(workInfoList);
     }
 
     private void initTvSize() {
@@ -216,7 +226,8 @@ public class EamApplication extends MBapApp {
      */
     private void setupDatabase() {
         //创建数据库equipment.db"
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(isIsAlone() ? mAloneManager.getHostContext() : this, "equipment.db", null);
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(isIsAlone() ? mAloneManager.getHostContext() : this, "equipment.db", null);
+        CustomDevOpenHelper helper = new CustomDevOpenHelper(isIsAlone() ? mAloneManager.getHostContext() : this, "equipment.db", null);
         //获取可写数据库
         SQLiteDatabase db = helper.getWritableDatabase();
         //获取数据库对象

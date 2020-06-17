@@ -91,6 +91,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
             Bundle bundle = new Bundle();
             bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
             bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+            bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,"addRepairStaff");
             IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
         }
         repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
@@ -127,8 +128,8 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5, context)));
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
+        refBtn.setVisibility(View.GONE);
         if (!editable) {
-            refBtn.setVisibility(View.GONE);
             rightBtn.setVisibility(View.GONE);
         }
         findViewById(R.id.includeSparePartLy).setVisibility(View.GONE);
@@ -158,6 +159,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
                         Bundle bundle = new Bundle();
                         bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                         bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                        bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,"addRepairStaff");
                         IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                     }
                 });
@@ -252,35 +254,37 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         if (!(commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff)) {
             return;
         }
-        CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
-
-        for (RepairStaffEntity repairStaffEntity : mEntities) {
-            if (repairStaffEntity.repairStaff != null && repairStaffEntity.timesNum != null && repairStaffEntity.timesNum >= repairSum) {
-                if (repairStaffEntity.repairStaff.id.equals(searchStaff.id)) {
-                    ToastUtils.show(context, "请勿重复添加人员!");
-                    refreshListController.refreshComplete(mEntities);
-                    return;
+        if ("addRepairStaff".equals(commonSearchEvent.flag)){
+            CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
+            for (RepairStaffEntity repairStaffEntity : mEntities) {
+                if (repairStaffEntity.repairStaff != null && repairStaffEntity.timesNum != null && repairStaffEntity.timesNum >= repairSum) {
+                    if (repairStaffEntity.repairStaff.id.equals(searchStaff.id)) {
+                        ToastUtils.show(context, "请勿重复添加人员!");
+                        refreshListController.refreshComplete(mEntities);
+                        return;
+                    }
                 }
             }
+
+            RepairStaffEntity repairStaffEntity = new RepairStaffEntity();
+            repairStaffEntity.repairStaff = new Staff();
+            repairStaffEntity.repairStaff.id = searchStaff.id;
+            repairStaffEntity.repairStaff.code = searchStaff.code;
+            repairStaffEntity.repairStaff.name = searchStaff.name;
+            repairStaffEntity.timesNum = (int) repairSum;
+
+            //实际开始/结束时间根据列表最后一项赋值
+            if (mEntities != null && mEntities.size() > 0) {
+                RepairStaffEntity entity = mEntities.get(mEntities.size() - 1);
+                repairStaffEntity.startTime = entity.startTime;
+                repairStaffEntity.endTime = entity.endTime;
+                repairStaffEntity.workHour = entity.workHour;
+            }
+            mRepairStaffAdapter.setRepairSum((int) repairSum);
+            mEntities.add(repairStaffEntity);
+            refreshListController.refreshComplete(mEntities);
         }
 
-        RepairStaffEntity repairStaffEntity = new RepairStaffEntity();
-        repairStaffEntity.repairStaff = new Staff();
-        repairStaffEntity.repairStaff.id = searchStaff.id;
-        repairStaffEntity.repairStaff.code = searchStaff.code;
-        repairStaffEntity.repairStaff.name = searchStaff.name;
-        repairStaffEntity.timesNum = (int) repairSum;
-
-        //实际开始/结束时间根据列表最后一项赋值
-        if (mEntities != null && mEntities.size() > 0) {
-            RepairStaffEntity entity = mEntities.get(mEntities.size() - 1);
-            repairStaffEntity.startTime = entity.startTime;
-            repairStaffEntity.endTime = entity.endTime;
-            repairStaffEntity.workHour = entity.workHour;
-        }
-        mRepairStaffAdapter.setRepairSum((int) repairSum);
-        mEntities.add(repairStaffEntity);
-        refreshListController.refreshComplete(mEntities);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

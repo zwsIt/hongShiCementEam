@@ -8,21 +8,19 @@ import com.supcon.mes.middleware.model.bean.FastQueryCondEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.module_main.model.bean.AnomalyEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
-import com.supcon.mes.module_main.model.bean.ProcessedEntity;
+import com.supcon.mes.middleware.model.bean.ProcessedEntity;
 import com.supcon.mes.module_main.model.bean.ScoreEntity;
 import com.supcon.mes.module_main.model.bean.WaitDealtEntity;
+import com.supcon.mes.module_main.model.bean.WarnDailyWorkEntity;
 import com.supcon.mes.module_main.model.bean.WorkNumEntity;
 
-import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
-import retrofit2.http.QueryName;
 
 /**
  * Created by Administrator on 2016/3/23.
@@ -106,13 +104,21 @@ public interface MainService {
     Flowable<CommonBAPListEntity<AnomalyEntity>> getAnomalyList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
     /**
-     * 获取处理意见
-     * @param url
-     * @param tableInfoId 表单id
+     * 异常记录获取待办id
+     * @param currentUserId
+     * @param tableNo
+     * @return
      */
-    @GET("{url}/dealInfo-list.action")
-    Flowable<List> getDealInfoList(@Path(value = "url",encoded = true) String url, @Query("tableInfoId") Long tableInfoId);
-
     @GET("/BEAM2/personWork/allAbnormalInfoOfEam/getPendingId.action")
     Flowable<CommonEntity> getPendingId(@Query("currentUserId") Long currentUserId, @Query("tableNo") String tableNo);
+
+
+    /**
+     * 获取预警提醒待办
+     * @param fastQueryCondEntity
+     * @return
+     */
+    @POST("/BEAM2/personWork/allEarlyWarningInfo/allEarlyWarningInfo-query.action?1=1&permissionCode=BEAM2_1.0.0_personWork_allEarlyWarningInfo")
+    Flowable<CommonBAPListEntity<WarnDailyWorkEntity>> listWarnInfos(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
 }

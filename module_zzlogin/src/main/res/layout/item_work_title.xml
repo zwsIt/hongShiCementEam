@@ -3,39 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="30dp"
     android:orientation="vertical"
-    android:layout_marginTop="@dimen/dp_1"
     >
-    <include layout="@layout/ly_line_light" android:layout_width="match_parent" android:layout_height="@dimen/dp_2"/>
-<!--    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:layout_marginLeft="10dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
-        >
-        <include
-            layout="@layout/ly_title_pic"
-            android:layout_width="5dp"
-            android:layout_height="13dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/contentTitleLabel"
-            style="@style/TitleTextColor"
-            android:layout_marginLeft="10dp"
-            />
-    </LinearLayout>-->
+    <include layout="@layout/ly_line_light" android:layout_width="match_parent" android:layout_height="@dimen/dp_2" android:visibility="gone"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        >
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp">
         <include
             layout="@layout/ly_title_pic"
             android:layout_width="5dp"
@@ -48,8 +24,9 @@
             android:id="@+id/contentTitleLabel"
             android:tag="contentTitleLabel"
             style="@style/TitleTextColor"
-            android:layout_marginLeft="13dp"
+            android:layout_marginStart="13dp"
             android:layout_centerVertical="true"
+            android:textStyle="bold"
             />
         <ImageView
             android:id="@+id/contentTitleSettingIc"
@@ -57,9 +34,9 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_user_sz"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
             android:visibility="gone"
             />
     </RelativeLayout>

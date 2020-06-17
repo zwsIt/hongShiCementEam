@@ -119,6 +119,8 @@ public class PendingController extends BaseDataController implements PendingQuer
                     IntentRouter.go(context, Constant.Router.YH_EDIT, bundle);
                 } else if (mPendingEntity.nowStatus.equals("审核")) {
                     IntentRouter.go(context, Constant.Router.YH_VIEW, bundle);
+                }else {
+                    IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
                 }
             }
         }
@@ -153,6 +155,8 @@ public class PendingController extends BaseDataController implements PendingQuer
                     case "验收":
                         IntentRouter.go(context, Constant.Router.WXGD_ACCEPTANCE, bundle);
                         break;
+                    default:
+                        IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
                 }
             }
         }

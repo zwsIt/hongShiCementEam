@@ -23,7 +23,8 @@
             app:key_width="@dimen/dp_100"
             app:key_size="14"
             app:key_color="@color/grey"
-            app:content_color="@color/black"/>
+            app:content_color="@color/black"
+            android:visibility="gone"/>
         <com.supcon.mes.mbap.view.CustomTextView
             android:layout_width="0dp"
             android:layout_height="match_parent"

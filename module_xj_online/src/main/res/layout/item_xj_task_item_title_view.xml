@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/BgXjAreaBlue"
+    android:paddingLeft="@dimen/dp_10"
+    android:paddingRight="@dimen/dp_10"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_5"
+        android:id="@+id/eam"
+        android:tag="eam"
+        android:drawableStart="@drawable/ic_eam_blue"
+        android:drawablePadding="@dimen/dp_5"
+        android:textColor="@color/xjAreaBlue"
+        android:textSize="@dimen/fontSize_15sp"
+        tools:text="7#辊压机"
+        android:visibility="visible"/>
+
+</LinearLayout>

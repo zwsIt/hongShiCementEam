@@ -180,7 +180,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
             queryParam.put(Constant.BAPQuery.REPAIR_TYPE, SystemCodeManager.getInstance().getSystemCodeEntityId(Constant.SystemCode.YH_WX_TYPE, repairType));
         }
         ModulePermissonCheckController mModulePermissionCheckController = new ModulePermissonCheckController();
-        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName(), /*"faultInfoFW"*/"work", new OnSuccessListener<Long>() {
+        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName(),"work", new OnSuccessListener<Long>() {
             @Override
             public void onSuccess(Long result) {
                 deploymentId = result;

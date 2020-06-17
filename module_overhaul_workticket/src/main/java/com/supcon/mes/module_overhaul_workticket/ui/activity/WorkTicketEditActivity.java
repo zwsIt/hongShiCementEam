@@ -45,6 +45,7 @@ import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
@@ -144,6 +145,8 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     FlowLayout hazardCtrlPointFlowLy;
     @BindByTag("content")
     CustomVerticalEditText content;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
 
     private String __pc__;
@@ -157,6 +160,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     private String name = ""; // 当前活动名称
     private SafetyMeasuresController safetyMeasuresController;
     private String oldSafetyMeasDetailListStr;
+    private DealInfoController mDealInfoController;
 
     @Override
     protected void onInit() {
@@ -181,6 +185,8 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
         safetyMeasuresController = getController(SafetyMeasuresController.class);
         safetyMeasuresController.setEditable(true);
+
+        mDealInfoController = new  DealInfoController(context,recyclerView,null);
     }
 
     @Override
@@ -205,6 +211,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             });
             getController(LinkController.class).initPendingTransition(workFlowView, pendingId);
         }
+
         //初始化危险控制源
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
 //        hazardRecyclerView.setLayoutManager(linearLayoutManager); // 水平线性布局
@@ -452,6 +459,8 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         map.put("ohworkticket.content", content.getContent());
         map.put("ohworkticket.hazardsourContrpoint", mWorkTicketEntity.getHazardsourContrpoint());
         map.put("ohworkticket.value", mWorkTicketEntity.getHazardsourContrpointForDisplay());
+        map.put("ohworkticket.offApplyId", mWorkTicketEntity.getOffApplyId() == null ? "" : mWorkTicketEntity.getOffApplyId());
+        map.put("ohworkticket.offApplyTableno", mWorkTicketEntity.getOffApplyTableNo() == null ? "" : mWorkTicketEntity.getOffApplyTableNo());
         map.put("__file_upload", true);
 
         // 表单
@@ -507,6 +516,10 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             public void onSuccess(Object result) {
                 WorkTicketEntity entity = GsonUtil.gsonToBean(GsonUtil.gsonString(result), WorkTicketEntity.class);
                 updateTableInfo(entity);
+                // 加载处理意见
+                if (mWorkTicketEntity.getTableInfoId() != null){
+                    mDealInfoController.listTableDealInfo(WorkTicketConstant.URL.PRE_URL,mWorkTicketEntity.getTableInfoId());
+                }
                 refreshController.refreshComplete();
             }
         });

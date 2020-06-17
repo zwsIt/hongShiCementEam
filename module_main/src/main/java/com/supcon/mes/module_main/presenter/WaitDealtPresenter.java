@@ -30,30 +30,39 @@ public class WaitDealtPresenter extends WaitDealtContract.Presenter {
     //工作提醒
     @Override
     public void getWaitDealt(int page, int pageSize, Map<String, Object> params) {
-        FastQueryCondEntity fastQueryCond = BAPQueryParamsHelper.createSingleFastQueryCond(params);
+        FastQueryCondEntity fastQueryCond;
+        Map<String, Object> paramsName;
+        if (params.containsKey(Constant.BAPQuery.SUBORDINATE)){
+            params.remove(Constant.BAPQuery.SUBORDINATE);
+            fastQueryCond = BAPQueryParamsHelper.createSingleFastQueryCond(params);
 
-        Map<String, Object> paramsName = new HashMap<>();
-        paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
-        paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "base_staff,ID,ALL_PERSON_WORK_INFO,STAFFID");
-        fastQueryCond.subconds.add(joinSubcondEntity);
+            JoinSubcondEntity joinSubcondEntity;
+            paramsName = new HashMap<>();
+            paramsName.put(Constant.BAPQuery.SUBORDINATE_DEPARTMENT, EamApplication.getAccountInfo().departmentId);
+            joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "BASE_DEPARTMENT,ID,ALL_PERSON_WORK_INFO,DEPARTMENT_ID");
+            fastQueryCond.subconds.add(joinSubcondEntity);
+            paramsName.remove(Constant.BAPQuery.SUBORDINATE_DEPARTMENT);
+            paramsName.put(Constant.BAPQuery.SUBORDINATE_POSITION, EamApplication.getAccountInfo().positionId);
+            joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "BASE_POSITION,ID,ALL_PERSON_WORK_INFO,POSITION_ID");
+            fastQueryCond.subconds.add(joinSubcondEntity);
+        }else {
+            fastQueryCond = BAPQueryParamsHelper.createSingleFastQueryCond(params);
+
+            paramsName = new HashMap<>();
+            paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
+            paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
+            JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "base_staff,ID,ALL_PERSON_WORK_INFO,STAFFID");
+            fastQueryCond.subconds.add(joinSubcondEntity);
+        }
 
         Map<String, Object> pageQueryParams = new HashMap<>();
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.pageSize", pageSize);
         pageQueryParams.put("page.maxPageSize", 500);
 
-        Flowable<CommonBAPListEntity<WaitDealtEntity>> mainClient;
-//        if (EamApplication.isHailuo()){
-            fastQueryCond.modelAlias = "allPersonWorkInfo";
-            mainClient = MainClient.getWaitDealtNew(fastQueryCond, pageQueryParams);
-//        }else {
-//            fastQueryCond.modelAlias = "personworkinfo";
-//            mainClient =MainClient.getWaitDealt(fastQueryCond, pageQueryParams);
-//        }
-
+        fastQueryCond.modelAlias = "allPersonWorkInfo";
         mCompositeSubscription.add(
-                mainClient
+                MainClient.getWaitDealtNew(fastQueryCond, pageQueryParams)
                 .onErrorReturn(new Function<Throwable, CommonBAPListEntity<WaitDealtEntity>>() {
                     @Override
                     public CommonBAPListEntity<WaitDealtEntity> apply(Throwable throwable) throws Exception {

@@ -130,6 +130,10 @@
                     app:text_size="14"
                     app:title_bg_color="@color/white"
                     app:widget_name="维保" />
+                <include layout="@layout/middle_ly_title_recycler"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent" />
             </LinearLayout>
         </ScrollView>
     </com.supcon.common.view.ptr.PtrFrameLayout>

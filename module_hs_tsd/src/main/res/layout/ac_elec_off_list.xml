@@ -12,7 +12,8 @@
         app:title_background_color="@color/themeColor"
         android:id="@+id/searchTitleBar"
         android:tag="searchTitleBar"
-        app:title_right_btn_need="false"/>
+        app:title_right_btn_need="false"
+        app:title_length="@dimen/dp_60"/>
 
     <include layout="@layout/ly_scroll_filter" />
 

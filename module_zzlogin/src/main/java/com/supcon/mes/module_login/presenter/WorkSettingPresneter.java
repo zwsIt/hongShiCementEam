@@ -4,7 +4,7 @@ import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.mbap.MBapApp;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.constant.Constant;
-import com.supcon.mes.module_login.model.bean.WorkInfo;
+import com.supcon.mes.middleware.model.bean.WorkInfo;
 import com.supcon.mes.module_login.model.contract.WorkSettingContract;
 
 import java.util.List;

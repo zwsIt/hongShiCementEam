@@ -2,6 +2,7 @@ package com.supcon.mes.module_wxgd.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,6 +49,7 @@ import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.PcController;
@@ -73,6 +76,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
+import com.supcon.mes.module_wxgd.constant.WXGDConstant;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
 import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
@@ -192,10 +196,14 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @BindByTag("workContext")
     CustomVerticalEditText workContext;
 
-    @BindByTag("eleOffChkBox")
-    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOffRadioGroup")
+    RadioGroup eleOffRadioGroup; // 是否生成停电票
+
     @BindByTag("eleOff")
     CustomTextView eleOff;
+
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
     private LinkController mLinkController;
 
@@ -210,6 +218,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private RepairStaffController mRepairStaffController;
     private LubricateOilsController mLubricateOilsController;
     private MaintenanceController maintenanceController;
+    private DealInfoController mDealInfoController;
 
     private WXGDSubmitController mWxgdSubmitController;
 //    private RoleController roleController;
@@ -260,10 +269,6 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         maintenanceController = getController(MaintenanceController.class);
         maintenanceController.setEditable(true);
 
-
-//        roleController = new RoleController();  //角色
-//        roleController.queryRoleList(EamApplication.getUserName());
-
         mWxgdSubmitController = new WXGDSubmitController(this);  //工作流提交Controller
 
         mLinkController = new LinkController();
@@ -283,8 +288,9 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         //获取维修组
         initRepairGroup();
 
-//        registerController(Constant.Controller.ROLE, roleController);
         registerController(WXGDSubmitController.class.getName(), mWxgdSubmitController);
+
+        mDealInfoController = new  DealInfoController(context,recyclerView,null);
     }
 
     /**
@@ -439,12 +445,16 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
         workContext.setContent(mWXGDEntity.workOrderContext);
         if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null) {
-            eleOffChkBox.setClickable(false);
-            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
+            for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
+                eleOffRadioGroup.getChildAt(i).setEnabled(false);
+            }
         } else {
-            eleOffChkBox.setClickable(true);
-            eleOffChkBox.setButtonDrawable(R.drawable.sl_checkbox_selector_small);
+            for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
+                eleOffRadioGroup.getChildAt(i).setEnabled(true);
+            }
         }
+        if (mWXGDEntity.isOffApply != null)
+            eleOffRadioGroup.check(mWXGDEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
 //        mWXGDEntity.isOffApply = true;
 //        eleOffChkBox.setChecked(true); // 默认true
     }
@@ -563,6 +573,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                     bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,chargeStaff.getTag().toString());
                     IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }
             }
@@ -664,7 +675,17 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         eamIc.setOnClickListener(v -> goSBDA());
         eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
 
-        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mWXGDEntity.isOffApply = isChecked);
+//        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mWXGDEntity.isOffApply = isChecked);
+        eleOffRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.noRadioButton){
+                    mWXGDEntity.isOffApply = false;
+                }else {
+                    mWXGDEntity.isOffApply = true;
+                }
+            }
+        });
 
     }
 
@@ -985,9 +1006,11 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getStaffInfo(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
-            CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
-            chargeStaff.setValue(searchStaff.name);
-            mWXGDEntity.getChargeStaff().id = searchStaff.id;
+            if (commonSearchEvent.flag.equals(chargeStaff.getTag().toString())){
+                CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
+                chargeStaff.setValue(searchStaff.name);
+                mWXGDEntity.getChargeStaff().id = searchStaff.id;
+            }
         }
     }
 
@@ -1044,6 +1067,11 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
+
+            // 加载处理意见
+            if (mWXGDEntity.tableInfoId != null){
+                mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL,mWXGDEntity.tableInfoId);
+            }
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }
@@ -1144,6 +1172,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     private boolean checkTableBlank() {
         if (mWXGDEntity.id == -1 && TextUtils.isEmpty(eamNameEdit.getValue())) { // 制单
             ToastUtils.show(context, "设备不允许为空！");
+            return true;
+        }
+        if (mWXGDEntity.isOffApply == null) {
+            ToastUtils.show(context, "请选择是否生成停电票！");
             return true;
         }
         if (TextUtils.isEmpty(chargeStaff.getValue())) {

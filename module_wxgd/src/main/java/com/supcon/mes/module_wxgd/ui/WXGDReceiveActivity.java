@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -137,7 +138,8 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     CustomWorkFlowView transition;
     @BindByTag("dispatcherStaff")
     CustomTextView dispatcherStaff;
-
+    @BindByTag("eleOffRadioGroup")
+    RadioGroup eleOffRadioGroup; // 是否生成停电票
     @BindByTag("workContext")
     CustomVerticalEditText workContext;
 
@@ -308,6 +310,11 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
+        if (mWXGDEntity.isOffApply != null)
+            eleOffRadioGroup.check(mWXGDEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
+        for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
+            eleOffRadioGroup.getChildAt(i).setEnabled(false);
+        }
     }
 
     @Override

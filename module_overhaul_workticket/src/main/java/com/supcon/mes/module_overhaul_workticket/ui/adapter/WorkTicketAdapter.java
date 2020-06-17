@@ -42,7 +42,6 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
 
     private class WorkTicketViewHolder extends BaseRecyclerViewHolder<WorkTicketEntity> {
 
-
         @BindByTag("itemTableNo")
         CustomTextView itemTableNo;
         @BindByTag("itemTableStatus")
@@ -55,6 +54,8 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
         TextView itemChargeStaff;
         @BindByTag("itemRiskAssessment")
         TextView itemRiskAssessment;
+        @BindByTag("content")
+        TextView content;
 
         public WorkTicketViewHolder(Context context) {
             super(context);
@@ -109,6 +110,7 @@ public class WorkTicketAdapter extends BaseListDataRecyclerViewAdapter<WorkTicke
             itemChargeStaff.setText(data.getChargeStaff().name);
             itemRiskAssessment.setText(data.getRiskAssessment().value);
             itemTableStatus.setTextColor(context.getResources().getColor(R.color.white));
+            content.setText(data.getContent());
             if (Constant.TableStatus_CH.EDIT.equals(data.getPending().taskDescription)) {
                 itemTableStatus.setBackground(context.getResources().getDrawable(R.drawable.sh_edit_bg));
             } else if (Constant.TableStatus_CH.REVIEW.equals(data.getPending().taskDescription)) {

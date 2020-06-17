@@ -224,7 +224,7 @@ public class PlanLubricationListAdapter extends BaseListDataRecyclerViewAdapter<
         protected void update(DailyLubricateTaskEntity data) {
             itemLubriOilTv.setContent(data.getLubricateOil().name);
             itemLubriChangeTv.setText(String.format(context.getString(R.string.device_style1), "加/换油:", Util.strFormat(data.getOilType().value)));
-            itemLubriNumTv.setText(String.format(context.getString(R.string.device_style1), "用量:", Util.big2(data.sum)));
+            itemLubriNumTv.setText(String.format(context.getString(R.string.device_style1), "点数:", String.valueOf(data.lubricatingnumber)));
             itemLubriPartTv.setValue(Util.strFormat(data.lubricatePart));
             itemLubriNextTime.setContent(data.nextTime != null ? DateUtil.dateFormat(data.nextTime) : "--");
             if (data.isCheck) {

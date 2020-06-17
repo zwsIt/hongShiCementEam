@@ -13,9 +13,10 @@
         android:id="@+id/searchTitleBar"
         android:tag="searchTitleBar"
         app:title_text="检修作业票"
-        app:title_right_btn_need="false"/>
+        app:title_right_btn_need="false"
+        app:title_length="@dimen/dp_80"/>
 
-    <include layout="@layout/ly_scroll_filter" />
+    <include layout="@layout/ly_work_ticket_filter" />
 
     <include layout="@layout/ly_recyclerview" />
 

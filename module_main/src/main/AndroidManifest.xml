@@ -71,5 +71,14 @@
             android:screenOrientation="sensor"
             android:theme="@style/AppNoTitleBarTheme"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+        <activity android:name=".ui.WarnPendingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+        <activity android:name=".ui.MainMenuActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppNoTitleBarTheme"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
     </application>
 </manifest>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:core_ptr="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_height="@dimen/dp_30"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:paddingStart="@dimen/dp_10"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="13dp"
+            android:background="@color/themeColor" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/deal_info"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="true"
+        android:tag="recyclerView"
+        android:visibility="visible"
+        tools:ignore="UnusedAttribute" />
+</LinearLayout>

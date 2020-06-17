@@ -16,7 +16,8 @@
         app:unselect_text_color="@color/darkgrey"
         app:select_bg_color="@color/white"
         app:unselect_bg_color="@color/white"
-        app:indicator_color="@color/themeColor"/>
+        app:indicator_color="@color/themeColor"
+        app:indicator_visible="true"/>
     <com.supcon.mes.mbap.view.NoScrollViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"

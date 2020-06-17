@@ -14,5 +14,5 @@ import java.util.Map;
 @ContractFactory(entites = {CommonBAPListEntity.class})
 public interface ProcessedAPI {
 
-    void workflowHandleList(Map<String, Object> queryParam,int page);
+    void workflowHandleList(Map<String, Object> queryParam,int page,int pageSize);
 }

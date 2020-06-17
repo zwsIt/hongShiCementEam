@@ -349,6 +349,7 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
 
     @Override
     public void getEamSuccess(CommonListEntity entity) {
+        refreshListController.refreshComplete();
         if (entity.result.size() > 0) {
             EamEntity eamEntity = (EamEntity) entity.result.get(0);
             eamCode.setContent(Util.strFormat(eamEntity.eamAssetCode));
@@ -363,11 +364,13 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
     @Override
     public void getEamFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
+        refreshListController.refreshComplete();
     }
 
     @SuppressLint("CheckResult")
     @Override
     public void getScorPerformanceSuccess(List entity) {
+        refreshListController.refreshComplete(entity);
         Flowable.fromIterable(((List<ScoreEamPerformanceEntity>) entity))
                 .filter(scorePerformanceTitleEntity -> {
                     if (scorePerformanceTitleEntity.viewType == ListType.TITLE.value()) {
@@ -389,14 +392,13 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
                     } else if (scorePerformanceTitleEntity.scoreStandard.contains("档案管理")) {
                         scorePerformanceTitleEntity.setTotalScore(scoreEamEntity.beamEstimate);
                     }
-                    refreshListController.refreshComplete(entity);
                 });
     }
 
     @Override
     public void getScorPerformanceFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
-        refreshListController.refreshComplete(null);
+        refreshListController.refreshComplete();
     }
 
     @Override
@@ -406,14 +408,14 @@ public class ScoreEamPerformanceActivity extends BaseRefreshRecyclerActivity imp
             update();
             presenterRouter.create(ScoreEamPerformanceAPI.class).getScorPerformance(scoreId);
         } else {
-            refreshListController.refreshComplete(null);
+            refreshListController.refreshComplete();
         }
     }
 
     @Override
     public void getScoreListFailed(String errorMsg) {
         SnackbarHelper.showError(rootView, errorMsg);
-        refreshListController.refreshComplete(null);
+        refreshListController.refreshComplete();
     }
 
     private void doSubmit() {

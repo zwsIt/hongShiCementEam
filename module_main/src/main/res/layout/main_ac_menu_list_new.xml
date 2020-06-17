@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/list_bg_color"
+    android:orientation="vertical">
+
+    <include layout="@layout/ly_titlebar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
+            <!--ScrollView唯一子布局中 : descendantFocusability这个方法的作用是就是解决焦点问题。它一共有三个属性可供选择：
+            blocksDescendants ：覆盖所有子控件获取焦点（优先级最高）
+            beforeDescendants ：优先于子控件获取焦点
+            afterDescendants ：当子控件不需要焦点时，获取焦点-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:background="@color/white"
+                android:orientation="horizontal" >
+                <TextView
+                    android:id="@+id/tv_item_cate_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="@string/main_my_menu"/>
+                <TextView
+                    android:id="@+id/dragTipTv"
+                    android:tag="dragTipTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/main_drag_move"
+                    android:textColor="#999999"
+                    android:textSize="@dimen/fontSize_12sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/allMenuRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                android:nestedScrollingEnabled="true"
+                android:overScrollMode="never"
+                android:tag="allMenuRecycler" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -7,6 +7,7 @@
     android:paddingStart="@dimen/dp_10"
     android:paddingEnd="@dimen/dp_10"
     android:background="@color/white"
+    android:elevation="1dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -52,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_5"
                     android:tag="waitDealtContent"
-                    android:textColor="#757575"
+                    android:textColor="@color/mainLightGrayColor"
                     android:textSize="@dimen/fontSize_14sp"
                     tools:text="内容" />
                 <LinearLayout
@@ -67,14 +68,6 @@
                         android:layout_height="wrap_content"
                         android:tag="waitDealtEamSource"
                         tools:text="来源" />
-                    <TextView
-                        android:id="@+id/waitDealtTime"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:tag="waitDealtTime"
-                        android:textColor="#757575"
-                        android:textSize="@dimen/fontSize_12sp"
-                        tools:text="2019-07-24 09:27:00" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -96,7 +89,16 @@
                 android:padding="@dimen/dp_5"
                 android:src="@drawable/btn_entrust"
                 android:tag="waitDealtEntrust" />
-
+            <TextView
+                android:id="@+id/waitDealtTime"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:tag="waitDealtTime"
+                android:textColor="@color/mainLightGrayColor"
+                android:textSize="@dimen/fontSize_12sp"
+                tools:text="07-24 09:27" />
         </RelativeLayout>
         <CheckBox
             android:id="@+id/chkBox"
@@ -116,5 +118,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/moreTvLl"
+        android:tag="moreTvLl"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/moreTv"
+            android:tag="moreTv"
+            android:text="@string/middleware_more"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:drawableEnd="@drawable/ic_into"
+            android:drawablePadding="@dimen/dp_5"/>
+    </LinearLayout>
 
 </LinearLayout>

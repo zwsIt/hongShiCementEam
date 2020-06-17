@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:elevation="@dimen/dp_1"
+    android:paddingStart="@dimen/dp_10"
+    android:paddingEnd="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_5"
+    android:paddingTop="@dimen/dp_5">
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/eam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="eam"
+        app:key_width="0dp"/>
+
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="content"
+        app:key_width="0dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/moreTvLl"
+        android:tag="moreTvLl"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/moreTv"
+            android:tag="moreTv"
+            android:text="@string/middleware_more"
+            android:gravity="center"
+            android:padding="@dimen/dp_10"
+            android:drawableEnd="@drawable/ic_into"
+            android:drawablePadding="@dimen/dp_5"/>
+    </LinearLayout>
+</LinearLayout>

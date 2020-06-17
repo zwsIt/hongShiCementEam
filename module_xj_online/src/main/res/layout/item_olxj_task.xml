@@ -37,7 +37,7 @@
                 android:paddingTop="@dimen/dp_8"
                 android:tag="itemXJPath"
                 android:text="巡检路线"
-                android:textColor="#366CBC"
+                android:textColor="@color/xjAreaBlue"
                 android:textSize="16sp" />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:gravity="center"
                 android:tag="taskStatus"
                 android:text="待检"
-                android:textColor="#366CBC"
+                android:textColor="@color/xjAreaBlue"
                 android:textSize="@dimen/fontSize_12sp" />
         </RelativeLayout>
 
@@ -95,15 +95,46 @@
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="@dimen/dp_20"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_time66" />
+                android:src="@drawable/ic_time_solid" />
 
             <TextView
                 android:id="@+id/taskStartEndTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginStart="25dp"
                 android:tag="taskStartEndTime"
-                android:text="起止时间"
+                android:text="@string/xj_start_end_time"
+                android:textColor="@color/textColorlightblack"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rateRl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/taskStartEndTimeRelativeLayout"
+            android:layout_alignStart="@+id/pathNameRelativeLayout"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_5"
+            android:padding="2dp"
+            android:tag="rateRl"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_rate" />
+
+            <TextView
+                android:id="@+id/rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:tag="rate"
+                android:text="@string/xj_rate"
                 android:textColor="@color/textColorlightblack"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -114,7 +145,7 @@
             android:id="@+id/nameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/taskStartEndTimeRelativeLayout"
+            android:layout_below="@+id/rateRl"
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_marginTop="5dp"
             android:paddingLeft="@dimen/dp_2"
@@ -126,7 +157,7 @@
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="@dimen/dp_20"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_people66" />
+                android:src="@drawable/ic_work_staff" />
 
             <TextView
                 android:id="@+id/taskResponsiblePerson"

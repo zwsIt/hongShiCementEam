@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/workIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="fitXY"
         android:src="@drawable/menu_form_selector" />
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="45dp"
         android:tag="workName"
         android:textColor="@color/black"
         android:textSize="12sp"
@@ -31,7 +31,8 @@
         android:id="@+id/workNum"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/dp_5"
         android:background="@drawable/sh_tip"
         android:gravity="center"
         android:tag="workNum"

@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <FrameLayout
@@ -10,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/tabRadioGroup"
-        android:tag="fragmentLayout" />
+        android:tag="fragmentLayout"/>
 
     <RadioGroup
         android:id="@+id/tabRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="57dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/tab_projection"
+        android:background="@drawable/sh_main_radio_group_bg"
         android:orientation="horizontal"
         android:paddingTop="@dimen/dp_3"
         android:tag="tabRadioGroup">

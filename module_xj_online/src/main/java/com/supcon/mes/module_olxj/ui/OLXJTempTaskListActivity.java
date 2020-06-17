@@ -688,7 +688,7 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
     @SuppressLint("CheckResult")
     @Override
     public void getOJXJTempTaskListSuccess(List entities) {
-        mOLXJTaskListAdapter.resertExpandPosition();
+        mOLXJTaskListAdapter.resetExpandPosition();
         if (entities.size() != 0 && isCurrentTask((OLXJTaskEntity) entities.get(0))) {
             entities.set(0, mOLXJTaskEntity);
         }

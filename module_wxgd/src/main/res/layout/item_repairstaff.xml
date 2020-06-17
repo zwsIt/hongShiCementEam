@@ -27,36 +27,32 @@
                 android:background="@color/white"
                 android:paddingStart="@dimen/dp_5"
                 android:tag="repairStaffName"
-                app:gravity="center"
                 app:key="@string/staff"
                 app:key_width="@dimen/dp_50"/>
             <include layout="@layout/ly_line_light" />
-            <LinearLayout
+            <com.supcon.mes.mbap.view.CustomDateView
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="45dp"
                 android:background="@color/white"
-                android:paddingLeft="@dimen/dp_5">
-
-                <com.supcon.mes.mbap.view.CustomVerticalDateView
-                    android:id="@+id/actualStartTime"
-                    style="@style/CustomStyle"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="5dp"
-                    android:tag="actualStartTime"
-                    app:editable="true"
-                    app:text="@string/actualStartTime" />
-
-                <include layout="@layout/ly_vertical_line" />
-
-                <com.supcon.mes.mbap.view.CustomVerticalDateView
-                    android:id="@+id/actualEndTime"
-                    style="@style/CustomStyle"
-                    android:paddingStart="@dimen/dp_5"
-                    android:paddingEnd="5dp"
-                    android:tag="actualEndTime"
-                    app:editable="true"
-                    app:text="@string/actualEndTime" />
-            </LinearLayout>
+                android:id="@+id/actualStartTime"
+                android:paddingStart="0dp"
+                android:paddingEnd="5dp"
+                android:tag="actualStartTime"
+                app:editable="true"
+                app:text="@string/actualStartTime"
+                app:text_width="@dimen/dp_100"/>
+            <include layout="@layout/ly_line_light" />
+            <com.supcon.mes.mbap.view.CustomDateView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                android:id="@+id/actualEndTime"
+                android:paddingStart="@dimen/dp_5"
+                android:paddingEnd="5dp"
+                android:tag="actualEndTime"
+                app:editable="true"
+                app:text="@string/actualEndTime"
+                app:text_width="@dimen/dp_100"/>
             <include layout="@layout/ly_line_light" />
             <com.supcon.mes.mbap.view.CustomTextView
                 android:id="@+id/workHour"
@@ -65,7 +61,6 @@
                 android:background="@color/white"
                 android:paddingStart="@dimen/dp_5"
                 android:tag="workHour"
-                app:gravity="center"
                 app:text="@string/workHour"
                 app:key_width="@dimen/dp_60"/>
             <include layout="@layout/ly_line_light" />

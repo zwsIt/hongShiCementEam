@@ -1,40 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/sl_transparent_press_no_stroke"
-    android:padding="5dp">
+    tools:ignore="MissingDefaultResource"
+    android:paddingBottom="@dimen/dp_10">
 
     <ImageView
         android:id="@+id/workIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:padding="@dimen/dp_2"
-        android:scaleType="fitXY" />
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_work_jxjh" />
 
     <TextView
         android:id="@+id/workName"
-        android:tag="workName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="@dimen/dp_10"
+        android:layout_marginTop="45dp"
+        android:tag="workName"
         android:textColor="@color/black"
-        android:textSize="13sp" />
-
+        android:textSize="12sp"
+        tools:text="巡检预警" />
+    <ImageView
+        android:id="@+id/btn"
+        android:tag="btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="4dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_menu_add"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/workNum"
-        android:tag="workNum"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginRight="5dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/dp_10"
         android:background="@drawable/sh_tip"
         android:gravity="center"
+        android:tag="workNum"
         android:textColor="@color/white"
         android:textSize="12sp"
-        android:visibility="gone" />
-</RelativeLayout>
+        android:visibility="visible"
+        tools:text="1" />
+</FrameLayout>

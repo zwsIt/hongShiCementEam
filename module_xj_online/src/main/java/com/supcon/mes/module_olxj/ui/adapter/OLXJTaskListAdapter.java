@@ -7,18 +7,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
-import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_olxj.R;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
+import com.supcon.mes.module_olxj.ui.OLXJTodayTaskRecordsActivity;
 
 import java.util.Date;
 import java.util.List;
@@ -49,7 +49,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         this.map = map;
     }
 
-    public void resertExpandPosition() {
+    public void resetExpandPosition() {
         this.expandPosition = -1;
     }
 
@@ -172,8 +172,8 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
                     return;
                 }
                 int position = getAdapterPosition();
-                boolean isExPand = expandPosition == position;
-                if (!isExPand) {
+                boolean isExpand = expandPosition == position;
+                if (!isExpand) {
                     expand(position);
                     onItemChildViewClick(taskExpandBtn, 1, getItem(position));
                 } else {
@@ -313,7 +313,18 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
                     String.format("%s  ~  %s",
                             DateUtil.dateFormat(data.starTime, "MM-dd HH:mm:ss"),
                             DateUtil.dateFormat(data.endTime, "MM-dd HH:mm:ss")));
-            taskStatus.setText(data.state);
+            if (context instanceof OLXJTodayTaskRecordsActivity){ // 今日巡检(巡检记录)
+                taskStatus.setText(data.linkState.value);
+                if (Constant.XJTaskLinkStatus.status5.equals(data.linkState.id) || Constant.XJTaskLinkStatus.status7.equals(data.linkState.id)
+                        || Constant.XJTaskLinkStatus.status4.equals(data.linkState.id)){
+                    taskStatus.setTextColor(context.getResources().getColor(R.color.red));
+                }else {
+                    taskStatus.setTextColor(context.getResources().getColor(R.color.xjAreaBlue));
+                }
+
+            }else {
+                taskStatus.setText(data.state);
+            }
 
         }
 

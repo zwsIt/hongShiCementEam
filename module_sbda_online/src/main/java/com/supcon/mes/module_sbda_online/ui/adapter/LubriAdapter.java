@@ -72,7 +72,7 @@ public class LubriAdapter extends BaseListDataRecyclerViewAdapter<LubriEntity> {
 
             itemLubricationOilTv.setValue(data.getLubricateOil().name);
             itemLubricationChangeTv.setText(String.format(context.getString(R.string.device_style1), "加/换油:", Util.strFormat(data.getOilType().value)));
-            itemLubricationNumTv.setText(String.format(context.getString(R.string.device_style1), "用量:", Util.big2(data.sum)));
+            itemLubricationNumTv.setText(String.format(context.getString(R.string.device_style1), "点数:", String.valueOf(data.lubricatingnumber)));
             itemLubricationPartTv.setValue(Util.strFormat(data.lubricatePart));
 
             if (!TextUtils.isEmpty(data.getAccessoryEamId().getAttachEamId().eamAssetCode)) {

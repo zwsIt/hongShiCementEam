@@ -152,17 +152,24 @@
                 <action android:name="com.umeng.message.message.sendmessage.action" />
             </intent-filter>
         </service>
-
+<!--        <service-->
+<!--            android:name=".ForcegroundService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true"-->
+<!--            android:excludeFromRecents="true"/>-->
         <service
             android:name="com.umeng.message.UmengDownloadResourceService"
             android:exported="false" />
         <service android:name=".MyNotificationService" />
-        <service android:name=".UmengNotificationService" android:process=":push" android:exported="true"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
+        <service
+            android:name=".UmengNotificationService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+<!--        <service android:name=".UmengNotificationService" android:process=":push" android:exported="true"-->
+<!--            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.service.notification.NotificationListenerService" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
         <receiver android:name=".NotificationBroadcast" />
         <provider

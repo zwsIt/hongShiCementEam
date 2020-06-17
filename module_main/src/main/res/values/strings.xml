@@ -12,4 +12,14 @@
     <string name="main_select_assignor">请选择委托人</string>
     <string name="no_get_pending">未获取当前代办信息</string>
     <string name="main_work_proxy">工作交接</string>
+    <string name="main_warn_work">预警提醒</string>
+    <string name="main_warn_overdue_work">已超期</string>
+    <string name="main_warn_notOverdue_work">未超期</string>
+    <string name="main_exception_data">数据异常</string>
+    <string name="main_subordinates">我的下属</string>
+    <string name="main_warn">预警</string>
+    <string name="main_pending_staff">待办人</string>
+    <string name="main_eam_records">设备履历</string>
+    <string name="main_drag_move">（按住拖动调整排序）</string>
+    <string name="main_menu_limit">最多11个</string>
 </resources>

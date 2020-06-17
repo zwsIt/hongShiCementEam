@@ -1,12 +1,14 @@
 package com.supcon.mes.module_wxgd.ui;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -29,6 +31,7 @@ import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
@@ -36,6 +39,7 @@ import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
+import com.supcon.mes.module_wxgd.constant.WXGDConstant;
 import com.supcon.mes.module_wxgd.controller.AcceptanceCheckController;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
 import com.supcon.mes.module_wxgd.controller.MaintenanceController;
@@ -116,12 +120,15 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
     @BindByTag("workContext")
     CustomVerticalEditText workContext;
 
-    @BindByTag("eleOffChkBox")
-    CheckBox eleOffChkBox; // 是否生成停电票
+    @BindByTag("eleOffRadioGroup")
+    RadioGroup eleOffRadioGroup; // 是否生成停电票
     @BindByTag("eleOff")
     CustomTextView eleOff;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
+    private DealInfoController mDealInfoController;
 
 //    private DatePickController mDatePickController;
 //    private List<SystemCodeEntity> checkResultList = new ArrayList<>();
@@ -147,6 +154,8 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
         getController(LubricateOilsController.class).setEditable(false);
         getController(AcceptanceCheckController.class).setEditable(false);
         getController(MaintenanceController.class).setEditable(false);
+
+        mDealInfoController = new  DealInfoController(context,recyclerView,null);
 
 //        mDatePickController = new DatePickController(this);
 //        mDatePickController.setSecondVisible(true);
@@ -238,13 +247,11 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
-        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null){
-            eleOffChkBox.setButtonDrawable(R.drawable.ic_checked);
-//            eleOffChkBox.setBackgroundResource(R.drawable.ic_checked);
-        }else {
-            eleOffChkBox.setButtonDrawable(null);
+        if (mWXGDEntity.isOffApply != null)
+            eleOffRadioGroup.check(mWXGDEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
+        for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
+            eleOffRadioGroup.getChildAt(i).setEnabled(false);
         }
-        eleOffChkBox.setClickable(false);
     }
 
     @Override
@@ -254,6 +261,7 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
         refreshController.setOnRefreshListener(() -> {
             Map<String,Object> queryParam = new HashMap<>();
             queryParam.put(Constant.BAPQuery.TABLE_NO,mWXGDEntity.tableNo);
+            queryParam.put(Constant.BAPQuery.WORK_STATE,Constant.WorkState_ENG.TAKE_EFFECT);
             presenterRouter.create(WXGDListAPI.class).listWxgds(1,queryParam,true);
         });
         eamName.getCustomValue().setOnClickListener(v -> goSBDA());
@@ -285,6 +293,10 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
             getController(LubricateOilsController.class).setWxgdEntity(mWXGDEntity);
             getController(MaintenanceController.class).setWxgdEntity(mWXGDEntity);
             getController(MaintenanceController.class).setWxgdEntity(mWXGDEntity);
+            // 加载处理意见
+            if (mWXGDEntity.tableInfoId != null){
+                mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL,mWXGDEntity.tableInfoId);
+            }
         } else {
             ToastUtils.show(this, "未查到当前单据信息");
         }

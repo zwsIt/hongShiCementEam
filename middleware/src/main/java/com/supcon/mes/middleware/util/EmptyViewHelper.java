@@ -14,7 +14,7 @@ public class EmptyViewHelper {
 
     private static EmptyViewEntity createEmptyNoBtnEntity(String msg){
         EmptyViewEntity emptyViewEntity = new EmptyViewEntity();
-        emptyViewEntity.icon = R.drawable.ic_nodata_new2;
+        emptyViewEntity.icon = R.drawable.ic_nodata_new;
         emptyViewEntity.contentText = TextUtils.isEmpty(msg)?"暂无数据":msg;
 
         return emptyViewEntity;

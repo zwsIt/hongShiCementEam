@@ -39,6 +39,7 @@ public class LubricationWarnEntity extends BaseEntity {
     public Float nextDuration;//下次润滑时长
     public ValueEntity periodType;//类型
     public Long period; //周期
+    public int lubricatingnumber; // 润滑点数
 
     public Float sum;
     public SparePartId sparePartId;//备件编码

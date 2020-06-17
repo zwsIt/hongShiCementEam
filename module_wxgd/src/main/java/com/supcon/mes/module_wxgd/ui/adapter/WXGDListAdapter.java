@@ -64,8 +64,8 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
         CustomTextView location;
         @BindByTag("repairGroup")
         CustomTextView repairGroup;
-        @BindByTag("chargeStaff")
-        CustomTextView chargeStaff;
+        @BindByTag("itemChargeStaff")
+        TextView itemChargeStaff;
         @BindByTag("workSource")
         TextView workSource;
         @BindByTag("repairType")
@@ -79,7 +79,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
         @BindByTag("faultInfoDescribe")
         CustomTextView faultInfoDescribe;
         @BindByTag("content")
-        CustomTextView content;
+        TextView content;
 
         @BindByTag("receiveBtn")
         Button receiveBtn;
@@ -183,11 +183,12 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
         protected void update(WXGDEntity data) {
             tableNo.setText(data.tableNo);
             tableStatus.setText(data.pending == null ? "" : data.pending.taskDescription);
-            eamName.setText(data.eamID == null ? "" : data.eamID.name);
+            eamName.setText(data.eamID == null ? "" : data.eamID.name + "(" + data.eamID.eamAssetCode +")");
             location.setValue((data.eamID.installPlace != null && data.eamID.installPlace.name != null) ? data.eamID.installPlace.name : "--");
             repairGroup.setValue((data.repairGroup != null && data.repairGroup.name != null) ? data.repairGroup.name : "--");
-            chargeStaff.setValue(Util.strFormat(data.getChargeStaff().name));
+            itemChargeStaff.setText(String.format("%s%s", context.getResources().getString(R.string.chargeStaff), Util.strFormat(data.getChargeStaff().name)));
             workSource.setText((data.workSource != null && !TextUtils.isEmpty(data.workSource.value)) ? data.workSource.value : "--");
+            content.setText(String.format("%s%s", context.getResources().getString(R.string.content_workList), data.workOrderContext == null ? "" : data.workOrderContext));
 
             if (data.eamID != null && data.eamID.id != null) {
                 new EamPicController().initEamPic(itemWXGDDeviceIc, data.eamID.id);
@@ -202,8 +203,6 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                 contentLl.setVisibility(View.GONE);
                 claim.setVisibility(View.GONE);
             } else {
-
-
                 if (Constant.WxgdWorkSource.patrolcheck.equals(data.workSource.id)) {
                     workSource.setBackgroundResource(R.color.repairOrange);
                     tableStatus.setTextColor(context.getResources().getColor(R.color.repairOrange));
@@ -225,7 +224,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                     tableStatus.setBackgroundResource(R.drawable.sh_bg_worksource_tablestatus_faultinfo);
                 }
 
-                if (Constant.WxgdWorkSource.lubrication.equals(data.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(data.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(data.workSource.id)) {
+                /*if (Constant.WxgdWorkSource.lubrication.equals(data.workSource.id) || Constant.WxgdWorkSource.maintenance.equals(data.workSource.id) || Constant.WxgdWorkSource.sparepart.equals(data.workSource.id)) {
                     priority.setVisibility(View.GONE);
                     faultInfoTypeLl.setVisibility(View.GONE);
                     faultInfoDescribeLl.setVisibility(View.GONE);
@@ -264,7 +263,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                     }
                     priority.setText(data.faultInfo.priority == null ? "" : data.faultInfo.priority.value);
                     faultInfoDescribe.setValue(data.faultInfo == null ? "" : data.faultInfo.describe);
-                }
+                }*/
             }
 
             if (Constant.WxgdView.RECEIVE_OPEN_URL.equals(data.pending == null ? "" : data.pending.openUrl)) {

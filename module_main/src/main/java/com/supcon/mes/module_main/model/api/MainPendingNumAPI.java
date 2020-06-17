@@ -17,5 +17,5 @@ public interface MainPendingNumAPI {
     /**
      * 获取提示问候语
      */
-    void getSloganInfo();
+//    void getSloganInfo();
 }

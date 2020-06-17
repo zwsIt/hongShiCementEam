@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:elevation="@dimen/dp_1"
     android:paddingStart="@dimen/dp_15"
     android:paddingEnd="@dimen/dp_15"
     android:paddingBottom="@dimen/dp_10">
@@ -22,7 +23,6 @@
             android:textColor="@color/blue"
             android:textSize="@dimen/dp_16"
             tools:text="workList_20190827_005" />
-
         <TextView
             android:id="@+id/processState"
             android:layout_width="wrap_content"

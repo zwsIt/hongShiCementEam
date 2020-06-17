@@ -25,6 +25,7 @@ public class TemLubricateTaskEntity extends BaseEntity {
     public boolean isCheck;
 
     public boolean isLubri;
+    public int lubricatingnumber; // 润滑点数
 
     public WXGDEam getEamID() {
         if (eamID == null) {

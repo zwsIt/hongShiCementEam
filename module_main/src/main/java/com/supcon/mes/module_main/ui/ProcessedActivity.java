@@ -29,7 +29,7 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.model.api.ProcessedAPI;
-import com.supcon.mes.module_main.model.bean.ProcessedEntity;
+import com.supcon.mes.middleware.model.bean.ProcessedEntity;
 import com.supcon.mes.module_main.model.contract.ProcessedContract;
 import com.supcon.mes.module_main.presenter.ProcessedPresenter;
 import com.supcon.mes.module_main.ui.adaper.ProcessedAdapter;
@@ -115,7 +115,7 @@ public class ProcessedActivity extends BaseRefreshRecyclerActivity<ProcessedEnti
             @Override
             public void onRefresh(int pageIndex) {
                 setRadioEnable(false);
-                presenterRouter.create(ProcessedAPI.class).workflowHandleList(queryParam, pageIndex);
+                presenterRouter.create(ProcessedAPI.class).workflowHandleList(queryParam, pageIndex,20);
             }
         });
 

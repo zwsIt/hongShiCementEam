@@ -114,6 +114,8 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 
     @BindByTag("xjTitleMap")
     ImageView xjTitleMap;
+    @BindByTag("todayXjRecordsTv")
+    TextView todayXjRecordsTv;  //今日巡检
 
     @BindByTag("olxjFinishBtn")
     Button olxjFinishBtn;
@@ -164,12 +166,9 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         nfcHelper = NFCHelper.getInstance();
         if (nfcHelper != null) {
             nfcHelper.setup(this);
-            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
-                @Override
-                public void onNFCReceived(String nfc) {
-                    LogUtil.d("NFC Received : " + nfc);
-                    EventBus.getDefault().post(new NFCEvent(nfc));
-                }
+            nfcHelper.setOnNFCListener(nfc -> {
+                LogUtil.d("NFC Received : " + nfc);
+                EventBus.getDefault().post(new NFCEvent(nfc));
             });
         }
         openDevice();
@@ -190,6 +189,8 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         contentView.addOnItemTouchListener(new CustomSwipeLayout.OnSwipeItemTouchListener(this));
         titleText.setText("计划巡检");
         xjTitleAdd.setVisibility(View.GONE);
+        xjTitleMap.setVisibility(View.GONE);
+//        todayXjRecordsTv.setVisibility(View.GONE);
         initEmptyView();
     }
 
@@ -202,6 +203,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         leftBtn.setOnClickListener(v -> {
             finish();
         });
+        todayXjRecordsTv.setOnClickListener(v -> IntentRouter.go(context,Constant.Router.JHXJ_TODAY_RECORDS_LIST));
         xjTitleMap.setOnClickListener(v -> {
             if (mOLXJTaskListAdapter.getList() == null || mOLXJTaskListAdapter.getList().size() == 0) {
                 ToastUtils.show(context, "未领取巡检任务,不能切换地图模式!");
@@ -721,7 +723,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 
     @Override
     public void getOJXJLastTaskListSuccess(List entities) {
-        mOLXJTaskListAdapter.resertExpandPosition();
+        mOLXJTaskListAdapter.resetExpandPosition();
 
         if (entities.size() != 0 && isCurrentTask((OLXJTaskEntity) entities.get(0))) {
             entities.set(0, mOLXJTaskEntity);

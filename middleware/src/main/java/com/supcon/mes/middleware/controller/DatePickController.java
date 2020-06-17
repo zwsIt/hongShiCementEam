@@ -9,6 +9,8 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.controllers.BasePickerController;
 import com.supcon.mes.middleware.util.AnimatorUtil;
 
+import java.util.Calendar;
+
 import static com.supcon.common.view.view.picker.DateTimePicker.NONE;
 import static com.supcon.common.view.view.picker.DateTimePicker.YEAR_MONTH;
 import static com.supcon.common.view.view.picker.DateTimePicker.YEAR_MONTH_DAY;
@@ -80,7 +82,7 @@ public class DatePickController extends BasePickerController<DateTimePicker> imp
 
     private void parseTime(long time) {
         dateStrs = DateUtil.dateFormat(time, "yyyy MM dd HH mm ss").split(" ");
-        if (Integer.valueOf(dateStrs[0]) < 2017 || Integer.valueOf(dateStrs[0]) > 2025) {
+        if (Integer.valueOf(dateStrs[0]) < 2017 || Integer.valueOf(dateStrs[0]) > Calendar.getInstance().get(Calendar.YEAR) +10) {
             dateStrs[0] = "2018";
         }
 
@@ -90,7 +92,7 @@ public class DatePickController extends BasePickerController<DateTimePicker> imp
         dateTimePicker = new DateTimePicker(activity, YEAR_MONTH_DAY, NONE);
         dateTimePicker.setOnDismissListener(this::onDismiss);
         dateTimePicker.setDateRangeStart(2017, 1, 1);
-        dateTimePicker.setDateRangeEnd(2025, 11, 11);
+        dateTimePicker.setDateRangeEnd(Calendar.getInstance().get(Calendar.YEAR) +10, 11, 11);
         dateTimePicker.setDividerVisible(isDividerVisible);
         dateTimePicker.setCycleDisable(isCycleDisable);
         dateTimePicker.setCanceledOnTouchOutside(isCancelOutside);
@@ -115,7 +117,7 @@ public class DatePickController extends BasePickerController<DateTimePicker> imp
         dateTimePicker = new DateTimePicker(activity, YEAR_MONTH, NONE);
         dateTimePicker.setOnDismissListener(this::onDismiss);
         dateTimePicker.setDateRangeStart(2017, 1);
-        dateTimePicker.setDateRangeEnd(2025, 11);
+        dateTimePicker.setDateRangeEnd(Calendar.getInstance().get(Calendar.YEAR) +10, 11);
         dateTimePicker.setDividerVisible(isDividerVisible);
         dateTimePicker.setCycleDisable(isCycleDisable);
         dateTimePicker.setCanceledOnTouchOutside(isCancelOutside);
@@ -136,7 +138,7 @@ public class DatePickController extends BasePickerController<DateTimePicker> imp
         dateTimePicker = new DateTimePicker(activity, YEAR_MONTH_DAY, NONE);
         dateTimePicker.setOnDismissListener(this::onDismiss);
         dateTimePicker.setDateRangeStart(2017, 1, 1);
-        dateTimePicker.setDateRangeEnd(2025, 11, 11);
+        dateTimePicker.setDateRangeEnd(Calendar.getInstance().get(Calendar.YEAR) +10, 11, 11);
         dateTimePicker.setTimeRangeStart(0, 0);
         dateTimePicker.setTimeRangeEnd(23, 59);
         dateTimePicker.setDividerVisible(isDividerVisible);

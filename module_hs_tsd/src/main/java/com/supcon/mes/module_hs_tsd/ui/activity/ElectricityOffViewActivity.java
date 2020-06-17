@@ -2,6 +2,7 @@ package com.supcon.mes.module_hs_tsd.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AttachmentController;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
@@ -103,6 +105,12 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     CustomDateView applyDate;
     @BindByTag("operateStaff")
     CustomTextView operateStaff;
+    @BindByTag("chargeStaff")
+    CustomTextView chargeStaff;
+    @BindByTag("electrician")
+    CustomTextView electrician;
+    @BindByTag("securityStaff")
+    CustomTextView securityStaff;
     @BindByTag("workTask")
     CustomVerticalEditText workTask;
     @BindByTag("galleryView")
@@ -117,6 +125,8 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     CustomWorkFlowView workFlowView;
     @BindByTag("finishBtn")
     Button finishBtn;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
     private String __pc__;
     private Long tableId; // 单据ID
@@ -126,6 +136,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     private DatePickController mDatePickController;
     private String activityName = ""; // 当前活动名称
     private String tableStatus;
+    private DealInfoController mDealInfoController;
 
     @Override
     protected void onInit() {
@@ -146,7 +157,7 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         mDatePickController.setCanceledOnTouchOutside(true);
         mDatePickController.setCycleDisable(false);
         mDatePickController.setSecondVisible(false);
-
+        mDealInfoController = new DealInfoController(context,recyclerView,null);
     }
 
     @Override
@@ -158,6 +169,9 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
     protected void initView() {
         super.initView();
         titleText.setText("停电申请查看");
+        chargeStaff.setVisibility(View.GONE);
+        electrician.setVisibility(View.GONE);
+        securityStaff.setVisibility(View.GONE);
         finishBtn.setVisibility(View.GONE);
 
         applyStaff.setEditable(false);
@@ -339,10 +353,10 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
         map.put("onoroff.createStaffId", mElectricityOffOnEntity.getCreateStaffId());
         map.put("onoroff.createTime", DateUtil.dateTimeFormat(mElectricityOffOnEntity.getCreateTime()));
         map.put("onoroff.createPositionId", EamApplication.getAccountInfo().positionId);
-        map.put("viewCode", "BEAMEle_1.0.0_onOrOff_eleOffEdit");
+        map.put("viewCode", "BEAMEle_1.0.0_onOrOff_eleOffMainView");
         map.put("modelName", "Onoroff");
-        map.put("datagridKey", "BEAMEle_onOrOff_onoroff_eleOffEdit_datagrids");
-        map.put("viewselect", "eleOffEdit");
+        map.put("datagridKey", "BEAMEle_onOrOff_onoroff_eleOffMainView_datagrids");
+        map.put("viewselect", "eleOffMainView");
         map.put("id", tableId.equals(-1L)? "" : tableId);
         map.put("deploymentId", mElectricityOffOnEntity.getDeploymentId());
         map.put("onoroff.version", mElectricityOffOnEntity.getVersion());
@@ -421,6 +435,10 @@ public class ElectricityOffViewActivity extends BaseRefreshActivity implements E
             public void onSuccess(Object result) {
                 ElectricityOffOnEntity entity = GsonUtil.gsonToBean(GsonUtil.gsonString(result), ElectricityOffOnEntity.class);
                 updateTableInfo(entity);
+                // 加载处理意见
+                if (mElectricityOffOnEntity.getTableInfoId() != null){
+                    mDealInfoController.listTableDealInfo(ElectricityConstant.URL.PRE_URL,mElectricityOffOnEntity.getTableInfoId());
+                }
                 refreshController.refreshComplete();
             }
         });

@@ -6,6 +6,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
 
 import com.supcon.common.view.util.LogUtil;
@@ -73,9 +77,9 @@ public class MyNotificationService extends Service {
             NotificationUtil.playSystemNotaficationSound(getBaseContext());
 //        }
 
-        if(msg.play_vibrate) {
-            NotificationUtil.playVibrator(getBaseContext());
-        }
+//        if(msg.play_vibrate) {
+//            NotificationUtil.playVibrator(getBaseContext());
+//        }
 
 
     }

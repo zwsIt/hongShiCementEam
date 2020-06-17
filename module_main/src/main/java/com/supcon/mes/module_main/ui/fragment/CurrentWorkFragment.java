@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 
@@ -77,8 +79,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 @Presenter(value = {WaitDealtPresenter.class, WaitDealtSubmitPresenter.class})
 public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEntity> implements WaitDealtContract.View, WaitDealtSubmitContract.View {
-    @BindByTag("tableFilter")
-    CustomFilterView<CustomFilterBean> tableFilter;
+
     @BindByTag("contentView")
     RecyclerView contentView;
     @BindByTag("waitStateRadioGroup")
@@ -119,8 +120,9 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(5,context)));
 
-        EventBus.getDefault().register(this);
-
+        if (!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
         mSinglePickController = new SinglePickController(getActivity());
         mSinglePickController.setDividerVisible(false);
         mSinglePickController.setCanceledOnTouchOutside(true);
@@ -148,13 +150,7 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
             }
         });
 
-        initFilter();
         initRepairGroup();
-    }
-
-    private void initFilter() {
-        tableFilter.setData(FilterHelper.createTableTypeList());
-        tableFilter.setCurrentPosition(0);
     }
 
     /**
@@ -178,7 +174,6 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
         refreshListController.setOnRefreshPageListener(new OnRefreshPageListener() {
             @Override
             public void onRefresh(int pageIndex) {
-//                setRadioEnable(false);
                 presenterRouter.create(WaitDealtAPI.class).getWaitDealt(pageIndex, 20, queryParam);
             }
         });
@@ -203,14 +198,7 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
             }
             refreshListController.refreshBegin();
         });
-        tableFilter.setFilterSelectChangedListener(new CustomFilterView.FilterSelectChangedListener<FilterBean>() {
-            @Override
-            public void onFilterSelected(FilterBean filterBean) {
-                CustomFilterBean customFilterBean = (CustomFilterBean)filterBean;
-                queryParam.put(Constant.BAPQuery.PROCESSKEY, customFilterBean.id);
-                refreshListController.refreshBegin();
-            }
-        });
+
         waitDealtAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
@@ -425,14 +413,12 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
     @Override
     public void getWaitDealtSuccess(CommonBAPListEntity entity) {
         refreshListController.refreshComplete(entity.result);
-//        setRadioEnable(true);
     }
 
     @Override
     public void getWaitDealtFailed(String errorMsg) {
         ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete();
-//        setRadioEnable(true);
     }
 
     @Override
@@ -458,8 +444,28 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+//        if (rootView != null) {
+//            ((ViewGroup) rootView.getParent()).removeView(rootView);
+//        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        if (EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    public void doFilter(String processKey) {
+        queryParam.put(Constant.BAPQuery.PROCESSKEY, processKey);
+        refreshListController.refreshBegin();
     }
 }

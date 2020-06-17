@@ -29,7 +29,8 @@ public class MultiDepartSelectPresenter extends XJMultiDepartSelectContract.Pres
                     AreaMultiStageEntity rootMultiStageEntity = new AreaMultiStageEntity();
                     DepartmentInfo rootArea = new DepartmentInfo();
                     rootArea.layRec = "";
-                    rootArea.name = "集团";
+                    rootArea.id = EamApplication.getAccountInfo().cid;
+                    rootArea.name = EamApplication.getAccountInfo().companyName;
                     AreaMultiStageEntity currentNode = rootMultiStageEntity;
                     rootMultiStageEntity.setCurrentEntity(rootArea);
                     for (int i = 0; i < areas.size(); i++) {

@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,13 +18,13 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.supcon.common.BaseConstant;
 import com.supcon.common.view.base.activity.BaseControllerActivity;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
+import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.LoginEvent;
-import com.supcon.mes.middleware.EamApplication;
+import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
@@ -33,7 +34,8 @@ import com.supcon.mes.middleware.ui.view.TrapezoidView;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
-import com.supcon.mes.module_login.model.bean.WorkInfo;
+import com.supcon.mes.middleware.model.bean.WorkInfo;
+import com.supcon.mes.module_main.ui.adaper.WorkAdapter;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.model.api.AnomalyAPI;
@@ -43,7 +45,6 @@ import com.supcon.mes.module_main.model.contract.EamDetailContract;
 import com.supcon.mes.module_main.presenter.AnomalyPresenter;
 import com.supcon.mes.module_main.presenter.EamDetailPresenter;
 import com.supcon.mes.module_main.ui.adaper.AnomalyAdapter;
-import com.supcon.mes.module_main.ui.adaper.WorkAdapter;
 import com.supcon.mes.module_main.ui.view.SimpleRatingBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -113,7 +114,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
     protected void initView() {
         super.initView();
         View waitTitle = rootView.findViewById(R.id.hs_anomaly_title);
-        ((TextView) waitTitle.findViewById(R.id.contentTitleLabel)).setText("异常记录");
+        ((TextView) waitTitle.findViewById(R.id.contentTitleLabel)).setText(context.getResources().getString(R.string.main_eam_records));
         waitMore = waitTitle.findViewById(R.id.contentTitleSettingIc);
         waitMore.setVisibility(View.VISIBLE);
         waitMore.setOnClickListener(v -> {
@@ -125,12 +126,14 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         ((TextView) workTitle.findViewById(R.id.contentTitleLabel)).setText("我的工作");
         eamPic = findViewById(R.id.eamPic);
         anomalyRecycler.setLayoutManager(new LinearLayoutManager(context));
+        anomalyRecycler.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(2,context)));
         anomalyAdapter = new AnomalyAdapter(this);
         anomalyRecycler.setAdapter(anomalyAdapter);
 
         GridLayoutManager layoutManager = new GridLayoutManager(context, 4);
         eamWorkRecycler.setLayoutManager(layoutManager);
         workAdapter = new WorkAdapter(this);
+        workAdapter.setEamHome(true);
         eamWorkRecycler.setAdapter(workAdapter);
     }
 
@@ -147,39 +150,19 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
                     }
                 });
 
-        workAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
-            @Override
-            public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
-                switch (position) {
-                    case 0:
-                        IntentRouter.go(EamDetailActivity.this, Constant.Router.OLXJ_EAM_UNHANDLED, bundle);
-                        break;
-                    case 1:
-                        IntentRouter.go(EamDetailActivity.this, Constant.Router.TEMPORARY_LUBRICATION_EARLY_WARN, bundle);
-                        break;
-                    case 2:
-                        IntentRouter.go(EamDetailActivity.this, Constant.Router.ACCEPTANCE_LIST, bundle);
-                        break;
-                    case 3:
-                        bundle.putLong(Constant.IntentKey.EAM_ID,mEamEntity.id);
-                        IntentRouter.go(context, Constant.Router.EAM_FILE_LIST, bundle);
-                        break;
-                    case 4:
-                        IntentRouter.go(context,Constant.Router.HS_TD_LIST,bundle);
-                        break;
-                        default:
-                }
+        workAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
+            WorkInfo workInfo = (WorkInfo) obj;
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
+            if (TextUtils.isEmpty(workInfo.router)){
+                return;
             }
+            IntentRouter.go(context,workInfo.router,bundle);
         });
-        eamLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString(Constant.IntentKey.EAM_CODE, mEamEntity.code);
-                IntentRouter.go(EamDetailActivity.this, Constant.Router.SCORE_EAM_LIST, bundle);
-            }
+        eamLayout.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.IntentKey.EAM_CODE, mEamEntity.code);
+            IntentRouter.go(EamDetailActivity.this, Constant.Router.SCORE_EAM_LIST, bundle);
         });
     }
 
@@ -199,22 +182,27 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         WorkInfo workInfo1 = new WorkInfo();
         workInfo1.name = "临时巡检";
         workInfo1.iconResId = R.drawable.menu_aew_selector;
+        workInfo1.router = Constant.Router.OLXJ_EAM_UNHANDLED;
         workInfos.add(workInfo1);
         WorkInfo workInfo2 = new WorkInfo();
         workInfo2.name = "临时润滑";
         workInfo2.iconResId = R.drawable.menu_lubricate_selector;
+        workInfo2.router = Constant.Router.TEMPORARY_LUBRICATION_EARLY_WARN;
         workInfos.add(workInfo2);
         WorkInfo workInfo3 = new WorkInfo();
         workInfo3.name = "验收评分";
         workInfo3.iconResId = R.drawable.menu_score_selector;
+        workInfo3.router = Constant.Router.ACCEPTANCE_LIST;
         workInfos.add(workInfo3);
         WorkInfo workInfo4 = new WorkInfo();
         workInfo4.name = "文档记录";
         workInfo4.iconResId = R.drawable.menu_print_selector;
+        workInfo4.router = Constant.Router.EAM_FILE_LIST;
         workInfos.add(workInfo4);
         WorkInfo workInfo5 = new WorkInfo();
         workInfo5.name = "停电申请";
         workInfo5.iconResId = R.drawable.ic_work_td;
+        workInfo5.router = Constant.Router.HS_TD_LIST;
         workInfos.add(workInfo5);
         workAdapter.setList(workInfos);
         workAdapter.notifyDataSetChanged();

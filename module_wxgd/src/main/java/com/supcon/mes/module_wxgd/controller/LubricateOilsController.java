@@ -165,7 +165,7 @@ public class LubricateOilsController extends BaseViewController implements Lubri
         }
     }
 
-    public void updateOldLubricateOils(List<LubricateOilsEntity> mLubricateOilsEntities) {
+    public void updateWarnLubricateOils(List<LubricateOilsEntity> mLubricateOilsEntities) {
         if (mLubricateOilsEntities == null)
             return;
         this.mLubricateOilsOldEntities = mLubricateOilsEntities;

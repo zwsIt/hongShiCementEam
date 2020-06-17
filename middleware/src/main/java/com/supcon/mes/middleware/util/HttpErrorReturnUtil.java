@@ -25,16 +25,12 @@ public class HttpErrorReturnUtil {
         if (throwable instanceof HttpException) {
             ResponseBody responseBody = ((HttpException) throwable).response().errorBody();
             if (responseBody != null && responseBody.charStream() != null) {
-                /*try {
-                    return responseBody.string();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
                 try {
                     BapResultEntity error = GsonUtil.gsonToBean(responseBody.string(), BapResultEntity.class);
                     return error.errMsg;
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    return msg;
                 }
             }
         }

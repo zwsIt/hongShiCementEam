@@ -18,7 +18,7 @@ import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.module_login.R;
 import com.supcon.mes.module_login.model.api.WorkSettingAPI;
-import com.supcon.mes.module_login.model.bean.WorkInfo;
+import com.supcon.mes.middleware.model.bean.WorkInfo;
 import com.supcon.mes.module_login.model.contract.WorkSettingContract;
 import com.supcon.mes.module_login.model.event.WorkRefreshEvent;
 import com.supcon.mes.module_login.presenter.WorkSettingPresneter;

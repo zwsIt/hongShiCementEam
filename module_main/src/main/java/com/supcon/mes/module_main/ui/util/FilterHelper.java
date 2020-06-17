@@ -49,6 +49,11 @@ public class FilterHelper {
         filterBean.id = Constant.ProcessKey.ELE_ON;
         filterBeanList.add(filterBean);
 
+        filterBean = new CustomFilterBean();
+        filterBean.name = "巡检";
+        filterBean.id = Constant.ProcessKey.POTROL_TASK_WF;
+        filterBeanList.add(filterBean);
+
         return filterBeanList;
     }
 
