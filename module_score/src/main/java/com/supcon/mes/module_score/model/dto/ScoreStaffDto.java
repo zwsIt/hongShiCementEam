@@ -13,10 +13,20 @@ public class ScoreStaffDto extends BaseEntity {
     public String item;
     public String itemScore;
     public String result;
+    public String resultValue; // 扣分值存储
     public String fraction;
     public String isItemValue;
     public String noItemValue;
 
     public String defaultNumVal;
     public ValueEntity defaultValueType;
+
+    //附件
+    public String attachFileMultiFileIds;
+    public String attachFileMultiFileNames;
+    public String attachFileFileAddPaths; // 存储路径
+    public String attachFileFileDeleteIds; // 附件删除ids
+
+    public String subScore; // 扣分
+
 }

@@ -4,11 +4,13 @@ import android.text.TextUtils;
 
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
+import com.supcon.mes.module_score.constant.ScoreConstant;
 import com.supcon.mes.module_score.model.bean.ScoreDutyEamEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceListEntity;
 import com.supcon.mes.module_score.model.contract.ScoreInspectorStaffPerformanceContract;
 import com.supcon.mes.module_score.model.network.ScoreHttpClient;
+import com.supcon.mes.module_score.ui.ScoreInspectorStaffPerformanceActivity;
 
 import org.reactivestreams.Publisher;
 
@@ -29,29 +31,50 @@ public class ScoreInspectorStaffPerformancePresenter extends ScoreInspectorStaff
 
     @Override
     public void getDutyEam(long staffId, String scoreType) {
-        mCompositeSubscription.add(ScoreHttpClient.getDutyEam(staffId, scoreType)
-                .onErrorReturn(throwable -> {
-                    CommonListEntity commonListEntity = new CommonListEntity();
-                    commonListEntity.errMsg = throwable.toString();
-                    return commonListEntity;
-                })
-                .subscribe(new Consumer<CommonListEntity<ScoreDutyEamEntity>>() {
+        mCompositeSubscription.add(ScoreHttpClient.getDutyEamNew(staffId, scoreType)
+                .onErrorReturn(new Function<Throwable, ScoreDutyEamEntity>() {
                     @Override
-                    public void accept(CommonListEntity<ScoreDutyEamEntity> scoreDutyEamEntityCommonListEntity) throws Exception {
-                        if (TextUtils.isEmpty(scoreDutyEamEntityCommonListEntity.errMsg)) {
-                            getView().getDutyEamSuccess(scoreDutyEamEntityCommonListEntity);
+                    public ScoreDutyEamEntity apply(Throwable throwable) throws Exception {
+                        ScoreDutyEamEntity scoreDutyEamEntity = new ScoreDutyEamEntity();
+                        scoreDutyEamEntity.errMsg = throwable.toString();
+                        return scoreDutyEamEntity;
+                    }
+                })
+                .subscribe(new Consumer<ScoreDutyEamEntity>() {
+                    @Override
+                    public void accept(ScoreDutyEamEntity scoreDutyEamEntity) throws Exception {
+                        if (scoreDutyEamEntity.success) {
+                            getView().getDutyEamSuccess(scoreDutyEamEntity);
                         } else {
-                            getView().getDutyEamFailed(scoreDutyEamEntityCommonListEntity.errMsg);
+                            getView().getDutyEamFailed(scoreDutyEamEntity.errMsg);
                         }
                     }
                 }));
+//        mCompositeSubscription.add(ScoreHttpClient.getDutyEam(staffId, scoreType)
+//                .onErrorReturn(throwable -> {
+//                    CommonListEntity commonListEntity = new CommonListEntity();
+//                    commonListEntity.errMsg = throwable.toString();
+//                    return commonListEntity;
+//                })
+//                .subscribe(new Consumer<CommonListEntity<ScoreDutyEamEntity>>() {
+//                    @Override
+//                    public void accept(CommonListEntity<ScoreDutyEamEntity> scoreDutyEamEntityCommonListEntity) throws Exception {
+//                        if (TextUtils.isEmpty(scoreDutyEamEntityCommonListEntity.errMsg)) {
+//                            getView().getDutyEamSuccess(scoreDutyEamEntityCommonListEntity);
+//                        } else {
+//                            getView().getDutyEamFailed(scoreDutyEamEntityCommonListEntity.errMsg);
+//                        }
+//                    }
+//                }));
     }
 
     @Override
-    public void getInspectorStaffScore(int scoreId) {
+    public void getInspectorStaffScore(Long staffId,Long scoreId) {
         List<String> urls = new ArrayList<>();
-        //设备运行
-        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560145365044.action");
+        //设备责任到人
+        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1592634082809.action");
+        //专业巡检
+        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1592635533062.action");
         //规范化管理
         urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560222990407.action");
         //安全生产
@@ -84,7 +107,7 @@ public class ScoreInspectorStaffPerformancePresenter extends ScoreInspectorStaff
                         scoreMap.put(scorePerformanceTitleEntity.project, scorePerformanceTitleEntity);
                     }
                     position++;
-                    scoreStaffPerformanceEntity.Index = position;
+                    scoreStaffPerformanceEntity.index = position;
                     scoreStaffPerformanceEntity.viewType = ListType.CONTENT.value();
                     if (scorePerformanceTitleEntity != null) {
                         scorePerformanceTitleEntity.scorePerformanceEntities.add(scoreStaffPerformanceEntity);
@@ -96,7 +119,11 @@ public class ScoreInspectorStaffPerformancePresenter extends ScoreInspectorStaff
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
-                        getView().getInspectorStaffScoreSuccess(new ArrayList<>(scoreMap.values()));
+                        ScoreInspectorStaffPerformancePresenter.this.getView().getInspectorStaffScoreSuccess(new ArrayList<>(scoreMap.values()));
+
+                        if (staffId != -1){
+                            getDutyEam(staffId, ScoreConstant.ScoreType.INSPECTION_STAFF);
+                        }
                     }
                 }));
     }

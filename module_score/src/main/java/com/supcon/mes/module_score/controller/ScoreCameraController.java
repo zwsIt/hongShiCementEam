@@ -1,12 +1,11 @@
-package com.supcon.mes.module_overhaul_workticket.controller;
+package com.supcon.mes.module_score.controller;
 
 import android.annotation.SuppressLint;
-import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.util.LogUtil;
-import com.supcon.common.view.util.LogUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.adapter.GalleryAdapter;
 import com.supcon.mes.mbap.beans.GalleryBean;
@@ -25,6 +24,8 @@ import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.PicUtil;
 import com.supcon.mes.middleware.util.WatermarkUtil;
+import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
+import com.supcon.mes.module_score.ui.adapter.ScoreStaffPerformanceAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,17 +33,19 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.supcon.mes.mbap.adapter.GalleryAdapter.FILE_TYPE_VIDEO;
 
-public class WorkTicketCameraController extends BaseCameraController {
+public class ScoreCameraController extends BaseCameraController {
 
-    CustomGalleryView galleryView;
+    CustomGalleryView galleryView; // 当前操作项目
 
-    private int currAdapterPosition;
+    private int currAdapterPosition; // 当前操作项目位置
+    private ScoreStaffPerformanceAdapter mScoreStaffPerformanceAdapter;
 
     private AttachmentController mAttachmentController;
     private AttachmentDownloadController mDownloadController;
@@ -51,7 +54,7 @@ public class WorkTicketCameraController extends BaseCameraController {
     public Map<String, CustomGalleryView> galleryViewHashMap  = new HashMap<String, CustomGalleryView>(); // map存储对应ViewHolder中的galleryView
     public Map<String, OnSuccessListener<File>> onSuccessListenerHashMap  = new HashMap<String, OnSuccessListener<File>>(); // map存储对应ViewHolder中的listener
 
-    public WorkTicketCameraController(View rootView) {
+    public ScoreCameraController(View rootView) {
         super(rootView);
         EventBus.getDefault().register(this);
     }
@@ -61,11 +64,12 @@ public class WorkTicketCameraController extends BaseCameraController {
         super.onInit();
     }
 
-    public void addGalleryView(int position, CustomGalleryView customGalleryView){
-        currAdapterPosition = position;
-        galleryView = customGalleryView;
+    public void addGalleryView(int position, CustomGalleryView customGalleryView, ScoreStaffPerformanceAdapter scoreStaffPerformanceAdapter){
+        super.addListener(position, customGalleryView);
+        mScoreStaffPerformanceAdapter = scoreStaffPerformanceAdapter;
+//        currAdapterPosition = position;
+//        galleryView = customGalleryView;
         galleryViewHashMap.put(String.valueOf(position),customGalleryView);
-        addListener(position, customGalleryView);
     }
 
     public void setOnSuccessListener(int position, OnSuccessListener<File> onSuccessListener) {
@@ -140,6 +144,7 @@ public class WorkTicketCameraController extends BaseCameraController {
     protected void onFileReceived(File file) {
         super.onFileReceived(file);
 
+
         String fileName = file.getName();
         if(PicUtil.isPic(fileName)){
             uploadLocalPic(file);
@@ -155,10 +160,11 @@ public class WorkTicketCameraController extends BaseCameraController {
         actionGalleryView.deletePic(position);
 //        galleryViewHashMap.get(String.valueOf(currAdapterPosition)).deletePic(position);
         delete(galleryBean);
+        updateScoreItem(new File(galleryBean.localPath));
         // 附件删除监听
-        if(onSuccessListenerHashMap.get(String.valueOf(actionPosition))!= null){
-            onSuccessListenerHashMap.get(String.valueOf(actionPosition)).onSuccess(new File(galleryBean.localPath));
-        }
+//        if(onSuccessListenerHashMap.get(String.valueOf(actionPosition))!= null){
+//            onSuccessListenerHashMap.get(String.valueOf(actionPosition)).onSuccess(new File(galleryBean.localPath));
+//        }
     }
 
     private void delete(GalleryBean galleryBean) {
@@ -190,10 +196,12 @@ public class WorkTicketCameraController extends BaseCameraController {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void deleteImage(ImageDeleteEvent imageDeleteEvent) {
         actionGalleryView.deletePic(imageDeleteEvent.getPos());
+
+        updateScoreItem(new File(imageDeleteEvent.getPicName()));
         // 附件删除监听
-        if(onSuccessListenerHashMap.get(String.valueOf(actionPosition))!= null){
-            onSuccessListenerHashMap.get(String.valueOf(actionPosition)).onSuccess(new File(imageDeleteEvent.getPicName())); // 本地照片路径
-        }
+//        if(onSuccessListenerHashMap.get(String.valueOf(actionPosition))!= null){
+//            onSuccessListenerHashMap.get(String.valueOf(actionPosition)).onSuccess(new File(imageDeleteEvent.getPicName())); // 本地照片路径
+//        }
     }
 
 
@@ -214,14 +222,17 @@ public class WorkTicketCameraController extends BaseCameraController {
                 GalleryBean galleryBean = new GalleryBean();
                 galleryBean.localPath = file.getAbsolutePath();
                 galleryBean.url = result;
-                CustomGalleryView videoGalleryView = galleryViewHashMap.get(String.valueOf(currAdapterPosition));
+//                CustomGalleryView videoGalleryView = galleryViewHashMap.get(String.valueOf(currAdapterPosition));
 //                videoGalleryView.clear(); // 支持单个
-                videoGalleryView.addGalleryBean(galleryBean);
-//                galleryView.addGalleryBean(galleryBean);
+//                videoGalleryView.addGalleryBean(galleryBean);
+                galleryView.addGalleryBean(galleryBean);
                 pics.add(galleryBean);
-                if(onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition))!= null){
-                    onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition)).onSuccess(file);
-                }
+//                if(onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition))!= null){
+//                    onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition)).onSuccess(file);
+//                }
+
+                updateScoreItem(file);
+
             }
         }, file);
     }
@@ -242,17 +253,73 @@ public class WorkTicketCameraController extends BaseCameraController {
                 galleryBean.localPath = file.getAbsolutePath();
 //                galleryBean.thumbnailPath = thumbnail.getAbsolutePath();
                 galleryBean.url = result;
-                CustomGalleryView videoGalleryView = galleryViewHashMap.get(String.valueOf(currAdapterPosition));
+//                CustomGalleryView videoGalleryView = galleryViewHashMap.get(String.valueOf(currAdapterPosition));
 //                videoGalleryView.clear(); // 支持单个
-                videoGalleryView.addGalleryBean(galleryBean);
+                galleryView.addGalleryBean(galleryBean);
 //                galleryView.addGalleryBean(galleryBean);
                 pics.add(galleryBean);
-                if(onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition))!= null){
-                    onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition)).onSuccess(file);
-                }
-
+//                if(onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition))!= null){
+//                    onSuccessListenerHashMap.get(String.valueOf(currAdapterPosition)).onSuccess(file);
+//                }
+                updateScoreItem(file);
             }
         }, file);
+    }
+
+     /**
+      * @method  更新评分项数据
+      * @description
+      * @author: zhangwenshuai
+      * @date: 2020/6/19 22:09
+      * @param  * @param null
+      * @param file
+      * @return
+      */
+    private void updateScoreItem(File file) {
+        ScoreStaffPerformanceEntity data = mScoreStaffPerformanceAdapter.getItem(currAdapterPosition);
+        StringBuilder picPath = new StringBuilder();
+        StringBuilder picLocalPaths = new StringBuilder();
+        for (GalleryBean galleryBean : galleryView.getGalleryAdapter().getList()) { // 控件展示附件
+            if (!TextUtils.isEmpty(galleryBean.url)) {
+                picPath.append(galleryBean.url).append(",");
+            }
+            picLocalPaths.append(galleryBean.localPath).append(",");
+        }
+        if (!picLocalPaths.toString().contains(file.getName())) {
+            // 删除
+            if (picLocalPaths.length() == 0) {
+                data.setAttachFileFileAddPaths(null);
+                if (!TextUtils.isEmpty(data.getAttachFileMultiFileIds())) {
+                    data.setAttachFileFileDeleteIds(data.getAttachFileMultiFileIds());
+                }
+            } else {
+                // 删除已保存
+                if (!TextUtils.isEmpty(data.getAttachFileMultiFileIds()) && data.getAttachFileMultiFileNames().contains(file.getName())){
+                    List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
+                    List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
+                    for (String name : attachFileNameList){
+                        if (name.contains(file.getName())){
+//                          String fileFileDeleteIds = data.getAttachFileFileDeleteIds() == null ? "" : data.getAttachFileFileDeleteIds();
+                            data.setAttachFileFileDeleteIds(TextUtils.isEmpty(data.getAttachFileFileDeleteIds()) ?
+                            attachFileIdList.get(attachFileNameList.indexOf(name)) : data.getAttachFileFileDeleteIds() + ","+ attachFileIdList.get(attachFileNameList.indexOf(name)));
+                            break;
+                        }
+                    }
+                }else { // 本地删除
+                    ArrayList<String> attachFileFileAddPathsList = new ArrayList<>(Arrays.asList(data.getAttachFileFileAddPaths().split(",")));
+                    for (String path : attachFileFileAddPathsList){
+                        if (path.contains(file.getName())){
+                            attachFileFileAddPathsList.remove(path);
+                            data.setAttachFileFileAddPaths(picPath.substring(0, picPath.length() - 1));
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            //添加
+            data.setAttachFileFileAddPaths(picPath.substring(0, picPath.length() - 1));
+        }
     }
 
     @Override
@@ -280,8 +347,9 @@ public class WorkTicketCameraController extends BaseCameraController {
         return pics.size()!=0;
     }
 
-    public void setCurrAdapterPosition(int adapterPosition) {
+    public void setCurrAdapterPosition(int adapterPosition, CustomGalleryView itemPics) {
         this.currAdapterPosition = adapterPosition;
+        galleryView = itemPics;
     }
 
     private static final String[] SHEET_ENTITY = {"拍摄照片", "拍摄短视频"};
@@ -309,7 +377,7 @@ public class WorkTicketCameraController extends BaseCameraController {
     }
 
     private boolean check(int position) {
-        CustomGalleryView galleryViewLocal = galleryViewHashMap.get(String.valueOf(currAdapterPosition));
+        CustomGalleryView galleryViewLocal = galleryView /*galleryViewHashMap.get(String.valueOf(currAdapterPosition))*/;
         if(galleryViewLocal.getGalleryAdapter().getItemCount() == 9){
             ToastUtils.show(context, "最多支持9张照片或视频！");
             return false;

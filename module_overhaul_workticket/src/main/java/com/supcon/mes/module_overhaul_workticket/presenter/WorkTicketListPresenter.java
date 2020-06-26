@@ -37,9 +37,9 @@ public class WorkTicketListPresenter extends WorkTicketListContract.Presenter {
             fastQueryCondEntity = BAPQueryParamsHelper.createSingleFastQueryCond(map);
         }
 
-        if(queryParams.containsKey(Constant.BAPQuery.EAM_NAME)){
+        if(queryParams.containsKey(Constant.BAPQuery.EAM_CODE)){
             Map<String, Object> map = new HashMap<>();
-            map.put(Constant.BAPQuery.EAM_NAME,queryParams.get(Constant.BAPQuery.EAM_NAME));
+            map.put(Constant.BAPQuery.EAM_CODE,queryParams.get(Constant.BAPQuery.EAM_CODE));
             JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(map,"EAM_BaseInfo,EAM_ID,WORKTICKET_OHWORKTICKETS,EAM_ID");
             if (fastQueryCondEntity.subconds == null){
                 fastQueryCondEntity.subconds = new ArrayList<>();

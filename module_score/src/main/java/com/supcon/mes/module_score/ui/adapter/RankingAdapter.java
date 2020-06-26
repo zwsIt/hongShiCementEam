@@ -93,7 +93,7 @@ public class RankingAdapter extends BaseListDataRecyclerViewAdapter<ScoreStaffEn
 
 //            }
             name.setText(data.getPatrolWorker().name);
-            depot.setText(Util.strFormat(data.getPatrolWorker().getMainPosition().getDepartment().name));
+            depot.setText(Util.strFormat(data.getPatrolWorker().getMainPosition()/*.getDepartment()*/.name));
             score.setText(Util.big(data.score));
             if (EamApplication.getAccountInfo().staffId == data.patrolWorker.id) {
                 ranking.setTextColor(context.getResources().getColor(R.color.color_dd4351));

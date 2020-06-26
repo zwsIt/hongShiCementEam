@@ -25,7 +25,7 @@ public class ScoreInspectorStaffDailyPerformancePresenter extends ScoreInspector
 
     @SuppressLint("CheckResult")
     @Override
-    public void getInspectorStaffDailyScore(int scoreId) {
+    public void getInspectorStaffDailyScore(Long scoreId) {
 
         LinkedHashMap<String, ScoreStaffDailyPerformanceEntity> scoreMap = new LinkedHashMap();
         String url = "/BEAM/patrolWorkerScore/workerScoreHead/data-dg1564126989486.action";

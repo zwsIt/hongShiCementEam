@@ -146,7 +146,7 @@ public class WorkFinishedListFragment extends BaseRefreshRecyclerFragment<WXGDEn
      * @author zhangwenshuai1 2018/8/14
      */
     public void doSearch(String eamName) {
-        queryParam.put(Constant.BAPQuery.EAM_NAME, eamName);
+        queryParam.put(Constant.BAPQuery.EAM_CODE, eamName);
         refreshListController.refreshBegin();
     }
 

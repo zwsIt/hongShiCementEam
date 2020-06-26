@@ -18,7 +18,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:tag="dispatcherLayout">
-
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/dispatcherStaff"
             android:layout_width="match_parent"
@@ -30,7 +29,24 @@
 
         <include layout="@layout/ly_line_light_light" />
     </LinearLayout>
-
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/workTicketTable"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingStart="@dimen/dp_10"
+        android:tag="workTicketTable"
+        app:key="检修票:"
+        app:key_width="@dimen/dp_100"/>
+    <include layout="@layout/ly_line_light_light" />
+    <com.supcon.mes.mbap.view.CustomTextView
+        android:id="@+id/eleOffTable"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingStart="@dimen/dp_10"
+        android:tag="eleOffTable"
+        app:key="停电票:"
+        app:key_width="@dimen/dp_100"/>
+    <include layout="@layout/ly_line_light_light" />
     <com.supcon.mes.mbap.view.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"

@@ -11,7 +11,7 @@ import com.supcon.mes.middleware.model.bean.WorkInfoDao;
 import org.greenrobot.greendao.database.Database;
 
 /**
- * @Description: 自定义数据帮助类
+ * @Description: 自定义数据库升级帮助类
  * @Author: zhangwenshuai
  * @CreateDate: 2020/6/15 10:26
  */

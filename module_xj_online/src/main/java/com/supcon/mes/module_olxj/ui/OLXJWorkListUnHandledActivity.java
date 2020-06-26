@@ -187,7 +187,6 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
         mSinglePickController = new SinglePickController<>(this);
         mSinglePickController.textSize(18);
         mSinglePickController.setCanceledOnTouchOutside(true);
-
 //        cameraManager = new CameraManager(this, Constant.PicType.XJ_PIC);
 
 //        mCameraController = getController(OLXJCameraController.class);
@@ -407,7 +406,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
         IntentRouter.go(context, Constant.Router.OLXJ_WORK_LIST_HANDLED, bundle);
     }
 
-    boolean isAllFinished = true;
+//    boolean isAllFinished = true;
 
     @SuppressLint("CheckResult")
     private void submitAreaData() {
@@ -539,6 +538,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                 .filter(new Predicate<OLXJWorkItemEntity>() {
                     @Override
                     public boolean test(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
+                        olxjWorkItemEntity.isEffective = false; // 将直接处理的单条巡检项状态还原，防止后台重复推送
                         return !olxjWorkItemEntity.isFinished;
                     }
                 })

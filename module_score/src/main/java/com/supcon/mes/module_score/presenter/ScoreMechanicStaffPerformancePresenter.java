@@ -48,11 +48,13 @@ public class ScoreMechanicStaffPerformancePresenter extends ScoreMechanicStaffPe
     }
 
     @Override
-    public void getMechanicStaffScore(int scoreId) {
+    public void getMechanicStaffScore(Long scoreId) {
         List<String> urls = new ArrayList<>();
 
         //设备运行
-        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560475480845.action");
+//        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560475480845.action");
+        // 设备责任到人
+        urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1592559476763.action");
         //规范化管理
         urls.add("/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560475480876.action");
         //安全生产
@@ -85,7 +87,7 @@ public class ScoreMechanicStaffPerformancePresenter extends ScoreMechanicStaffPe
                         scoreMap.put(scorePerformanceTitleEntity.project, scorePerformanceTitleEntity);
                     }
                     position++;
-                    scoreStaffPerformanceEntity.Index = position;
+                    scoreStaffPerformanceEntity.index = position;
                     scoreStaffPerformanceEntity.viewType = ListType.CONTENT.value();
                     if (scorePerformanceTitleEntity != null) {
                         scorePerformanceTitleEntity.scorePerformanceEntities.add(scoreStaffPerformanceEntity);

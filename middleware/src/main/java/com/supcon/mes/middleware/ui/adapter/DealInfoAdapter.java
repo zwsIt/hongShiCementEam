@@ -92,7 +92,7 @@ public class DealInfoAdapter extends BaseListDataRecyclerViewAdapter<DealInfoEnt
                 dealAdvice.setVisibility(View.GONE);
             }else {
                 dealAdvice.setVisibility(View.VISIBLE);
-                dealAdvice.setText("意见：" + data.dealAdvice);
+                dealAdvice.setText(String.format("意见：%s", data.dealAdvice));
             }
             dealTime.setText(DateUtil.dateFormat(data.dealTime,Constant.TimeString.YEAR_MONTH_DAY_HOUR_MIN_SEC));
         }

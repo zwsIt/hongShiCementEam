@@ -114,7 +114,8 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
     @Override
     protected void initView() {
         super.initView();
-        searchTitleBar.searchView().setHint("请输入设备名称");
+        searchTitleBar.searchView().setHint("请输入设备编码");
+        searchTitleBar.searchView().setHint(getString(R.string.middleware_input_eam_code));
         searchTitleBar.searchView().setInputTextColor(R.color.black);
         FilterHelper.addView(this,radioGroupFilter,FilterHelper.queryBtn());
         getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), "workTicketFW", result -> {
@@ -160,7 +161,7 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
                 .subscribe(new Consumer<CharSequence>() {
                     @Override
                     public void accept(CharSequence charSequence) throws Exception {
-                        queryParam.put(Constant.BAPQuery.EAM_NAME,charSequence.toString().trim());
+                        queryParam.put(Constant.BAPQuery.EAM_CODE,charSequence.toString().trim());
                         doFilter();
                     }
                 });

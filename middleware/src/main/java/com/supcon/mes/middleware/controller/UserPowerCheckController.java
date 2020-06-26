@@ -18,17 +18,12 @@ import java.util.Map;
  * ------------- Description -------------
  */
 @Presenter(value = {UserPowerCheckPresenter.class})
-public class UserPowerCheckController extends BasePresenterController implements UserPowerCheckContract.View, UserPowerCheckAPI {
+public class UserPowerCheckController extends BasePresenterController implements UserPowerCheckContract.View {
 
     private OnSuccessListener<Map<String, Boolean>> mOnSuccessListener;
 
     public void checkModulePermission(long companyId, String menuOperateCodes, OnSuccessListener<Map<String, Boolean>> onSuccessListener) {
         this.mOnSuccessListener = onSuccessListener;
-        presenterRouter.create(UserPowerCheckAPI.class).checkUserPower(companyId, menuOperateCodes);
-    }
-
-    @Override
-    public void checkUserPower(long companyId, String menuOperateCodes) {
         presenterRouter.create(UserPowerCheckAPI.class).checkUserPower(companyId, menuOperateCodes);
     }
 

@@ -182,6 +182,10 @@ public class ScoreMapManager {
                     scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
                     scoreEamDto.defaultNumVal = scorePerformanceEntity.defaultNumVal > 0 ? Util.strFormat2(scorePerformanceEntity.defaultNumVal) : "";
                     scoreEamDto.defaultValueType = scorePerformanceEntity.defaultValueType;
+                    scoreEamDto.attachFileFileAddPaths = Util.strFormat2(scorePerformanceEntity.getAttachFileFileAddPaths());
+                    scoreEamDto.attachFileMultiFileIds = Util.strFormat2(scorePerformanceEntity.getAttachFileMultiFileIds());
+                    scoreEamDto.attachFileFileDeleteIds = Util.strFormat2(scorePerformanceEntity.getAttachFileFileDeleteIds());
+                    scoreEamDto.resultValue = scorePerformanceEntity.resultValue;
                     scorePerformanceDto.add(scoreEamDto);
                 });
         return scorePerformanceDto;

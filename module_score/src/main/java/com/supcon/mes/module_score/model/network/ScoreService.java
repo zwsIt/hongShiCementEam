@@ -48,19 +48,23 @@ public interface ScoreService {
 
     //巡检工人员评分
     @GET
-    Flowable<ScoreStaffPerformanceListEntity> getInspectorStaffScore(@Url String url, @Query("workerScoreHead.id") int scoreId);
+    Flowable<ScoreStaffPerformanceListEntity> getInspectorStaffScore(@Url String url, @Query("workerScoreHead.id") Long scoreId);
 
     //巡检工每日人员评分
     @GET
-    Flowable<CommonBAPListEntity<ScoreStaffDailyPerformanceEntity>> getInspectorStaffDailyScore(@Url String url, @Query("workerScoreHead.id") int scoreId);
+    Flowable<CommonBAPListEntity<ScoreStaffDailyPerformanceEntity>> getInspectorStaffDailyScore(@Url String url, @Query("workerScoreHead.id") Long scoreId);
 
     //机修工人员评分
     @GET
-    Flowable<ScoreStaffPerformanceListEntity> getMechanicStaffScore(@Url String url, @Query("workerScoreHead.id") int scoreId);
+    Flowable<ScoreStaffPerformanceListEntity> getMechanicStaffScore(@Url String url, @Query("workerScoreHead.id") Long scoreId);
 
     //人员设备评分
     @GET("/BEAM/patrolWorkerScore/workerScoreHead/getResponsityBeam.action")
     Flowable<CommonListEntity<ScoreDutyEamEntity>> getDutyEam(@Query("staffId") long staffId, @Query("scoreType") String scoreType);
+
+    //人员设备评分新
+    @GET("/BEAM/patrolWorkerScore/workerScoreHead/getEamResStaffSocre.action")
+    Flowable<ScoreDutyEamEntity> getDutyEamNew(@Query("staffId") long staffId, @Query("scoreType") String scoreType);
 
     //提交
     @POST

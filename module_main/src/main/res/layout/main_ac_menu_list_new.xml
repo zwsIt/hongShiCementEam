@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
-            <!--ScrollView唯一子布局中 : descendantFocusability这个方法的作用是就是解决焦点问题。它一共有三个属性可供选择：
+            <!--ScrollView唯一子布局中 : descendantFocusability这个方法的作用是就是解决焦点问题（本视图中我的应用会被顶出屏幕区域）。它一共有三个属性可供选择：
             blocksDescendants ：覆盖所有子控件获取焦点（优先级最高）
             beforeDescendants ：优先于子控件获取焦点
             afterDescendants ：当子控件不需要焦点时，获取焦点-->
@@ -55,7 +55,7 @@
                 android:layout_marginLeft="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginRight="@dimen/dp_5"
-                android:nestedScrollingEnabled="true"
+                android:nestedScrollingEnabled="false"
                 android:overScrollMode="never"
                 android:tag="allMenuRecycler" />
         </LinearLayout>

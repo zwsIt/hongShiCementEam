@@ -16,6 +16,12 @@ public interface WXGDConstant {
     interface URL{
         String PRE_URL =  "/BEAM2/workList/workRecord/";
     }
-
+    /**
+     * 是否停电
+     */
+    interface EleOff {
+        String yes =  "BEAM2_019/01"; // 是
+        String no =  "BEAM2_019/02"; // 否
+    }
 
 }

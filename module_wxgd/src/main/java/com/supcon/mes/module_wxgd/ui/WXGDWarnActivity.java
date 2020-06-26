@@ -48,6 +48,7 @@ import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntity;
 import com.supcon.mes.middleware.model.bean.RepairGroupEntityDao;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
@@ -57,6 +58,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
+import com.supcon.mes.module_wxgd.constant.WXGDConstant;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
 import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
@@ -429,11 +431,13 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
         eamIc.setOnClickListener(v -> goSBDA());
         eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
         eleOffRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            SystemCodeEntity systemCodeEntity = new SystemCodeEntity();
             if (checkedId == R.id.noRadioButton){
-                mWXGDEntity.isOffApply = false;
+                systemCodeEntity.id = WXGDConstant.EleOff.no;
             }else {
-                mWXGDEntity.isOffApply = true;
+                systemCodeEntity.id = WXGDConstant.EleOff.yes;
             }
+            mWXGDEntity.isPowerCut = systemCodeEntity;
         });
     }
 
@@ -724,6 +728,10 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
 //            SnackbarHelper.showError(rootView, "维修组和负责人不允许同时为空！");
 //            return true;
 //        }
+        if (mWXGDEntity.isPowerCut == null) {
+            ToastUtils.show(context, "请选择是否生成停电票！");
+            return true;
+        }
         if (TextUtils.isEmpty(chargeStaff.getValue())) {
             ToastUtils.show(context,"负责人不允许为空！");
             return true;

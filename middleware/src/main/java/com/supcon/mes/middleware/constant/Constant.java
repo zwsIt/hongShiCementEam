@@ -29,6 +29,7 @@ public interface Constant {
     String XJ_GUIDE_IMGPATH = FILE_PATH + "eamInspectionGuideImage" + File.separator; //设备巡检指导图片路径
     String IMAGE_SAVE_WORKTICKETPATH = FILE_PATH + "workTicket" + File.separator + "pics" + File.separator;   //检修工作票的图片路径
     String IMAGE_SAVE_ELE_PATH = FILE_PATH + "electricity" + File.separator + "pics" + File.separator;   //停送电的图片路径
+    String IMAGE_SAVE_SCORE_PATH = FILE_PATH + "score" + File.separator + "pics" + File.separator;   //个人评分的图片路径
 
     /**
      * fir.im相关信息
@@ -236,6 +237,7 @@ public interface Constant {
         String LUBRICATION_RECORDS_FINISH_LIST = "LUBRICATION_RECORDS_FINISH_LIST"; // 已完成润滑记录
         String PENDING_LIST = "PENDING_LIST"; // 工作提醒
         String WARN_PLAN_LUBRICATION_NEW = "WARN_PLAN_LUBRICATION_NEW"; // 计划润滑新
+        String PLAN_LUBRICATION_WARN_TAB = "PLAN_LUBRICATION_WARN_TAB";//计划润滑（页签：电气、机械）
         String WORK_START_EDIT = "WORK_START_EDIT"; // 工作发起
         String EAM_TREE_SELECT = "EAM_TREE_SELECT"; // 设备层级选择
         String EAM_AREA_TREE_SELECT = "EAM_AREA_TREE_SELECT"; // 设备区域位置层级选择
@@ -342,6 +344,7 @@ public interface Constant {
         String EAM_CODE = "EAM_CODE";//EAM_CODE
         String AREA_NAME = "AREA_NAME";//AREA_NAME
         String isEdit = "isEdit";//是否能编辑
+        String UPDATE = "UPDATE"; // 修改
         String IS_MAIN_EAM = "IS_MAIN_EAM";//是否主设备
 
         String SCORE_ENTITY = "SCORE_ENTITY";//评分记录
@@ -561,6 +564,7 @@ public interface Constant {
         String XJ_PIC = "xjRecord";
         String YH_PIC = "yhRecord";
         String GD_PIC = "workRecord";
+        String SCORE_PIC = "ScoreRecord";
     }
 
     interface RefreshAction {
@@ -639,6 +643,7 @@ public interface Constant {
         String EAM_EXACT_CODE = "EAM_EXACT_CODE";//精确设备编码
         String EAM_CODE = "EAM_CODE";//设备编码
         String EAMCODE = "EAMCODE";//设备编码
+//        String EAM_ASSETCODE = "EAM_ASSETCODE"; // 设备编码
         String EAM_STATE = "EAM_STATE";//设备状态
         String EAM_AREA = "EAM_AREA";//区域类型
         String EAM_AREANAME = "EAM_AREANAME";//区域类型主设备
@@ -721,6 +726,7 @@ public interface Constant {
         String SUBORDINATE_DEPARTMENT = "SUBORDINATE_DEPARTMENT"; // 我的下属部门
         String SUBORDINATE_POSITION = "SUBORDINATE_POSITION"; // 我的下属岗位
         String RISK_ASSESSMENT = "RISK_ASSESSMENT"; // 风险评估
+        String LUB_TYPE = "LUB_TYPE"; // 润滑类型：电气、机械
     }
 
 

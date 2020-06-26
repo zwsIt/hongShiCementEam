@@ -216,8 +216,8 @@ public class BaseCameraController extends BaseViewController{
 //        intent.putExtra("autofocus", true);//进行自动对焦操作
         intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);// 设置视频的质量，值为0-1，
-        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 8);// 设置视频的录制长度，s为单位
-        intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 24 * 1024 * 1024L);// 设置视频文件大小，字节为单位
+        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);// 设置视频的录制长度，s为单位
+        intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, 36 * 1024 * 1024L);// 设置视频文件大小，字节为单位
         activity.startActivityForResult(intent, ACT_VIDEO);// 设置请求码，在onActivityResult()方法中接收结果
         lastAction = ACT_VIDEO;
     }

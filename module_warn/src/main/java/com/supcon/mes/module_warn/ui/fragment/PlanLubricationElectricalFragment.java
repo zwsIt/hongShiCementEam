@@ -1,4 +1,4 @@
-package com.supcon.mes.module_warn.ui;
+package com.supcon.mes.module_warn.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -17,7 +16,7 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
-import com.supcon.common.view.listener.OnItemChildViewClickListener;
+import com.supcon.common.view.base.fragment.BaseRefreshRecyclerFragment;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
@@ -34,14 +33,12 @@ import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.NFCHelper;
-import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
 import com.supcon.mes.module_warn.constant.WarnConstant;
 import com.supcon.mes.module_warn.model.api.CompleteAPI;
 import com.supcon.mes.module_warn.model.api.DailyLubricationWarnAPI;
-import com.supcon.mes.module_warn.model.bean.DailyLubricateRecordEntity;
 import com.supcon.mes.module_warn.model.bean.DailyLubricateTaskEntity;
 import com.supcon.mes.module_warn.model.bean.DailyLubricateTaskListEntity;
 import com.supcon.mes.module_warn.model.bean.DelayEntity;
@@ -49,22 +46,19 @@ import com.supcon.mes.module_warn.model.contract.CompleteContract;
 import com.supcon.mes.module_warn.model.contract.DailyLubricationWarnContract;
 import com.supcon.mes.module_warn.presenter.CompletePresenter;
 import com.supcon.mes.module_warn.presenter.DailyLubricationWarnPresenter;
-import com.supcon.mes.module_warn.presenter.DailyReceivePresenter;
-import com.supcon.mes.module_warn.ui.adapter.DailyLubricateTaskAdapter;
+import com.supcon.mes.module_warn.ui.PlanWarnLubricationListActivity;
 import com.supcon.mes.module_warn.ui.adapter.PlanLubricationListAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import common.Assert;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Predicate;
 
@@ -72,16 +66,11 @@ import io.reactivex.functions.Predicate;
  * ClassName
  * Created by zhangwenshuai1 on 2020/5/20
  * Email zhangwenshuai1@supcon.com
- * Desc 计划润滑(日常润滑预警)
+ * Desc 计划润滑：电气
  */
-@Router(Constant.Router.WARN_PLAN_LUBRICATION_NEW)
 @Presenter(value = {DailyLubricationWarnPresenter.class, CompletePresenter.class})
 @Controller(value = {UserPowerCheckController.class})
-public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<DailyLubricateTaskEntity> implements DailyLubricationWarnContract.View, CompleteContract.View {
-    @BindByTag("leftBtn")
-    ImageButton leftBtn;
-    @BindByTag("titleText")
-    TextView titleText;
+public class PlanLubricationElectricalFragment extends BaseRefreshRecyclerFragment<DailyLubricateTaskEntity> implements DailyLubricationWarnContract.View, CompleteContract.View {
     @BindByTag("lubricationStaff")
     CustomTextView lubricationStaff;
     @BindByTag("lubricationNum")
@@ -89,7 +78,6 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
     @BindByTag("contentView")
     RecyclerView contentView;
 
-    private NFCHelper nfcHelper;
     private PlanLubricationListAdapter planLubricationListAdapter;
     private final Map<String, Object> queryParam = new HashMap<>();
     private DailyLubricateTaskEntity lubricationWarnTitle;
@@ -97,13 +85,13 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
 
     @Override
     protected IListAdapter<DailyLubricateTaskEntity> createAdapter() {
-        planLubricationListAdapter = new PlanLubricationListAdapter(this, false);
+        planLubricationListAdapter = new PlanLubricationListAdapter(context, false);
         return planLubricationListAdapter;
     }
 
     @Override
     protected int getLayoutID() {
-        return R.layout.warn_ac_plan_lubrication_list;
+        return R.layout.frag_list;
     }
 
     @Override
@@ -115,32 +103,17 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
         refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
         contentView.setLayoutManager(new LinearLayoutManager(context));
         contentView.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(3,context)));
-        nfcHelper = NFCHelper.getInstance();
-        if (nfcHelper != null) {
-            nfcHelper.setup(context);
-            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
-                @Override
-                public void onNFCReceived(String nfc) {
-                    LogUtil.d("NFC Received : " + nfc);
-                    EventBus.getDefault().post(new NFCEvent(nfc));
-                }
-            });
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (nfcHelper != null)
-            nfcHelper.onResumeNFC(this);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        titleText.setText(context.getResources().getString(R.string.warn_plan_lubrication));
-        lubricationStaff.setContent(EamApplication.getAccountInfo().staffName);
+//        lubricationStaff.setContent(EamApplication.getAccountInfo().staffName);
         initOperateCodePermission();
     }
 
@@ -148,13 +121,11 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
     @Override
     protected void initListener() {
         super.initListener();
-        RxView.clicks(leftBtn)
-                .throttleFirst(1, TimeUnit.SECONDS)
-                .subscribe(o -> onBackPressed());
         refreshListController.setOnRefreshPageListener((page) -> {
 //            queryParam.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
             Map<String, Object> pageQueryParams = new HashMap<>();
             pageQueryParams.put("page.pageNo", page);
+            queryParam.put(Constant.BAPQuery.LUB_TYPE,"BEAM_075/01"); // 电气
             presenterRouter.create(DailyLubricationWarnAPI.class).getLubrications(queryParam, pageQueryParams);
         });
         planLubricationListAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
@@ -215,9 +186,9 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
                         bundle.putString(Constant.IntentKey.WARN_SOURCE_TYPE, "BEAM062/01");
                         bundle.putString(Constant.IntentKey.WARN_SOURCE_IDS, sourceIds.toString());
                         bundle.putLong(Constant.IntentKey.WARN_NEXT_TIME, nextTime);
-                        IntentRouter.go(this, Constant.Router.DELAYDIALOG, bundle);
+                        IntentRouter.go(context, Constant.Router.DELAYDIALOG, bundle);
                     } else {
-                        ToastUtils.show(this, "请选择操作项!");
+                        ToastUtils.show(context, "请选择操作项!");
                     }
                 });
     }
@@ -253,7 +224,7 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
                         onLoading("处理中...");
                         presenterRouter.create(CompleteAPI.class).dailyComplete(param);
                     } else {
-                        ToastUtils.show(this, "请选择操作项!");
+                        ToastUtils.show(context, "请选择操作项!");
                     }
                 });
     }
@@ -277,25 +248,8 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
         });
     }
 
-    /**
-     * @param
-     * @description NFC事件
-     * @author zhangwenshuai1
-     * @date 2018/6/28
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getNFC(NFCEvent nfcEvent) {
-        LogUtil.d("NFC_TAG", nfcEvent.getNfc());
-        Map<String, Object> nfcJson = Util.gsonToMaps(nfcEvent.getNfc());
-        if (nfcJson.get("textRecord") == null) {
-            ToastUtils.show(context, "标签内容空！");
-            return;
-        }
-        doDeal((String) nfcJson.get("textRecord"));
-    }
-
     @SuppressLint("CheckResult")
-    private void doDeal(String code) {
+    public void doDeal(String code) {
         List<DailyLubricateTaskEntity> list = planLubricationListAdapter.getList();
         if (list == null || list.size() <= 0) {
             ToastUtils.show(context, context.getResources().getString(R.string.warn_no_data_operate));
@@ -333,8 +287,8 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
     @SuppressLint("CheckResult")
     @Override
     public void getLubricationsSuccess(DailyLubricateTaskListEntity entity) {
-        lubricationNum.setContent(String.valueOf(entity.totalCount));
-        List<DailyLubricateTaskEntity> dailyLubricateEamEntityList = new ArrayList<>(); // 列表润滑设备展示
+//        lubricationNum.setContent(String.valueOf(entity.totalCount));
+        LinkedList<DailyLubricateTaskEntity> dailyLubricateEamEntityList = new LinkedList<>(); // 列表润滑设备展示
         Map<String, DailyLubricateTaskEntity> lubricationPartMap = new HashMap<>(); // 临时存储展示用的设备润滑部位
         Flowable.fromIterable(entity.result)
                 .subscribe(lubricationWarnEntity -> {
@@ -373,6 +327,7 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
                         dailyLubricateEamEntityList.addAll(1,dailyLubricateEamEntityList.get(0).getExpendList());
                     }
                         refreshListController.refreshComplete(dailyLubricateEamEntityList);
+                    ((PlanWarnLubricationListActivity)context).setTabNum(1,entity.totalCount);
                 });
     }
 
@@ -381,31 +336,6 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
         ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete();
     }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        //获取到Tag对象
-        if (nfcHelper != null)
-            nfcHelper.dealNFCTag(intent);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (nfcHelper != null)
-            nfcHelper.onPauseNFC(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-        if (nfcHelper != null) {
-            nfcHelper.release();
-        }
-    }
-
 
     @Override
     public void dailyCompleteSuccess(DelayEntity entity) {
@@ -417,5 +347,11 @@ public class PlanLubricationWarnNewActivity extends BaseRefreshRecyclerActivity<
     @Override
     public void dailyCompleteFailed(String errorMsg) {
         onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

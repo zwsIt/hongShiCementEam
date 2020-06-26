@@ -90,6 +90,10 @@ public class AnomalyAdapter extends BaseListDataRecyclerViewAdapter<AnomalyEntit
                         public void accept(Object o) throws Exception {
                             AnomalyEntity anomalyEntity = getItem(getAdapterPosition());
                             Bundle bundle = new Bundle();
+                            if (TextUtils.isEmpty(anomalyEntity.processKey)){
+                                ToastUtils.show(context,"数据异常processKey：" + anomalyEntity.processKey );
+                                return;
+                            }
                             switch (anomalyEntity.processKey){
                                 case Constant.ProcessKey.WORK:
                                     goWork(anomalyEntity, bundle);

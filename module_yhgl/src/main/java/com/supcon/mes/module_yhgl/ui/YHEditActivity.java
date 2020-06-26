@@ -2,6 +2,7 @@ package com.supcon.mes.module_yhgl.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -51,6 +52,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.AttachmentController;
 import com.supcon.mes.middleware.controller.AttachmentDownloadController;
+import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
@@ -78,8 +80,10 @@ import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
+import com.supcon.mes.module_wxgd.constant.WXGDConstant;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
+import com.supcon.mes.module_yhgl.constant.YhConstant;
 import com.supcon.mes.module_yhgl.controller.LubricateOilsController;
 import com.supcon.mes.module_yhgl.controller.MaintenanceController;
 import com.supcon.mes.module_yhgl.controller.RepairStaffController;
@@ -209,6 +213,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     RadioGroup eleOffRadioGroup; // 是否生成停电票
     @BindByTag("eleOff")
     CustomTextView eleOff;
+    @BindByTag("recyclerView")
+    RecyclerView recyclerView;
 
     private YHEntity mYHEntity;
 
@@ -230,6 +236,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private LubricateOilsController mLubricateOilsController;
     private RepairStaffController mRepairStaffController;
     private MaintenanceController maintenanceController;
+    private DealInfoController mDealInfoController;
     //dataGrid删除数据id
     private List<Long> dgDeletedIds_sparePart = new ArrayList<>();
     private List<Long> dgDeletedIds_lubricateOils = new ArrayList<>();
@@ -307,7 +314,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         mAttachmentController = getController(AttachmentController.class);
         mAttachmentDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_YHPATH);
-
+        mDealInfoController = new DealInfoController(context,recyclerView,null);
         initSinglePickController();
         initDatePickController();
         initCheckResult();
@@ -386,11 +393,15 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             yhEditMemo.setInput(mYHEntity.remark);
         }
 
-        if (mYHEntity.isOffApply != null)
-            eleOffRadioGroup.check(mYHEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
-
-//        mYHEntity.isOffApply = true;
-//        eleOffChkBox.setChecked(true); // 默认true
+        if (mYHEntity.isPowerCut != null){
+            if (mYHEntity.isPowerCut.id.equals(WXGDConstant.EleOff.yes)){
+                eleOffRadioGroup.check(R.id.yesRadioButton);
+            }else {
+                eleOffRadioGroup.check(R.id.noRadioButton);
+            }
+        }else {
+            eleOffRadioGroup.clearCheck();
+        }
 
         initCheckView();
         // 加载图片
@@ -666,7 +677,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     mYHEntity.downStream.id = "BEAM2_2013/01";
-                    mYHEntity.isOffApply = false;
+                    mYHEntity.isPowerCut = null;
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
 //                    if (TextUtils.isEmpty(yhEditWXChargeGroup.getValue()) && TextUtils.isEmpty(yhEditWXChargeStaff.getValue())) {
 //                        mYHEntity.chargeStaff = new Staff();
@@ -687,8 +698,8 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(gdBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    if (mYHEntity.isOffApply != null && mYHEntity.isOffApply && mYHEntity.chargeStaff != null && mYHEntity.chargeStaff.id == null) {
-                        ToastUtils.show(context, "勾选生成停电票时，请选择负责人");
+                    if (mYHEntity.chargeStaff != null && mYHEntity.chargeStaff.id != null && mYHEntity.isPowerCut == null) {
+                        ToastUtils.show(context, "选择负责人时,请勾选是否生成停电票");
                         return;
                     }
                     mYHEntity.downStream.id = "BEAM2_2013/02";
@@ -716,7 +727,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(bigRepair)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    mYHEntity.isOffApply = false;
+                    mYHEntity.isPowerCut = null;
                     mYHEntity.downStream.id = "BEAM2_2013/04";
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
                     if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
@@ -726,7 +737,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         RxView.clicks(checkRepair)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
-                    mYHEntity.isOffApply = false;
+                    mYHEntity.isPowerCut = null;
                     mYHEntity.downStream.id = "BEAM2_2013/05";
                     List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
                     if (linkEntities != null && checkBeforeSubmit() && linkEntities.size() > 0) {
@@ -791,7 +802,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                     currentAcceptChkEntity.checkResult = null;
                 } else {
                     if (checkResultListStr.size() <= 0) {
-                        ToastUtils.show(context, "验收列表数据为空,请退出app重启加载");
+                        ToastUtils.show(context, "验收列表数据为空,请退出应用重启加载");
                         return;
                     }
                     mSinglePickController.list(checkResultListStr)
@@ -822,11 +833,14 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
 //        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mYHEntity.isOffApply = isChecked);
         eleOffRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == -1)return;
+            SystemCodeEntity systemCodeEntity = new SystemCodeEntity();
             if (checkedId == R.id.noRadioButton){
-                mYHEntity.isOffApply = false;
+                systemCodeEntity.id = WXGDConstant.EleOff.no;
             }else {
-                mYHEntity.isOffApply = true;
+                systemCodeEntity.id = WXGDConstant.EleOff.yes;
             }
+            mYHEntity.isPowerCut = systemCodeEntity;
         });
 
         customCameraIv.setOnClickListener(new View.OnClickListener() {
@@ -1165,10 +1179,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             ToastUtils.show(context, "请选择设备！");
             return false;
         }
-        if (mYHEntity.isOffApply == null){
-            ToastUtils.show(context,"请选择是否生成停电票！");
-            return false;
-        }
         if (mYHEntity.priority == null) {
             ToastUtils.show(context, "请选择优先级！");
             return false;
@@ -1230,12 +1240,12 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         map.put("faultInfo.sourceType.value", mYHEntity.sourceType != null ? mYHEntity.sourceType.value : "其他");
 
         map.put("faultInfo.chargeStaff.id", mYHEntity.chargeStaff == null ? "" : Util.strFormat2(mYHEntity.chargeStaff.id));
-        map.put("faultInfo.isOffApply", mYHEntity.isOffApply);
+        map.put("faultInfo.isPowerCut.id", mYHEntity.isPowerCut != null ? Util.strFormat2(mYHEntity.isPowerCut.id) : "");
         // 预警：备件、润滑、维保延期处理
         if (mYHEntity.sourceType != null && (Constant.YhglWorkSource.sparepart.equals(mYHEntity.sourceType.id) || Constant.YhglWorkSource.lubrication.equals(mYHEntity.sourceType.id) ||
                 Constant.YhglWorkSource.maintenance.equals(mYHEntity.sourceType.id))) {
-            map.put("faultInfo.delayDate", TextUtils.isEmpty(mDelayDate.getContent()) ? "" : mDelayDate.getContent()  /*DateUtil.dateFormat(mDelayDate.getContent(), Constant.TimeString.YEAR_MONTH_DAY)*/);
-            map.put("faultInfo.delayDuration", mDelayDuration.getContent());
+            map.put("faultInfo.delayDate", (mDelayDate == null || TextUtils.isEmpty(mDelayDate.getContent())) ? "" : mDelayDate.getContent()  /*DateUtil.dateFormat(mDelayDate.getContent(), Constant.TimeString.YEAR_MONTH_DAY)*/);
+            map.put("faultInfo.delayDuration", mDelayDuration == null ? "" : mDelayDuration.getContent());
         }
 
         if (mYHEntity.pending != null && mYHEntity.pending.id != null) {
@@ -1460,6 +1470,10 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             mLubricateOilsController.refreshData(mYHEntity);
             mRepairStaffController.refreshData(mYHEntity);
             maintenanceController.refreshData(mYHEntity);
+            // 加载处理意见
+            if (mYHEntity.tableInfoId != null){
+                mDealInfoController.listTableDealInfo(YhConstant.URL.PRE_URL,mYHEntity.tableInfoId);
+            }
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }

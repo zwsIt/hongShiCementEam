@@ -216,7 +216,6 @@ public class HomeFragment extends BaseRefreshFragment implements WaitDealtContra
     @Override
     public void onResume() {
         super.onResume();
-        presenterRouter.create(ScoreStaffAPI.class).getPersonScore(String.valueOf(EamApplication.getAccountInfo().getStaffId()));
 //        if (atomicBoolean.compareAndSet(true, true)) {
             getWorkData();
 //        }
@@ -534,6 +533,7 @@ public class HomeFragment extends BaseRefreshFragment implements WaitDealtContra
         if (index == 0){
             presenterRouter.create(WaitDealtAPI.class).getWaitDealt(1, 2, new HashMap<>());
         }
+        presenterRouter.create(ScoreStaffAPI.class).getPersonScore(String.valueOf(EamApplication.getAccountInfo().getStaffId()));
         presenterRouter.create(WarnPendingListAPI.class).listWarnPending(new HashMap<>(),1,1);
         presenterRouter.create(MainPendingNumAPI.class).getMainWorkCount(String.valueOf(EamApplication.getAccountInfo().getStaffId()));
     }
@@ -632,17 +632,12 @@ public class HomeFragment extends BaseRefreshFragment implements WaitDealtContra
     @SuppressLint("CheckResult")
     private void updateNum(List<WorkNumEntity> workNumEntities) {
         Flowable.fromIterable(workNumEntities)
-                .subscribe(new Consumer<WorkNumEntity>() {
-                    @Override
-                    public void accept(WorkNumEntity workNumEntity) throws Exception {
-                        List<WorkInfo> workInfoList = workAdapter.getList();
-
-                        for (WorkInfo workInfo : workInfoList) {
-                            workNumEntity.num = workInfoList.indexOf(workInfo);
-                            if (workNumEntity.tagName.equals(workInfo.tag)) {
-                                workInfo.num = workNumEntity.num;
-                                break;
-                            }
+                .subscribe(workNumEntity -> {
+                    List<WorkInfo> workInfoList = workAdapter.getList();
+                    for (WorkInfo workInfo : workInfoList) {
+                        if (workNumEntity.tagName.equals(workInfo.tag)) {
+                            workInfo.num = workNumEntity.num;
+                            break;
                         }
                     }
                 }, throwable -> {

@@ -188,7 +188,7 @@ public class ScoreInspectorStaffDailyPerformanceActivity extends BaseRefreshRecy
             public void onChildViewClick(View childView, int action, Object obj) {
                 if (action == -1) {
                     scoreStaffEntity.patrolWorker = null;
-                    scoreStaffEntity.id = -1;
+                    scoreStaffEntity.id = -1L;
                 }
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);

@@ -26,6 +26,7 @@ import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.middleware.util.EditInputFilter;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.R;
@@ -118,9 +119,10 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         RadioButton scoreRadioBtn1;
         @BindByTag("scoreRadioBtn2")
         RadioButton scoreRadioBtn2;
-
         @BindByTag("checkLayout")
         FlowLayout checkLayout;
+        @BindByTag("itemPics")
+        CustomGalleryView itemPics;
 
 
         public ViewHolder(Context context) {
@@ -130,6 +132,12 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         @Override
         protected int layoutId() {
             return R.layout.item_score_performance_content;
+        }
+
+        @Override
+        protected void initView() {
+            super.initView();
+            itemPics.setVisibility(View.GONE);
         }
 
         @Override
@@ -170,23 +178,35 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         @SuppressLint("SetTextI18n")
         @Override
         protected void update(ScoreEamPerformanceEntity data) {
-            itemIndex.setText(data.Index + ".");
+            itemIndex.setText(data.index + ".");
             scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + Util.big0(data.score) + ")"));
             checkLayout.removeAllViews();
-            scoreRadioGroup.setVisibility(View.VISIBLE);
-            checkLayout.setVisibility(View.VISIBLE);
+
             if (!TextUtils.isEmpty(data.isItemValue) && !TextUtils.isEmpty(data.noItemValue)) {
+                scoreRadioGroup.setVisibility(View.VISIBLE);
+                checkLayout.setVisibility(View.GONE);
+
                 scoreRadioBtn1.setText(data.isItemValue);
                 scoreRadioBtn2.setText(data.noItemValue);
                 scoreRadioBtn1.setChecked(data.result);
                 scoreRadioBtn2.setChecked(!data.result);
-                checkLayout.setVisibility(View.GONE);
             } else {
+                checkLayout.setVisibility(View.VISIBLE);
                 scoreRadioGroup.setVisibility(View.GONE);
                 addview(context, checkLayout, data.marks, data.marksState);
             }
             scoreRadioBtn1.setEnabled(isEdit);
             scoreRadioBtn2.setEnabled(isEdit);
+
+            if (!isEdit) {
+                if (data.result){
+                    scoreRadioBtn1.setButtonDrawable(R.drawable.ic_check_box_true_small_gray);
+                    scoreRadioBtn2.setButtonDrawable(R.drawable.ic_check_box_false_small);
+                }else {
+                    scoreRadioBtn1.setButtonDrawable(R.drawable.ic_check_box_false_small);
+                    scoreRadioBtn2.setButtonDrawable(R.drawable.ic_check_box_true_small_gray);
+                }
+            }
         }
 
         @SuppressLint("CheckResult")
@@ -265,7 +285,6 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         @BindByTag("expend")
         ImageView expend;
 
-
         @BindByTag("titleLayout")
         RelativeLayout titleLayout;
         @BindByTag("timeLayout")
@@ -276,7 +295,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         CustomEditText cumulativeDownTime;
 
 
-        public HeadViewHolder(Context context) {
+        HeadViewHolder(Context context) {
             super(context, parent);
         }
 
@@ -359,7 +378,7 @@ public class ScoreEamPerformanceAdapter extends BaseListDataRecyclerViewAdapter<
         @SuppressLint({"SetTextI18n", "StringFormatInvalid", "StringFormatMatches"})
         @Override
         protected void update(ScoreEamPerformanceEntity data) {
-            itemIndex.setText(data.Index + ".");
+            itemIndex.setText(data.index + ".");
             scoreItem.setText(data.itemDetail + (data.marks.size() > 0 ? "" : "(" + data.score + ")"));
             scoreRight.setText(Util.big(data.resultValue) + "%");
 

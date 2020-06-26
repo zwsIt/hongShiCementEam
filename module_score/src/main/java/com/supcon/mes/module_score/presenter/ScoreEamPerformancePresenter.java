@@ -79,7 +79,7 @@ public class ScoreEamPerformancePresenter extends ScoreEamPerformanceContract.Pr
                         scorePerformanceOldTitleEntity.scorePerformanceEntityMap.put(scorePerformanceEntity.scoreItem + "(" +  Util.big0(scorePerformanceEntity.score) + ")"
                                 , scorePerformanceEntity);
                     }
-                    scorePerformanceOldTitleEntity.Index = position;
+                    scorePerformanceOldTitleEntity.index = position;
 
                     if (scorePerformanceOldTitleEntity.resultValue != 0) {
                         scorePerformanceOldTitleEntity.viewType = ListType.HEADER.value();

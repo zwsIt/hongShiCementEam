@@ -38,16 +38,21 @@ public class DailyLubricationWarnPresenter extends DailyLubricationWarnContract.
 
     @Override
     public void getLubrications(Map<String, Object> params, Map<String, Object> pageQueryParams) {
-        FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
+        Map<String, Object> map = new HashMap<>();
+        FastQueryCondEntity fastQuery;
+        map.put(Constant.BAPQuery.LUB_TYPE,params.get(Constant.BAPQuery.LUB_TYPE));
+        fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(map);
 
-        Map<String, Object> paramsEam = new HashMap<>();
+//        Map<String, Object> paramsEam = new HashMap<>();
+        map.clear();
         if (params.containsKey(Constant.BAPQuery.EAM_CODE)) {
-            paramsEam.put(Constant.BAPQuery.EAM_CODE, Objects.requireNonNull(params.get(Constant.BAPQuery.EAM_CODE)));
+            map.put(Constant.BAPQuery.EAM_CODE, Objects.requireNonNull(params.get(Constant.BAPQuery.EAM_CODE)));
         }
         if (params.containsKey(Constant.BAPQuery.EAM_ID)) {
-            paramsEam.put(Constant.BAPQuery.EAM_ID, Objects.requireNonNull(params.get(Constant.BAPQuery.EAM_ID)));
+            map.put(Constant.BAPQuery.EAM_ID, Objects.requireNonNull(params.get(Constant.BAPQuery.EAM_ID)));
         }
-        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsEam, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
+
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(map, "EAM_BaseInfo,EAM_ID,BEAM_JWXITEMS,EAMID");
 //        if (params.containsKey(Constant.BAPQuery.NAME)) {  // 通过设备权限控制，不需要查询设备巡检责任人筛选
 //            Map<String, Object> paramsName = new HashMap<>();
 //            paramsName.put(Constant.BAPQuery.NAME, params.get(Constant.BAPQuery.NAME));

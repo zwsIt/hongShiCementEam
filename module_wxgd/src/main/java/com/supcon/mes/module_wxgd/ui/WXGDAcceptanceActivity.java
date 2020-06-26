@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -161,7 +162,10 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     CustomVerticalDateView realEndTime;
     @BindByTag("dispatcherStaff")
     CustomTextView dispatcherStaff;
-
+    @BindByTag("workTicketTable")
+    CustomTextView workTicketTable;
+    @BindByTag("eleOffTable")
+    CustomTextView eleOffTable;
     @BindByTag("acceptChkStaff")
     CustomVerticalTextView acceptChkStaff;
     @BindByTag("acceptChkStaffCode")
@@ -386,10 +390,12 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
             priority.setValue(mWXGDEntity.faultInfo.priority == null ? "" : mWXGDEntity.faultInfo.priority.value);
             faultInfoDescribe.setValue(mWXGDEntity.faultInfo.describe);
         }
-        dispatcherStaff.setContent(!TextUtils.isEmpty(mWXGDEntity.getDispatcher().name) ? mWXGDEntity.getDispatcher().name : EamApplication.getAccountInfo().staffName);
+        dispatcherStaff.setContent(mWXGDEntity.getDispatcher().name);
         wosource.setContent(mWXGDEntity.workSource != null ? mWXGDEntity.workSource.value : "");
         repairType.setSpinner(mWXGDEntity.repairType != null ? mWXGDEntity.repairType.value : "");
         repairAdvise.setContent(mWXGDEntity.repairAdvise);
+        workTicketTable.setContent(mWXGDEntity.ohWorkTicket == null ? "" : mWXGDEntity.ohWorkTicket.tableNo);
+        eleOffTable.setContent(mWXGDEntity.offApply == null ? "" : mWXGDEntity.offApply.tableNo);
         chargeStaff.setValue(Util.strFormat2(mWXGDEntity.getChargeStaff().name));
         repairGroup.setValue(mWXGDEntity.repairGroup != null ? mWXGDEntity.repairGroup.name : "");
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : DateUtil.dateTimeFormat(mWXGDEntity.planStartDate));
@@ -397,10 +403,21 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
-        if (mWXGDEntity.isOffApply != null)
-            eleOffRadioGroup.check(mWXGDEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
+        if (mWXGDEntity.isPowerCut != null){
+            if (mWXGDEntity.isPowerCut.id.equals(WXGDConstant.EleOff.yes)){
+                eleOffRadioGroup.check(R.id.yesRadioButton);
+            }else {
+                eleOffRadioGroup.check(R.id.noRadioButton);
+            }
+        }else {
+            eleOffRadioGroup.clearCheck();
+        }
         for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
-            eleOffRadioGroup.getChildAt(i).setEnabled(false);
+            RadioButton radioButton = (RadioButton) eleOffRadioGroup.getChildAt(i);
+            radioButton.setEnabled(false);
+            if (radioButton.isChecked()) {
+                radioButton.setButtonDrawable(R.drawable.ic_check_box_true_small_gray);
+            }
         }
     }
 

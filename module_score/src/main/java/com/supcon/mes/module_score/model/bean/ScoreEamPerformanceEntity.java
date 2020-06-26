@@ -28,7 +28,7 @@ public class ScoreEamPerformanceEntity extends BaseEntity {
     @Expose
     public int viewType = 0;
     @Expose
-    public int Index = 0;
+    public int index = 0;
     @Expose
     public Map<String, Float> marks = new LinkedHashMap<>();//多选项
     @Expose

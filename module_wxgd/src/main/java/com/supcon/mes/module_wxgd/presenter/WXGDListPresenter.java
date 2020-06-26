@@ -15,7 +15,7 @@ public class WXGDListPresenter extends WXGDListContract.Presenter {
     @Override
     public void listWxgds(int pageNum, Map<String, Object> queryParam, boolean all) {
         String url = "/BEAM2/workList/workRecord/workList-pending.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
-        if (all && queryParam.containsKey(Constant.BAPQuery.WORK_STATE)) {
+        if (all) {
             url = "/BEAM2/workList/workRecord/workList-query.action?1=1&permissionCode=BEAM2_1.0.0_workList_workList";
         }
 
@@ -37,7 +37,7 @@ public class WXGDListPresenter extends WXGDListContract.Presenter {
                             return wxgdListEntity;
                         })
                         .subscribe(wxgdListEntity -> {
-                            if (wxgdListEntity.errMsg == null) {
+                            if (wxgdListEntity.result != null) {
                                 getView().listWxgdsSuccess(wxgdListEntity);
                             } else {
                                 getView().listWxgdsFailed(wxgdListEntity.errMsg);

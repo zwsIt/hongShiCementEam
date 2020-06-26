@@ -68,6 +68,7 @@
     <string name="middleware_area">区域位置</string>
     <string name="middleware_recently">最近</string>
     <string name="middleware_input_eam_name">请输入设备名称</string>
+    <string name="middleware_input_eam_code">请输入设备编码</string>
     <string name="middleware_pending">待办</string>
     <string name="middleware_all">全部</string>
     <string name="middleware_no">否</string>

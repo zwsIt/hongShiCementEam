@@ -67,7 +67,7 @@ public class WorkHelper {
                     break;
                 case Constant.WorkType.JHRH:
                     workInfo.iconResId = R.drawable.ic_work_daily_lubr_warn;
-                    workInfo.router = Constant.Router.WARN_PLAN_LUBRICATION_NEW;
+                    workInfo.router = Constant.Router.PLAN_LUBRICATION_WARN_TAB;
                     break;
                 case Constant.WorkType.LSRH:
                     workInfo.iconResId = R.drawable.ic_work_rh;

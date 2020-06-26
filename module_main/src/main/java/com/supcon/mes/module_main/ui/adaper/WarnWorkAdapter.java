@@ -55,7 +55,7 @@ public class WarnWorkAdapter extends BaseListDataRecyclerViewAdapter<WarnDailyWo
                     .subscribe(o -> {
                         WarnDailyWorkEntity warnDailyWorkEntity = getItem(getAdapterPosition());
                         if (warnDailyWorkEntity.dataId == null){// 日常润滑预警
-                            IntentRouter.go(context, Constant.Router.WARN_PLAN_LUBRICATION_NEW);
+                            IntentRouter.go(context, Constant.Router.PLAN_LUBRICATION_WARN_TAB);
                         }else { // 预警提醒
                             if (warnDailyWorkEntity.peroidType == null) {
                                 ToastUtils.show(context, "未查询到当前单据周期类型!");

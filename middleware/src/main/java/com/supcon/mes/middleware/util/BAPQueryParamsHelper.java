@@ -290,28 +290,12 @@ public class BAPQueryParamsHelper {
 //                subcondEntity.value = String.valueOf(value);
 //                break;
             case Constant.BAPQuery.SOURCE_TYPE:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = Constant.BAPQuery.SOURCE_TYPE;
-                subcondEntity.dbColumnType = Constant.BAPQuery.SYSTEMCODE;
-                subcondEntity.operator = Constant.BAPQuery.BE;
-                subcondEntity.paramStr = Constant.BAPQuery.LIKE_OPT_Q;
-                subcondEntity.value = String.valueOf(value);
-                break;
-
             case Constant.BAPQuery.WORK_SOURCE:
-                subcondEntity = new SubcondEntity();
-                subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = Constant.BAPQuery.WORK_SOURCE;
-                subcondEntity.dbColumnType = Constant.BAPQuery.SYSTEMCODE;
-                subcondEntity.operator = Constant.BAPQuery.BE;
-                subcondEntity.paramStr = Constant.BAPQuery.LIKE_OPT_Q;
-                subcondEntity.value = String.valueOf(value);
-                break;
             case Constant.BAPQuery.WORK_STATE:
+            case Constant.BAPQuery.LUB_TYPE:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.type = TYPE_NORMAL;
-                subcondEntity.columnName = Constant.BAPQuery.WORK_STATE;
+                subcondEntity.columnName = key;
                 subcondEntity.dbColumnType = Constant.BAPQuery.SYSTEMCODE;
                 subcondEntity.operator = Constant.BAPQuery.BE;
                 subcondEntity.paramStr = Constant.BAPQuery.LIKE_OPT_Q;

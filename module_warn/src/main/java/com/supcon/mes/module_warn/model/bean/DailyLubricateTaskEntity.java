@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.LubricateOil;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEam;
 
@@ -22,8 +23,8 @@ public class DailyLubricateTaskEntity extends BaseEntity {
     public int lubricatingnumber; // 润滑点数
 
     public Long nextTime;
-    public ValueEntity periodType;//类型
-
+    public ValueEntity periodType;//周期类型
+    public SystemCodeEntity lubType;//类型：电气（BEAM_075/01）、机械（BEAM_075/02）
     public int position;
 
     public Float sum;

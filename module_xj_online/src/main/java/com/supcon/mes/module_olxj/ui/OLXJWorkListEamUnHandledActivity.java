@@ -506,7 +506,13 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
     private void doRefresh(boolean isDcs) {
         List<OLXJWorkItemEntity> workItems = new ArrayList<>();
         Flowable.fromIterable(mXJAreaEntity.workItemEntities)
-                .filter(olxjWorkItemEntity -> !olxjWorkItemEntity.isFinished)
+                .filter(new Predicate<OLXJWorkItemEntity>() {
+                    @Override
+                    public boolean test(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
+                        olxjWorkItemEntity.isEffective = false; // 将直接处理的单条巡检项状态还原，防止后台重复推送
+                        return !olxjWorkItemEntity.isFinished;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(olxjWorkItemEntity -> {
                     workItems.add(olxjWorkItemEntity);

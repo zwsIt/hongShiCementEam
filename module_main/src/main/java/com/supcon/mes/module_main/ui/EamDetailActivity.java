@@ -172,6 +172,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         Map<String, Object> param = new HashMap<>();
         param.put(Constant.BAPQuery.EAMCODE, mEamEntity.code);
         presenterRouter.create(AnomalyAPI.class).getAnomalyList(1, 2, param);
+        presenterRouter.create(EamDetailAPI.class).getEamScore(mEamEntity.id);
 
     }
 
@@ -208,7 +209,6 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         workAdapter.notifyDataSetChanged();
 
         eamName.setText(mEamEntity.name);
-        presenterRouter.create(EamDetailAPI.class).getEamScore(mEamEntity.id);
         new EamPicController().initEamPic(eamPic, mEamEntity.id);
     }
 

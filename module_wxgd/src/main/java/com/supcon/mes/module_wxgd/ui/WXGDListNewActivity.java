@@ -82,7 +82,7 @@ public class WXGDListNewActivity extends BaseFragmentActivity {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         searchTitleBar.setTitleText(context.getResources().getString(R.string.workName));
-        titleSearchView.setHint(getString(R.string.middleware_input_eam_name));
+        titleSearchView.setHint(getString(R.string.middleware_input_eam_code));
         initTab();
         initViewPager();
     }

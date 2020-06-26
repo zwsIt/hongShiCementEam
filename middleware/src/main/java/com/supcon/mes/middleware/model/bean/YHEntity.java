@@ -6,6 +6,8 @@ import com.supcon.common.com_http.BaseEntity;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.http.DELETE;
+
 /**
  * Created by wangshizhan on 2018/8/14
  * Email:wangshizhan@supcom.com
@@ -34,7 +36,9 @@ public class YHEntity extends BaseEntity {
     public RepairGroupEntity repiarGroup;
 
     public List<AttachmentEntity> attachmentEntities;
+    @Deprecated
     public Boolean isOffApply; // 是否需要停电
+    public SystemCodeEntity isPowerCut; // 是否需要停电
 
     public EamEntity getEamID() {
         if (eamID == null) {

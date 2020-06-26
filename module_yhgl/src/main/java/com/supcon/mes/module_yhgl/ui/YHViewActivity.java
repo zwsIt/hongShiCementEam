@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -51,6 +52,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
+import com.supcon.mes.module_wxgd.constant.WXGDConstant;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
 import com.supcon.mes.module_yhgl.model.api.YHSubmitAPI;
@@ -81,7 +83,6 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
 
     @BindByTag("titleText")
     TextView titleText;
-
 
     @BindByTag("yhViewFindTime")
     CustomVerticalDateView yhViewFindTime;
@@ -152,7 +153,6 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
 
     }
 
-
     @Override
     protected void onRegisterController() {
         super.onRegisterController();
@@ -178,11 +178,23 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
         yhViewWXType.setSpinner(mYHEntity.repairType != null ? mYHEntity.repairType.value : "");
         yhViewWXGroup.setSpinner(mYHEntity.repiarGroup != null ? mYHEntity.repiarGroup.name : "");
 
-        for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
-            eleOffRadioGroup.getChildAt(i).setEnabled(false);
+        if (mYHEntity.isPowerCut != null){
+            if (mYHEntity.isPowerCut.id.equals(WXGDConstant.EleOff.yes)){
+                eleOffRadioGroup.check(R.id.yesRadioButton);
+            }else {
+                eleOffRadioGroup.check(R.id.noRadioButton);
+            }
+        }else {
+            eleOffRadioGroup.clearCheck();
         }
-        if (mYHEntity.isOffApply != null)
-            eleOffRadioGroup.check(mYHEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
+        for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
+            RadioButton radioButton = (RadioButton) eleOffRadioGroup.getChildAt(i);
+            radioButton.setEnabled(false);
+            if (radioButton.isChecked()) {
+                radioButton.setButtonDrawable(R.drawable.ic_check_box_true_small_gray);
+            }
+        }
+
         if (!TextUtils.isEmpty(mYHEntity.describe)) {
             yhViewDescription.setContent(mYHEntity.describe);
         }

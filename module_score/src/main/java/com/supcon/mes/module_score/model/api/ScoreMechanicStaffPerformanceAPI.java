@@ -8,7 +8,7 @@ import java.util.List;
 @ContractFactory(entites = {List.class, CommonListEntity.class})
 public interface ScoreMechanicStaffPerformanceAPI {
 
-    void getMechanicStaffScore(int scoreId);
+    void getMechanicStaffScore(Long scoreId);
 
     void getDutyEam(long staffId, String scoreType);
 

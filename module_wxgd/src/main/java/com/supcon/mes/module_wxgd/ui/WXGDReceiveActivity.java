@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
+import com.supcon.mes.module_wxgd.constant.WXGDConstant;
 import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
 import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
@@ -138,6 +140,10 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
     CustomWorkFlowView transition;
     @BindByTag("dispatcherStaff")
     CustomTextView dispatcherStaff;
+    @BindByTag("workTicketTable")
+    CustomTextView workTicketTable;
+    @BindByTag("eleOffTable")
+    CustomTextView eleOffTable;
     @BindByTag("eleOffRadioGroup")
     RadioGroup eleOffRadioGroup; // 是否生成停电票
     @BindByTag("workContext")
@@ -299,10 +305,12 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
             priority.setValue(mWXGDEntity.faultInfo.priority == null ? "" : mWXGDEntity.faultInfo.priority.value);
             faultInfoDescribe.setValue(mWXGDEntity.faultInfo.describe);
         }
-        dispatcherStaff.setContent(!TextUtils.isEmpty(mWXGDEntity.getDispatcher().name) ? mWXGDEntity.getDispatcher().name : EamApplication.getAccountInfo().staffName);
+        dispatcherStaff.setContent(mWXGDEntity.getDispatcher().name);
         wosource.setContent(mWXGDEntity.workSource != null ? mWXGDEntity.workSource.value : "");
         repairType.setSpinner(mWXGDEntity.repairType != null ? mWXGDEntity.repairType.value : "");
         repairAdvise.setContent(mWXGDEntity.repairAdvise);
+        workTicketTable.setContent(mWXGDEntity.ohWorkTicket == null ? "" : mWXGDEntity.ohWorkTicket.tableNo);
+        eleOffTable.setContent(mWXGDEntity.offApply == null ? "" : mWXGDEntity.offApply.tableNo);
         chargeStaff.setValue(!TextUtils.isEmpty(mWXGDEntity.getChargeStaff().name) ? mWXGDEntity.getChargeStaff().name : EamApplication.getAccountInfo().staffName);
         repairGroup.setValue(mWXGDEntity.repairGroup == null ? "" : mWXGDEntity.repairGroup.name);
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planStartDate, "yyyy-MM-dd HH:mm:ss"));
@@ -310,10 +318,21 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
-        if (mWXGDEntity.isOffApply != null)
-            eleOffRadioGroup.check(mWXGDEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
+        if (mWXGDEntity.isPowerCut != null){
+            if (mWXGDEntity.isPowerCut.id.equals(WXGDConstant.EleOff.yes)){
+                eleOffRadioGroup.check(R.id.yesRadioButton);
+            }else {
+                eleOffRadioGroup.check(R.id.noRadioButton);
+            }
+        }else {
+            eleOffRadioGroup.clearCheck();
+        }
         for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
-            eleOffRadioGroup.getChildAt(i).setEnabled(false);
+            RadioButton radioButton = (RadioButton) eleOffRadioGroup.getChildAt(i);
+            radioButton.setEnabled(false);
+            if (radioButton.isChecked()) {
+                radioButton.setButtonDrawable(R.drawable.ic_check_box_true_small_gray);
+            }
         }
     }
 

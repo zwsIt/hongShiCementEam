@@ -10,11 +10,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
+import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
+import com.supcon.common.view.base.adapter.IListAdapter;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
@@ -23,6 +26,7 @@ import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -43,6 +47,8 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_score.IntentRouter;
 import com.supcon.mes.module_score.R;
+import com.supcon.mes.module_score.constant.ScoreConstant;
+import com.supcon.mes.module_score.controller.ScoreCameraController;
 import com.supcon.mes.module_score.model.api.ScoreInspectorStaffPerformanceAPI;
 import com.supcon.mes.module_score.model.api.ScoreStaffSubmitAPI;
 import com.supcon.mes.module_score.model.bean.ScoreDutyEamEntity;
@@ -67,6 +73,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+
 /**
  * @author yangfei.cao
  * @ClassName hongShiCementEam
@@ -76,7 +86,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Router(value = Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE)
 @Presenter(value = {ScoreInspectorStaffPerformancePresenter.class, ScoreInspectorStaffSubmitPresenter.class})
-public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity implements ScoreInspectorStaffPerformanceContract.View, ScoreStaffSubmitContract.View {
+@Controller(value = {ScoreCameraController.class})
+public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshRecyclerActivity<ScoreStaffPerformanceEntity> implements ScoreInspectorStaffPerformanceContract.View, ScoreStaffSubmitContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
@@ -84,11 +95,11 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
     @BindByTag("rightBtn")
     ImageButton rightBtn;
 
-    @BindByTag("recyclerView")
-    RecyclerView recyclerView;
+    @BindByTag("contentView")
+    RecyclerView contentView;
 
     @BindByTag("recyclerViewEam")
-    RecyclerView recyclerViewEam;
+    RecyclerView recyclerViewEam; // 设备责任到人
 
     @BindByTag("scoreStaff")
     CustomVerticalTextView scoreStaff;
@@ -99,77 +110,91 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
 
     private ScoreStaffPerformanceAdapter scoreStaffPerformanceAdapter;
     private ScoreStaffEntity scoreStaffEntity;
-    private boolean isEdit;
-    private ScoreStaffEamAdapter scoreStaffEamAdapter;
-    private float avgScore = 30;//设备平均分
+    private ScoreStaffEntity oriScoreStaffEntity;
+    private boolean isEdit,update;
+//    private ScoreStaffEamAdapter scoreStaffEamAdapter;
+    private float avgScore = 0;// 设备平均分
+
+    public ScoreStaffEntity getScoreStaffEntity() {
+        return scoreStaffEntity;
+    }
 
     @Override
     protected int getLayoutID() {
         return R.layout.ac_score_staff_performance;
     }
-
+    @Override
+    protected IListAdapter<ScoreStaffPerformanceEntity> createAdapter() {
+        scoreStaffPerformanceAdapter = new ScoreStaffPerformanceAdapter(this);
+        return scoreStaffPerformanceAdapter;
+    }
     @Override
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
         scoreStaffEntity = (ScoreStaffEntity) getIntent().getSerializableExtra(Constant.IntentKey.SCORE_ENTITY);
         isEdit = getIntent().getBooleanExtra(Constant.IntentKey.isEdit, false);
+        update = getIntent().getBooleanExtra(Constant.IntentKey.UPDATE, false);
+
+        refreshListController.setAutoPullDownRefresh(true);
+        refreshListController.setPullDownRefreshEnabled(true);
+        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context,""));
+        contentView.setLayoutManager(new LinearLayoutManager(context));
+        contentView.setAdapter(scoreStaffPerformanceAdapter);
+        scoreStaffPerformanceAdapter.setEditable(isEdit);
     }
 
     @Override
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        refreshController.setAutoPullDownRefresh(true);
-        refreshController.setPullDownRefreshEnabled(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerViewEam.setLayoutManager(new LinearLayoutManager(context));
-        scoreStaffPerformanceAdapter = new ScoreStaffPerformanceAdapter(this);
-        scoreStaffEamAdapter = new ScoreStaffEamAdapter(this);
-        recyclerView.setAdapter(scoreStaffPerformanceAdapter);
-        recyclerViewEam.setAdapter(scoreStaffEamAdapter);
-        scoreStaffPerformanceAdapter.setEditable(isEdit);
+
+//        recyclerViewEam.setLayoutManager(new LinearLayoutManager(context));
+//        scoreStaffEamAdapter = new ScoreStaffEamAdapter(this);
+//        recyclerViewEam.setAdapter(scoreStaffEamAdapter);
 
         rightBtn.setImageResource(R.drawable.sl_top_submit);
         scoreStaff.setEditable(isEdit);
         if (isEdit) {
             rightBtn.setVisibility(View.VISIBLE);
         }
+
+        Spanned title = HtmlParser.buildSpannedText(String.format(getString(R.string.device_style7), "员工评分表", ""), new HtmlTagHandler());
+        titleText.setText(title);
+        if (scoreStaffEntity == null) {
+            scoreStaffEntity = new ScoreStaffEntity();
+            scoreStaffEntity.patrolWorker = new Staff();
+//            scoreStaffEntity.patrolWorker.name = EamApplication.getAccountInfo().staffName;
+//            scoreStaffEntity.patrolWorker.code = EamApplication.getAccountInfo().staffCode;
+//            scoreStaffEntity.patrolWorker.id = EamApplication.getAccountInfo().staffId;
+        } else {
+            scoreStaff.setEditable(false);
+        }
+        scoreStaff.setKey("员工");
+        scoreStaff.setContent(scoreStaffEntity.getPatrolWorker().name);
+        staffScore.setContent(Util.big0(scoreStaffEntity.score));
+        scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score);
+        scoreStaffEntity.scoreData = (scoreStaffEntity.scoreData != null) ? scoreStaffEntity.scoreData : System.currentTimeMillis();
+        scoreTime.setContent(DateUtil.dateFormat(scoreStaffEntity.scoreData));
+        oriScoreStaffEntity = GsonUtil.gsonToBean(GsonUtil.gsonString(scoreStaffEntity),ScoreStaffEntity.class);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        Spanned title = HtmlParser.buildSpannedText(String.format(getString(R.string.device_style7), "巡检工评分表", ""), new HtmlTagHandler());
-        titleText.setText(title);
-        if (scoreStaffEntity == null) {
-            scoreStaffEntity = new ScoreStaffEntity();
-            scoreStaffEntity.patrolWorker = new Staff();
-            scoreStaffEntity.patrolWorker.name = EamApplication.getAccountInfo().staffName;
-            scoreStaffEntity.patrolWorker.code = EamApplication.getAccountInfo().staffCode;
-            scoreStaffEntity.patrolWorker.id = EamApplication.getAccountInfo().staffId;
-        } else {
-            scoreStaff.setEditable(false);
-        }
-        scoreStaff.setKey("巡检工");
-        scoreStaff.setContent(scoreStaffEntity.getPatrolWorker().name);
-        staffScore.setContent(Util.big0(scoreStaffEntity.score));
-        scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score - avgScore);
-        scoreStaffEntity.scoreData = (scoreStaffEntity.scoreData != null) ? scoreStaffEntity.scoreData : System.currentTimeMillis();
-        scoreTime.setContent(DateUtil.dateFormat(scoreStaffEntity.scoreData));
-
     }
 
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
-        refreshController.setOnRefreshListener(new OnRefreshListener() {
+        refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenterRouter.create(ScoreInspectorStaffPerformanceAPI.class).getInspectorStaffScore(scoreStaffEntity.id);
                 long staffId = scoreStaffEntity.getPatrolWorker().id != null ? scoreStaffEntity.getPatrolWorker().id : -1;
-                presenterRouter.create(ScoreInspectorStaffPerformanceAPI.class).getDutyEam(staffId, "BEAM_065/02");
+                presenterRouter.create(ScoreInspectorStaffPerformanceAPI.class).getInspectorStaffScore(staffId, scoreStaffEntity.id);
+//
+//                presenterRouter.create(ScoreInspectorStaffPerformanceAPI.class).getDutyEam(staffId, ScoreConstant.ScoreType.INSPECTION_STAFF);
             }
         });
         RxView.clicks(leftBtn)
@@ -179,12 +204,12 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
         RxView.clicks(rightBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> new CustomDialog(context)
-                        .twoButtonAlertDialog("确定提交巡检工评分吗?")
+                        .twoButtonAlertDialog("确定提交员工评分吗?")
                         .bindView(R.id.redBtn, "确定")
                         .bindView(R.id.grayBtn, "取消")
                         .bindClickListener(R.id.redBtn, v12 -> {
-                            if (scoreStaffEntity.patrolWorker == null) {
-                                ToastUtils.show(this, "请选择巡检工!");
+                            if (scoreStaffEntity.patrolWorker == null || scoreStaffEntity.patrolWorker.id == null) {
+                                ToastUtils.show(this, "请选择员工!");
                                 return;
                             }
                             onLoading("正在处理中...");
@@ -198,7 +223,7 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
             public void onChildViewClick(View childView, int action, Object obj) {
                 if (action == -1) {
                     scoreStaffEntity.patrolWorker = null;
-                    scoreStaffEntity.id = -1;
+                    scoreStaffEntity.id = -1L;
                 }
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
@@ -210,18 +235,20 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
         scoreStaffPerformanceAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
             @Override
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
-                ScoreStaffPerformanceEntity scoreStaffPerformanceEntity = (ScoreStaffPerformanceEntity) obj;
-                scoreStaffEntity.score = scoreStaffPerformanceEntity.scoreNum + avgScore;
-                staffScore.setContent(Util.big0(scoreStaffEntity.score));
-                scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score - avgScore);
+                updateTotalScore((ScoreStaffPerformanceEntity) obj);
             }
         });
     }
 
+    public void updateTotalScore(ScoreStaffPerformanceEntity scoreStaffPerformanceEntity) {
+        scoreStaffEntity.score = scoreStaffPerformanceEntity.scoreNum;
+        staffScore.setContent(Util.big0(scoreStaffEntity.score));
+        scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
-        refreshController.refreshBegin();
+        refreshListController.refreshBegin();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -235,7 +262,8 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
                 staff.name = searchStaff.name;
                 staff.code = searchStaff.code;
                 scoreStaffEntity.patrolWorker = staff;
-                refreshController.refreshBegin();
+                oriScoreStaffEntity.score = 100f;
+                refreshListController.refreshBegin();
             }
         }
     }
@@ -243,69 +271,84 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
     @SuppressLint("CheckResult")
     @Override
     public void getInspectorStaffScoreSuccess(List entity) {
-        if (entity.size() > 0) {
-            scoreStaffPerformanceAdapter.setList(entity);
-            scoreStaffPerformanceAdapter.notifyDataSetChanged();
-        } else {
-            recyclerView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
-        }
-        refreshController.refreshComplete();
+        refreshListController.refreshComplete(entity);
     }
 
     @Override
     public void getInspectorStaffScoreFailed(String errorMsg) {
-        refreshController.refreshComplete();
+        refreshListController.refreshComplete();
         SnackbarHelper.showError(rootView, errorMsg);
-        recyclerView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
+//        contentView.setAdapter((BaseListDataRecyclerViewAdapter) EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
     }
 
     @SuppressLint("CheckResult")
     @Override
-    public void getDutyEamSuccess(CommonListEntity entity) {
-        if (entity.result != null && entity.result.size() > 0) {
-            ScoreDutyEamEntity scoreDutyEamEntity = (ScoreDutyEamEntity) entity.result.get(0);
-            ScoreDutyEamEntity scoreDutyEamEntityTitle = new ScoreDutyEamEntity();
-            scoreDutyEamEntityTitle.name = "现场管理";
-            scoreDutyEamEntityTitle.avgScore = scoreDutyEamEntity.avgScore;
-            scoreDutyEamEntityTitle.viewType = ListType.TITLE.value();
-            entity.result.add(0, scoreDutyEamEntityTitle);
+    public void getDutyEamSuccess(ScoreDutyEamEntity entity) {
+        scoreStaffEntity.score = oriScoreStaffEntity.score;
+        Flowable.fromIterable(scoreStaffPerformanceAdapter.getList())
+                .filter(scoreStaffPerformanceEntity -> {
+                    if (scoreStaffPerformanceEntity.viewType == ListType.TITLE.value() && "专业巡检".equals(scoreStaffPerformanceEntity.project)) {
+//                        scoreStaffPerformanceEntity.score = scoreStaffPerformanceEntity.fraction;
+                        scoreStaffPerformanceEntity.fraction = entity.professInspScore;
+                        return true;
+                    }else if (scoreStaffPerformanceEntity.viewType == ListType.TITLE.value() && "设备责任到人(现场管理、设备运行)".equals(scoreStaffPerformanceEntity.project)) {
+//                        scoreStaffPerformanceEntity.score = scoreStaffPerformanceEntity.fraction;
+                        scoreStaffPerformanceEntity.fraction = entity.avgScore;
+                        return true;
+                    }
+                    return false;
+                })
+                .subscribe(scoreStaffPerformanceEntity -> {
+                    scoreStaffPerformanceAdapter.notifyItemChanged(scoreStaffPerformanceAdapter.getList().indexOf(scoreStaffPerformanceEntity));// 更新标题
+                    if (!isEdit || update)return;
+                    scoreStaffPerformanceEntity.scoreNum = scoreStaffEntity.score - scoreStaffPerformanceEntity.score + scoreStaffPerformanceEntity.fraction; //总分
+                    updateTotalScore(scoreStaffPerformanceEntity);
+                });
 
-            avgScore = scoreDutyEamEntityTitle.avgScore;
-            if (scoreStaffEntity.score == 100) {
-                staffScore.setContent(Util.big0(70 + scoreDutyEamEntityTitle.avgScore));
-                scoreStaffPerformanceAdapter.updateTotal(70);
-            } else {
-                scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score - avgScore);
-            }
-        }
-        scoreStaffEamAdapter.setList(entity.result);
-        scoreStaffEamAdapter.notifyDataSetChanged();
+//        if (entity.result != null && entity.result.size() > 0) {
+//            ScoreDutyEamEntity scoreDutyEamEntity = (ScoreDutyEamEntity) entity.result.get(0);
+//            ScoreDutyEamEntity scoreDutyEamEntityTitle = new ScoreDutyEamEntity();
+//            scoreDutyEamEntityTitle.name = "设备责任到人";
+//            scoreDutyEamEntityTitle.avgScore = scoreDutyEamEntity.avgScore;
+//            scoreDutyEamEntityTitle.viewType = ListType.TITLE.value();
+//            entity.result.add(0, scoreDutyEamEntityTitle);
+//
+//            avgScore = scoreDutyEamEntityTitle.avgScore;
+//            if (scoreStaffEntity.score == 100) {
+//                staffScore.setContent(Util.big0(70 + scoreDutyEamEntityTitle.avgScore));
+//                scoreStaffPerformanceAdapter.updateTotal(70);
+//            } else {
+//                scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score - avgScore);
+//            }
+//        }
+//        scoreStaffEamAdapter.setList(entity.result);
+//        scoreStaffEamAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void getDutyEamFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, errorMsg);
-        scoreStaffEamAdapter.setList(new LinkedList());
-        scoreStaffEamAdapter.notifyDataSetChanged();
+        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//        scoreStaffEamAdapter.setList(new LinkedList());
+//        scoreStaffEamAdapter.notifyDataSetChanged();
     }
 
     private void doSubmit() {
 
         Map map = ScoreMapManager.createMap(scoreStaffEntity);
-        if (scoreStaffEamAdapter.getList() != null) {
-            ScoreMapManager.addAvg(scoreStaffEamAdapter.getList(), map);
-        }
+//        if (scoreStaffEamAdapter.getList() != null) {
+//            ScoreMapManager.addAvg(scoreStaffEamAdapter.getList(), map);
+//        }
         map.put("viewselect", "patrolScoreEdit");
         map.put("datagridKey", "BEAM_patrolWorkerScore_workerScoreHead_patrolScoreEdit_datagrids");
         map.put("viewCode", "BEAM_1.0.0_patrolWorkerScore_patrolScoreEdit");
 
-        map.put("workerScoreHead.scoreType.id", "BEAM_065/02");
+        map.put("workerScoreHead.scoreType.id", ScoreConstant.ScoreType.INSPECTION_STAFF);
         map.put("workerScoreHead.scoreType.value", "巡检工个人评分");
 
-        List list1 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "设备运行");
-        map.put("dg1560145365044ModelCode", "BEAM_1.0.0_patrolWorkerScore_Running");
-        map.put("dg1560145365044ListJson", list1.toString());
-        map.put("dgLists['dg1560145365044']", list1.toString());
+//        List list1 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "设备运行");
+//        map.put("dg1560145365044ModelCode", "BEAM_1.0.0_patrolWorkerScore_Running");
+//        map.put("dg1560145365044ListJson", list1.toString());
+//        map.put("dgLists['dg1560145365044']", list1.toString());
 
         List list2 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "规范化管理");
         map.put("dg1560222990407ModelCode", "BEAM_1.0.0_patrolWorkerScore_Standardized");
@@ -351,11 +394,8 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshActivity 
 
     @Override
     public void doStaffSubmitFailed(String errorMsg) {
-        if ("本数据已经被其他人修改或删除，请刷页面后重试".equals(errorMsg)) {
+        if ("本数据已经被其他人修改或删除，请刷新页面后重试".equals(errorMsg)) {
             loaderController.showMsgAndclose(ErrorMsgHelper.msgParse(errorMsg), false, 5000);
-        } else if (errorMsg.contains("com.supcon.orchid.BEAM2.entities.BEAM2SparePart")) {
-            //error : Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect): [com.supcon.orchid.BEAM2.entities.BEAM2SparePart#1211]
-            loaderController.showMsgAndclose("请刷新备件表体数据！", false, 4000);
         } else {
             onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
         }

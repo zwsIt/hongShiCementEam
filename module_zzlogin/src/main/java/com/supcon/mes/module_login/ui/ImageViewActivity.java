@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -31,6 +33,8 @@ import com.bumptech.glide.Glide;
 import com.supcon.common.view.base.activity.BaseActivity;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.LogUtils;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.listener.ImageTouchListener;
 import com.supcon.mes.mbap.view.CustomDialog;
@@ -85,6 +89,24 @@ public class ImageViewActivity extends BaseActivity {
 
     private boolean isEditable = false;
 
+//    private Matrix initMatrix = new Matrix(); // 初始状态
+    // 縮放控制
+    private Matrix matrix = new Matrix();
+    private Matrix savedMatrix = new Matrix();
+    // 不同状态的表示：
+    private static final int NONE = 0;
+    private static final int DRAG = 1;
+    private static final int ZOOM = 2;
+    private int mode = NONE;
+
+    private PointF oriPoint = new PointF(); // 初始点
+
+    // 定义第一个按下的点，两只接触点的中点，以及初始的两指按下的距离：
+    private PointF startPoint = new PointF();
+    private PointF midPoint = new PointF();
+    private float oriDis = 1f;
+    private ImageView mImageView; // 当前展示图片
+
 
     @Override
     protected int getLayoutID() {
@@ -106,8 +128,6 @@ public class ImageViewActivity extends BaseActivity {
             mDatas = new ArrayList<>();
         }
 
-
-
     }
 
     @Override
@@ -118,7 +138,7 @@ public class ImageViewActivity extends BaseActivity {
             pageNum.setVisibility(View.GONE);
         }
         else{
-            pageNum.setText(String.valueOf(mPosition+1+"/"+mDatas.size()));
+            pageNum.setText(mPosition + 1 + "/" + mDatas.size());
         }
 
         mImageViews = new ArrayList<>();
@@ -130,6 +150,13 @@ public class ImageViewActivity extends BaseActivity {
             imageViewContainer.setOriginalInfo(mWidth, mHeight, mLocationX, mLocationY);
             imageViewContainer.transformIn();
             imageViewContainer.setOnClickListener(v -> onBackPressed());
+            imageViewContainer.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    zoomImage(v,event);
+                    return true; //拦截
+                }
+            });
 
             if(string!=null && string.contains(".mp4")) {
                 ImageView playImageView = relativeLayout.findViewById(R.id.playIv);
@@ -176,6 +203,70 @@ public class ImageViewActivity extends BaseActivity {
 //                        initImageView(customImageView);
 //                    }
 //                });
+    }
+
+    private void zoomImage(View v, MotionEvent event) {
+        mImageView = (ImageView) v;
+        mImageView.setScaleType(ImageView.ScaleType.MATRIX); // 支持缩放、移动
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            // 单指
+            case MotionEvent.ACTION_DOWN:
+                matrix.set(mImageView.getImageMatrix());
+                savedMatrix.set(matrix);
+                startPoint.set(event.getX(), event.getY());
+                if (oriPoint.x == 0 && oriPoint.y == 0){
+                    oriPoint.set(startPoint);
+                }
+                mode = DRAG;
+                break;
+            // 双指
+            case MotionEvent.ACTION_POINTER_DOWN:
+                oriDis = distance(event);
+                if (oriDis > 10f) { // 两个手指并拢在一起的时候像素大于10
+                    savedMatrix.set(matrix);
+                    midPoint = middle(event);
+                    mode = ZOOM;
+                }
+                break;
+            // 手指放开
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_POINTER_UP:
+                mode = NONE;
+                break;
+            // 单指滑动事件
+            case MotionEvent.ACTION_MOVE:
+                if (mode == DRAG) {
+                    // 是一个手指拖动
+                    matrix.set(savedMatrix);
+                    matrix.postTranslate(event.getX() - startPoint.x, event.getY() - startPoint.y);
+                } else if (mode == ZOOM) {
+                    // 两个手指滑动
+                    float newDist = distance(event);
+                    if (newDist > 10f) { // 两个手指并拢在一起的时候像素大于10
+                        matrix.set(savedMatrix);
+                        float scale = newDist / oriDis/* < 1.0f ? 1.0f : newDist / oriDis*/;
+                        matrix.postScale(scale, scale, midPoint.x, midPoint.y);
+                    }
+                }
+                break;
+        }
+//         设置ImageView的Matrix
+        mImageView.setImageMatrix(matrix);
+    }
+
+    // 计算两个触摸点之间的距离
+    private float distance(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return Float.valueOf(String.valueOf(Math.sqrt(x * x + y * y))) ;
+    }
+
+    // 计算两个触摸点的中点
+    private PointF middle(MotionEvent event) {
+        float x = event.getX(0) + event.getX(1);
+        float y = event.getY(0) + event.getY(1);
+        return new PointF(x / 2, y / 2);
     }
 
     public static float ScreenW;//屏幕的宽
@@ -258,6 +349,13 @@ public class ImageViewActivity extends BaseActivity {
                 mPosition = position;
                 pageNum.setText(String.valueOf(mPosition+1+"/"+mDatas.size()));
 
+                // 还原上一张图片状态
+                if (oriPoint.x != startPoint.x && oriPoint.y != startPoint.y){
+                    RelativeLayout relativeLayout = mImageViews.get(position);
+                    CustomImageView imageViewContainer = relativeLayout.findViewById(R.id.img);
+                    mImageView.setImageMatrix(imageViewContainer.getImageMatrix());
+                }
+                oriPoint.x = 0;oriPoint.y = 0;
             }
 
             @Override
@@ -270,6 +368,7 @@ public class ImageViewActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        mImageView = null;
         finish();
 //        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }

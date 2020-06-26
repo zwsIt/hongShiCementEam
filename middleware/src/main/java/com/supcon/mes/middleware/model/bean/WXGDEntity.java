@@ -107,7 +107,9 @@ public class WXGDEntity extends BaseEntity implements Cloneable {
 
     public OffApplyBean offApply; // 停电申请
     public WorkTicketBean ohWorkTicket; // 检修作业票
+    @Deprecated
     public Boolean isOffApply; // 是否需要停电
+    public SystemCodeEntity isPowerCut; // 是否需要停电
     public OverhaulProjectEntity overhaulProId; // 大修项目ID
     public RepairProjectEntity repairProId; // 检修项目ID
 

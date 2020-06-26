@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.LinkEntity;
@@ -169,6 +171,14 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     LinearLayout eamInfoEditLl;
     @BindByTag("repairLl")
     LinearLayout repairLl;
+
+    @BindByTag("workTicketTable")
+    CustomTextView workTicketTable;
+    @BindByTag("eleOffTable")
+    CustomTextView eleOffTable;
+    @BindByTag("dispatcherStaff")
+    CustomTextView dispatcherStaff;
+
     @BindByTag("repairGroup")
     CustomTextView repairGroup;
     @BindByTag("chargeStaff")
@@ -438,25 +448,40 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         wosource.setContent(mWXGDEntity.workSource != null ? mWXGDEntity.workSource.value : "");
         repairType.setSpinner(mWXGDEntity.repairType != null ? mWXGDEntity.repairType.value : "");
         repairAdvise.setContent(mWXGDEntity.repairAdvise);
+        workTicketTable.setContent(mWXGDEntity.ohWorkTicket == null ? "" : mWXGDEntity.ohWorkTicket.tableNo);
+        eleOffTable.setContent(mWXGDEntity.offApply == null ? "" : mWXGDEntity.offApply.tableNo);
+        dispatcherStaff.setContent(mWXGDEntity.getDispatcher().name);
         chargeStaff.setValue(Util.strFormat2(mWXGDEntity.getChargeStaff().name));
         repairGroup.setValue(mWXGDEntity.repairGroup == null ? "" : mWXGDEntity.repairGroup.name);
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? DateUtil.dateTimeFormat(new Date().getTime()) : DateUtil.dateFormat(mWXGDEntity.planStartDate, "yyyy-MM-dd HH:mm:ss"));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.planEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
-        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null) {
+
+        if (mWXGDEntity.isPowerCut != null){
+            if (mWXGDEntity.isPowerCut.id.equals(WXGDConstant.EleOff.yes)){
+                eleOffRadioGroup.check(R.id.yesRadioButton);
+            }else {
+                eleOffRadioGroup.check(R.id.noRadioButton);
+            }
+        }else {
+            eleOffRadioGroup.clearCheck();
+        }
+
+        if (mWXGDEntity.offApply != null && mWXGDEntity.offApply.id != null) { // 存在停电票不可编辑
+            RadioButton radioButton;
             for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
-                eleOffRadioGroup.getChildAt(i).setEnabled(false);
+                radioButton = (RadioButton) eleOffRadioGroup.getChildAt(i);
+                radioButton.setEnabled(false);
+                if (radioButton.isChecked()){
+                    radioButton.setButtonDrawable(R.drawable.ic_check_box_true_small_gray);
+                }
             }
         } else {
             for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
                 eleOffRadioGroup.getChildAt(i).setEnabled(true);
             }
         }
-        if (mWXGDEntity.isOffApply != null)
-            eleOffRadioGroup.check(mWXGDEntity.isOffApply ? R.id.yesRadioButton : R.id.noRadioButton);
-//        mWXGDEntity.isOffApply = true;
-//        eleOffChkBox.setChecked(true); // 默认true
     }
 
     @SuppressLint("CheckResult")
@@ -674,17 +699,15 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         eamName.getCustomValue().setOnClickListener(v -> goSBDA());
         eamIc.setOnClickListener(v -> goSBDA());
         eamCode.getCustomValue().setOnClickListener(v -> goSBDA());
-
-//        eleOffChkBox.setOnCheckedChangeListener((buttonView, isChecked) -> mWXGDEntity.isOffApply = isChecked);
-        eleOffRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.noRadioButton){
-                    mWXGDEntity.isOffApply = false;
-                }else {
-                    mWXGDEntity.isOffApply = true;
-                }
+        eleOffRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == -1)return;
+            SystemCodeEntity systemCodeEntity = new SystemCodeEntity();
+            if (checkedId == R.id.noRadioButton){
+                systemCodeEntity.id = WXGDConstant.EleOff.no;
+            }else {
+                systemCodeEntity.id = WXGDConstant.EleOff.yes;
             }
+            mWXGDEntity.isPowerCut = systemCodeEntity;
         });
 
     }
@@ -1174,7 +1197,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             ToastUtils.show(context, "设备不允许为空！");
             return true;
         }
-        if (mWXGDEntity.isOffApply == null) {
+        if (mWXGDEntity.isPowerCut == null) {
             ToastUtils.show(context, "请选择是否生成停电票！");
             return true;
         }
