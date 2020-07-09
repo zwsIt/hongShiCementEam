@@ -155,9 +155,9 @@ public class ScoreMechanicStaffPerformanceActivity extends BaseRefreshRecyclerAc
         if (scoreStaffEntity == null) {
             scoreStaffEntity = new ScoreStaffEntity();
             scoreStaffEntity.patrolWorker = new Staff();
-            scoreStaffEntity.patrolWorker.name = EamApplication.getAccountInfo().staffName;
-            scoreStaffEntity.patrolWorker.code = EamApplication.getAccountInfo().staffCode;
-            scoreStaffEntity.patrolWorker.id = EamApplication.getAccountInfo().staffId;
+//            scoreStaffEntity.patrolWorker.name = EamApplication.getAccountInfo().staffName;
+//            scoreStaffEntity.patrolWorker.code = EamApplication.getAccountInfo().staffCode;
+//            scoreStaffEntity.patrolWorker.id = EamApplication.getAccountInfo().staffId;
         } else {
             scoreStaff.setEditable(false);
         }
@@ -198,7 +198,7 @@ public class ScoreMechanicStaffPerformanceActivity extends BaseRefreshRecyclerAc
                         .bindView(R.id.redBtn, "确定")
                         .bindView(R.id.grayBtn, "取消")
                         .bindClickListener(R.id.redBtn, v12 -> {
-                            if (scoreStaffEntity.patrolWorker == null) {
+                            if (scoreStaffEntity.patrolWorker == null || scoreStaffEntity.patrolWorker.id == null) {
                                 ToastUtils.show(this, "请选择员工!");
                                 return;
                             }

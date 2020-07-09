@@ -49,6 +49,7 @@ import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_hs_tsd.IntentRouter;
 import com.supcon.mes.module_hs_tsd.R;
@@ -205,7 +206,7 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
      * @author user 2019/12/27
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "EleOn", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.ELE_ON, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));

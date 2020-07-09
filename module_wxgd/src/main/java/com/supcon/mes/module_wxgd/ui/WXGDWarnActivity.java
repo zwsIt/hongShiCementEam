@@ -54,6 +54,7 @@ import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -252,7 +253,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
      */
     private void initLink() {
         mLinkController.setCancelShow(false);
-        mLinkController.initStartTransition(transition, "work");
+        mLinkController.initStartTransition(transition, ProcessKeyUtil.WORK);
     }
 
     /**
@@ -262,7 +263,7 @@ public class WXGDWarnActivity extends BaseRefreshActivity implements WXGDListCon
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));

@@ -39,6 +39,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
 import com.supcon.mes.middleware.util.NFCHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_hs_tsd.IntentRouter;
 import com.supcon.mes.module_hs_tsd.R;
@@ -133,7 +134,7 @@ public class ElectricityOffListActivity extends BaseRefreshRecyclerActivity<Elec
         searchTitleBar.searchView().setHint("请输入设备名称");
         searchTitleBar.searchView().setInputTextColor(R.color.black);
         FilterHelper.addView(this, radioGroupFilter, FilterHelper.queryBtn());
-        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), "EleOnWorkFlow", result -> {
+        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.ELE_OFF, result -> {
             if (result == null) {
                 searchTitleBar.disableRightBtn();
             }

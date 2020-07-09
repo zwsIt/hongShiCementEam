@@ -1447,5 +1447,24 @@ public class ManifestUtil {
         return var1;
     }
 
+    public static String getXiaoMiAppId(Context context){
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),PackageManager.GET_META_DATA);
+            return String.valueOf(applicationInfo.metaData.get("XiaoMiAppId"));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static String getXiaoMiAppKey(Context context){
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),PackageManager.GET_META_DATA);
+
+            return String.valueOf(applicationInfo.metaData.get("XiaoMiAppKey"));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

@@ -18,6 +18,7 @@ import com.supcon.mes.middleware.alone.AloneManager;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.AccountInfo;
 import com.supcon.mes.middleware.model.bean.AccountInfoDao;
+import com.supcon.mes.middleware.model.bean.Company;
 import com.supcon.mes.middleware.model.bean.DaoMaster;
 import com.supcon.mes.middleware.model.bean.DaoSession;
 import com.supcon.mes.middleware.model.bean.Staff;
@@ -317,6 +318,22 @@ public class EamApplication extends MBapApp {
      */
     public static Long getCid(){
         return accountInfo.cid;
+    }
+
+    public static void setCompany(Company company){
+        SharedPreferencesUtils.setParam(getAppContext(),Constant.SPKey.COMPANY,company == null ? "" : company.toString());
+    }
+    public static Company getCompany(){
+        String companyStr = SharedPreferencesUtils.getParam(getAppContext(),Constant.SPKey.COMPANY,"");
+        Company company = GsonUtil.gsonToBean(companyStr,Company.class);
+        return company;
+    }
+
+    public static void setCompanyCode(Company company){
+        SharedPreferencesUtils.setParam(getAppContext(),Constant.SPKey.C_CODE,company == null ? "" : company.code);
+    }
+    public static String getCompanyCode(){
+        return SharedPreferencesUtils.getParam(getAppContext(),Constant.SPKey.C_CODE,"");
     }
 
     public static String getIpPort(){

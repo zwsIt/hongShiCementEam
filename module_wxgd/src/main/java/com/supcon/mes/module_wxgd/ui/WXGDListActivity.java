@@ -55,6 +55,7 @@ import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -180,7 +181,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
             queryParam.put(Constant.BAPQuery.REPAIR_TYPE, SystemCodeManager.getInstance().getSystemCodeEntityId(Constant.SystemCode.YH_WX_TYPE, repairType));
         }
         ModulePermissonCheckController mModulePermissionCheckController = new ModulePermissonCheckController();
-        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName(),"work", new OnSuccessListener<Long>() {
+        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.WORK, new OnSuccessListener<Long>() {
             @Override
             public void onSuccess(Long result) {
                 deploymentId = result;
@@ -207,7 +208,7 @@ public class WXGDListActivity extends BaseRefreshRecyclerActivity<WXGDEntity> im
      * @author user 2019/10/31
      */
     public void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));

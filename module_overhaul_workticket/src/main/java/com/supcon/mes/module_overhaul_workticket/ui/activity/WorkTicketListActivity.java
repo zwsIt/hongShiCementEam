@@ -36,6 +36,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_overhaul_workticket.IntentRouter;
 import com.supcon.mes.module_overhaul_workticket.R;
@@ -118,7 +119,7 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
         searchTitleBar.searchView().setHint(getString(R.string.middleware_input_eam_code));
         searchTitleBar.searchView().setInputTextColor(R.color.black);
         FilterHelper.addView(this,radioGroupFilter,FilterHelper.queryBtn());
-        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), "workTicketFW", result -> {
+        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.WORK_TICKET, result -> {
             if (result == null){
                 searchTitleBar.disableRightBtn();
             }

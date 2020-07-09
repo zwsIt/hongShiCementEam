@@ -29,6 +29,7 @@ import com.supcon.mes.mbap.beans.LoginEvent;
 import com.supcon.mes.mbap.utils.PatternUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
+import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -41,6 +42,7 @@ import com.supcon.mes.middleware.model.bean.Company;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorization;
 import com.supcon.mes.middleware.model.bean.ModuleAuthorizationListEntity;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_login.BuildConfig;
 import com.supcon.mes.module_login.IntentRouter;
@@ -57,9 +59,13 @@ import com.supcon.mes.module_login.presenter.MinePresenter;
 import com.supcon.mes.module_login.presenter.ZhiZhiUrlQueryPresenter;
 import com.supcon.mes.module_login.service.HeartBeatService;
 import com.supcon.mes.push.controller.DeviceTokenController;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +84,9 @@ import io.reactivex.schedulers.Schedulers;
 @Presenter(value = {LoginPresenter.class, ZhiZhiUrlQueryPresenter.class, MinePresenter.class})
 @Controller(value = {CompanyController.class, DeviceTokenController.class})
 public class LoginActivity extends BaseControllerActivity implements LoginContract.View, ZhiZhiUrlQueryContract.View, MineContract.View {
-
+    private static final int PERMISSION_READ_EXTERNAL_STORAGE = 0;
+    private static final int PERMISSION_WRITE_EXTERNAL_STORAGE = 1;
+    private static final int PERMISSION_REQUEST_CODE = 99;
     @BindByTag("companySpinner")
     CustomSpinner companySpinner;
 
@@ -107,6 +115,7 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
 
     private ImageView spinnerIv; // 下拉选择公司
     private Long mCompanyId;
+    private Company mCompany;
 
     @Override
     protected int getLayoutID() {
@@ -172,7 +181,8 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
                                 companySpinner.setContent(item.toString());
                                 companySpinner.findViewById(R.id.customDeleteIcon).setVisibility(View.GONE);
                                 // 获取companyId
-                                mCompanyId = companyList.get(index).id;
+                                mCompany = companyList.get(index);
+                                mCompanyId = mCompany.id;
                             }
                         }).show(companySpinner.getContent());
             }
@@ -433,6 +443,14 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
         MBapApp.setIsLogin(true);
         MBapApp.setUserName(usernameInput.getInput().trim());
         MBapApp.setPassword(pwdInput.getInput().trim());
+//        SharedPreferencesUtils.setParam(context,Constant.SPKey.COMPANY,mCompany == null ? "" : mCompany.toString());
+
+        if (mCompany == null){
+            mCompany = EamApplication.getCompany();
+        }
+        EamApplication.setCompanyCode(mCompany);
+        ProcessKeyUtil.updateProcessKey();
+
         SharedPreferencesUtils.setParam(context,Constant.SPKey.C_NAME,companySpinner.getContent());
         SharedPreferencesUtils.setParam(context,Constant.SPKey.C_ID,mCompanyId);
 
@@ -481,4 +499,5 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
     public void logoutFailed(String errorMsg) {
         LogUtil.d("登出失败");
     }
+
 }

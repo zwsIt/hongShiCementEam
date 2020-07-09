@@ -232,7 +232,7 @@ public class WXGDMapManager {
     public static List<AcceptanceCheckEntityDto> translateAcceptChkDto(List<AcceptanceCheckEntity> list) {
         List<AcceptanceCheckEntityDto> acceptanceCheckEntityDtos = new ArrayList<>();
         AcceptanceCheckEntityDto acceptanceCheckEntityDto;
-        SystemCodeEntity checkResult;
+//        SystemCodeEntity checkResult;
         for (AcceptanceCheckEntity entity : list) {
             acceptanceCheckEntityDto = new AcceptanceCheckEntityDto();
 
@@ -245,6 +245,8 @@ public class WXGDMapManager {
 
             acceptanceCheckEntityDto.checkTime = entity.checkTime == null ? "" : DateUtil.dateFormat(entity.checkTime, "yyyy-MM-dd HH:mm:ss");
             acceptanceCheckEntityDto.remark = entity.remark;
+            acceptanceCheckEntityDto.reason = entity.reason;
+            acceptanceCheckEntityDto.id = entity.id == null ? "" : String.valueOf(entity.id);
             acceptanceCheckEntityDtos.add(acceptanceCheckEntityDto);
         }
         return acceptanceCheckEntityDtos;

@@ -23,6 +23,7 @@ import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.util.HtmlParser;
 import com.supcon.mes.middleware.util.HtmlTagHandler;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
@@ -123,10 +124,10 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
         protected void update(ProcessedEntity data) {
             if (!"MainActivity".equals(context.getClass().getSimpleName())) {
                 // 只处理工单、隐患单、设备验收单、运行记录、备件领用申请、停送电、检修作业票
-                if((Constant.ProcessKey.WORK.equals(data.processKey) || Constant.ProcessKey.FAULT_INFO.equals(data.processKey)
-                        || Constant.ProcessKey.CHECK_APPLY_FW.equals(data.processKey) || Constant.ProcessKey.RUN_STATE_WF.equals(data.processKey)
-                        || Constant.ProcessKey.SPARE_PART_APPLY.equals(data.processKey) || Constant.ProcessKey.ELE_OFF.equals(data.processKey)
-                        || Constant.ProcessKey.ELE_ON.equals(data.processKey) || Constant.ProcessKey.WORK_TICKET.equals(data.processKey)) && !TextUtils.isEmpty(data.openUrl)){
+                if((ProcessKeyUtil.WORK.equals(data.processKey) || ProcessKeyUtil.FAULT_INFO.equals(data.processKey)
+                        || ProcessKeyUtil.CHECK_APPLY_FW.equals(data.processKey) || ProcessKeyUtil.RUN_STATE_WF.equals(data.processKey)
+                        || ProcessKeyUtil.SPARE_PART_APPLY.equals(data.processKey) || ProcessKeyUtil.ELE_OFF.equals(data.processKey)
+                        || ProcessKeyUtil.ELE_ON.equals(data.processKey) || ProcessKeyUtil.WORK_TICKET.equals(data.processKey)) && !TextUtils.isEmpty(data.openUrl)){
                     dealInfoController = new DealInfoController(context,flowProcessView,data);
                     dealInfoController.getDealInfoList();
                     flowProcessView.setVisibility(View.VISIBLE);
@@ -185,29 +186,51 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
     private void goTable(ProcessedEntity processedEntity) {
         Bundle bundle = new Bundle();
         processedEntity.tableId = processedEntity.tableId == null ? -1L : processedEntity.tableId;
-        switch (processedEntity.processKey){
-            case Constant.ProcessKey.WORK_TICKET:
+
+        if (processedEntity.processKey.equals(ProcessKeyUtil.WORK_TICKET)){
+            goWorkTicket(processedEntity, bundle);
+        }else if (processedEntity.processKey.equals(ProcessKeyUtil.ELE_ON)){
+            bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);
+            IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
+        }else if (processedEntity.processKey.equals(ProcessKeyUtil.ELE_OFF)){
+            bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);
+            IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
+        }else if (processedEntity.processKey.equals(ProcessKeyUtil.FAULT_INFO)){
+            YHEntity yhEntity = new YHEntity();
+            yhEntity.tableNo = processedEntity.workTableNo;
+            bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY,yhEntity);
+            IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
+        }else if (processedEntity.processKey.equals(ProcessKeyUtil.WORK)){
+            WXGDEntity wxgdEntity = new WXGDEntity();
+            wxgdEntity.tableNo = processedEntity.workTableNo;
+            bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
+            IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+        }else {
+            ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
+        }
+        /*switch (processedEntity.processKey){
+            case ProcessKeyUtil.WORK_TICKET:
                 goWorkTicket(processedEntity, bundle);
                 break;
-            case Constant.ProcessKey.ELE_ON:
+            case ProcessKeyUtil.ELE_ON:
                 bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);
                 IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
                 break;
-            case Constant.ProcessKey.ELE_OFF:
+            case ProcessKeyUtil.ELE_OFF:
                 bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);
                 IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
                 break;
-//                case Constant.ProcessKey.RUN_STATE_WF:
+//                case ProcessKeyUtil.RUN_STATE_WF:
 //                    break;
-//                case Constant.ProcessKey.CHECK_APPLY_FW:
+//                case ProcessKeyUtil.CHECK_APPLY_FW:
 //                    break;
-            case Constant.ProcessKey.FAULT_INFO:
+            case ProcessKeyUtil.FAULT_INFO:
                 YHEntity yhEntity = new YHEntity();
                 yhEntity.tableNo = processedEntity.workTableNo;
                 bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY,yhEntity);
                 IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
                 break;
-            case Constant.ProcessKey.WORK:
+            case ProcessKeyUtil.WORK:
                 WXGDEntity wxgdEntity = new WXGDEntity();
                 wxgdEntity.tableNo = processedEntity.workTableNo;
                 bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
@@ -215,7 +238,7 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
                 break;
             default:
                 ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
-        }
+        }*/
     }
 
     /**

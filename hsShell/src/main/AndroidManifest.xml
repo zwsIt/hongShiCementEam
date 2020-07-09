@@ -4,6 +4,14 @@
     package="com.supcon.mes.hongShiCementEam"
     android:sharedUserId="${APP_SHARE_ID}">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="com.supcon.mes.push.PushApplication"
         android:allowBackup="true"
@@ -37,17 +45,42 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />
+        <!-- HUAWEI厂商通道 start-->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="appid=${HuaWeiAppId}" />
+        <!-- HUAWEI厂商通道 end-->
 
+        <meta-data android:name="XiaoMiAppId" android:value="${XiaoMiAppId}"/>
+        <meta-data android:name="XiaoMiAppKey" android:value="${XiaoMiAppKey}"/>
 
+        <!-- VIVO厂商通道 start-->
+        <meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="${vivoAppKey}" />
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="${vivoAppId}" />
+        <!-- VIVO厂商通道 end-->
+
+        <!-- 魅族 start-->
+        <!--push应用定义消息receiver声明 -->
+        <receiver android:name="com.supcon.mes.push.MeiZuReceiver">
+            <intent-filter>
+                <!-- 接收push消息 -->
+                <action android:name="com.meizu.flyme.push.intent.MESSAGE" />
+                <!-- 接收register消息 -->
+                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />
+                <!-- 接收unregister消息-->
+                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK" />
+                <!-- 兼容低版本Flyme3推送服务配置 -->
+                <action android:name="com.meizu.c2dm.intent.REGISTRATION" />
+                <action android:name="com.meizu.c2dm.intent.RECEIVE" />
+
+                <category android:name="${APP_SHARE_ID}"/>
+            </intent-filter>
+        </receiver>
+        <!-- 魅族 end-->
     </application>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

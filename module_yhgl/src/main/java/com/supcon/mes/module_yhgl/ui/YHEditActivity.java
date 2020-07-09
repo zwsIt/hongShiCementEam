@@ -77,6 +77,7 @@ import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
@@ -1095,7 +1096,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private void iniTransition() {
 
         if (mYHEntity.pending == null) {
-            mLinkController.initStartTransition(null, "faultInfoFW");
+            mLinkController.initStartTransition(null, ProcessKeyUtil.FAULT_INFO);
         } else {
             mLinkController.initPendingTransition(null, mYHEntity.pending.id);
         }

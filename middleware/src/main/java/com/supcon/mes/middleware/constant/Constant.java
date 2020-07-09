@@ -2,9 +2,12 @@ package com.supcon.mes.middleware.constant;
 
 import android.os.Environment;
 
+import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.mes.middleware.EamApplication;
 
 import java.io.File;
+
+import static com.supcon.common.view.App.getAppContext;
 
 /**
  * Created by wangshizhan on 2018/4/28.
@@ -502,6 +505,8 @@ public interface Constant {
 
         String C_NAME = "C_NAME";
         String C_ID = "C_ID";
+        String C_CODE = "C_CODE";
+        String COMPANY = "COMPANY";
         String COMPANY_LIST = "COMPANY_LIST";
     }
 
@@ -954,22 +959,22 @@ public interface Constant {
      * 我的流程(处理过的)单据类型
      */
     interface ProcessKey {
-        String WORK = "work"; // 工单
-        String FAULT_INFO = "faultInfoFW"; // 隐患登记
-        String EAM_INFO_EDIT = "eaminfoEdit"; // 设备档案新增申请
-        String EAM_INFO = "eaminfo"; // 设备档案申请修改
-        String CHANGE_WF = "changeWF"; // 设备状态变更
-        String CHECK_APPLY_FW = "checkApplyFW"; // 验收申请
-        String ENTRUST_REPAIR = "entrustRepair"; // 委外维修单
-        String INSTALL_NEW_WF = "installNewWF"; // 安装验收移交
-        String RUN_STATE_WF = "RunningStateWF"; // 运行记录处理
-        String SPARE_PART_APPLY = "sparePartApply"; // 备件领用申请
-        String WORK_ALLOT_NEW_WF = "workAllotNewWF"; // 设备调拨
-        String TEMP_WF = "tempWF"; // 临时任务
-        String POTROL_TASK_WF = "potrolTaskWF"; // 点巡检任务
-        String ELE_OFF = "EleOnWorkFlow"; // 停电
-        String ELE_ON = "EleOn"; // 送电
-        String WORK_TICKET = "workTicketFW"; // 检修作业票
+//        String WORK = EamApplication.getCid() == 1002 ? "work" : EamApplication.getCompanyCode() + "work"; // 工单
+//        String FAULT_INFO = EamApplication.getCid() == 1002 ? "faultInfoFW" : EamApplication.getCompanyCode() + "faultInfoFW"; // 隐患登记
+//        String EAM_INFO_EDIT = EamApplication.getCid() == 1002 ? "eaminfoEdit" : EamApplication.getCompanyCode() + "eaminfoEdit"; // 设备档案新增申请
+//        String EAM_INFO = EamApplication.getCid() == 1002 ? "eaminfo" : EamApplication.getCompanyCode() + "eaminfo"; // 设备档案申请修改
+//        String CHANGE_WF = EamApplication.getCid() == 1002 ? "changeWF" : EamApplication.getCompanyCode() + "changeWF"; // 设备状态变更
+//        String CHECK_APPLY_FW = EamApplication.getCid() == 1002 ? "checkApplyFW" : EamApplication.getCompanyCode() + "checkApplyFW"; // 验收申请
+//        String ENTRUST_REPAIR = EamApplication.getCid() == 1002 ? "entrustRepair" : EamApplication.getCompanyCode() + "entrustRepair"; // 委外维修单
+//        String INSTALL_NEW_WF = EamApplication.getCid() == 1002 ? "installNewWF" : EamApplication.getCompanyCode() + "installNewWF"; // 安装验收移交
+//        String RUN_STATE_WF = EamApplication.getCid() == 1002 ? "RunningStateWF" : EamApplication.getCompanyCode() + "RunningStateWF"; // 运行记录处理
+//        String SPARE_PART_APPLY = EamApplication.getCid() == 1002 ? "sparePartApply" : EamApplication.getCompanyCode() + "sparePartApply"; // 备件领用申请
+//        String WORK_ALLOT_NEW_WF = EamApplication.getCid() == 1002 ? "workAllotNewWF" : EamApplication.getCompanyCode() + "workAllotNewWF"; // 设备调拨
+//        String TEMP_WF = EamApplication.getCid() == 1002 ? "tempWF" : EamApplication.getCompanyCode() + "tempWF"; // 临时任务
+//        String POTROL_TASK_WF = EamApplication.getCid() == 1002 ? "potrolTaskWF" : EamApplication.getCompanyCode() + "potrolTaskWF"; // 点巡检任务
+//        String ELE_OFF = EamApplication.getCid() == 1002 ? "EleOnWorkFlow" : EamApplication.getCompanyCode() + "EleOnWorkFlow"; // 停电
+//        String ELE_ON = EamApplication.getCid() == 1002 ? "EleOn" : EamApplication.getCompanyCode() + "EleOn"; // 送电
+//        String WORK_TICKET = /*EamApplication.getCid() == 1002 ? "workTicketFW" : EamApplication.getCompanyCode() + */"workTicketFW"; // 检修作业票
     }
 
     interface WarnType {

@@ -35,6 +35,7 @@ import com.supcon.mes.middleware.model.bean.IDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.module_olxj.R;
 import com.supcon.mes.module_olxj.controller.OLXJWorkItemListRefController;
 import com.supcon.mes.module_olxj.model.api.OLXJGroupAPI;
@@ -115,7 +116,7 @@ public class OLXJGroupListActivity extends BaseRefreshRecyclerActivity<OLXJGroup
             deploymentId = getIntent().getLongExtra(Constant.IntentKey.DEPLOYMENT_ID, 0);
 
             mLinkController = new LinkController();
-            mLinkController.initStartTransition(null, "tempWF");
+            mLinkController.initStartTransition(null, ProcessKeyUtil.TEMP_WF);
         }
     }
 

@@ -293,3 +293,4 @@ public static java.lang.String TABLENAME;
 -keep public class **.R$*{
    public static final int *;
 }
+-keep class org.android.agoo.xiaomi.MiPushBroadcastReceiver {*;}

@@ -74,6 +74,7 @@ import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -342,7 +343,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             mLinkController.setCancelShow(false);
         }
         if (mWXGDEntity.id == null || mWXGDEntity.id == -1) { // 制定
-            mLinkController.initStartTransition(transition, "work");
+            mLinkController.initStartTransition(transition, ProcessKeyUtil.WORK);
             getSubmitPc("start310work"); // 通过pc端菜单管理中相应菜单获取制定 操作编码
         } else {
             mLinkController.setOnSuccessListener(result -> {
@@ -360,7 +361,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));

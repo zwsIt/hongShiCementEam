@@ -34,7 +34,7 @@ import com.supcon.mes.module_main.model.contract.AnomalyContract;
 import com.supcon.mes.module_main.presenter.AnomalyPresenter;
 import com.supcon.mes.module_main.ui.adaper.AnomalyAdapter;
 import com.supcon.mes.module_main.ui.util.FilterHelper;
-import com.umeng.message.common.Const;
+//import com.umeng.message.common.Const;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

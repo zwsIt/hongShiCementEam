@@ -49,7 +49,7 @@ public class WarnLubricationListActivity extends BaseFragmentActivity {
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
     @BindByTag("customSearchView")
-    CustomSearchView titleSearchView;
+    CustomSearchView customSearchView;
     @BindByTag("searchTitleBar")
     CustomHorizontalSearchTitleBar searchTitleBar;
     @BindByTag("customTab")
@@ -79,7 +79,7 @@ public class WarnLubricationListActivity extends BaseFragmentActivity {
                     ToastUtils.show(context, "标签内容空！");
                     return;
                 }
-                titleSearchView.setInput((String) nfcJson.get("textRecord"));
+                customSearchView.setInput((String) nfcJson.get("textRecord"));
 //                    EventBus.getDefault().post(new NFCEvent(nfc));
             });
         }
@@ -90,7 +90,7 @@ public class WarnLubricationListActivity extends BaseFragmentActivity {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         searchTitleBar.setTitleText(context.getResources().getString(R.string.warn_lubrication));
-        titleSearchView.setHint("请输入设备编码");
+        customSearchView.setHint("请输入设备编码");
         searchTitleBar.disableRightBtn();
         initTab();
         initViewPager();
@@ -148,15 +148,15 @@ public class WarnLubricationListActivity extends BaseFragmentActivity {
     protected void initListener() {
         super.initListener();
         searchTitleBar.leftBtn().setOnClickListener(v -> finish());
-        RxTextView.textChanges(titleSearchView.editText())
+        RxTextView.textChanges(customSearchView.editText())
                 .skipInitialValue()
                 .subscribe(charSequence -> {
                     mTimeFrequencyFragment.doSearch(charSequence.toString().trim());
                     mRunTimeFragment.doSearch(charSequence.toString().trim());
                 });
-        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () -> {
-            mTimeFrequencyFragment.doSearch(titleSearchView.getInput().trim());
-            mRunTimeFragment.doSearch(titleSearchView.getInput().trim());
+        KeyExpandHelper.doActionSearch(customSearchView.editText(), true, () -> {
+            mTimeFrequencyFragment.doSearch(customSearchView.getInput().trim());
+            mRunTimeFragment.doSearch(customSearchView.getInput().trim());
         });
         customTab.setOnTabChangeListener(new CustomTab.OnTabChangeListener() {
             @Override

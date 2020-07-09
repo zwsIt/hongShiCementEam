@@ -56,6 +56,7 @@ import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_hs_tsd.IntentRouter;
 import com.supcon.mes.module_hs_tsd.R;
@@ -191,7 +192,7 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
         getController(LinkController.class).setCancelShow(true);
         if (pendingId.equals(-1L)) {
             // 制定单据工作流
-            getController(LinkController.class).initStartTransition(workFlowView, "EleOnWorkFlow");
+            getController(LinkController.class).initStartTransition(workFlowView, ProcessKeyUtil.ELE_OFF);
             getSubmitPc("start362"); // 通过pc端菜单管理中相应菜单获取制定 操作编码
         } else {
             getController(LinkController.class).setOnSuccessListener(result -> {
@@ -216,7 +217,7 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
      * @author user 2019/12/27
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "EleOnWorkFlow", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.ELE_OFF, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
@@ -347,6 +348,10 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
                     doSave();
                     break;
                 case 1:
+                    if (Constant.Transition.CANCEL_CN.equals(workFlowVar.dec)){
+                        showConfirmDialog(workFlowVar);
+                    }
+                    break;
                 case 2:
                     doSubmit(workFlowVar);
                     break;
@@ -365,6 +370,16 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
             }
         });
 
+    }
+    /**
+     * 作废提示
+     * @param workFlowVar
+     */
+    private void showConfirmDialog(WorkFlowVar workFlowVar) {
+        new CustomDialog(context).twoButtonAlertDialog(context.getResources().getString(R.string.confirm_exe_operate) + workFlowVar.dec + "？")
+                .bindClickListener(R.id.grayBtn,null,true)
+                .bindClickListener(R.id.redBtn, v -> doSubmit(workFlowVar), true)
+                .show();
     }
 
     private void doSave() {

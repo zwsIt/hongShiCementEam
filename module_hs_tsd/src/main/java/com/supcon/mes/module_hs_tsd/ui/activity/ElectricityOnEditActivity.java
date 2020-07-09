@@ -55,6 +55,7 @@ import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_hs_tsd.R;
 import com.supcon.mes.module_hs_tsd.constant.ElectricityConstant;
@@ -182,7 +183,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
         getController(LinkController.class).setCancelShow(true);
         if (pendingId.equals(-1L)) {
             // 制定单据工作流
-            getController(LinkController.class).initStartTransition(workFlowView, "EleOn");
+            getController(LinkController.class).initStartTransition(workFlowView, ProcessKeyUtil.ELE_ON);
             getSubmitPc("start376"); // 通过pc端菜单管理中相应菜单获取制定 操作编码
         } else {
             getController(LinkController.class).setOnSuccessListener(result -> {
@@ -207,7 +208,7 @@ public class ElectricityOnEditActivity extends BaseRefreshActivity implements El
      * @author user 2019/12/27
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "EleOn", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.ELE_ON, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));

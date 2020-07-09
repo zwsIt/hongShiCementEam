@@ -19,7 +19,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        multiDexEnabled true
         ndk{
-            abiFilters "armeabi-v7a", "x86", "armeabi"
+            abiFilters "armeabi-v7a", "x86", "armeabi"/*,"arm64-v8a","x86_64","mips","mips64"*/
         }
         flavorDimensions("hongshi")
     }
@@ -41,8 +41,13 @@ android {
                                     APP_ICON            : "@drawable/ic_app_launcher_hongshi",
                                     APP_ROUND_ICON      : "@drawable/ic_app_launcher_round_hs",
                                     APP_SHARE_ID        : "com.supcon.mes.hongShiCementEam",
-                                    UMENG_APPKEY        : "5cbea853570df3300e000f4a",
-                                    UMENG_MESSAGE_SECRET: "b884c2d96b0bda0442bc9158cccb06c4"]
+                                    UMENG_APPKEY        : "5ef99e4f570df3173300016b"/*"5cbea853570df3300e000f4a"*/,
+                                    UMENG_MESSAGE_SECRET: "a21848cb45802a0ac1c90d7681471a0b"/*"b884c2d96b0bda0442bc9158cccb06c4"*/,
+                                    HuaWeiAppId         : "102480349",
+                                    XiaoMiAppId         : "2882303761518455453",
+                                    XiaoMiAppKey        : "5461845536453",
+                                    vivoAppId           : "此处改为VIVO后台真实参数",
+                                    vivoAppKey          : "此处改为VIVO后台真实参数"]
         }
 //        hailuo {
 //            applicationId 'com.supcon.mes.hailuoCementEam'

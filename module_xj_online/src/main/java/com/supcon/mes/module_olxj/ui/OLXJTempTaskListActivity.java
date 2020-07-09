@@ -43,6 +43,7 @@ import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.NFCHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
@@ -201,7 +202,7 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
 
         initEmptyView();
 
-        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName(), "tempWF", new OnSuccessListener<Long>() {
+        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.TEMP_WF, new OnSuccessListener<Long>() {
             @Override
             public void onSuccess(Long result) {
                 deploymentId = result;

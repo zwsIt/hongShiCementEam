@@ -63,6 +63,7 @@ import com.supcon.mes.middleware.ui.view.FlowLayout;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FieldHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_overhaul_workticket.IntentRouter;
@@ -201,7 +202,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         getController(LinkController.class).setCancelShow(true);
         if (pendingId.equals(-1L)) {
             // 制定单据工作流
-            getController(LinkController.class).initStartTransition(workFlowView, "workTicketFW");
+            getController(LinkController.class).initStartTransition(workFlowView, ProcessKeyUtil.WORK_TICKET);
             getSubmitPc("start_op3wj2a"); // 通过pc端菜单管理中相应菜单获取制定 操作编码
         } else {
             getController(LinkController.class).setOnSuccessListener(result -> {
@@ -227,7 +228,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "workTicketFW", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK_TICKET, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
@@ -350,7 +351,11 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                 case 0:
                     doSave();
                     break;
-                case 1:
+                case 1: //作废提示
+                    if (Constant.Transition.CANCEL_CN.equals(workFlowVar.dec)){
+                        showConfirmDialog(workFlowVar);
+                    }
+                    break;
                 case 2:
                     doSubmit(workFlowVar);
                     break;
@@ -377,6 +382,17 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
     }
 
+    /**
+     * 作废提示
+     * @param workFlowVar
+     */
+    private void showConfirmDialog(WorkFlowVar workFlowVar) {
+        new CustomDialog(context).twoButtonAlertDialog(context.getResources().getString(R.string.confirm_exe_operate) + workFlowVar.dec + "？")
+                .bindClickListener(R.id.grayBtn,null,true)
+                .bindClickListener(R.id.redBtn, v -> doSubmit(workFlowVar), true)
+                .show();
+    }
+
     private void retrialEleOff() {
         new CustomDialog(this)
                 .twoButtonAlertDialog("确定弃审停电票？")
@@ -384,7 +400,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                 .bindClickListener(R.id.redBtn, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onLoading(context.getResources().getString(R.string.ticket_dealing));
+                        onLoading(context.getResources().getString(R.string.dealing));
                         presenterRouter.create(WorkTicketSubmitAPI.class).retrial(mWorkTicketEntity.getOffApplyTableNo());
                     }
                 }, true)
@@ -686,7 +702,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
 
     @Override
     public void retrialSuccess(CommonEntity entity) {
-        onLoadSuccess(context.getResources().getString(R.string.ticket_dealt_success));
+        onLoadSuccess(context.getResources().getString(R.string.deal_success));
         refreshController.refreshBegin();
     }
 

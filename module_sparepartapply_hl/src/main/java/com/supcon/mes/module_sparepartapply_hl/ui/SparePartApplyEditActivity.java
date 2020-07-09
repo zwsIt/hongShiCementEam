@@ -49,6 +49,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sparepartapply_hl.IntentRouter;
 import com.supcon.mes.module_sparepartapply_hl.R;
@@ -181,7 +182,7 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
         titleText.setText("备件领用申请编辑");
         if (pendingId.equals(-1L)){
             // 制定单据工作流
-            getController(LinkController.class).initStartTransition(workFlowView,"sparePartApply");
+            getController(LinkController.class).initStartTransition(workFlowView, ProcessKeyUtil.SPARE_PART_APPLY);
             getSubmitPc("start310sparePartApply"); // 通过pc端菜单管理中备件领用申请菜单获取制定 操作编码
         }else {
             getController(LinkController.class).setOnSuccessListener(result -> {
@@ -199,7 +200,7 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "sparePartApply", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.SPARE_PART_APPLY, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
@@ -240,7 +241,7 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
     private void initCtrl() {
         // 获取deploymentId
         modulePermissonCheckController = getController(ModulePermissonCheckController.class);
-        modulePermissonCheckController.checkModulePermission(EamApplication.getUserName().toLowerCase(), "sparePartApply", new OnSuccessListener<Long>() {
+        modulePermissonCheckController.checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.SPARE_PART_APPLY, new OnSuccessListener<Long>() {
             @Override
             public void onSuccess(Long result) {
 //                deploymentId = result;

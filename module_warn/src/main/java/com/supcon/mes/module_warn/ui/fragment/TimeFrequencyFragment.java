@@ -36,6 +36,7 @@ import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
@@ -138,7 +139,7 @@ public class TimeFrequencyFragment extends BaseRefreshRecyclerFragment<Lubricati
     protected void initData() {
         super.initData();
         mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "work", result -> deploymentId = result, null);
+        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.WORK, result -> deploymentId = result, null);
     }
 
     /**

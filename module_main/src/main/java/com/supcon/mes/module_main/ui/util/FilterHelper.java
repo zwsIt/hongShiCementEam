@@ -3,6 +3,7 @@ package com.supcon.mes.module_main.ui.util;
 import com.supcon.mes.mbap.view.CustomFilterView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CustomFilterBean;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,32 +27,32 @@ public class FilterHelper {
 
         filterBean = new CustomFilterBean();
         filterBean.name = "隐患单";
-        filterBean.id = Constant.ProcessKey.FAULT_INFO;
+        filterBean.id = ProcessKeyUtil.FAULT_INFO;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
         filterBean.name = "维修工单";
-        filterBean.id = Constant.ProcessKey.WORK;
+        filterBean.id = ProcessKeyUtil.WORK;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
         filterBean.name = "检修票";
-        filterBean.id = Constant.ProcessKey.WORK_TICKET;
+        filterBean.id = ProcessKeyUtil.WORK_TICKET;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
         filterBean.name = "停电票";
-        filterBean.id = Constant.ProcessKey.ELE_OFF;
+        filterBean.id = ProcessKeyUtil.ELE_OFF;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
         filterBean.name = "送电票";
-        filterBean.id = Constant.ProcessKey.ELE_ON;
+        filterBean.id = ProcessKeyUtil.ELE_ON;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
         filterBean.name = "巡检";
-        filterBean.id = Constant.ProcessKey.POTROL_TASK_WF;
+        filterBean.id = ProcessKeyUtil.POTROL_TASK_WF;
         filterBeanList.add(filterBean);
 
         return filterBeanList;

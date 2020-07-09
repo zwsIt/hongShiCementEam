@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -34,6 +35,9 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.ModulePowerController;
+import com.supcon.mes.middleware.controller.UserPowerCheckController;
 import com.supcon.mes.middleware.model.api.EamAPI;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
@@ -43,6 +47,7 @@ import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
+import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.NFCHelper;
@@ -50,6 +55,7 @@ import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_yhgl.IntentRouter;
 import com.supcon.mes.module_yhgl.R;
+import com.supcon.mes.module_yhgl.constant.YhConstant;
 import com.supcon.mes.module_yhgl.model.api.WorkStartAPI;
 import com.supcon.mes.module_yhgl.model.contract.WorkStartContract;
 import com.supcon.mes.module_yhgl.model.dto.WorkStartDTO;
@@ -71,6 +77,7 @@ import io.reactivex.functions.Consumer;
 
 @Router(value = Constant.Router.WORK_START_EDIT)
 @Presenter(value = {WorkStartPresenter.class, EamPresenter.class})
+@Controller(value = {UserPowerCheckController.class})
 public class WorkStartActivity extends BaseControllerActivity implements WorkStartContract.View, EamContract.View {
 
     @BindByTag("leftBtn")
@@ -101,6 +108,7 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
     private SinglePickController mSinglePickController;
     private List<SystemCodeEntity> mPriority;  // 优先级
     private List<String> mPriorityList = new ArrayList<>();
+    private boolean addPermission; // 添加权限（使用隐患单多页签添加按钮）
 
     @Override
     protected void onInit() {
@@ -168,6 +176,13 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
         super.initView();
         titleText.setText(getResources().getString(R.string.fault_work_start_edit));
         workStartStaff.setContent(EamApplication.getAccountInfo().staffName);
+
+        getController(UserPowerCheckController.class).checkModulePermission(EamApplication.getCid(), YhConstant.OperateCode.CUSTOM_ADD, new OnSuccessListener<Map<String, Boolean>>() {
+            @Override
+            public void onSuccess(Map<String, Boolean> result) {
+                addPermission = result.get(YhConstant.OperateCode.CUSTOM_ADD);
+            }
+        });
     }
 
     @Override
@@ -256,6 +271,10 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        if (!addPermission){
+                            ToastUtils.show(context, context.getResources().getString(R.string.sorry_no_add_permission));
+                            return;
+                        }
                         doSubmit();
                     }
                 });

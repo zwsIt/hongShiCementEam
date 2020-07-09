@@ -32,6 +32,7 @@ import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.ui.fragment.WorkFinishedListFragment;
@@ -56,7 +57,7 @@ public class WXGDListNewActivity extends BaseFragmentActivity {
     @BindByTag("rightBtn")
     ImageButton rightBtn;
     @BindByTag("customSearchView")
-    CustomSearchView titleSearchView;
+    CustomSearchView customSearchView;
     @BindByTag("searchTitleBar")
     CustomHorizontalSearchTitleBar searchTitleBar;
     @BindByTag("customTab")
@@ -82,7 +83,7 @@ public class WXGDListNewActivity extends BaseFragmentActivity {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         searchTitleBar.setTitleText(context.getResources().getString(R.string.workName));
-        titleSearchView.setHint(getString(R.string.middleware_input_eam_code));
+        customSearchView.setHint(getString(R.string.middleware_input_eam_code));
         initTab();
         initViewPager();
     }
@@ -110,7 +111,7 @@ public class WXGDListNewActivity extends BaseFragmentActivity {
     protected void initData() {
         super.initData();
         ModulePermissonCheckController mModulePermissionCheckController = new ModulePermissonCheckController();
-        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName().toLowerCase(), "work", result -> {
+        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.WORK, result -> {
             if (result == null){
                 searchTitleBar.disableRightBtn();
             }
@@ -142,15 +143,15 @@ public class WXGDListNewActivity extends BaseFragmentActivity {
                         ToastUtils.show(context, "当前用户并未拥有创建单据权限！");
                     }
                 });
-        RxTextView.textChanges(titleSearchView.editText())
+        RxTextView.textChanges(customSearchView.editText())
                 .skipInitialValue()
                 .subscribe(charSequence -> {
                     mWorkPendingListFragment.doSearch(charSequence.toString().trim());
                     mWorkFinishedListFragment.doSearch(charSequence.toString().trim());
                 });
-        KeyExpandHelper.doActionSearch(titleSearchView.editText(), true, () -> {
-            mWorkPendingListFragment.doSearch(titleSearchView.getInput().trim());
-            mWorkFinishedListFragment.doSearch(titleSearchView.getInput().trim());
+        KeyExpandHelper.doActionSearch(customSearchView.editText(), true, () -> {
+            mWorkPendingListFragment.doSearch(customSearchView.getInput().trim());
+            mWorkFinishedListFragment.doSearch(customSearchView.getInput().trim());
         });
         customTab.setOnTabChangeListener(new CustomTab.OnTabChangeListener() {
             @Override

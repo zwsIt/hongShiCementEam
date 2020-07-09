@@ -34,6 +34,7 @@ import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
 import com.supcon.mes.module_main.model.api.WaitDealtAPI;
@@ -130,29 +131,52 @@ public class SubordinatesWorkFragment extends BaseRefreshRecyclerFragment<WaitDe
             public void onItemChildViewClick(View childView, int position, int action, Object obj) {
                 WaitDealtEntity waitDealtEntity = (WaitDealtEntity) obj;
                 Bundle bundle = new Bundle();
-                switch (waitDealtEntity.processKey){
-                    case Constant.ProcessKey.WORK_TICKET:
+
+                if (waitDealtEntity.processKey.equals(ProcessKeyUtil.WORK_TICKET)){
+                    goWorkTicket(waitDealtEntity, bundle);
+                }else if (waitDealtEntity.processKey.equals(ProcessKeyUtil.ELE_ON)){
+                    bundle.putLong(Constant.IntentKey.TABLE_ID, waitDealtEntity.tableId);
+                    IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
+                }else if (waitDealtEntity.processKey.equals(ProcessKeyUtil.ELE_OFF)){
+                    bundle.putLong(Constant.IntentKey.TABLE_ID, waitDealtEntity.tableId);
+                    IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
+                }else if (waitDealtEntity.processKey.equals(ProcessKeyUtil.FAULT_INFO)){
+                    YHEntity yhEntity = new YHEntity();
+                    yhEntity.tableNo = waitDealtEntity.workTableNo;
+                    bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY,yhEntity);
+                    IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
+                }else if (waitDealtEntity.processKey.equals(ProcessKeyUtil.WORK)){
+                    WXGDEntity wxgdEntity = new WXGDEntity();
+                    wxgdEntity.tableNo = waitDealtEntity.workTableNo;
+                    bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
+                    IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+                }else {
+                    ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
+                }
+
+                /*switch (waitDealtEntity.processKey){
+                    case ProcessKeyUtil.WORK_TICKET:
                         goWorkTicket(waitDealtEntity, bundle);
                         break;
-                    case Constant.ProcessKey.ELE_ON:
+                    case ProcessKeyUtil.ELE_ON:
                         bundle.putLong(Constant.IntentKey.TABLE_ID, waitDealtEntity.tableId);
                         IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
                         break;
-                    case Constant.ProcessKey.ELE_OFF:
+                    case ProcessKeyUtil.ELE_OFF:
                         bundle.putLong(Constant.IntentKey.TABLE_ID, waitDealtEntity.tableId);
                         IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
                         break;
-//                case Constant.ProcessKey.RUN_STATE_WF:
+//                case ProcessKeyUtil.RUN_STATE_WF:
 //                    break;
-//                case Constant.ProcessKey.CHECK_APPLY_FW:
+//                case ProcessKeyUtil.CHECK_APPLY_FW:
 //                    break;
-                    case Constant.ProcessKey.FAULT_INFO:
+                    case ProcessKeyUtil.FAULT_INFO:
                         YHEntity yhEntity = new YHEntity();
                         yhEntity.tableNo = waitDealtEntity.workTableNo;
                         bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY,yhEntity);
                         IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
                         break;
-                    case Constant.ProcessKey.WORK:
+                    case ProcessKeyUtil.WORK:
                         WXGDEntity wxgdEntity = new WXGDEntity();
                         wxgdEntity.tableNo = waitDealtEntity.workTableNo;
                         bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
@@ -160,7 +184,7 @@ public class SubordinatesWorkFragment extends BaseRefreshRecyclerFragment<WaitDe
                         break;
                     default:
                         ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
-                }
+                }*/
             }
         });
     }

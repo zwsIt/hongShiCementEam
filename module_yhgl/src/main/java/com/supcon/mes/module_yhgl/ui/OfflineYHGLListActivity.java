@@ -33,6 +33,7 @@ import com.supcon.mes.middleware.model.bean.YHEntityVo;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.TimeUtil;
@@ -264,7 +265,7 @@ public class OfflineYHGLListActivity extends BaseRefreshRecyclerActivity<YHEntit
     protected void initData() {
         super.initData();
         ModulePermissonCheckController modulePermissonCheckController = new ModulePermissonCheckController();
-        modulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "faultInfoFW", result -> {
+        modulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.FAULT_INFO, result -> {
         }, null);
     }
 

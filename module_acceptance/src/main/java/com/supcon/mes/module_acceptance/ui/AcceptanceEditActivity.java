@@ -54,6 +54,7 @@ import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.NFCHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_acceptance.IntentRouter;
@@ -194,7 +195,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
 
         mLinkController = getController(LinkController.class);
         if (isEdit){ // 制定
-            mLinkController.initStartTransition(null, "checkApplyFW");
+            mLinkController.initStartTransition(null, ProcessKeyUtil.CHECK_APPLY_FW);
             ModulePowerController modulePowerController = new ModulePowerController();
             modulePowerController.checkModulePermission(deploymentId, new OnSuccessListener<BapResultEntity>() {
                 @Override
@@ -216,7 +217,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "checkApplyFW", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.CHECK_APPLY_FW, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));

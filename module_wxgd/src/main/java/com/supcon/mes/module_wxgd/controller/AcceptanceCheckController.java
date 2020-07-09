@@ -34,7 +34,7 @@ import java.util.List;
 public class AcceptanceCheckController extends BaseViewController implements AcceptanceCheckContract.View {
 
     @BindByTag("acceptanceCheckListWidget")
-    CustomListWidget<AcceptanceCheckEntity> mCustomListWidget;
+    CustomListWidget<AcceptanceCheckEntity> acceptanceCheckListWidget;
 
     private WXGDEntity mWxgdEntity;
     private List<AcceptanceCheckEntity> mAcceptanceCheckEntities = new ArrayList<>();
@@ -53,13 +53,13 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
     @Override
     public void initView() {
         super.initView();
-        mCustomListWidget.setAdapter(new AcceptanceCheckAdapter(context, isEditable));
+        acceptanceCheckListWidget.setAdapter(new AcceptanceCheckAdapter(context, isEditable));
     }
 
     @Override
     public void initListener() {
         super.initListener();
-        mCustomListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
+        acceptanceCheckListWidget.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
                 Bundle bundle = new Bundle();
@@ -87,12 +87,12 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
             }
         }
         mAcceptanceCheckEntities = entity.result;
-        if (mCustomListWidget != null) {
-            mCustomListWidget.setData(entity.result);
+        if (acceptanceCheckListWidget != null) {
+            acceptanceCheckListWidget.setData(entity.result);
             if (isEditable) {
-                mCustomListWidget.setShowText("编辑 (" + mAcceptanceCheckEntities.size() + ")");
+                acceptanceCheckListWidget.setShowText("编辑 (" + mAcceptanceCheckEntities.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + mAcceptanceCheckEntities.size() + ")");
+                acceptanceCheckListWidget.setShowText("查看 (" + mAcceptanceCheckEntities.size() + ")");
             }
         }
         EventBus.getDefault().post(new ListEvent("acceptanceCheckEntity", mAcceptanceCheckEntities));
@@ -104,7 +104,7 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
     }
 
     public void setCustomListWidget(CustomListWidget<AcceptanceCheckEntity> customListWidget) {
-        this.mCustomListWidget = customListWidget;
+        this.acceptanceCheckListWidget = customListWidget;
     }
 
     @Override
@@ -141,12 +141,12 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
             return;
         }
         mAcceptanceCheckEntities = list;
-        if (mCustomListWidget != null) {
+        if (acceptanceCheckListWidget != null) {
 //            mCustomListWidget.setData(mAcceptanceCheckEntities);
             if (isEditable) {
-                mCustomListWidget.setShowText("编辑 (" + list.size() + ")");
+                acceptanceCheckListWidget.setShowText("编辑 (" + list.size() + ")");
             } else {
-                mCustomListWidget.setShowText("查看 (" + list.size() + ")");
+                acceptanceCheckListWidget.setShowText("查看 (" + list.size() + ")");
             }
         }
     }
@@ -156,6 +156,6 @@ public class AcceptanceCheckController extends BaseViewController implements Acc
     }
 
     public void clear() {
-        mCustomListWidget.clear();
+        acceptanceCheckListWidget.clear();
     }
 }

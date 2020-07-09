@@ -30,6 +30,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_warn.IntentRouter;
 import com.supcon.mes.module_warn.R;
@@ -135,7 +136,7 @@ public class RunTimeFragment extends BaseRefreshRecyclerFragment<LubricationWarn
     protected void initData() {
         super.initData();
         mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "work", new OnSuccessListener<Long>() {
+        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.WORK, new OnSuccessListener<Long>() {
             @Override
             public void onSuccess(Long result) {
                 deploymentId = result;

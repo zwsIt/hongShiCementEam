@@ -29,6 +29,7 @@ import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_acceptance.IntentRouter;
@@ -121,7 +122,7 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
         customSearchView.setHint("请输入设备");
         customSearchView.setInput(selecStr);
 
-        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), "checkApplyFW", result -> {
+        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.CHECK_APPLY_FW, result -> {
             if (result == null){
                 searchTitleBar.disableRightBtn();
             }

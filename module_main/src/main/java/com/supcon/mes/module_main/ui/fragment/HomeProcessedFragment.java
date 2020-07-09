@@ -98,7 +98,7 @@ public class HomeProcessedFragment extends BaseRefreshRecyclerFragment<Processed
             ProcessedEntity processedEntity = (ProcessedEntity) obj;
             Bundle bundle = new Bundle();
             processedEntity.tableId = processedEntity.tableId == null ? -1L : processedEntity.tableId;
-            switch (processedEntity.processKey){
+            /*switch (processedEntity.processKey){
                 case Constant.ProcessKey.WORK_TICKET:
                     goWorkTicket(processedEntity, bundle);
                     break;
@@ -128,7 +128,7 @@ public class HomeProcessedFragment extends BaseRefreshRecyclerFragment<Processed
                     break;
                     default:
                         ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
-            }
+            }*/
         });
 
     }

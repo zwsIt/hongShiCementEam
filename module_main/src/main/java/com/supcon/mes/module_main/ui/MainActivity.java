@@ -48,8 +48,8 @@ import com.supcon.mes.module_main.ui.fragment.MineFragment;
 import com.supcon.mes.module_main.ui.fragment.WorkFragment;
 import com.supcon.mes.push.controller.DeviceTokenController;
 import com.supcon.mes.push.controller.PendingController;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.PushAgent;
+//import com.umeng.analytics.MobclickAgent;
+//import com.umeng.message.PushAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -110,7 +110,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
         Api.getInstance().setDebug(BuildConfig.DEBUG);
         LogUtil.showLog = BuildConfig.DEBUG;
         ProcessHelper.getInstance().startService(this);
-        PushAgent.getInstance(context).onAppStart();
+//        PushAgent.getInstance(context).onAppStart();
 
         initAllMenu();
     }
@@ -223,7 +223,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
         super.onResume();
         if (nfcHelper != null)
             nfcHelper.onResumeNFC(this);
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -272,7 +272,7 @@ public class MainActivity extends BaseMultiFragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
         if (nfcHelper != null)
             nfcHelper.onPauseNFC(this);
     }

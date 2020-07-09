@@ -1,6 +1,7 @@
 package com.supcon.mes.push;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -58,15 +59,25 @@ public class MyNotificationService extends Service {
         int id = new Random(System.nanoTime()).nextInt();
         oldMessage = msg;
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        manager.cancelAll();
-        Notification.Builder mBuilder = new Notification.Builder(this);
+        manager.cancelAll();
+        Notification.Builder mBuilder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "com.supcon.com";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(channelId, Context.NOTIFICATION_SERVICE, importance);
+            manager.createNotificationChannel(channel);
+
+            mBuilder = new Notification.Builder(this,channelId);
+        }else {
+            mBuilder = new Notification.Builder(this);
+        }
         mBuilder.setContentTitle(msg.title)
                 .setContentText(msg.text)
                 .setTicker(msg.ticker)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_pending_red)
                 .setAutoCancel(true);
-        Notification notification = mBuilder.getNotification();
+        Notification notification = mBuilder.build();
         PendingIntent clickPendingIntent = getClickPendingIntent(this, msg);
         PendingIntent dismissPendingIntent = getDismissPendingIntent(this, msg);
         notification.deleteIntent = dismissPendingIntent;

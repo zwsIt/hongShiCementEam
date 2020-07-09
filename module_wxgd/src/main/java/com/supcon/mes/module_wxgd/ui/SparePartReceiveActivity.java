@@ -42,6 +42,7 @@ import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
 import com.supcon.mes.middleware.model.event.SparePartAddEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
 import com.supcon.mes.module_wxgd.model.api.SparePartReceiveSubmitAPI;
@@ -130,14 +131,14 @@ public class SparePartReceiveActivity extends BaseRefreshRecyclerActivity<SpareP
         refreshListController.refreshComplete(null);
 
         ModulePermissonCheckController mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "sparePartApply",
+        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.SPARE_PART_APPLY,
                 result -> {
                     deploymentId = result;
                     ModulePowerController modulePowerController = new ModulePowerController();
                     modulePowerController.checkModulePermission(deploymentId, result1 -> powerCode = result1.powerCode);
                 }, null);
         mLinkController = new LinkController();
-        mLinkController.initStartTransition(null, "sparePartApply");
+        mLinkController.initStartTransition(null, ProcessKeyUtil.SPARE_PART_APPLY);
     }
 
     @SuppressLint("CheckResult")

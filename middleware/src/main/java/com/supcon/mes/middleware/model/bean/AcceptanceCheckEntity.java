@@ -13,6 +13,7 @@ public class AcceptanceCheckEntity extends BaseEntity {
     public Long checkTime;//验收时间
     public String remark;//备注
     public CheckApply checkApplyId; // 设备验收单
+    public String reason; // 原因
 
     public Staff getCheckStaff() {
         if (checkStaff == null) {

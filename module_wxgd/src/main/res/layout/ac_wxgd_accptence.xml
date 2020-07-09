@@ -160,6 +160,20 @@
                         app:text="@string/acceptChkConclusion"
                         app:text_size="15" />
                 </LinearLayout>
+                <com.supcon.mes.mbap.view.CustomVerticalEditText
+                    android:id="@+id/acceptReason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:focusable="false"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:paddingStart="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:tag="acceptReason"
+                    app:edit_maxLine="10"
+                    app:key="原因："
+                    app:text_size="15" />
 
                 <com.supcon.mes.mbap.view.CustomGalleryView
                     android:id="@+id/yhGalleryView"

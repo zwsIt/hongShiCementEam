@@ -1,14 +1,22 @@
 package com.supcon.mes.push.util;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.SharedPreferencesUtils;
+import com.supcon.mes.push.BuildConfig;
 import com.supcon.mes.push.UmengNotificationService;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
 import com.umeng.message.PushAgent;
+
+import org.android.agoo.huawei.HuaWeiRegister;
+import org.android.agoo.mezu.MeizuRegister;
+import org.android.agoo.oppo.OppoRegister;
+import org.android.agoo.vivo.VivoRegister;
+import org.android.agoo.xiaomi.MiPushRegistar;
 
 import java.lang.reflect.Field;
 
@@ -65,14 +73,15 @@ public class PushHelper {
     private void initUpush() {
 
         PushAgent mPushAgent = PushAgent.getInstance(context);
+        mPushAgent.setResourcePackageName(BuildConfig.APPLICATION_ID);
 //        handler = new Handler(context.getMainLooper());
 
         //sdk开启通知声音
-        mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE);
+//        mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE);
         // sdk关闭通知声音
         // mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
         // 通知声音由服务端控制
-        // mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SERVER);
+//         mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SERVER);
 
         // mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
         // mPushAgent.setNotificationPlayVibrate(MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
@@ -191,8 +200,16 @@ public class PushHelper {
         //使用完全自定义处理
         mPushAgent.setPushIntentServiceClass(UmengNotificationService.class);
 
-        //华为通道
-//        HuaWeiRegister.register(this);
+        //华为通道注册，注意华为通道的初始化参数在minifest中配置
+        HuaWeiRegister.register((Application) context);
+        //小米通道注册，参数2："填写您在小米后台APP对应的xiaomi id", 参数3："填写您在小米后台APP对应的xiaomi key"
+        MiPushRegistar.register(context,ManifestUtil.getXiaoMiAppId(context),ManifestUtil.getXiaoMiAppKey(context));
+        //魅族通道
+//        MeizuRegister.register(context, "填写您在魅族后台APP对应的app id", "填写您在魅族后台APP对应的app key");
+        //OPPO通道
+//        OppoRegister.register(context, "填写您在OPPO后台APP对应的app key", "填写您在魅族后台APP对应的app secret");
+        //VIVO 通道，注意VIVO通道的初始化参数在minifest中配置
+        VivoRegister.register(context);
     }
 
 }

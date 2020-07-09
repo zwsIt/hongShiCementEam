@@ -17,6 +17,7 @@ import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_main.IntentRouter;
 import com.supcon.mes.module_main.R;
@@ -94,27 +95,44 @@ public class AnomalyAdapter extends BaseListDataRecyclerViewAdapter<AnomalyEntit
                                 ToastUtils.show(context,"数据异常processKey：" + anomalyEntity.processKey );
                                 return;
                             }
-                            switch (anomalyEntity.processKey){
-                                case Constant.ProcessKey.WORK:
+
+                            if (anomalyEntity.processKey.equals(ProcessKeyUtil.WORK_TICKET)){
+                                goWorkTicket(anomalyEntity, bundle);
+                            }else if (anomalyEntity.processKey.equals(ProcessKeyUtil.ELE_ON)){
+                                bundle.putLong(Constant.IntentKey.TABLE_ID, anomalyEntity.dataId);
+                                IntentRouter.go(context, Constant.Router.HS_ELE_ON_VIEW, bundle);
+                            }else if (anomalyEntity.processKey.equals(ProcessKeyUtil.ELE_OFF)){
+                                bundle.putLong(Constant.IntentKey.TABLE_ID, anomalyEntity.dataId);
+                                IntentRouter.go(context, Constant.Router.HS_ELE_OFF_VIEW, bundle);
+                            }else if (anomalyEntity.processKey.equals(ProcessKeyUtil.FAULT_INFO)){
+                                goFaultInfo(anomalyEntity,bundle);
+                            }else if (anomalyEntity.processKey.equals(ProcessKeyUtil.WORK)){
+                                goWork(anomalyEntity, bundle);
+                            }else {
+                                ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
+                            }
+
+                            /*switch (anomalyEntity.processKey){
+                                case ProcessKeyUtil.WORK:
                                     goWork(anomalyEntity, bundle);
                                     break;
-                                case Constant.ProcessKey.FAULT_INFO:
+                                case ProcessKeyUtil.FAULT_INFO:
                                     goFaultInfo(anomalyEntity,bundle);
                                     break;
-                                case Constant.ProcessKey.ELE_OFF:
+                                case ProcessKeyUtil.ELE_OFF:
                                     bundle.putLong(Constant.IntentKey.TABLE_ID, anomalyEntity.dataId);
                                     IntentRouter.go(context, Constant.Router.HS_ELE_OFF_VIEW, bundle);
                                     break;
-                                case Constant.ProcessKey.ELE_ON:
+                                case ProcessKeyUtil.ELE_ON:
                                     bundle.putLong(Constant.IntentKey.TABLE_ID, anomalyEntity.dataId);
                                     IntentRouter.go(context, Constant.Router.HS_ELE_ON_VIEW, bundle);
                                     break;
-                                case Constant.ProcessKey.WORK_TICKET:
+                                case ProcessKeyUtil.WORK_TICKET:
                                     goWorkTicket(anomalyEntity,bundle);
                                     break;
                                     default:
                                         ToastUtils.show(context,"暂不支持打开页面查看");
-                            }
+                            }*/
                         }
                     });
         }
@@ -122,7 +140,7 @@ public class AnomalyAdapter extends BaseListDataRecyclerViewAdapter<AnomalyEntit
         @SuppressLint("CheckResult")
         @Override
         protected void update(AnomalyEntity data) {
-//            if (Constant.ProcessKey.WORK.equals(data.processKey) || Constant.ProcessKey.FAULT_INFO.equals(data.processKey)){
+//            if (ProcessKeyUtil.WORK.equals(data.processKey) || ProcessKeyUtil.FAULT_INFO.equals(data.processKey)){
 //                Api.getInstance().retrofit.create(MainService.class).getPendingId(EamApplication.getAccountInfo().userId,data.workTableNo)
 //                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 //                .onErrorReturn(throwable -> {

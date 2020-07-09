@@ -5,7 +5,7 @@ buildscript {
         google()
         mavenCentral()
         jcenter()
-
+        maven { url 'https://dl.bintray.com/umsdk/release' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.2'
@@ -25,8 +25,9 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
         flatDir {
-            dirs '../module_zz_new/libs', '../vibLib/libs', 'libs'  //系统会搜索本身libs下和moduleM中libs下的依赖，使用逗号隔开。
+            dirs /*'../module_zz_new/libs', '../vibLib/libs',*/ 'libs'  //系统会搜索本身libs下和moduleM中libs下的依赖，使用逗号隔开。
         }
     }
 }
@@ -42,12 +43,12 @@ ext{
 
     minSdkVersion = 21
     targetSdkVersion = 22
-    versionCode = 52
-    versionName = "8.20.10.03"
+    versionCode = 53
+    versionName = "8.20.10.04"
 
     ProductCode = "8.20.10"
     EamCode = "01"
-    MobileCode = "03"  //测试版本，不足一位加“0”补足
+    MobileCode = "04"  //测试版本，不足一位加“0”补足
 
     isAlone  = false
 

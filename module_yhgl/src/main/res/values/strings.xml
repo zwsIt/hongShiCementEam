@@ -13,4 +13,5 @@
     <string name="fault_work_start_edit">工作发起</string>
     <string name="fault_work_content">工作内容</string>
     <string name="fault_submit">提 交</string>
+    <string name="sorry_no_add_permission">抱歉，您没有发起工作权限</string>
 </resources>

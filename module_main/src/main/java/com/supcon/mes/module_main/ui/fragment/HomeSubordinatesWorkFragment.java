@@ -128,7 +128,7 @@ public class HomeSubordinatesWorkFragment extends BaseRefreshRecyclerFragment<Wa
         waitDealtAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
             WaitDealtEntity waitDealtEntity = (WaitDealtEntity) obj;
             Bundle bundle = new Bundle();
-            switch (waitDealtEntity.processKey){
+            /*switch (waitDealtEntity.processKey){
                 case Constant.ProcessKey.WORK_TICKET:
                     goWorkTicket(waitDealtEntity, bundle);
                     break;
@@ -158,7 +158,7 @@ public class HomeSubordinatesWorkFragment extends BaseRefreshRecyclerFragment<Wa
                     break;
                 default:
                     ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
-            }
+            }*/
         });
     }
 

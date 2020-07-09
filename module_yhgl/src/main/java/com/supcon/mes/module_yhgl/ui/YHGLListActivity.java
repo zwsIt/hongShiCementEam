@@ -43,6 +43,7 @@ import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.module_yhgl.IntentRouter;
@@ -377,7 +378,7 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
     protected void initData() {
         super.initData();
         mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), "faultInfoFW", new OnSuccessListener<Long>() {
+        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.FAULT_INFO, new OnSuccessListener<Long>() {
             @Override
             public void onSuccess(Long result) {
                 deploymentId = result;

@@ -44,6 +44,7 @@ import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_sparepartapply_hl.IntentRouter;
 import com.supcon.mes.module_sparepartapply_hl.R;
@@ -165,7 +166,7 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
         remark.setEditable(false);
         getController(LinkController.class).setOnSuccessListener(result -> {
             //获取__pc__
-            getController(PcController.class).queryPc(result.toString(), "sparePartApply", new OnAPIResultListener<String>() {
+            getController(PcController.class).queryPc(result.toString(), ProcessKeyUtil.SPARE_PART_APPLY, new OnAPIResultListener<String>() {
                 @Override
                 public void onFail(String errorMsg) {
                     ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));

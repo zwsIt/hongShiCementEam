@@ -111,7 +111,7 @@
         app:key="扣分数:"
         app:key_size="15"
         app:necessary="false"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
     <com.supcon.mes.middleware.ui.view.FlowLayout
         android:id="@+id/checkLayout"
         android:layout_width="match_parent"

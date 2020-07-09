@@ -18,6 +18,8 @@ import com.app.annotation.BindByTag;
 import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
@@ -68,6 +70,7 @@ import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -100,6 +103,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * WXGDDispatcherActivity 验收Activity
@@ -182,6 +187,8 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
 
     @BindByTag("workContext")
     CustomVerticalEditText workContext;
+    @BindByTag("acceptReason")
+    CustomVerticalEditText acceptReason;
 
     @BindByTag("acceptApplyBtn")
     Button acceptApplyBtn;
@@ -316,7 +323,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, "work", new OnAPIResultListener<String>() {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK, new OnAPIResultListener<String>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
@@ -421,6 +428,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         }
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
@@ -486,6 +494,14 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
                 }
             }
         });
+        RxTextView.textChanges(acceptReason.editText())
+                .skipInitialValue()
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        currentAcceptChkEntity.reason = charSequence.toString();
+                    }
+                });
 
         transition.setOnChildViewClickListener((childView, action, obj) -> {
             switch (action) {
@@ -603,6 +619,10 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private void doSubmit(WorkFlowVar workFlowVar) {
         if ("".equals(acceptChkResult.getSpinnerValue())) {
             ToastUtils.show(context, "请填写验收结论!");
+            return;
+        }
+        if (acceptChkResult.getSpinnerValue().contains("差") && "".equals(acceptReason.getContent())) {
+            ToastUtils.show(context, "验收结论差，请填写验收原因");
             return;
         }
 
@@ -730,7 +750,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     public void receiveList(ListEvent listEvent) {
         if ("acceptanceCheckEntity".equals(listEvent.getFlag())) {
             List list = listEvent.getList();
-            if (list.size() > 0 && mWXGDEntity.repairSum != null && list.size() == mWXGDEntity.repairSum) {
+            if (list.size() > 0 /*&& mWXGDEntity.repairSum != null && list.size() == mWXGDEntity.repairSum*/) {
                 // 已存在保存数据
                 currentAcceptChkEntity = (AcceptanceCheckEntity) list.get(list.size() - 1); // 获取最后一个为当前可编辑
             }
@@ -845,12 +865,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
         AttachmentDownloadController mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_GDPATH);
         mDownloadController.downloadPic(attachmentEntities, "BEAM2_1.0.0_workList",
-                new OnSuccessListener<List<GalleryBean>>() {
-                    @Override
-                    public void onSuccess(List<GalleryBean> result) {
-                        yhGalleryView.setGalleryBeans(result);
-                    }
-                });
+                result -> yhGalleryView.setGalleryBeans(result));
     }
 
     @Override

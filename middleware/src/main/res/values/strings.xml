@@ -80,5 +80,6 @@
     <string name="no_query_eam">未查询到设备</string>
     <string name="inspection_statistics">巡检统计</string>
     <string name="deal_info">处理意见</string>
+    <string name="confirm_exe_operate">确认执行当前操作：</string>
 
 </resources>
