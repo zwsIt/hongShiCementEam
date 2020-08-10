@@ -6,7 +6,6 @@ import com.supcon.mes.middleware.model.bean.Staff;
 
 public class ScoreStaffEntity extends BaseEntity {
 
-
     public Long cid;
     public Long createTime;//创建时间
     public Long id = -1L;
@@ -15,7 +14,6 @@ public class ScoreStaffEntity extends BaseEntity {
     public Long scoreData;//评分时间
 
     public int rank; // 排名
-
 
     public Staff getPatrolWorker() {
         if (patrolWorker == null) {

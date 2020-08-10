@@ -53,6 +53,7 @@ import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.presenter.EamPresenter;
+import com.supcon.mes.middleware.util.BadgeUtil;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
@@ -306,6 +307,12 @@ public class HomeFragment extends BaseRefreshFragment implements WaitDealtContra
     @Override
     protected void initListener() {
         super.initListener();
+//        workDepot.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                BadgeUtil.setNotificationBadge(11,context);
+//            }
+//        });
         refreshController.setOnRefreshListener(() -> getWorkData());
         pendingRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             refreshController.refreshBegin();
@@ -357,18 +364,15 @@ public class HomeFragment extends BaseRefreshFragment implements WaitDealtContra
                     }
                 });
 
-        scoreLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (scoreEntity != null && !TextUtils.isEmpty(scoreEntity.type)) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Constant.IntentKey.RANKING, scoreEntity.ranking != null ? scoreEntity.ranking : -1);
-                    bundle.putString(Constant.IntentKey.TYPE, scoreEntity.type);
-                    IntentRouter.go(getActivity(), Constant.Router.RANKING, bundle);
-                } else {
-                    ToastUtils.show(getActivity(), "未获取到当前用户评分，不能查看排名！");
-                }
-            }
+        scoreLayout.setOnClickListener(v -> {
+//            if (scoreEntity != null && !TextUtils.isEmpty(scoreEntity.type)) {
+                Bundle bundle = new Bundle();
+//                bundle.putInt(Constant.IntentKey.RANKING, scoreEntity.ranking != null ? scoreEntity.ranking : -1);
+//                bundle.putString(Constant.IntentKey.TYPE, scoreEntity.type);
+                IntentRouter.go(getActivity(), Constant.Router.SCORE_RANKING, bundle);
+//            } else {
+//                ToastUtils.show(getActivity(), "未获取到当前用户评分，不能查看排名！");
+//            }
         });
     }
 

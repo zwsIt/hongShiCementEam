@@ -23,5 +23,8 @@ public interface WXGDConstant {
         String yes =  "BEAM2_019/01"; // 是
         String no =  "BEAM2_019/02"; // 否
     }
+    interface HeaderData{
+        String HEADER_DATA_INCLUDES = "faultInfo.id,faultInfo.tableInfoId";
+    }
 
 }

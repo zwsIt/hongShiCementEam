@@ -161,20 +161,8 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
 
         mDealInfoController = new  DealInfoController(context,recyclerView,null);
 
-//        mDatePickController = new DatePickController(this);
-//        mDatePickController.setSecondVisible(true);
-//        mDatePickController.setDividerVisible(true);
-//        mDatePickController.setCanceledOnTouchOutside(true);
-
-//        initCheckResult();
     }
 
-//    private void initCheckResult() {
-//        checkResultList = EamApplication.dao().getSystemCodeEntityDao().queryBuilder().where(SystemCodeEntityDao.Properties.EntityCode.eq(Constant.SystemCode.CHECK_RESULT)).list();
-//        for (SystemCodeEntity entity : checkResultList) {
-//            checkResultListStr.add(entity.value);
-//        }
-//    }
 
     @Override
     protected void initView() {

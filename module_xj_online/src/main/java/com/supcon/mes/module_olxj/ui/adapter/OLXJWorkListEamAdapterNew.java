@@ -313,8 +313,8 @@ public class OLXJWorkListEamAdapterNew extends BaseListDataRecyclerViewAdapter<O
                 @Override
                 public void onClick(View v) {
                     mOLXJCameraController.setCurrAdapterPosition(getAdapterPosition(),ufItemPics);
-                    mOLXJCameraController.showCustomDialog();
-//                    ufItemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
+//                    mOLXJCameraController.showCustomDialog();
+                    ufItemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
                 }
             });
 

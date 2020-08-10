@@ -28,7 +28,7 @@
                 android:paddingLeft="@dimen/dp_5"
                 android:paddingBottom="@dimen/dp_5"
                 >
-                <com.supcon.mes.mbap.view.CustomVerticalTextView
+                <com.supcon.mes.mbap.view.CustomTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -52,12 +52,13 @@
                     app:editable="true"
                     />
             </LinearLayout>
-            <include layout="@layout/ly_line_light"/>
+            <include layout="@layout/ly_line_light" android:visibility="gone"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:background="@color/white"
-                android:paddingLeft="@dimen/dp_5">
+                android:paddingLeft="@dimen/dp_5"
+                android:visibility="gone">
                 <com.supcon.mes.mbap.view.CustomVerticalDateView
                     style="@style/CustomStyle"
                     android:id="@+id/actualStartTime"

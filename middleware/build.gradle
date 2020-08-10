@@ -32,7 +32,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    /*测温添加so库*/
+    /*添加so库*/
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
@@ -76,7 +76,7 @@ dependencies {
     implementation 'com.carmelo:keeplive:1.0.0'
     api 'com.huangyz0918:androidwm:0.2.3' // 水印生成库
     api 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1' // 数据库升级帮助类
-    api 'com.yanzhenjie.permission:support:2.0.1'//权限申请库
+//    api 'com.yanzhenjie.permission:support:2.0.1'//权限申请库
 
     annotationProcessor "com.supcon.mes.common:apt:$rootProject.ext.aptVersion@jar"
 //    compile project(path: ':module_hs_tsd')

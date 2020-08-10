@@ -63,5 +63,20 @@
             android:tag="faultInfoDescribe"
             app:key="隐患现象："
             app:text_size="15" />
+        <com.supcon.mes.mbap.view.CustomGalleryView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_1"
+            android:id="@+id/yhGalleryView"
+            android:tag="yhGalleryView"
+            android:background="@color/white"
+            android:padding="10dp"
+            app:text="隐患照片"
+            app:text_size="16"
+            app:columns="3"
+            app:icon_visible="false"
+            app:editable="false"
+            />
     </LinearLayout>
 </LinearLayout>

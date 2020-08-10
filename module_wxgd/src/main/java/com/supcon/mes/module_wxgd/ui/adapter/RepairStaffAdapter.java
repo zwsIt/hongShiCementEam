@@ -106,6 +106,9 @@ public class RepairStaffAdapter extends BaseListDataRecyclerViewAdapter<RepairSt
         protected void initView() {
             super.initView();
             chkBox.setVisibility(View.GONE);
+            actualStartTime.setVisibility(View.GONE);
+            actualEndTime.setVisibility(View.GONE);
+            workHour.setVisibility(View.GONE);
             if (!editable) {
                 itemViewDelBtn.setVisibility(View.GONE);
             }

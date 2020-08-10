@@ -105,6 +105,7 @@ public class FilterHelper {
         return list;
     }
 
+    @SuppressLint("CheckResult")
     public static List<FilterBean> createDeviceAreaFilter() {
         final List<FilterBean> list = new ArrayList<>();
         FilterBean all = new FilterBean();
@@ -124,6 +125,7 @@ public class FilterHelper {
         return list;
     }
 
+    @SuppressLint("CheckResult")
     public static List<FilterBean> createDeviceStatusFilter() {
         final List<FilterBean> list = new ArrayList<>();
         FilterBean all = new FilterBean();

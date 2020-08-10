@@ -74,4 +74,13 @@ public interface ScoreService {
 
     @GET("/BEAM/scorePerformance/scoreHead/checkIsDeal.action")
     Flowable<ScoreDeviceCheckResultEntity> doCheckDevice(@Query("eamId") long eamId, @Query("dateString") String date);
+
+
+    //人员绩效评分列表
+    @POST("/BEAM/patrolWorkerScore/workerScoreHead/patrolScore-query.action?1=1&permissionCode=BEAM_1.0.0_patrolWorkerScore_patrolScore")
+    Flowable<CommonBAPListEntity<ScoreStaffEntity>> scoreQuery(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+
+    @POST("/BEAM/scorePerformance/scoreHead/getSocreTemplate.action?sourceType=BEAM_065/02")
+    Flowable<ScoreStaffPerformanceListEntity> getScoreTemplate(@Query("sourceId") Long staffId);
+
 }

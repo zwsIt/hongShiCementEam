@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.supcon.common.view.base.activity.BaseActivity;
+import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.adapter.GalleryAdapter;
@@ -26,6 +27,7 @@ import com.supcon.mes.middleware.util.PicUtil;
 import com.supcon.mes.middleware.util.WatermarkUtil;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
 import com.supcon.mes.module_score.ui.adapter.ScoreStaffPerformanceAdapter;
+import com.supcon.mes.module_score.ui.adapter.ScoreStaffPerformanceNewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,7 +47,7 @@ public class ScoreCameraController extends BaseCameraController {
     CustomGalleryView galleryView; // 当前操作项目
 
     private int currAdapterPosition; // 当前操作项目位置
-    private ScoreStaffPerformanceAdapter mScoreStaffPerformanceAdapter;
+    private BaseListDataRecyclerViewAdapter mScoreStaffPerformanceAdapter;
 
     private AttachmentController mAttachmentController;
     private AttachmentDownloadController mDownloadController;
@@ -64,9 +66,9 @@ public class ScoreCameraController extends BaseCameraController {
         super.onInit();
     }
 
-    public void addGalleryView(int position, CustomGalleryView customGalleryView, ScoreStaffPerformanceAdapter scoreStaffPerformanceAdapter){
+    public void addGalleryView(int position, CustomGalleryView customGalleryView, BaseListDataRecyclerViewAdapter baseListDataRecyclerViewAdapter){
         super.addListener(position, customGalleryView);
-        mScoreStaffPerformanceAdapter = scoreStaffPerformanceAdapter;
+        mScoreStaffPerformanceAdapter = baseListDataRecyclerViewAdapter;
 //        currAdapterPosition = position;
 //        galleryView = customGalleryView;
         galleryViewHashMap.put(String.valueOf(position),customGalleryView);
@@ -276,7 +278,7 @@ public class ScoreCameraController extends BaseCameraController {
       * @return
       */
     private void updateScoreItem(File file) {
-        ScoreStaffPerformanceEntity data = mScoreStaffPerformanceAdapter.getItem(currAdapterPosition);
+        ScoreStaffPerformanceEntity data = (ScoreStaffPerformanceEntity) mScoreStaffPerformanceAdapter.getItem(currAdapterPosition);
         StringBuilder picPath = new StringBuilder();
         StringBuilder picLocalPaths = new StringBuilder();
         for (GalleryBean galleryBean : galleryView.getGalleryAdapter().getList()) { // 控件展示附件

@@ -36,6 +36,7 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
@@ -48,6 +49,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
@@ -88,6 +90,7 @@ import com.supcon.mes.module_wxgd.model.event.VersionRefreshEvent;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
 import com.supcon.mes.module_wxgd.presenter.WXGDStopOrActivatePresenter;
 import com.supcon.mes.module_wxgd.util.FieldHepler;
+import com.supcon.mes.module_wxgd.util.WXGDFaultInfoPicHelper;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -112,7 +115,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 @Router(Constant.Router.WXGD_EXECUTE)
 @Presenter(value = {WXGDStopOrActivatePresenter.class, WXGDListPresenter.class})
-@Controller(value = {PcController.class,SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
+@Controller(value = {PcController.class,SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class, OnlineCameraController.class})
 public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDStopOrActivateContract.View, WXGDListContract.View {
 
     @BindByTag("leftBtn")
@@ -186,6 +189,8 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     CustomTextView eleOff;
     @BindByTag("recyclerView")
     RecyclerView recyclerView;
+    @BindByTag("yhGalleryView")
+    CustomGalleryView yhGalleryView;
 
     private RepairStaffController mRepairStaffController;
     private SparePartController mSparePartController;
@@ -346,8 +351,9 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         planStartTime.setEditable(false);
         planEndTime.setEditable(false);
         repairType.setEditable(false);
-        realEndTime.setEditable(isEdit);
-        realEndTime.setNecessary(isEdit);
+        realEndTime.setEditable(false);
+//        realEndTime.setEditable(isEdit);
+        realEndTime.setNecessary(false);
         repairAdvise.setEditable(false);
         if (!isEdit) {
             workFlowBar.setVisibility(View.GONE);
@@ -387,13 +393,13 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         planStartTime.setDate(mWXGDEntity.planStartDate == null ? "" : sdf.format(mWXGDEntity.planStartDate));
         planEndTime.setDate(mWXGDEntity.planEndDate == null ? "" : sdf.format(mWXGDEntity.planEndDate));
 
-        if (mWXGDEntity != null) {
-            mWXGDEntity.realEndDate = mWXGDEntity.realEndDate != null ? mWXGDEntity.realEndDate : System.currentTimeMillis();
-        } else {
-            mWXGDEntity.realEndDate = System.currentTimeMillis();
-        }
+//        if (mWXGDEntity != null) {
+//            mWXGDEntity.realEndDate = mWXGDEntity.realEndDate != null ? mWXGDEntity.realEndDate : System.currentTimeMillis();
+//        } else {
+//            mWXGDEntity.realEndDate = System.currentTimeMillis();
+//        }
 
-        realEndTime.setDate(DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
+        realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
         if (mWXGDEntity.isPowerCut != null){
@@ -534,7 +540,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                     }
                     mWXGDEntity.realEndDate = select;
                     realEndTime.setDate(dateStr);
-                }).show(mWXGDEntity.realEndDate);
+                }).show(mWXGDEntity.realEndDate == null ? System.currentTimeMillis() : mWXGDEntity.realEndDate);
             }
 
         });
@@ -556,8 +562,9 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                     }
                     if (!Constant.Transition.REJECT_CN.equals(workFlowVar.dec)) {
                         if (mWXGDEntity.realEndDate == null) {
-                            SnackbarHelper.showError(rootView, "请填写实际结束时间");
-                            return;
+                            mWXGDEntity.realEndDate = System.currentTimeMillis();
+//                            SnackbarHelper.showError(rootView, "请填写实际结束时间");
+//                            return;
                         }
                     }
                     onLoading("正在处理中...");
@@ -864,6 +871,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
+            initFaultInfoPic();
             // 加载处理意见
             if (mWXGDEntity.tableInfoId != null){
                 mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL,mWXGDEntity.tableInfoId);
@@ -872,6 +880,9 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             ToastUtils.show(this, "未查到当前待办");
         }
         refreshController.refreshComplete();
+    }
+    private void initFaultInfoPic() {
+        WXGDFaultInfoPicHelper.initPic(mWXGDEntity.id, yhGalleryView);
     }
 
     @Override

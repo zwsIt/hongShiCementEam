@@ -26,6 +26,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -75,6 +76,7 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
     protected boolean editable;
     private String tableStatus;
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
+    private YHEntity mYhEntity;
 
     @Override
     protected int getLayoutID() {
@@ -87,6 +89,7 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         EventBus.getDefault().register(context);
         editable = getIntent().getBooleanExtra(Constant.IntentKey.IS_EDITABLE, false);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
+        mYhEntity = (YHEntity) getIntent().getSerializableExtra(Constant.IntentKey.YHGL_ENTITY);
         mRepairStaffAdapter.setEditable(editable);
         mRepairStaffAdapter.setTableStatus(tableStatus);
         String staffInfo = getIntent().getStringExtra(Constant.IntentKey.REPAIR_STAFF_ENTITIES);
@@ -244,7 +247,10 @@ public class YHGLRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
             return;
         }
         CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
-
+        if (mYhEntity.chargeStaff != null && searchStaff.id.equals(mYhEntity.chargeStaff.id)){
+            ToastUtils.show(context, "已存在负责人："+searchStaff.name+"，请勿重复添加人员!");
+            return;
+        }
         for (RepairStaffEntity repairStaffEntity : mEntities) {
             if (repairStaffEntity.repairStaff != null) {
                 if (repairStaffEntity.repairStaff.id.equals(searchStaff.id)) {

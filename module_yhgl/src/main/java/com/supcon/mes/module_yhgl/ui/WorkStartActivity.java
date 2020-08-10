@@ -23,12 +23,14 @@ import com.supcon.common.view.util.StatusBarUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.picker.DateTimePicker;
 import com.supcon.common.view.view.picker.SinglePicker;
+import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.controllers.DatePickController;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
+import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomImageButton;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -37,6 +39,7 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.controller.ModulePowerController;
+import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.UserPowerCheckController;
 import com.supcon.mes.middleware.model.api.EamAPI;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
@@ -46,7 +49,9 @@ import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.contract.EamContract;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
+import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
 import com.supcon.mes.middleware.model.event.NFCEvent;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.presenter.EamPresenter;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -77,7 +82,7 @@ import io.reactivex.functions.Consumer;
 
 @Router(value = Constant.Router.WORK_START_EDIT)
 @Presenter(value = {WorkStartPresenter.class, EamPresenter.class})
-@Controller(value = {UserPowerCheckController.class})
+@Controller(value = {UserPowerCheckController.class, OnlineCameraController.class})
 public class WorkStartActivity extends BaseControllerActivity implements WorkStartContract.View, EamContract.View {
 
     @BindByTag("leftBtn")
@@ -98,6 +103,8 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
     CustomSpinner workPriority;
     @BindByTag("workContent")
     CustomVerticalEditText workContent;
+    @BindByTag("galleryView")
+    CustomGalleryView galleryView;
     @BindByTag("submitBtn")
     Button submitBtn;
 
@@ -142,6 +149,9 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
         mSinglePickController = new SinglePickController<String>(this);
         mSinglePickController.textSize(18);
         mSinglePickController.setCanceledOnTouchOutside(true);
+
+        getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_YHPATH,Constant.PicType.YH_PIC);
+        getController(OnlineCameraController.class).addGalleryView(0,galleryView);
     }
 
     @Override
@@ -285,6 +295,16 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
             return;
         }
         onLoading(context.getResources().getString(R.string.dealing));
+
+        // 照片
+        if (galleryView.getGalleryAdapter() != null && galleryView.getGalleryAdapter().getItemCount() > 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (GalleryBean galleryBean : galleryView.getGalleryAdapter().getList()){
+                stringBuilder.append(galleryBean.url).append(",");
+            }
+            mWorkStartDTO.setImgServerUrl(stringBuilder.substring(0,stringBuilder.length()-1));
+        }
+
         presenterRouter.create(WorkStartAPI.class).workStartSubmit(GsonUtil.gsonString(mWorkStartDTO));
     }
     private boolean checkResult() {
@@ -305,6 +325,18 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * 全屏展示时监听图片删除
+     *
+     * @param imageDeleteEvent
+     */
+    @Subscribe
+    public void onReceiveImageDeleteEvent(ImageDeleteEvent imageDeleteEvent) {
+        getController(OnlineCameraController.class).deleteGalleryBean(galleryView.getGalleryAdapter().getList().get(imageDeleteEvent.getPos()), imageDeleteEvent.getPos());
+        EventBus.getDefault().post(new RefreshEvent());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

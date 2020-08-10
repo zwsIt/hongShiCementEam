@@ -105,6 +105,8 @@ public class PendingController extends BaseDataController implements PendingQuer
                 bundle.putString(BaseConstant.WEB_URL, url);
                 IntentRouter.go(context, Constant.Router.SD, bundle);
             }
+        }else {
+            IntentRouter.go(context, Constant.Router.MAIN_REDLION);
         }
 
     }

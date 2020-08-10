@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.supcon.common.view.util.LogUtil;
@@ -26,6 +27,7 @@ import com.supcon.mes.middleware.model.bean.WorkInfo;
 import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.CrashHandler;
 import com.supcon.mes.middleware.util.CustomDevOpenHelper;
+import com.supcon.mes.middleware.util.DatabaseContext;
 import com.supcon.mes.middleware.util.WorkHelper;
 
 import java.util.List;
@@ -228,7 +230,7 @@ public class EamApplication extends MBapApp {
     private void setupDatabase() {
         //创建数据库equipment.db"
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(isIsAlone() ? mAloneManager.getHostContext() : this, "equipment.db", null);
-        CustomDevOpenHelper helper = new CustomDevOpenHelper(isIsAlone() ? mAloneManager.getHostContext() : this, "equipment.db", null);
+        CustomDevOpenHelper helper = new CustomDevOpenHelper(isIsAlone() ? mAloneManager.getHostContext() : this/*new DatabaseContext(this,Constant.FILE_PATH)*/, "equipment.db", null);
         //获取可写数据库
         SQLiteDatabase db = helper.getWritableDatabase();
         //获取数据库对象

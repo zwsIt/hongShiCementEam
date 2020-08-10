@@ -14,6 +14,15 @@ public class WorkStartDTO extends BaseEntity {
     private Long planFinishTime;    // 计划完成时间
     private String priority;        // 优先级
     private String content;         // 工作内容
+    private String imgServerUrl;    // 图片地址
+
+    public String getImgServerUrl() {
+        return imgServerUrl;
+    }
+
+    public void setImgServerUrl(String imgServerUrl) {
+        this.imgServerUrl = imgServerUrl;
+    }
 
     public Long getInitStaffId() {
         return initStaffId;

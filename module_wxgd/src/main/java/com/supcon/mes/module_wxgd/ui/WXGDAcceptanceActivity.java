@@ -92,6 +92,7 @@ import com.supcon.mes.module_wxgd.model.dto.AcceptanceCheckEntityDto;
 import com.supcon.mes.middleware.model.event.ListEvent;
 import com.supcon.mes.module_wxgd.presenter.GenerateAcceptancePresenter;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
+import com.supcon.mes.module_wxgd.util.WXGDFaultInfoPicHelper;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -193,8 +194,8 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     @BindByTag("acceptApplyBtn")
     Button acceptApplyBtn;
 
-    @BindByTag("yhGalleryView")
-    CustomGalleryView yhGalleryView;
+    @BindByTag("acceptGalleryView")
+    CustomGalleryView acceptGalleryView;
 
     @BindByTag("eleOffRadioGroup")
     RadioGroup eleOffRadioGroup; // 是否生成停电票
@@ -202,6 +203,8 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     CustomTextView eleOff;
     @BindByTag("recyclerView")
     RecyclerView recyclerView;
+    @BindByTag("yhGalleryView")
+    CustomGalleryView yhGalleryView;
 
     private AcceptanceCheckController mAcceptanceCheckController;
     private RepairStaffController mRepairStaffController;
@@ -287,7 +290,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-        customCameraIv = yhGalleryView.findViewById(R.id.customCameraIv);
+        customCameraIv = acceptGalleryView.findViewById(R.id.customCameraIv);
         initPicPath();
     }
 
@@ -296,11 +299,12 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
      */
     private void initPicPath() {
         getController(OnlineCameraController.class).init(Constant.IMAGE_SAVE_GDPATH, Constant.PicType.GD_PIC);
+        getController(OnlineCameraController.class).addGalleryView(0,acceptGalleryView);
     }
 
     @Subscribe
     public void onReceiveImageDeleteEvent(ImageDeleteEvent imageDeleteEvent) {
-        getController(OnlineCameraController.class).deleteGalleryBean(yhGalleryView.getGalleryAdapter().getList().get(imageDeleteEvent.getPos()), imageDeleteEvent.getPos());
+        getController(OnlineCameraController.class).deleteGalleryBean(acceptGalleryView.getGalleryAdapter().getList().get(imageDeleteEvent.getPos()), imageDeleteEvent.getPos());
 //        yhGalleryView.deletePic(imageDeleteEvent.getPos());
         EventBus.getDefault().post(new RefreshEvent());
     }
@@ -828,6 +832,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
             mSparePartController.setWxgdEntity(mWXGDEntity);
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
+            initFaultInfoPic();
             // 加载处理意见
             if (mWXGDEntity.tableInfoId != null){
                 mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL,mWXGDEntity.tableInfoId);
@@ -837,9 +842,13 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
         }
         refreshController.refreshComplete();
     }
+    private void initFaultInfoPic() {
+        new OnlineCameraController(rootView).addGalleryView(0,yhGalleryView);
+        WXGDFaultInfoPicHelper.initPic(mWXGDEntity.id, yhGalleryView);
+    }
 
     /**
-     * 初始化照片
+     * 初始化验收照片
      */
     private void initPic() {
         mAttachmentController.refreshGalleryView(new OnAPIResultListener<AttachmentListEntity>() {
@@ -855,7 +864,6 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
             }
         }, mWXGDEntity.tableInfoId);
 
-
     }
 
     /**
@@ -865,7 +873,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     private void downloadAttachment(List<AttachmentEntity> attachmentEntities) {
         AttachmentDownloadController mDownloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_GDPATH);
         mDownloadController.downloadPic(attachmentEntities, "BEAM2_1.0.0_workList",
-                result -> yhGalleryView.setGalleryBeans(result));
+                result -> acceptGalleryView.setGalleryBeans(result));
     }
 
     @Override

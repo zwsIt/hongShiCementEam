@@ -29,7 +29,7 @@
                 android:tag="repairStaffName"
                 app:key="@string/staff"
                 app:key_width="@dimen/dp_50"/>
-            <include layout="@layout/ly_line_light" />
+            <include layout="@layout/ly_line_light" android:visibility="gone" />
             <com.supcon.mes.mbap.view.CustomDateView
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -41,7 +41,7 @@
                 app:editable="true"
                 app:text="@string/actualStartTime"
                 app:text_width="@dimen/dp_100"/>
-            <include layout="@layout/ly_line_light" />
+            <include layout="@layout/ly_line_light" android:visibility="gone" />
             <com.supcon.mes.mbap.view.CustomDateView
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -53,7 +53,7 @@
                 app:editable="true"
                 app:text="@string/actualEndTime"
                 app:text_width="@dimen/dp_100"/>
-            <include layout="@layout/ly_line_light" />
+            <include layout="@layout/ly_line_light" android:visibility="gone" />
             <com.supcon.mes.mbap.view.CustomTextView
                 android:id="@+id/workHour"
                 android:layout_width="match_parent"

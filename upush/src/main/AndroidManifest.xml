@@ -101,8 +101,7 @@
 
         <service
             android:name="com.umeng.message.XiaomiIntentService"
-            android:exported="true"
-            android:process=":channel">
+            android:exported="true"><!--android:process=":channel"   删除此进程，需要在主进程注册小米推送，否则失败-->
             <intent-filter>
                 <action android:name="org.agoo.android.intent.action.RECEIVE" />
             </intent-filter>
@@ -136,6 +135,7 @@
 
         <service
             android:name="com.umeng.message.UmengMessageCallbackHandlerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.umeng.messge.registercallback.action" />
@@ -160,6 +160,7 @@
 <!--            android:excludeFromRecents="true"/>-->
         <service
             android:name="com.umeng.message.UmengDownloadResourceService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="false" />
         <service android:name=".MyNotificationService" />
         <service

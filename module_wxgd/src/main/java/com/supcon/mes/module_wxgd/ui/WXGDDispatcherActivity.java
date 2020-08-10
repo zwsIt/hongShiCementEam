@@ -42,6 +42,7 @@ import com.supcon.mes.mbap.utils.controllers.SinglePickController;
 import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomEditText;
+import com.supcon.mes.mbap.view.CustomGalleryView;
 import com.supcon.mes.mbap.view.CustomSpinner;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
@@ -54,8 +55,10 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
+import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.middleware.controller.YHCloseController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
@@ -103,6 +106,7 @@ import com.supcon.mes.module_wxgd.model.event.SparePartEvent;
 import com.supcon.mes.module_wxgd.model.event.VersionRefreshEvent;
 import com.supcon.mes.module_wxgd.presenter.WXGDDispatcherPresenter;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
+import com.supcon.mes.module_wxgd.util.WXGDFaultInfoPicHelper;
 import com.supcon.mes.module_wxgd.util.WXGDMapManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -129,7 +133,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 @Router(value = Constant.Router.WXGD_DISPATCHER)
 @Presenter(value = {WXGDDispatcherPresenter.class, WXGDListPresenter.class})
-@Controller(value = {PcController.class, SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
+@Controller(value = {PcController.class, SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class, OnlineCameraController.class})
 public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDDispatcherContract.View, WXGDListContract.View, WXGDSubmitController.OnSubmitResultListener {
 
     @BindByTag("leftBtn")
@@ -215,6 +219,9 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
     @BindByTag("recyclerView")
     RecyclerView recyclerView;
+
+    @BindByTag("yhGalleryView")
+    CustomGalleryView yhGalleryView;
 
     private LinkController mLinkController;
 
@@ -1092,6 +1099,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             mLubricateOilsController.setWxgdEntity(mWXGDEntity);
             maintenanceController.setWxgdEntity(mWXGDEntity);
 
+            initFaultInfoPic();
             // 加载处理意见
             if (mWXGDEntity.tableInfoId != null){
                 mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL,mWXGDEntity.tableInfoId);
@@ -1100,6 +1108,10 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             ToastUtils.show(this, "未查到当前待办");
         }
         refreshController.refreshComplete();
+    }
+
+    private void initFaultInfoPic() {
+        WXGDFaultInfoPicHelper.initPic(mWXGDEntity.id, yhGalleryView);
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.RepairStaffEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
@@ -75,6 +76,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
     private long repairSum; // 工单执行次数
     private String tableStatus;
     private List<Long> dgDeletedIds = new ArrayList<>(); //表体删除记录ids
+    private WXGDEntity mWxgdEntity;
 
     @Override
     protected int getLayoutID() {
@@ -96,6 +98,7 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         }
         repairSum = getIntent().getLongExtra(Constant.IntentKey.REPAIR_SUM, 1);
         tableStatus = getIntent().getStringExtra(Constant.IntentKey.TABLE_STATUS);
+        mWxgdEntity = (WXGDEntity) getIntent().getSerializableExtra(Constant.IntentKey.WXGD_ENTITY);
         mRepairStaffAdapter.setEditable(editable);
         mRepairStaffAdapter.setRepairSum((int) repairSum);
         mRepairStaffAdapter.setTableStatus(tableStatus);
@@ -256,6 +259,12 @@ public class WXGDRepairStaffListActivity extends BaseRefreshRecyclerActivity<Rep
         }
         if ("addRepairStaff".equals(commonSearchEvent.flag)){
             CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
+
+            if (mWxgdEntity.chargeStaff != null && searchStaff.id.equals(mWxgdEntity.chargeStaff.id)){
+                ToastUtils.show(context, "已存在负责人："+searchStaff.name+"，请勿重复添加人员!");
+                return;
+            }
+
             for (RepairStaffEntity repairStaffEntity : mEntities) {
                 if (repairStaffEntity.repairStaff != null && repairStaffEntity.timesNum != null && repairStaffEntity.timesNum >= repairSum) {
                     if (repairStaffEntity.repairStaff.id.equals(searchStaff.id)) {

@@ -119,6 +119,9 @@ public class OLXJTaskRecordsListAdapter extends BaseListDataRecyclerViewAdapter<
             taskExpandBtn.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 boolean isExpand = expandPosition == position;
+                if (mOLXJAreaEntities!= null){
+                    mOLXJAreaEntities.clear();
+                }
                 if (!isExpand) {
                     expand(position);
                     onItemChildViewClick(taskExpandBtn, 1, getItem(position));

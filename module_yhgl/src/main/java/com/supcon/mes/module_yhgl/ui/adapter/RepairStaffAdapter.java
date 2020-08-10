@@ -19,6 +19,7 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.view.CustomDialog;
+import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
@@ -65,7 +66,7 @@ public class RepairStaffAdapter extends BaseListDataRecyclerViewAdapter<RepairSt
         @BindByTag("repairStaffDelete")
         ImageView repairStaffDelete;
         @BindByTag("repairStaffName")
-        CustomVerticalTextView repairStaffName;
+        CustomTextView repairStaffName;
         @BindByTag("workHour")
         CustomVerticalEditText workHour;
         @BindByTag("actualStartTime")
@@ -93,6 +94,9 @@ public class RepairStaffAdapter extends BaseListDataRecyclerViewAdapter<RepairSt
         protected void initView() {
             super.initView();
             chkBox.setVisibility(View.GONE);
+            actualStartTime.setVisibility(View.GONE);
+            actualEndTime.setVisibility(View.GONE);
+            workHour.setVisibility(View.GONE);
             if (!editable) {
                 itemViewDelBtn.setVisibility(View.GONE);
             }

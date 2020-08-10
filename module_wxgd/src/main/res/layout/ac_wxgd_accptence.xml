@@ -176,7 +176,7 @@
                     app:text_size="15" />
 
                 <com.supcon.mes.mbap.view.CustomGalleryView
-                    android:id="@+id/yhGalleryView"
+                    android:id="@+id/acceptGalleryView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_1"
@@ -186,7 +186,7 @@
                     android:paddingTop="@dimen/dp_10"
                     android:paddingRight="@dimen/dp_20"
                     android:paddingBottom="@dimen/dp_10"
-                    android:tag="yhGalleryView"
+                    android:tag="acceptGalleryView"
                     app:columns="3"
                     app:editable="true"
                     app:icon_visible="true"

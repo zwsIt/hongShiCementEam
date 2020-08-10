@@ -291,9 +291,9 @@ public class BaseCameraController extends BaseViewController{
                     .subscribe(new Consumer<File>() {
                         @Override
                         public void accept(File file) throws Exception {
-                            if(mOnSuccessListener!= null){
-                                mOnSuccessListener.onSuccess(file);
-                            }
+//                            if(mOnSuccessListener!= null){
+//                                mOnSuccessListener.onSuccess(file);
+//                            }
                             onFileReceived(file);
                             tempFile = null;
                         }
@@ -329,9 +329,9 @@ public class BaseCameraController extends BaseViewController{
                     .subscribe(new Consumer<File>() {
                         @Override
                         public void accept(File file) throws Exception {
-                            if(mOnSuccessListener!= null){
-                                mOnSuccessListener.onSuccess(file);
-                            }
+//                            if(mOnSuccessListener!= null){
+//                                mOnSuccessListener.onSuccess(file);
+//                            }
                             onFileReceived(file);
                             tempFile = null;
                         }

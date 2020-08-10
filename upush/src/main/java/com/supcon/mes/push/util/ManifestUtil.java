@@ -1447,7 +1447,7 @@ public class ManifestUtil {
         return var1;
     }
 
-    public static String getXiaoMiAppId(Context context){
+    static String getXiaoMiAppId(Context context){
         try {
             ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),PackageManager.GET_META_DATA);
             return String.valueOf(applicationInfo.metaData.get("XiaoMiAppId"));
@@ -1456,7 +1456,7 @@ public class ManifestUtil {
             return null;
         }
     }
-    public static String getXiaoMiAppKey(Context context){
+    static String getXiaoMiAppKey(Context context){
         try {
             ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),PackageManager.GET_META_DATA);
 

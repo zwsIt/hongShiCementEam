@@ -315,13 +315,10 @@ public class OLXJWorkListAdapterNew extends BaseListDataRecyclerViewAdapter<OLXJ
 
                     });
 
-            ufItemPhotoBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOLXJCameraController.setCurrAdapterPosition(getAdapterPosition(),ufItemPics);
-                    mOLXJCameraController.showCustomDialog();
-//                    ufItemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
-                }
+            ufItemPhotoBtn.setOnClickListener(v -> {
+                mOLXJCameraController.setCurrAdapterPosition(getAdapterPosition(),ufItemPics);
+//                    mOLXJCameraController.showCustomDialog();
+                ufItemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
             });
 
             RxTextView.textChanges(ufItemSelectResult.getCustomSpinner())

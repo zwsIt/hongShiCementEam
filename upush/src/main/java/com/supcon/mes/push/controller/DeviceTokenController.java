@@ -103,18 +103,18 @@ public class DeviceTokenController extends BaseDataController implements DeviceT
 
     @Override
     public void sendLoginDeviceTokenSuccess() {
-        LogUtil.e("DEVICE_TOKEN发送成功:"+mDeviceToken);
+        LogUtil.d("DEVICE_TOKEN发送成功:"+mDeviceToken);
 //        ToastUtils.show(context, "DEVICE_TOKEN发送成功");
     }
 
     @Override
     public void sendLoginDeviceTokenFailed(String errorMsg) {
-        LogUtil.e(""+errorMsg);
+        LogUtil.e("DEVICE_TOKEN发送失败："+errorMsg);
     }
 
     @Override
     public void sendLogoutDeviceTokenSuccess() {
-        LogUtil.e("DEVICE_TOKEN清除成功:"+mDeviceToken);
+        LogUtil.d("DEVICE_TOKEN清除成功:"+mDeviceToken);
         //do nothing
 //        SharedPreferencesUtils.setParam(context, Constant.SPKey.DEVICE_TOKEN, "");
 //        ToastUtils.show(context, "DEVICE_TOKEN清除成功");

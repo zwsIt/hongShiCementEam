@@ -85,6 +85,7 @@ public interface Constant {
         String WAIT_DEALT = "WAIT_DEALT";//待办
         String ANOMALY = "ANOMALY";//设备异常
         String RANKING = "RANKING";//人员评分
+        String SCORE_RANKING = "SCORE_RANKING";//人员绩效评分排名
         String EAM_DETAIL = "EAM_DETAIL";//设备详情
 
         String XJGL_LIST = "XJGL_LIST";
@@ -247,6 +248,7 @@ public interface Constant {
         String EAM_TYPE_TREE_SELECT = "EAM_TYPE_TREE_SELECT"; // 设备类型层级选择
         String WARN_PENDING_LIST = "WARN_PENDING_LIST"; // 预警工作待办
         String ALL_MENU_LIST = "ALL_MENU_LIST"; // 所有应用
+        String SCORE_STAFF_PERFORMANCE = "SCORE_STAFF_PERFORMANCE"; // 绩效评分
     }
 
 

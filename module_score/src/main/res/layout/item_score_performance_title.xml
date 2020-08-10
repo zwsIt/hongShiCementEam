@@ -30,6 +30,7 @@
             android:tag="contentTitle"
             android:text="设备运转率"
             android:textColor="@color/textColorlightblack"
+            android:textStyle="bold"
             android:textSize="@dimen/fontSize_16sp" />
 
         <TextView

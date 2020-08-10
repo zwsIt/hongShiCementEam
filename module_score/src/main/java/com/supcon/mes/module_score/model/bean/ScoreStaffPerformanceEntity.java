@@ -3,6 +3,7 @@ package com.supcon.mes.module_score.model.bean;
 import com.google.gson.annotations.Expose;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.AttachmentEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
 import com.supcon.mes.module_score.constant.ScoreConstant;
 
@@ -34,9 +35,10 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
     public float fraction;//单项总分数
     public float score;//默认总分数
 
-    public ValueEntity defaultValueType;//类型
+    public SystemCodeEntity defaultValueType;//类型
     public int defaultNumVal;//默认数量
     public String subScore; // 文本扣分数
+    public SystemCodeEntity scoreType; // 评分类型
 
     @Expose
     public float lastSubScore; // 上次文本扣分数
@@ -78,12 +80,12 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
         this.totalHightScore = totalHightScore;
     }
 
-    public boolean isEdit() {
-        if (defaultValueType != null && ScoreConstant.ValueType.T1.equals(defaultValueType.id)) {
-            return true;
-        }
-        return false;
-    }
+//    public boolean isEdit() {
+//        if (defaultValueType != null && ScoreConstant.ValueType.T1.equals(defaultValueType.id)) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public String getAttachFileMultiFileIds() {
         return attachFileMultiFileIds;

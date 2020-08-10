@@ -59,9 +59,9 @@ import com.supcon.mes.module_login.presenter.MinePresenter;
 import com.supcon.mes.module_login.presenter.ZhiZhiUrlQueryPresenter;
 import com.supcon.mes.module_login.service.HeartBeatService;
 import com.supcon.mes.push.controller.DeviceTokenController;
-import com.yanzhenjie.permission.Action;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
+//import com.yanzhenjie.permission.Action;
+//import com.yanzhenjie.permission.AndPermission;
+//import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
 

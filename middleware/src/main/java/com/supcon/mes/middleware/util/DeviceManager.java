@@ -75,6 +75,7 @@ public final class DeviceManager {
     }
 
     //实现设备管理初始化操作,这里希望在LoginActivity中执行,用以执行相应数据的初始化操作,在每一次用户登录之后实现DeviceManger的初始化操作
+    @SuppressLint("CheckResult")
     public void init() {
         if (isReady) {
             LogUtil.e("DeviceManager", "DeviceManager has been initialized already!");
@@ -228,6 +229,7 @@ public final class DeviceManager {
         return commonDeviceEntityMap.get(eamId);
     }
 
+    @SuppressLint("CheckResult")
     private List<CommonDeviceEntity> getDeviceEntitiesByEamIds(List<CommonDeviceEntity> commonDeviceEntities, List<Long> eamIds, boolean exclude) {
         final List<CommonDeviceEntity> result = new LinkedList<>();
         Flowable.fromIterable(commonDeviceEntities)
@@ -257,6 +259,7 @@ public final class DeviceManager {
         return result;
     }
 
+    @SuppressLint("CheckResult")
     public Set<String> getAllDeviceAreas() {
         checkIsReady();
         final Set<String> result = new HashSet<>();
@@ -273,6 +276,7 @@ public final class DeviceManager {
         return result;
     }
 
+    @SuppressLint("CheckResult")
     public Set<String> getAllDeviceStatuses() {
         checkIsReady();
         final Set<String> result = new HashSet<>();

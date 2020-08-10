@@ -7,91 +7,112 @@
 
     <include layout="@layout/ly_titlebar_local" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dp_50"
-        android:layout_above="@+id/submitBtn"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingStart="@dimen/dp_10"
-        android:paddingEnd="@dimen/dp_10">
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/workStartStaff"
+        android:layout_above="@+id/submitBtn">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:tag="workStartStaff"
-            app:editable="true"
-            app:gravity="center_vertical|right"
-            app:key="@string/fault_work_start_staff"
-            app:key_size="16"
-            app:necessary="true" />
-        <include layout="@layout/ly_line_light_light" />
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/eamCode"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:tag="eamCode"
-            app:editable="true"
-            app:gravity="center_vertical|right"
-            app:key="@string/eam_code"
-            app:key_size="16"
-            app:necessary="true" />
-        <include layout="@layout/ly_line_light_light" />
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/eamName"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:tag="eamName"
-            app:editable="false"
-            app:gravity="center_vertical|right"
-            app:key="@string/eam_name"
-            app:key_size="16" />
-        <include layout="@layout/ly_line_light_light" />
-        <com.supcon.mes.mbap.view.CustomTextView
-            android:id="@+id/workContactStaff"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:tag="workContactStaff"
-            app:editable="true"
-            app:gravity="center_vertical|right"
-            app:key="@string/fault_work_contact_staff"
-            app:key_size="16"
-            app:text_width="@dimen/dp_100"/>
-        <include layout="@layout/ly_line_light_light" />
-        <com.supcon.mes.mbap.view.CustomDateView
-            android:id="@+id/workEndTime"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:tag="workEndTime"
-            app:editable="true"
-            app:gravity="center_vertical|right"
-            app:key="@string/fault_plan_repair_time"
-            app:key_size="16"
-            app:text_width="110dp" />
-        <include layout="@layout/ly_line_light_light" />
-        <com.supcon.mes.mbap.view.CustomSpinner
-            android:id="@+id/workPriority"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:tag="workPriority"
-            app:editable="true"
-            app:gravity="center_vertical|right"
-            app:key="@string/fault_work_priority"
-            app:key_size="16"
-            app:necessary="true" />
-        <include layout="@layout/ly_line_light_light" />
-        <com.supcon.mes.mbap.view.CustomVerticalEditText
-            android:id="@+id/workContent"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_100"
-            android:tag="workContent"
-            app:edit_hint="请填写工作内容"
-            app:editable="true"
-            app:key="@string/fault_work_content"
-            app:key_size="16"
-            app:necessary="true" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10">
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/workStartStaff"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:tag="workStartStaff"
+                app:editable="true"
+                app:gravity="center_vertical|right"
+                app:key="@string/fault_work_start_staff"
+                app:key_size="16"
+                app:necessary="true" />
+            <include layout="@layout/ly_line_light_light" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/eamCode"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:tag="eamCode"
+                app:editable="true"
+                app:gravity="center_vertical|right"
+                app:key="@string/eam_code"
+                app:key_size="16"
+                app:necessary="true" />
+            <include layout="@layout/ly_line_light_light" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/eamName"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:tag="eamName"
+                app:editable="false"
+                app:gravity="center_vertical|right"
+                app:key="@string/eam_name"
+                app:key_size="16" />
+            <include layout="@layout/ly_line_light_light" />
+            <com.supcon.mes.mbap.view.CustomTextView
+                android:id="@+id/workContactStaff"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:tag="workContactStaff"
+                app:editable="true"
+                app:gravity="center_vertical|right"
+                app:key="@string/fault_work_contact_staff"
+                app:key_size="16"
+                app:text_width="@dimen/dp_100"/>
+            <include layout="@layout/ly_line_light_light" />
+            <com.supcon.mes.mbap.view.CustomDateView
+                android:id="@+id/workEndTime"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:tag="workEndTime"
+                app:editable="true"
+                app:gravity="center_vertical|right"
+                app:key="@string/fault_plan_repair_time"
+                app:key_size="16"
+                app:text_width="110dp" />
+            <include layout="@layout/ly_line_light_light" />
+            <com.supcon.mes.mbap.view.CustomSpinner
+                android:id="@+id/workPriority"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:tag="workPriority"
+                app:editable="true"
+                app:gravity="center_vertical|right"
+                app:key="@string/fault_work_priority"
+                app:key_size="16"
+                app:necessary="true" />
+            <include layout="@layout/ly_line_light_light" />
+            <com.supcon.mes.mbap.view.CustomVerticalEditText
+                android:id="@+id/workContent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_100"
+                android:tag="workContent"
+                app:edit_hint="请填写工作内容"
+                app:editable="true"
+                app:key="@string/fault_work_content"
+                app:key_size="16"
+                app:necessary="true" />
+            <include layout="@layout/ly_line_light_light" />
+            <com.supcon.mes.mbap.view.CustomGalleryView
+                android:id="@+id/galleryView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_1"
+                android:background="@color/white"
+                android:minHeight="@dimen/dp_30"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:tag="galleryView"
+                app:columns="3"
+                app:editable="true"
+                app:icon_visible="true"
+                app:text="照片"
+                app:text_size="16" />
+        </LinearLayout>
+    </ScrollView>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

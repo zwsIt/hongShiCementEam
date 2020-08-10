@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.IBinder;
 
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.mes.mbap.MBapApp;
+import com.supcon.mes.middleware.util.BadgeUtil;
 import com.supcon.mes.push.event.PushRefreshEvent;
 import com.supcon.mes.push.util.NotificationUtil;
 import com.umeng.message.UTrack;
@@ -75,7 +77,7 @@ public class MyNotificationService extends Service {
                 .setContentText(msg.text)
                 .setTicker(msg.ticker)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_pending_red)
+                .setSmallIcon(R.drawable.ic_app_launcher_hongshi)
                 .setAutoCancel(true);
         Notification notification = mBuilder.build();
         PendingIntent clickPendingIntent = getClickPendingIntent(this, msg);
@@ -92,6 +94,8 @@ public class MyNotificationService extends Service {
 //            NotificationUtil.playVibrator(getBaseContext());
 //        }
 
+        // 应用角标
+//        BadgeUtil.setBadgeConunt(MBapApp.getAppContext(),1,notification);
 
     }
 
