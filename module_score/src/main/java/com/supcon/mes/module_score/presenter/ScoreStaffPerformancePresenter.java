@@ -55,7 +55,7 @@ public class ScoreStaffPerformancePresenter extends ScoreStaffPerformanceContrac
                     if (scoreStaffPerformanceListEntity.result != null){
                         ScoreStaffPerformanceListEntity performanceListEntity = new ScoreStaffPerformanceListEntity();
                         performanceListEntity.result = new ArrayList<>();
-                        Set<String> categorySet = new HashSet<>();  // 标题
+                        Set<String> categorySet = new HashSet<>();  // 标题集合
 
                         for (ScoreStaffPerformanceEntity scoreStaffPerformanceEntity : scoreStaffPerformanceListEntity.result){
                             if (!TextUtils.isEmpty(scoreStaffPerformanceEntity.category) && !categorySet.contains(scoreStaffPerformanceEntity.category)) {

@@ -800,7 +800,6 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 
             }).show();
         }
-
     }
 
     /**

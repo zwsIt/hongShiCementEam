@@ -17,8 +17,10 @@ import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
+import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.util.ToastUtils;
+import com.supcon.mes.mbap.beans.WorkFlowVar;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
@@ -30,13 +32,21 @@ import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.mbap.view.CustomVerticalEditText;
 import com.supcon.mes.mbap.view.CustomVerticalSpinner;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
+import com.supcon.mes.mbap.view.CustomWorkFlowView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.EamPicController;
+import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.PcController;
+import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntityDao;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
+import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
+import com.supcon.mes.middleware.util.ErrorMsgHelper;
+import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_wxgd.IntentRouter;
 import com.supcon.mes.module_wxgd.R;
@@ -46,10 +56,13 @@ import com.supcon.mes.module_wxgd.controller.LubricateOilsController;
 import com.supcon.mes.module_wxgd.controller.MaintenanceController;
 import com.supcon.mes.module_wxgd.controller.RepairStaffController;
 import com.supcon.mes.module_wxgd.controller.SparePartController;
+import com.supcon.mes.module_wxgd.controller.WXGDSubmitController;
 import com.supcon.mes.module_wxgd.model.api.WXGDListAPI;
 import com.supcon.mes.module_wxgd.model.bean.WXGDListEntity;
 import com.supcon.mes.module_wxgd.model.contract.WXGDListContract;
 import com.supcon.mes.module_wxgd.presenter.WXGDListPresenter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,9 +78,9 @@ import java.util.Map;
 
 @Router(value = Constant.Router.WXGD_COMPLETE)
 @Controller(value = {SparePartController.class, RepairStaffController.class, LubricateOilsController.class,
-        MaintenanceController.class, AcceptanceCheckController.class})
+        MaintenanceController.class, AcceptanceCheckController.class, LinkController.class, PcController.class})
 @Presenter(value = {WXGDListPresenter.class})
-public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDListContract.View {
+public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDListContract.View, WXGDSubmitController.OnSubmitResultListener {
 
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -130,9 +143,14 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
     CustomTextView eleOff;
     @BindByTag("recyclerView")
     RecyclerView recyclerView;
+    @BindByTag("transition")
+    CustomWorkFlowView transition;
+    @BindByTag("workFlowBar")
+    LinearLayout workFlowBar;
 
     private WXGDEntity mWXGDEntity;//传入维修工单实体参数
     private DealInfoController mDealInfoController;
+    private String __pc__;
 
 //    private DatePickController mDatePickController;
 //    private List<SystemCodeEntity> checkResultList = new ArrayList<>();
@@ -168,11 +186,26 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
     protected void initView() {
         super.initView();
         eamIc = findViewById(R.id.eamIc);
-//        if (mStatisticSource){
-            titleText.setText("工单查看");
-//        }else {
-//            titleText.setText("生效");
-//        }
+    }
+
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK_TICKET, new OnAPIResultListener<String>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                __pc__ = result;
+            }
+        });
     }
 
 
@@ -183,6 +216,9 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
      * @author zhangwenshuai1 2018/8/16
      */
     private void initTableHeadView() {
+        titleText.setText(mWXGDEntity.getPending().taskDescription);
+//        initLink();
+
         if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
         } else {
@@ -200,6 +236,22 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
         realEndTime.setNecessary(false);
         repairType.setEditable(false);
         repairAdvise.setEditable(false);
+    }
+
+    /**
+     * 工作流
+     */
+    private void initLink() {
+        if (mWXGDEntity.getPending().id != null){
+            workFlowBar.setVisibility(View.VISIBLE);
+            getSubmitPc(mWXGDEntity.getPending().activityName);
+//            getController(LinkController.class).setOnSuccessListener(result -> {
+//                //获取__pc__
+////                name = result.toString();
+//                getSubmitPc(mWXGDEntity.getPending().activityName);
+//            });
+            getController(LinkController.class).initPendingTransition(transition, mWXGDEntity.getPending().id);
+        }
     }
 
     @Override
@@ -313,5 +365,17 @@ public class WXGDCompleteActivity extends BaseRefreshActivity implements WXGDLis
     public void listWxgdsFailed(String errorMsg) {
         refreshController.refreshComplete();
         ToastUtils.show(context, errorMsg);
+    }
+
+    @Override
+    public void submitSuccess(BapResultEntity entity) {
+        onLoadSuccess("处理成功");
+        EventBus.getDefault().post(new RefreshEvent());
+        back();
+    }
+
+    @Override
+    public void submitFailed(String errorMsg) {
+        onLoadFailed(ErrorMsgHelper.msgParse(errorMsg));
     }
 }

@@ -3,6 +3,7 @@ package com.supcon.mes.module_overhaul_workticket.model.bean;
 import com.supcon.common.com_http.BaseEntity;
 import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,10 +32,10 @@ public class SafetyMeasuresEntity extends BaseEntity {
     private int version;
 
     //附件
-    private String attachFileMultiFileIds;
-    private String attachFileMultiFileNames;
-    private String attachFileFileAddPaths; // 存储路径
-    private String attachFileFileDeleteIds; // 附件删除ids
+    private List<Long> attachFileMultiFileIds;
+    private List<String> attachFileMultiFileNames;
+    private List<String> attachFileFileAddPaths; // 存储路径
+    private List<Long> attachFileFileDeleteIds; // 附件删除ids
 
     private int operateType/* = OperateType.CONFIRM.getType()*/; // 操作类型：视频、拍照、nfc、确认; 默认确认
 
@@ -100,35 +101,44 @@ public class SafetyMeasuresEntity extends BaseEntity {
         this.operateType = operateType;
     }
 
-    public String getAttachFileMultiFileIds() {
+    public List<Long> getAttachFileMultiFileIds() {
+        if (attachFileMultiFileIds == null){
+            attachFileMultiFileIds = new ArrayList<>();
+        }
         return attachFileMultiFileIds;
     }
 
-    public void setAttachFileMultiFileIds(String attachFileMultiFileIds) {
+    public void setAttachFileMultiFileIds(List<Long> attachFileMultiFileIds) {
         this.attachFileMultiFileIds = attachFileMultiFileIds;
     }
 
-    public String getAttachFileMultiFileNames() {
+    public List<String> getAttachFileMultiFileNames() {
         return attachFileMultiFileNames;
     }
 
-    public void setAttachFileMultiFileNames(String attachFileMultiFileNames) {
+    public void setAttachFileMultiFileNames(List<String> attachFileMultiFileNames) {
         this.attachFileMultiFileNames = attachFileMultiFileNames;
     }
 
-    public String getAttachFileFileAddPaths() {
+    public List<String> getAttachFileFileAddPaths() {
+        if (attachFileFileAddPaths == null){
+            attachFileFileAddPaths = new ArrayList<>();
+        }
         return attachFileFileAddPaths;
     }
 
-    public void setAttachFileFileAddPaths(String attachFileFileAddPaths) {
+    public void setAttachFileFileAddPaths(List<String> attachFileFileAddPaths) {
         this.attachFileFileAddPaths = attachFileFileAddPaths;
     }
 
-    public String getAttachFileFileDeleteIds() {
+    public List<Long> getAttachFileFileDeleteIds() {
+        if (attachFileFileDeleteIds == null){
+            attachFileFileDeleteIds = new ArrayList<>();
+        }
         return attachFileFileDeleteIds;
     }
 
-    public void setAttachFileFileDeleteIds(String attachFileFileDeleteIds) {
+    public void setAttachFileFileDeleteIds(List<Long> attachFileFileDeleteIds) {
         this.attachFileFileDeleteIds = attachFileFileDeleteIds;
     }
 

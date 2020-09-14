@@ -5,8 +5,10 @@ import android.text.TextUtils;
 import com.supcon.common.com_http.util.RxSchedulers;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.network.Api;
+import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.ResultEntity;
 import com.supcon.mes.middleware.model.bean.XJPathEntityDao;
 import com.supcon.mes.middleware.model.event.DataUploadEvent;
@@ -26,15 +28,23 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 /**
  * Created by wangshizhan on 2019/4/4
  * Email:wangshizhan@supcom.com
  */
 public class OLXJWorkSubmitPresenter extends OLXJWorkSubmitContract.Presenter{
+    private boolean isOneSubmit;
+
     @Override
-    public void uploadOLXJAreaData(OLXJAreaEntity areaEntity) {
+    public void uploadOLXJAreaData(OLXJAreaEntity areaEntity, boolean isOneSubmit) {
+        this.isOneSubmit = isOneSubmit;
         createXjFile(areaEntity);
     }
 
@@ -90,33 +100,58 @@ public class OLXJWorkSubmitPresenter extends OLXJWorkSubmitContract.Presenter{
             e.printStackTrace();
             return;
         }
-        uploadXJZipFile(new File(Constant.FILE_PATH + "xj_upload.json"));
+        uploadXJZipFile(new File(Constant.FILE_PATH + "xj_upload.json"), areaEntity);
     }
 
-    private void uploadXJZipFile(File uploadZip) {
+    private void uploadXJZipFile(File uploadZip, OLXJAreaEntity areaEntity) {
         Api.getInstance().setTimeOut(300);
         mCompositeSubscription.add(
                 OLXJClient.submitPotrolTaskByWork(FormDataHelper.createZipFileForm(uploadZip), uploadZip.getName())
                         .compose(RxSchedulers.io_main())
-                        .onErrorReturn(throwable -> {
-                            Api.getInstance().setTimeOut(30);
-                            ResultEntity resultEntity = new ResultEntity();
-                            resultEntity.success = false;
-                            resultEntity.errMsg = throwable.toString();
-                            return resultEntity;
+                        .onErrorReturn(new Function<Throwable, CommonEntity>() {
+                            @Override
+                            public CommonEntity apply(Throwable throwable) throws Exception {
+                                Api.getInstance().setTimeOut(30);
+                                CommonEntity resultEntity = new CommonEntity();
+                                resultEntity.success = false;
+                                resultEntity.errMsg = throwable.toString();
+                                return resultEntity;
+                            }
                         })
-                        .subscribe(commonEntity -> {
-                            Api.getInstance().setTimeOut(30);
-                            if (commonEntity.success) {
-                                DataUploadEvent dataUploadEvent = new DataUploadEvent(true);
-                                dataUploadEvent.setSize(1);
-                                final int finishedSize = EamApplication.dao().getXJPathEntityDao().queryBuilder()
-                                        .where(XJPathEntityDao.Properties.State.eq("已检")).list().size();
-                                if (finishedSize > 10)
-                                    dataUploadEvent.setMsg("仍有" + (finishedSize - 10) + "条巡检数据待上传");
-                                Objects.requireNonNull(getView()).uploadOLXJAreaDataSuccess();
-                            } else {
-                                Objects.requireNonNull(getView()).uploadOLXJAreaDataFailed(commonEntity.errMsg);
+                        .subscribe(new Consumer<CommonEntity>() {
+                            @Override
+                            public void accept(CommonEntity commonEntity) throws Exception {
+                                Api.getInstance().setTimeOut(30);
+                                if (commonEntity.success) {
+                                    DataUploadEvent dataUploadEvent = new DataUploadEvent(true);
+                                    dataUploadEvent.setSize(1);
+                                    final int finishedSize = EamApplication.dao().getXJPathEntityDao().queryBuilder()
+                                            .where(XJPathEntityDao.Properties.State.eq("已检")).list().size();
+                                    if (finishedSize > 10)
+                                        dataUploadEvent.setMsg("仍有" + (finishedSize - 10) + "条巡检数据待上传");
+
+                                    // update是否群推送
+                                    if (commonEntity.result != null) {
+                                        if (isOneSubmit && !TextUtils.isEmpty(commonEntity.result.toString())) {
+                                            Map<String, Boolean> booleanMap = GsonUtil.gsonToMaps(commonEntity.result.toString());
+                                            if (booleanMap != null && booleanMap.size() > 0) {
+                                                Set<String> keySet = booleanMap.keySet();
+                                                for (String id : keySet) {
+                                                    for (OLXJWorkItemEntity workItemEntity : areaEntity.workItemEntities) {
+                                                        if (workItemEntity.id == Double.valueOf(id) && booleanMap.get(id)) {
+                                                            workItemEntity.isPush = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Objects.requireNonNull(OLXJWorkSubmitPresenter.this.getView()).uploadOLXJAreaDataSuccess();
+                                } else {
+                                    Objects.requireNonNull(OLXJWorkSubmitPresenter.this.getView()).uploadOLXJAreaDataFailed(commonEntity.errMsg);
+                                }
                             }
                         }, throwable -> Objects.requireNonNull(getView()).uploadOLXJAreaDataFailed(throwable.toString()))
 

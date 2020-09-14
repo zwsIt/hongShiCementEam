@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dp_50"
+        android:layout_above="@+id/workFlowBar"
         android:tag="refreshFrameLayout"
         core_ptr:ptr_keep_header_when_refresh="true"
         core_ptr:ptr_pull_to_fresh="false"
@@ -101,5 +102,36 @@
 
         </ScrollView>
     </com.supcon.common.view.ptr.PtrFrameLayout>
+    <LinearLayout
+        android:id="@+id/workFlowBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/sh_white_stroke"
+        android:orientation="vertical"
+        android:tag="workFlowBar"
+        android:visibility="gone">
+
+        <com.supcon.mes.mbap.view.CustomEditText
+            android:id="@+id/commentInput"
+            style="@style/HintTextColor"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingTop="@dimen/dp_3"
+            android:paddingBottom="@dimen/dp_3"
+            android:tag="commentInput"
+            app:edit_hint="填写意见"
+            app:text_color="@color/textColorlightblack"
+            app:text_size="14"
+            app:text_width="0dp"
+            android:visibility="gone"/>
+        <com.supcon.mes.mbap.view.CustomWorkFlowView
+            android:id="@+id/transition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="transition"
+            app:commentable="true" />
+    </LinearLayout>
 
 </RelativeLayout>

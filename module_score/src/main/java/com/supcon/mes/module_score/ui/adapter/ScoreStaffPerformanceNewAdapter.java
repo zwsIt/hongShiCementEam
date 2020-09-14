@@ -182,19 +182,28 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                 if (scoreRadioBtn1.isPressed() || scoreRadioBtn2.isPressed()) {
                         ScoreStaffPerformanceEntity item = getItem(getAdapterPosition());
                         item.result = !item.result;
+                        float otherTotalScore = total - item.scoreEamPerformanceEntity.fraction; // 除当前标题的总分数
                         if (checkedId == R.id.scoreRadioBtn1) { // 是
                             // 标题分数 -
                             item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.fraction - item.score < 0 ? 0 : item.scoreEamPerformanceEntity.fraction - item.score;
+                            item.theoreticalScore = item.score; // 当前理论项扣分数
                         } else if (checkedId == R.id.scoreRadioBtn2) { // 否
+                            item.theoreticalScore = 0; // 当前理论项扣分数
                             // 标题分数 +
-                            item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.fraction + item.score;
+                            // 判断是否当前类别中的某项已经全部扣完分数
+                            itemAddScore(item);
+//                            item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.fraction + item.score > item.defaultTotalScore ? item.defaultTotalScore : item.scoreEamPerformanceEntity.fraction + item.score;
                         }
-                        // 更新
+                        // 更新标题分数
                         List<ScoreStaffPerformanceEntity> list = getList();
                         int position = list.indexOf(item.scoreEamPerformanceEntity);
                         notifyItemChanged(position);
 
                         notifyItemChanged(getAdapterPosition()); // 是否显示拍照
+
+                    //更新总分数
+                    item.scoreNum = otherTotalScore + item.scoreEamPerformanceEntity.fraction;
+                    onItemChildViewClick(scoreRadioGroup, 0, item);
 
 //                    item.result = !item.result;
 //                    float oldTotal = total - item.scoreEamPerformanceEntity.fraction;
@@ -229,32 +238,30 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                 if (Util.strToInt(text) == item.defaultNumVal) {
                     return;
                 }
-                float oldTotal = total - item.scoreEamPerformanceEntity.fraction;
-                float score = item.itemScore * (Util.strToInt(text) - item.defaultNumVal);
-                item.scoreEamPerformanceEntity.setTotalHightScore(item.scoreEamPerformanceEntity.getTotalHightScore() - score);
-                if (item.scoreEamPerformanceEntity.getTotalHightScore() >= 0) {
-                    item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.getTotalHightScore();
-                } else {
-                    item.scoreEamPerformanceEntity.fraction = 0;
-                }
+                float otherTotalScore = total - item.scoreEamPerformanceEntity.fraction; // 除当前标题的总分数
+//                float subScore = item.score * (Util.strToInt(text) - item.defaultNumVal); // 当前项扣分数
+                if (item.defaultNumVal < Util.strToInt(text)) { // 次数加
+                    // 标题分数 -
+                    item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.fraction - item.score < 0 ? 0 : item.scoreEamPerformanceEntity.fraction - item.score;
+                    item.theoreticalScore = item.theoreticalScore + item.score; // 当前理论项扣分数
+                } else { // 次数减
+                    item.theoreticalScore = item.theoreticalScore - item.score;
+                    // 标题分数 +
+//                    // 判断是否当前类别中的某项已经全部扣完分数
+                    itemAddScore(item);
 
-                if (item.scoreEamPerformanceEntity.fraction > item.scoreEamPerformanceEntity.score) {
-                    item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.score;
+//                    item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.fraction + item.score > item.defaultTotalScore ? item.defaultTotalScore : item.scoreEamPerformanceEntity.fraction + item.score;
                 }
-
                 item.defaultNumVal = Util.strToInt(text);
+                // 更新标题分数
                 List<ScoreStaffPerformanceEntity> list = getList();
                 int position = list.indexOf(item.scoreEamPerformanceEntity);
                 notifyItemChanged(position);
                 notifyItemChanged(getAdapterPosition()); // 是否显示拍照
-//                    if (item.defaultNumVal <= 0) {
-//                        ufItemPhotoIv.setVisibility(View.GONE); // 是否显示拍照
-//                    }else {
-//                        ufItemPhotoIv.setVisibility(View.VISIBLE);
-//                    }
+
                 //更新总分数
-                item.scoreEamPerformanceEntity.scoreNum = oldTotal + item.scoreEamPerformanceEntity.fraction;
-                onItemChildViewClick(scoreRadioGroup, 0, item.scoreEamPerformanceEntity);
+                item.scoreNum = otherTotalScore + item.scoreEamPerformanceEntity.fraction;
+                onItemChildViewClick(sum, 0, item);
             });
             RxTextView.textChanges(handleScore.editText())
                     .skipInitialValue()
@@ -266,8 +273,8 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                         ScoreStaffPerformanceEntity item = getItem(getAdapterPosition());
                         if (item == null || charSequence.toString().equals(item.resultValue))
                             return false;
-                        if (Util.strToFloat(charSequence.toString()) > item.itemScore) {
-                            ToastUtils.show(context, "当前项目最高" + item.itemScore + "分");
+                        if (Util.strToFloat(charSequence.toString()) > item.score) {
+                            ToastUtils.show(context, "当前项目最高" + item.score + "分");
                             handleScore.setContent(charSequence.subSequence(0, charSequence.length() - 1).toString());
 //                            handleScore.editText().setSelection(charSequence.length()-1);
                             return false;
@@ -275,24 +282,22 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                         return true;
                     })
                     .subscribe(charSequence -> {
-/*                        ScoreStaffPerformanceEntity item = getItem(getAdapterPosition());
+                        ScoreStaffPerformanceEntity item = getItem(getAdapterPosition());
                         item.resultValue = charSequence.toString();
-                        int position = getList().indexOf(item.scoreEamPerformanceEntity); // 标题位置
-                        float otherTotal = total - item.scoreEamPerformanceEntity.fraction; // 除当前类别的总分数
+                        float otherTotalScore = total - item.scoreEamPerformanceEntity.fraction; // 除当前标题的总分数
 
                         // 标题更新分数
                         item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.fraction + item.lastSubScore - Util.strToFloat(charSequence.toString());
-//                        item.lastSubScore = Util.strToFloat(charSequence.toString()); // 记录上次扣分数
+
+                        // 更新标题分数
+                        List<ScoreStaffPerformanceEntity> list = getList();
+                        int position = list.indexOf(item.scoreEamPerformanceEntity);
                         notifyItemChanged(position);
-                        notifyItemChanged(getAdapterPosition());
-//                        if (TextUtils.isEmpty(charSequence)) {
-//                            ufItemPhotoIv.setVisibility(View.GONE); // 是否显示拍照
-//                        }else {
-//                            ufItemPhotoIv.setVisibility(View.VISIBLE);
-//                        }
+                        notifyItemChanged(getAdapterPosition()); // 是否显示拍照
+
                         //更新总分数
-                        item.scoreEamPerformanceEntity.scoreNum = otherTotal + item.scoreEamPerformanceEntity.fraction;
-                        onItemChildViewClick(handleScore, position, item.scoreEamPerformanceEntity);*/
+                        item.scoreNum = otherTotalScore + item.scoreEamPerformanceEntity.fraction;
+                        onItemChildViewClick(handleScore, 0, item);
                     });
             RxView.clicks(ufItemPhotoIv).throttleFirst(500, TimeUnit.MILLISECONDS)
                     .subscribe(o -> {
@@ -300,6 +305,25 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                         itemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
 //                        mScoreCameraController.showCustomDialog();
                     });
+        }
+
+        /**
+         * @author zhangwenshuai1 2020/8/15
+         * @param
+         * @return
+         * @description 判断是否当前类别中的项已经全部扣完类别总分数，否则+
+         *
+         */
+        private void itemAddScore(ScoreStaffPerformanceEntity item) {
+            float categoryTotalScore = 0;
+            for (ScoreStaffPerformanceEntity entity : getList()){
+                if (entity.category.equals(item.category)){
+                    categoryTotalScore += entity.theoreticalScore;
+                }
+            }
+            if (categoryTotalScore < item.defaultTotalScore){
+                item.scoreEamPerformanceEntity.fraction = item.defaultTotalScore - categoryTotalScore;
+            }
         }
 
         @SuppressLint({"StringFormatMatches", "SetTextI18n", "CheckResult"})
@@ -321,23 +345,37 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
             data.lastSubScore = Util.strToFloat(data.resultValue); // 赋值上一次扣分数
             handleScore.setContent(data.resultValue);
 
-            if (data.defaultValueType != null && ScoreConstant.ValueType.T1.equals(data.defaultValueType.id)) {
-                sum.setVisibility(View.VISIBLE);
-                scoreRadioGroup.setVisibility(View.GONE);
-                handleScore.setVisibility(View.GONE);
-            } else if (data.defaultValueType != null && ScoreConstant.ValueType.T2.equals(data.defaultValueType.id)) {
-                scoreRadioGroup.setVisibility(View.VISIBLE);
-                sum.setVisibility(View.GONE);
-                handleScore.setVisibility(View.GONE);
-            } else if (data.defaultValueType != null && ScoreConstant.ValueType.T3.equals(data.defaultValueType.id)) {
-                handleScore.setVisibility(View.VISIBLE);
-                scoreRadioGroup.setVisibility(View.GONE);
-                sum.setVisibility(View.GONE);
-            } else {
+            if (data.scoreType != null && data.scoreType.id.equals(ScoreConstant.ScoreItemType.T1)){ // 自动
                 handleScore.setVisibility(View.GONE);
                 scoreRadioGroup.setVisibility(View.GONE);
                 sum.setVisibility(View.GONE);
+
+
+
+            }else { // 手动
+                if (data.defaultValueType != null && ScoreConstant.ValueType.T1.equals(data.defaultValueType.id)) {
+                    sum.setVisibility(View.VISIBLE);
+                    scoreRadioGroup.setVisibility(View.GONE);
+                    handleScore.setVisibility(View.GONE);
+                    data.theoreticalScore = data.score * data.defaultNumVal;
+                } else if (data.defaultValueType != null && ScoreConstant.ValueType.T2.equals(data.defaultValueType.id)) {
+                    scoreRadioGroup.setVisibility(View.VISIBLE);
+                    sum.setVisibility(View.GONE);
+                    handleScore.setVisibility(View.GONE);
+                    data.theoreticalScore = data.result ? data.score : 0;
+                } else if (data.defaultValueType != null && ScoreConstant.ValueType.T3.equals(data.defaultValueType.id)) {
+                    handleScore.setVisibility(View.VISIBLE);
+                    scoreRadioGroup.setVisibility(View.GONE);
+                    sum.setVisibility(View.GONE);
+                    data.theoreticalScore = TextUtils.isEmpty(data.resultValue) ? 0 : Float.parseFloat(data.resultValue);
+                } else {
+                    handleScore.setVisibility(View.GONE);
+                    scoreRadioGroup.setVisibility(View.GONE);
+                    sum.setVisibility(View.GONE);
+                    data.theoreticalScore = 0;
+                }
             }
+
             scoreRadioBtn1.setText(data.isItemValue);
             scoreRadioBtn2.setText(data.noItemValue);
             scoreRadioBtn1.setChecked(data.result);

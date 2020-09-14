@@ -1,5 +1,7 @@
 package com.supcon.mes.module_overhaul_workticket.util;
 
+import android.text.TextUtils;
+
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_overhaul_workticket.model.bean.HazardPointEntity;
@@ -7,6 +9,8 @@ import com.supcon.mes.module_overhaul_workticket.model.bean.SafetyMeasuresEntity
 import com.supcon.mes.module_overhaul_workticket.model.dto.SafetyMeasuresEntityDto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class WorkTicketHelper {
@@ -36,11 +40,24 @@ public class WorkTicketHelper {
             dto.isExecuted = Util.strFormat2(entity.isIsExecuted());
             dto.safetyMeasure = Util.strFormat2(entity.getSafetyMeasure());
             dto.operateType = Util.strFormat2(entity.getOperateType());
-            dto.attachFileFileAddPaths = Util.strFormat2(entity.getAttachFileFileAddPaths());
-            dto.attachFileMultiFileIds = Util.strFormat2(entity.getAttachFileMultiFileIds());
-            dto.attachFileFileDeleteIds = Util.strFormat2(entity.getAttachFileFileDeleteIds());
 
-            safetyMeasuresEntityDtoList.add(dto);
+//            List<String> addPaths = new ArrayList<>();
+//            addPaths = Arrays.asList(Util.strFormat2(entity.getAttachFileFileAddPaths()).split(","));
+
+//            if (!TextUtils.isEmpty(entity.getAttachFileFileAddPaths())){
+//                dto.attachFileFileAddPaths = Arrays.asList(Util.strFormat2(entity.getAttachFileFileAddPaths()).split(",")); // 数组方式
+//            }
+            dto.attachFileFileAddPaths = entity.getAttachFileFileAddPaths();
+//            if (!TextUtils.isEmpty(entity.getAttachFileMultiFileIds())){
+//                dto.attachFileMultiFileIds = Arrays.asList(Util.strFormat2(entity.getAttachFileMultiFileIds())); // 数组方式
+//            }
+            dto.attachFileMultiFileIds = entity.getAttachFileMultiFileIds();
+//            if (!TextUtils.isEmpty(entity.getAttachFileFileDeleteIds())){
+//                dto.attachFileFileDeleteIds = Arrays.asList(Util.strFormat2(entity.getAttachFileFileDeleteIds())); // 数组方式
+//            }
+            dto.attachFileFileDeleteIds = entity.getAttachFileFileDeleteIds();
+
+                    safetyMeasuresEntityDtoList.add(dto);
         }
         return safetyMeasuresEntityDtoList;
     }

@@ -338,9 +338,11 @@ public class SafetyMeasuresViewAdapter extends BaseListDataRecyclerViewAdapter<S
 //                    videoIv.setVisibility(View.GONE);
             SafetyMeasuresEntity data = getItem(adapterPosition);
             StringBuilder picPath = new StringBuilder();
+            List<String> picPathList = new ArrayList<>();
             for (GalleryBean galleryBean : galleryView.getGalleryAdapter().getList()) {
                 if (!TextUtils.isEmpty(galleryBean.url)) {
                     picPath.append(galleryBean.url).append(",");
+                    picPathList.add(galleryBean.url);
                 }
             }
             if (!picPath.toString().contains(file.getName())) {
@@ -348,27 +350,29 @@ public class SafetyMeasuresViewAdapter extends BaseListDataRecyclerViewAdapter<S
                 if (picPath.length() == 0) {
                     data.setIsExecuted(false);
                     data.setAttachFileFileAddPaths(null);
-                    if (!TextUtils.isEmpty(data.getAttachFileMultiFileIds())) {
+                    if (data.getAttachFileMultiFileIds().size() > 0) {
                         data.setAttachFileFileDeleteIds(data.getAttachFileMultiFileIds());
                     }
                 } else {
-                    List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
-                    List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
-                    List<String> attachFileFileAddPathsList = Arrays.asList(data.getAttachFileFileAddPaths().split(","));
+//                    List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
+//                    List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
+//                    List<String> attachFileFileAddPathsList = Arrays.asList(data.getAttachFileFileAddPaths().split(","));
                     // 删除已保存
                     if (data.getAttachFileMultiFileNames().contains(file.getName())){
-                        for (String name : attachFileNameList){
-                            if (name.contains(file.getName())){
-                                String fileFileDeleteIds = data.getAttachFileFileDeleteIds() == null ? "" : data.getAttachFileFileDeleteIds();
-                                data.setAttachFileFileDeleteIds(fileFileDeleteIds + ","+ attachFileIdList.get(attachFileNameList.indexOf(name)));
-                                break;
-                            }
-                        }
+                        data.getAttachFileFileDeleteIds().add(data.getAttachFileMultiFileIds().get(data.getAttachFileMultiFileNames().indexOf(file.getName())));
+//                        for (String name : attachFileNameList){
+//                            if (name.contains(file.getName())){
+//                                String fileFileDeleteIds = data.getAttachFileFileDeleteIds() == null ? "" : data.getAttachFileFileDeleteIds();
+//                                data.setAttachFileFileDeleteIds(fileFileDeleteIds + ","+ attachFileIdList.get(attachFileNameList.indexOf(name)));
+//                                break;
+//                            }
+//                        }
                     }else { // 本地删除
-                        for (String path : attachFileFileAddPathsList){
+                        for (String path : data.getAttachFileFileAddPaths()){
                             if (path.contains(file.getName())){
-                                attachFileFileAddPathsList.remove(path);
-                                data.setAttachFileFileAddPaths(picPath.substring(0, picPath.length() - 1));
+//                                attachFileFileAddPathsList.remove(path);
+//                                data.setAttachFileFileAddPaths(picPath.substring(0, picPath.length() - 1));
+                                data.getAttachFileFileAddPaths().remove(path);
                                 break;
                             }
                         }
@@ -377,13 +381,14 @@ public class SafetyMeasuresViewAdapter extends BaseListDataRecyclerViewAdapter<S
             } else {
                 //添加
                 data.setIsExecuted(true);
-                data.setAttachFileFileAddPaths(picPath.substring(0, picPath.length() - 1));
+//                data.setAttachFileFileAddPaths(picPath.substring(0, picPath.length() - 1));
+                data.setAttachFileFileAddPaths(picPathList);
             }
         });
     }
 
     private void initAttachFiles(SafetyMeasuresEntity data, AttachmentDownloadController downloadController, CustomGalleryView galleryView, ImageView gifIv) {
-        if (!TextUtils.isEmpty(data.getAttachFileMultiFileIds())) {
+        if (data.getAttachFileMultiFileIds().size() > 0) {
             Glide.with(context).asGif().load(R.drawable.preloader_3).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL)).into(gifIv);
             if (downloadController == null) {
                 downloadController = new AttachmentDownloadController(Constant.IMAGE_SAVE_WORKTICKETPATH);
@@ -394,12 +399,13 @@ public class SafetyMeasuresViewAdapter extends BaseListDataRecyclerViewAdapter<S
             }else {
                 attachmentEntities = new ArrayList<>();
                 AttachmentEntity attachmentEntity;
-                List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
-                List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
-                for (String id : attachFileIdList){
+//                List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
+//                List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
+                List<Long> attachFileIdList = data.getAttachFileMultiFileIds();
+                for (Long id : attachFileIdList){
                     attachmentEntity = new AttachmentEntity();
-                    attachmentEntity.id = Long.parseLong(id);
-                    attachmentEntity.name = attachFileNameList.get(attachFileIdList.indexOf(id));
+                    attachmentEntity.id = id;
+                    attachmentEntity.name = data.getAttachFileMultiFileNames().get(attachFileIdList.indexOf(id));
                     attachmentEntity.deploymentId = attachmentEntity.id; // 赋值附近id,防止下载过滤
                     attachmentEntities.add(attachmentEntity);
                 }

@@ -115,7 +115,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 @Router(Constant.Router.WXGD_EXECUTE)
 @Presenter(value = {WXGDStopOrActivatePresenter.class, WXGDListPresenter.class})
-@Controller(value = {PcController.class,SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class, OnlineCameraController.class})
+@Controller(value = {PcController.class, SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class, OnlineCameraController.class})
 public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDStopOrActivateContract.View, WXGDListContract.View {
 
     @BindByTag("leftBtn")
@@ -204,7 +204,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     private SinglePickController mSinglePickController;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//    private RoleController roleController;
+    //    private RoleController roleController;
     private String tip;
     private WXGDSubmitController wxgdSubmitController;
     private boolean isActivate = true;//当前是否是激活状态 true:激活
@@ -239,9 +239,6 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         super.onRegisterController();
         mLinkController = new LinkController();
         registerController(Constant.Controller.LINK, mLinkController);
-//        roleController = new RoleController();
-//        registerController(Constant.Controller.ROLE, roleController);
-//        roleController.queryRoleList(EamApplication.getUserName());
 
         wxgdSubmitController = new WXGDSubmitController(this);
         registerController(WXGDSubmitController.class.getName(), wxgdSubmitController);
@@ -277,7 +274,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         mSinglePickController.textSize(18);
         mSinglePickController.setCanceledOnTouchOutside(true);
 
-        mDealInfoController = new  DealInfoController(context,recyclerView,null);
+        mDealInfoController = new DealInfoController(context, recyclerView, null);
     }
 
 
@@ -303,6 +300,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                 isActivate = false;
             }
             initTableHeadData();
+            if (Constant.Transition.NOTIFICATION.equals(mWXGDEntity.pending.activityType)){
+                mLinkController.setNotify(true, mWXGDEntity.pending.activityName);
+            }
+
             mLinkController.initPendingTransition(transition, mWXGDEntity.pending != null ? mWXGDEntity.pending.id : 0);
             getSubmitPc(mWXGDEntity.pending.activityName);
         }
@@ -336,7 +337,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
      */
     private void initTableHeadView() {
         if (mWXGDEntity == null) return;
-        titleText.setText((mWXGDEntity.pending != null && isEdit) ? mWXGDEntity.pending.taskDescription : "通知");
+        titleText.setText(mWXGDEntity.pending.taskDescription);
         if (mWXGDEntity.faultInfo == null) {
             faultInfo.setVisibility(View.GONE);
         } else {
@@ -355,8 +356,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
 //        realEndTime.setEditable(isEdit);
         realEndTime.setNecessary(false);
         repairAdvise.setEditable(false);
+
+        workFlowBar.setVisibility(View.VISIBLE);
+
         if (!isEdit) {
-            workFlowBar.setVisibility(View.GONE);
             repairLl.setVisibility(View.GONE);
         }
     }
@@ -402,13 +405,13 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         realEndTime.setDate(mWXGDEntity.realEndDate == null ? "" : DateUtil.dateFormat(mWXGDEntity.realEndDate, "yyyy-MM-dd HH:mm:ss"));
 
         workContext.setContent(mWXGDEntity.workOrderContext);
-        if (mWXGDEntity.isPowerCut != null){
-            if (mWXGDEntity.isPowerCut.id.equals(WXGDConstant.EleOff.yes)){
+        if (mWXGDEntity.isPowerCut != null) {
+            if (mWXGDEntity.isPowerCut.id.equals(WXGDConstant.EleOff.yes)) {
                 eleOffRadioGroup.check(R.id.yesRadioButton);
-            }else {
+            } else {
                 eleOffRadioGroup.check(R.id.noRadioButton);
             }
-        }else {
+        } else {
             eleOffRadioGroup.clearCheck();
         }
         for (int i = 0; i < eleOffRadioGroup.getChildCount(); i++) {
@@ -497,10 +500,10 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void updateLubPart(PositionEvent positionEvent){
+    public void updateLubPart(PositionEvent positionEvent) {
         if (positionEvent.getPosition() == -1) return;
-        if (positionEvent.getObj() instanceof LubricatingPartEntity){
-            mLubricateOilsController.getLubricateOilsEntities().get(positionEvent.getPosition()).lubricatingPart = ((LubricatingPartEntity)positionEvent.getObj()).getLubPart();
+        if (positionEvent.getObj() instanceof LubricatingPartEntity) {
+            mLubricateOilsController.getLubricateOilsEntities().get(positionEvent.getPosition()).lubricatingPart = ((LubricatingPartEntity) positionEvent.getObj()).getLubPart();
             mLubricateOilsController.getLubricateOilsAdapter().notifyItemChanged(positionEvent.getPosition());
         }
 
@@ -519,7 +522,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                 } else {
                     queryParam.put(Constant.BAPQuery.TABLE_NO, mWXGDEntity.tableNo);
                 }
-                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam,false);
+                presenterRouter.create(WXGDListAPI.class).listWxgds(1, queryParam, false);
             }
         });
 
@@ -722,8 +725,8 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         map.put("operateType", Constant.Transition.SUBMIT);
 
         List<WorkFlowEntity> outcomeMapJson = workFlowVar.outcomeMapJson;
-        if (!TextUtils.isEmpty(outcomeMapJson.get(0).assignUser)){
-            outcomeMapJson.get(0).assignUser = ("\"\"".equals(outcomeMapJson.get(0).assignUser)) ? null : outcomeMapJson.get(0).assignUser.replace("\"","");
+        if (!TextUtils.isEmpty(outcomeMapJson.get(0).assignUser)) {
+            outcomeMapJson.get(0).assignUser = ("\"\"".equals(outcomeMapJson.get(0).assignUser)) ? null : outcomeMapJson.get(0).assignUser.replace("\"", "");
         }
 
         map.put("workFlowVar.outcomeMapJson", workFlowVar.outcomeMapJson.toString());
@@ -792,7 +795,7 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
         map.put("dg1557993341033ListJson", maintainDtos);
         map.put("dgLists['dg1557993341033']", maintainDtos);
 
-        wxgdSubmitController.doExecuteSubmit(map,__pc__);
+        wxgdSubmitController.doExecuteSubmit(map, __pc__);
     }
 
     //暂停或激活
@@ -873,14 +876,15 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             maintenanceController.setWxgdEntity(mWXGDEntity);
             initFaultInfoPic();
             // 加载处理意见
-            if (mWXGDEntity.tableInfoId != null){
-                mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL,mWXGDEntity.tableInfoId);
+            if (mWXGDEntity.tableInfoId != null) {
+                mDealInfoController.listTableDealInfo(WXGDConstant.URL.PRE_URL, mWXGDEntity.tableInfoId);
             }
         } else {
             ToastUtils.show(this, "未查到当前待办");
         }
         refreshController.refreshComplete();
     }
+
     private void initFaultInfoPic() {
         WXGDFaultInfoPicHelper.initPic(mWXGDEntity.id, yhGalleryView);
     }

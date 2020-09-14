@@ -422,7 +422,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                             if (!doFinish(xjWorkItemEntity)) return;
                         }
                         onLoading("正在打包并上传巡检数据，请稍后...");
-                        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity);
+                        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity, false);
                     } catch (Exception e) {
                         onLoadFailed("完成操作失败！" + e.getMessage());
                         e.printStackTrace();
@@ -449,7 +449,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
         olxjAreaEntity.staffId = mXJAreaEntity.staffId;
         olxjAreaEntity.workItemEntities.add(xjWorkItemEntity);
         onLoading("正在打包并上传巡检数据，请稍后...");
-        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(olxjAreaEntity);
+        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(olxjAreaEntity, true);
     }
 
     private void showSubmitDialog(String msg) {
@@ -460,7 +460,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                 .bindClickListener(R.id.grayBtn, null, true)
                 .bindClickListener(R.id.redBtn, v -> {
                     onLoading("正在打包并上传巡检数据，请稍后...");
-                    presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity);
+                    presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity, false);
                 }, true)
                 .show();
     }
@@ -498,7 +498,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                                             }
                                         }
                                         onLoading("正在打包并上传巡检数据，请稍后...");
-                                        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity);
+                                        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity, false);
 //                                        onLoadSuccess("完成");
 //                                        doRefresh();
 //                                        mOLXJWorkListAdapter.notifyDataSetChanged();
@@ -990,46 +990,43 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
         }
         List<OLXJWorkItemEntity> olxjWorkItemEntities = new ArrayList<>();
         Flowable.fromIterable(deviceDCSEntities)
-                .flatMap(new Function<DeviceDCSEntity, Publisher<OLXJWorkItemEntity>>() {
-                    @Override
-                    public Publisher<OLXJWorkItemEntity> apply(DeviceDCSEntity deviceDCSEntity) throws Exception {
-                        Flowable<OLXJWorkItemEntity> filter = Flowable.fromIterable(mXJAreaEntity.workItemEntities)
-                                .filter(new Predicate<OLXJWorkItemEntity>() {
-                                    @Override
-                                    public boolean test(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
-                                        if (!TextUtils.isEmpty(olxjWorkItemEntity.itemnumber)
-                                                && olxjWorkItemEntity.itemnumber.trim().equals(deviceDCSEntity.itemNumber.trim())) {
-                                            if (!TextUtils.isEmpty(deviceDCSEntity.valueType)) {
-                                                if (!TextUtils.isEmpty(deviceDCSEntity.latestValue)) {
-                                                    if (TextUtils.isEmpty(olxjWorkItemEntity.defaultVal) || !deviceDCSEntity.latestValue.equals(olxjWorkItemEntity.defaultVal)) {
-                                                        olxjWorkItemEntity.result = deviceDCSEntity.latestValue;
-                                                        olxjWorkItemEntity.defaultVal = deviceDCSEntity.latestValue;
-                                                        //开关机
-                                                        if (deviceDCSEntity.valueType.equals("BEAM053/01")) {
-                                                            if (deviceDCSEntity.latestValue.equals("开")) {
-                                                                olxjWorkItemEntity.isFinished = false;
-                                                                isColse.put(olxjWorkItemEntity.itemnumber.trim(), false);
-                                                            } else if (deviceDCSEntity.latestValue.equals("关")) {
-                                                                olxjWorkItemEntity.isFinished = true;
-                                                                isColse.put(olxjWorkItemEntity.itemnumber.trim(), true);
-                                                            }
+                .flatMap((Function<DeviceDCSEntity, Publisher<OLXJWorkItemEntity>>) deviceDCSEntity -> {
+                    Flowable<OLXJWorkItemEntity> filter = Flowable.fromIterable(mXJAreaEntity.workItemEntities)
+                            .filter(new Predicate<OLXJWorkItemEntity>() {
+                                @Override
+                                public boolean test(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
+                                    if (!TextUtils.isEmpty(olxjWorkItemEntity.itemnumber)
+                                            && olxjWorkItemEntity.itemnumber.trim().equals(deviceDCSEntity.itemNumber.trim())) {
+                                        if (!TextUtils.isEmpty(deviceDCSEntity.valueType)) {
+                                            if (!TextUtils.isEmpty(deviceDCSEntity.latestValue)) {
+                                                if (TextUtils.isEmpty(olxjWorkItemEntity.defaultVal) || !deviceDCSEntity.latestValue.equals(olxjWorkItemEntity.defaultVal)) {
+                                                    olxjWorkItemEntity.result = deviceDCSEntity.latestValue;
+                                                    olxjWorkItemEntity.defaultVal = deviceDCSEntity.latestValue;
+                                                    //开关机
+                                                    if (deviceDCSEntity.valueType.equals("BEAM053/01")) {
+                                                        if (deviceDCSEntity.latestValue.equals("开")) {
+                                                            olxjWorkItemEntity.isFinished = false;
+                                                            isColse.put(olxjWorkItemEntity.itemnumber.trim(), false);
+                                                        } else if (deviceDCSEntity.latestValue.equals("关")) {
+                                                            olxjWorkItemEntity.isFinished = true;
+                                                            isColse.put(olxjWorkItemEntity.itemnumber.trim(), true);
                                                         }
-                                                        if ("数字".equals(olxjWorkItemEntity.inputStandardID.valueTypeMoblie.value) && OLXJConstant.MobileEditType.INPUTE.equals(olxjWorkItemEntity.inputStandardID.editTypeMoblie.id)) {  //值类型判断：字符/数字
-                                                            if (olxjWorkItemEntity.autoJudge) {
-                                                                //结论自动判定
-                                                                XJJudgeHelper.getInstance(OLXJWorkListUnHandledActivity.this).autoJudgeConclusion(olxjWorkItemEntity, olxjWorkItemEntity.result);
-                                                            }
-                                                        }
-                                                        return true;
                                                     }
+                                                    if ("数字".equals(olxjWorkItemEntity.inputStandardID.valueTypeMoblie.value) && OLXJConstant.MobileEditType.INPUTE.equals(olxjWorkItemEntity.inputStandardID.editTypeMoblie.id)) {  //值类型判断：字符/数字
+                                                        if (olxjWorkItemEntity.autoJudge) {
+                                                            //结论自动判定
+                                                            XJJudgeHelper.getInstance(OLXJWorkListUnHandledActivity.this).autoJudgeConclusion(olxjWorkItemEntity, olxjWorkItemEntity.result);
+                                                        }
+                                                    }
+                                                    return true;
                                                 }
                                             }
                                         }
-                                        return false;
                                     }
-                                });
-                        return filter;
-                    }
+                                    return false;
+                                }
+                            });
+                    return filter;
                 })
                 .subscribe(new Consumer<OLXJWorkItemEntity>() {
                     @Override

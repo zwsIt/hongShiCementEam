@@ -2,6 +2,8 @@ package com.supcon.mes.module_overhaul_workticket.model.dto;
 
 import com.supcon.common.com_http.BaseEntity;
 
+import java.util.List;
+
 /**
  * ClassName
  * Created by zhangwenshuai1 on 2019/12/24
@@ -19,8 +21,8 @@ public class SafetyMeasuresEntityDto extends BaseEntity {
     public String rowIndex;
 
     //附件
-    public String attachFileMultiFileIds;
-    public String attachFileMultiFileNames;
-    public String attachFileFileAddPaths; // 存储路径
-    public String attachFileFileDeleteIds; // 附件删除ids
+    public List<Long> attachFileMultiFileIds;
+    public List<String> attachFileMultiFileNames;
+    public List<String> attachFileFileAddPaths; // 存储路径
+    public List<Long> attachFileFileDeleteIds; // 附件删除ids
 }

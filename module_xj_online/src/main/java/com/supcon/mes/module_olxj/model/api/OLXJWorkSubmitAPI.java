@@ -11,6 +11,6 @@ import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 @ContractFactory(entites = {NullEntity.class})
 public interface OLXJWorkSubmitAPI {
 
-    void uploadOLXJAreaData(OLXJAreaEntity areaEntity);
+    void uploadOLXJAreaData(OLXJAreaEntity areaEntity, boolean isOneSubmit);
 
 }

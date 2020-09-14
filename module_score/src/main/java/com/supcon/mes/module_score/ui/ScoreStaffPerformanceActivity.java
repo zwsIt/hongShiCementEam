@@ -56,6 +56,7 @@ import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceListEntity;
 import com.supcon.mes.module_score.model.contract.ScoreInspectorStaffPerformanceContract;
 import com.supcon.mes.module_score.model.contract.ScoreStaffPerformanceContract;
 import com.supcon.mes.module_score.model.contract.ScoreStaffSubmitContract;
+import com.supcon.mes.module_score.model.dto.ScoreStaffDto;
 import com.supcon.mes.module_score.presenter.ScoreInspectorStaffPerformancePresenter;
 import com.supcon.mes.module_score.presenter.ScoreInspectorStaffSubmitPresenter;
 import com.supcon.mes.module_score.presenter.ScoreStaffPerformancePresenter;
@@ -67,6 +68,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -74,6 +76,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
+import io.reactivex.functions.Predicate;
 
 /**
  * ScoreStaffPerformanceActivity
@@ -197,6 +200,16 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshRecyclerActivity<S
 
         RxView.clicks(rightBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
+                .filter(new Predicate<Object>() {
+                    @Override
+                    public boolean test(Object o) throws Exception {
+                        if (scoreStaffPerformanceAdapter.getItemCount() <= 0 ){
+                            ToastUtils.show(context,"列表无数据可评分");
+                            return false;
+                        }
+                        return true;
+                    }
+                })
                 .subscribe(o -> new CustomDialog(context)
                         .twoButtonAlertDialog("确定提交员工评分吗?")
                         .bindView(R.id.redBtn, "确定")
@@ -328,32 +341,30 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshRecyclerActivity<S
     private void doSubmit() {
 
         Map map = ScoreMapManager.createMap(scoreStaffEntity);
-//        if (scoreStaffEamAdapter.getList() != null) {
-//            ScoreMapManager.addAvg(scoreStaffEamAdapter.getList(), map);
-//        }
+
         map.put("viewselect", "patrolScoreEdit");
         map.put("datagridKey", "BEAM_patrolWorkerScore_workerScoreHead_patrolScoreEdit_datagrids");
         map.put("viewCode", "BEAM_1.0.0_patrolWorkerScore_patrolScoreEdit");
 
-        map.put("workerScoreHead.scoreType.id", ScoreConstant.ScoreType.INSPECTION_STAFF);
-        map.put("workerScoreHead.scoreType.value", "巡检工个人评分");
+//        map.put("workerScoreHead.scoreType.id", ScoreConstant.ScoreType.INSPECTION_STAFF);
+//        map.put("workerScoreHead.scoreType.value", "巡检工个人评分");
 
-//        List list1 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "设备运行");
-//        map.put("dg1560145365044ModelCode", "BEAM_1.0.0_patrolWorkerScore_Running");
-//        map.put("dg1560145365044ListJson", list1.toString());
-//        map.put("dgLists['dg1560145365044']", list1.toString());
+//        List list2 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "规范化管理");
+//        map.put("dg1560222990407ModelCode", "BEAM_1.0.0_patrolWorkerScore_Standardized");
+//        map.put("dg1560222990407ListJson", list2.toString());
+//        map.put("dgLists['dg1560222990407']", list2.toString());
+//
+//        List list3 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "安全生产");
+//        map.put("dg1560223948889ModelCode", "BEAM_1.0.0_patrolWorkerScore_SafeProduction");
+//        map.put("dg1560223948889ListJson", list3.toString());
+//        map.put("dgLists['dg1560223948889']", list3.toString());
+//
+//        List list4 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "工作表现");
+//        map.put("dg1560224145331ModelCode", "BBEAM_1.0.0_patrolWorkerScore_WorkePerformance");
+//        map.put("dg1560224145331ListJson", list4.toString());
+//        map.put("dgLists['dg1560224145331']", list4.toString());
 
-        List list2 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "规范化管理");
-        map.put("dg1560222990407ModelCode", "BEAM_1.0.0_patrolWorkerScore_Standardized");
-        map.put("dg1560222990407ListJson", list2.toString());
-        map.put("dgLists['dg1560222990407']", list2.toString());
-
-        List list3 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "安全生产");
-        map.put("dg1560223948889ModelCode", "BEAM_1.0.0_patrolWorkerScore_SafeProduction");
-        map.put("dg1560223948889ListJson", list3.toString());
-        map.put("dgLists['dg1560223948889']", list3.toString());
-
-        List list4 = ScoreMapManager.dataStaffChange(scoreStaffPerformanceAdapter.getList(), "工作表现");
+        List list4 = dgScoreStaffDto();
         map.put("dg1560224145331ModelCode", "BBEAM_1.0.0_patrolWorkerScore_WorkePerformance");
         map.put("dg1560224145331ListJson", list4.toString());
         map.put("dgLists['dg1560224145331']", list4.toString());
@@ -366,13 +377,36 @@ public class ScoreStaffPerformanceActivity extends BaseRefreshRecyclerActivity<S
         presenterRouter.create(ScoreStaffSubmitAPI.class).doStaffSubmit(url, map);
     }
 
-
-    public long getYesterday() {
-        Calendar ca = Calendar.getInstance();
-        ca.setTime(new Date());
-        ca.add(Calendar.DAY_OF_MONTH, -1);
-        return ca.getTimeInMillis();
+    @SuppressLint("CheckResult")
+    public List<ScoreStaffDto> dgScoreStaffDto() {
+        List<ScoreStaffPerformanceEntity> scorePerformanceEntities = scoreStaffPerformanceAdapter.getList();
+        List<ScoreStaffDto> scorePerformanceDto = new ArrayList<>();
+        Flowable.fromIterable(scorePerformanceEntities)
+                .filter(scorePerformanceEntity -> scorePerformanceEntity.viewType == ListType.CONTENT.value())
+                .subscribe(scorePerformanceEntity -> {
+                    ScoreStaffDto scoreEamDto = new ScoreStaffDto();
+                    scoreEamDto.id = Util.strFormat2(scorePerformanceEntity.id);
+                    scoreEamDto.category = scorePerformanceEntity.category;
+                    scoreEamDto.project = scorePerformanceEntity.project;
+                    scoreEamDto.score = Util.big(scorePerformanceEntity.score);
+                    scoreEamDto.grade = scorePerformanceEntity.grade;
+                    scoreEamDto.item = scorePerformanceEntity.item;
+                    scoreEamDto.itemScore = Util.big(scorePerformanceEntity.itemScore);
+                    scoreEamDto.result = Util.strFormat2(scorePerformanceEntity.result);
+                    scoreEamDto.fraction = Util.big(scorePerformanceEntity.scoreEamPerformanceEntity.fraction);
+                    scoreEamDto.isItemValue = scorePerformanceEntity.isItemValue;
+                    scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
+                    scoreEamDto.defaultNumVal = scorePerformanceEntity.defaultNumVal > 0 ? Util.strFormat2(scorePerformanceEntity.defaultNumVal) : "";
+//                    scoreEamDto.defaultValueType = scorePerformanceEntity.defaultValueType;
+                    scoreEamDto.attachFileFileAddPaths = Util.strFormat2(scorePerformanceEntity.getAttachFileFileAddPaths());
+                    scoreEamDto.attachFileMultiFileIds = Util.strFormat2(scorePerformanceEntity.getAttachFileMultiFileIds());
+                    scoreEamDto.attachFileFileDeleteIds = Util.strFormat2(scorePerformanceEntity.getAttachFileFileDeleteIds());
+                    scoreEamDto.resultValue = scorePerformanceEntity.resultValue;
+                    scorePerformanceDto.add(scoreEamDto);
+                });
+        return scorePerformanceDto;
     }
+
 
     @Override
     public void doStaffSubmitSuccess(BapResultEntity entity) {

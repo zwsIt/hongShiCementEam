@@ -33,12 +33,13 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
     public String resultValue; // 扣分值存储
 
     public float fraction;//单项总分数
-    public float score;//默认总分数
+    public float score;//分数
 
+    public float defaultTotalScore; // 单类总分
     public SystemCodeEntity defaultValueType;//类型
     public int defaultNumVal;//默认数量
     public String subScore; // 文本扣分数
-    public SystemCodeEntity scoreType; // 评分类型
+    public SystemCodeEntity scoreType; // 评分类型:BEAM_077/02:手动评分;  BEAM_077/01:自动评分
 
     @Expose
     public float lastSubScore; // 上次文本扣分数
@@ -59,6 +60,8 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
 
     @Expose
     public ScoreStaffPerformanceEntity scoreEamPerformanceEntity;//标题
+    @Expose
+    public float theoreticalScore;//理论扣分数
 
     @Expose
     private Float totalHightScore;//单项最高总分数

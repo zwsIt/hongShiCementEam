@@ -137,7 +137,9 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                 if (wxgdEntity == null) { return; }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
-                if (wxgdEntity.pending != null && !TextUtils.isEmpty(wxgdEntity.pending.openUrl)) {
+                if (wxgdEntity.getPending().id == null || wxgdEntity.getPending().openUrl == null) { // 无代办、生效
+                    IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+                }else {
                     switch (wxgdEntity.pending.openUrl) {
                         case Constant.WxgdView.RECEIVE_OPEN_URL:
                             IntentRouter.go(context, Constant.Router.WXGD_RECEIVE, bundle);
@@ -145,8 +147,7 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                         case Constant.WxgdView.DISPATCH_OPEN_URL:
                             IntentRouter.go(context, Constant.Router.WXGD_DISPATCHER, bundle);
                             break;
-                        case Constant.WxgdView.VIEW_OPEN_URL:
-                            bundle.putBoolean(Constant.IntentKey.isEdit, false);
+//                            bundle.putBoolean(Constant.IntentKey.isEdit, false);
                         case Constant.WxgdView.EXECUTE_OPEN_URL:
                             IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
                             break;
@@ -154,11 +155,10 @@ public class WXGDListAdapter extends BaseListDataRecyclerViewAdapter<WXGDEntity>
                             IntentRouter.go(context, Constant.Router.WXGD_ACCEPTANCE, bundle);
                             break;
                         default:
-                            IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle);
+                            bundle.putBoolean(Constant.IntentKey.isEdit, false);
+                            IntentRouter.go(context, Constant.Router.WXGD_EXECUTE, bundle); // 通知
                             break;
                     }
-                } else {
-                    IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
                 }
             });
 

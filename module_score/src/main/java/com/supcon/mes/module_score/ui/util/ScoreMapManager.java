@@ -130,13 +130,13 @@ public class ScoreMapManager {
         Map<String, Object> map = new HashMap<>();
 
         map.put("modelName", "WorkerScoreHead");
-        if (scoreStaffEntity.id != -1) {
+        if (scoreStaffEntity.id != null  && scoreStaffEntity.id != -1) {
             map.put("id", scoreStaffEntity.id);
         }
         map.put("workerScoreHead.patrolWorker.id", Util.strFormat2(scoreStaffEntity.getPatrolWorker().id));
         map.put("workerScoreHead.scoreData", format.format(scoreStaffEntity.scoreData));
         map.put("workerScoreHead.score", Util.big(scoreStaffEntity.score));
-        map.put("workerScoreHead.siteScore", "30");
+//        map.put("workerScoreHead.siteScore", "30");
         map.put("bap_validate_user_id", EamApplication.getAccountInfo().userId);
         return map;
     }

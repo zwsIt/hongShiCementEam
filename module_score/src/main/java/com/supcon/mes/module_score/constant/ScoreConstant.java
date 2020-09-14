@@ -16,12 +16,20 @@ public interface ScoreConstant {
     }
 
     /**
-     * 评分类别
+     * 值类别
      */
     interface ValueType {
         String T1 = "BEAM_066/01"; // 数值
         String T2 = "BEAM_066/02"; // 布尔
         String T3 = "BEAM_066/03"; // 文本
+    }
+
+    /**
+     * 绩效项目评分类型
+     */
+    interface ScoreItemType {
+        String T1 = "BEAM_077/02"; // 自动
+        String T2 = "BEAM_077/02"; // 手动
     }
 
     interface Permission {

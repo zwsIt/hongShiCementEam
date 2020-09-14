@@ -426,7 +426,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
                             if (!doFinish(xjWorkItemEntity)) return;
                         }
                         onLoading("正在打包并上传巡检数据，请稍后...");
-                        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity);
+                        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity, false);
                     } catch (Exception e) {
                         onLoadFailed("完成操作失败！" + e.getMessage());
                         e.printStackTrace();
@@ -1258,9 +1258,9 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
     @Override
     public void updateTaskByIdSuccess(ResultEntity entity) {
         if (isOneSubmit) {
-            presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(olxjAreaEntity);
+            presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(olxjAreaEntity, true);
         } else {
-            presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity);
+            presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity, false);
         }
     }
 

@@ -45,6 +45,7 @@ public class WorkTicketEntity extends BaseEntity {
     private Long cid;
     private Staff createStaff;
     private Long createStaffId;
+    private Long createPositionId;
     private Long createTime;
     private Long id;
     private PendingEntity pending;
@@ -55,6 +56,14 @@ public class WorkTicketEntity extends BaseEntity {
     private int version;
 
     private Long deploymentId;
+
+    public Long getCreatePositionId() {
+        return createPositionId;
+    }
+
+    public void setCreatePositionId(Long createPositionId) {
+        this.createPositionId = createPositionId;
+    }
 
     public Map getAttrMap() {
         return attrMap;

@@ -262,6 +262,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
             mWorkTicketEntity.setCreateStaffId(chargeStaff.id);
             mWorkTicketEntity.setChargeStaff(chargeStaff);
             mWorkTicketEntity.setWorkShop(chargeStaff.getMainPosition().department);
+            mWorkTicketEntity.setCreatePositionId(EamApplication.getAccountInfo().positionId);
 
             updateTableInfo(mWorkTicketEntity);
         }
@@ -441,7 +442,7 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         map.put("bap_validate_user_id", String.valueOf(EamApplication.getAccountInfo().userId));
         map.put("ohworkticket.createStaffId", mWorkTicketEntity.getCreateStaffId());
         map.put("ohworkticket.createTime", DateUtil.dateTimeFormat(mWorkTicketEntity.getCreateTime()));
-        map.put("ohworkticket.createPositionId", EamApplication.getAccountInfo().positionId);
+        map.put("ohworkticket.createPositionId", mWorkTicketEntity.getCreatePositionId());
         map.put("viewCode", "WorkTicket_8.20.3.03_workTicket_workTicketEdit");
         map.put("modelName", "Ohworkticket");
         map.put("datagridKey", "WorkTicket_workTicket_ohworkticket_workTicketEdit_datagrids");

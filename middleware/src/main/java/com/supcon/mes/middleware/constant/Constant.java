@@ -857,7 +857,7 @@ public interface Constant {
         String DISPATCH_OPEN_URL = "/BEAM2/workList/workRecord/workEdit.action";//派单
         String RECEIVE_OPEN_URL = "/BEAM2/workList/workRecord/workReceiptEdit.action";//接单
         String EXECUTE_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";//执行
-        String STOP_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";
+//        String STOP_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";
         String ACCEPTANCE_OPEN_URL = "/BEAM2/workList/workRecord/workCheckEdit.action";//验收
         String VIEW_OPEN_URL = "/BEAM2/workList/workRecord/workView.action";//通知
     }

@@ -32,22 +32,16 @@ public class ScoreInspectorStaffPerformancePresenter extends ScoreInspectorStaff
     @Override
     public void getDutyEam(long staffId, String scoreType) {
         mCompositeSubscription.add(ScoreHttpClient.getDutyEamNew(staffId, scoreType)
-                .onErrorReturn(new Function<Throwable, ScoreDutyEamEntity>() {
-                    @Override
-                    public ScoreDutyEamEntity apply(Throwable throwable) throws Exception {
-                        ScoreDutyEamEntity scoreDutyEamEntity = new ScoreDutyEamEntity();
-                        scoreDutyEamEntity.errMsg = throwable.toString();
-                        return scoreDutyEamEntity;
-                    }
+                .onErrorReturn(throwable -> {
+                    ScoreDutyEamEntity scoreDutyEamEntity = new ScoreDutyEamEntity();
+                    scoreDutyEamEntity.errMsg = throwable.toString();
+                    return scoreDutyEamEntity;
                 })
-                .subscribe(new Consumer<ScoreDutyEamEntity>() {
-                    @Override
-                    public void accept(ScoreDutyEamEntity scoreDutyEamEntity) throws Exception {
-                        if (scoreDutyEamEntity.success) {
-                            getView().getDutyEamSuccess(scoreDutyEamEntity);
-                        } else {
-                            getView().getDutyEamFailed(scoreDutyEamEntity.errMsg);
-                        }
+                .subscribe(scoreDutyEamEntity -> {
+                    if (scoreDutyEamEntity.success) {
+                        getView().getDutyEamSuccess(scoreDutyEamEntity);
+                    } else {
+                        getView().getDutyEamFailed(scoreDutyEamEntity.errMsg);
                     }
                 }));
 //        mCompositeSubscription.add(ScoreHttpClient.getDutyEam(staffId, scoreType)

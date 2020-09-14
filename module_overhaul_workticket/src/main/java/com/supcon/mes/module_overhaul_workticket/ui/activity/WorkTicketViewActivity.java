@@ -369,7 +369,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         map.put("bap_validate_user_id", String.valueOf(EamApplication.getAccountInfo().userId));
         map.put("ohworkticket.createStaffId", mWorkTicketEntity.getCreateStaffId());
         map.put("ohworkticket.createTime", DateUtil.dateTimeFormat(mWorkTicketEntity.getCreateTime()));
-        map.put("ohworkticket.createPositionId", EamApplication.getAccountInfo().positionId);
+        map.put("ohworkticket.createPositionId", mWorkTicketEntity.getCreatePositionId());
         map.put("viewCode", "WorkTicket_8.20.3.03_workTicket_workTicketEdit");
         map.put("modelName", "Ohworkticket");
         map.put("datagridKey", "WorkTicket_workTicket_ohworkticket_workTicketEdit_datagrids");
@@ -401,7 +401,7 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             map.put("pendingId", pendingId);
         }
         //表头信息,取修改后最新数据
-        map.put("ohworkticket.chargeStaff.id", Util.strFormat2(mWorkTicketEntity.getChargeStaff().id));
+        map.put("ohworkticket.chargeStaff.id", mWorkTicketEntity.getChargeStaff().id);
         map.put("ohworkticket.workList.id", Util.strFormat2(mWorkTicketEntity.getWorkList().id));
         map.put("ohworkticket.eamId.id", Util.strFormat2(mWorkTicketEntity.getEamId().id));
         map.put("ohworkticket.workShop.id", Util.strFormat2(mWorkTicketEntity.getChargeStaff().getMainPosition().getDepartment().id));

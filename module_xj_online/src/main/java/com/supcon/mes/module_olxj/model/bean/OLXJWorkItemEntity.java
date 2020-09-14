@@ -137,6 +137,7 @@ public class OLXJWorkItemEntity extends BaseEntity implements Comparable<OLXJWor
     public ValueEntity priority;//优先级
 
     public boolean isEffective; // 隐患单是否生效（注：true：结论异常巡检项生成生效隐患单；否则编辑）
+    public boolean isPush; // 是否推送群消息
 
     private TaskSignBean taskSignID; // 签到
 
