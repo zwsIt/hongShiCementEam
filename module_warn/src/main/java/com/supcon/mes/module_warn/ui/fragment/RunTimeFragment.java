@@ -25,8 +25,10 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.controller.UserPowerCheckController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -64,7 +66,7 @@ import io.reactivex.schedulers.Schedulers;
  * Desc 运行时长RunTimeFragment
  */
 @Presenter(value = LubricationWarnPresenter.class)
-@Controller(value = {UserPowerCheckController.class})
+@Controller(value = {UserPowerCheckController.class, WorkFlowKeyController.class})
 public class RunTimeFragment extends BaseRefreshRecyclerFragment<LubricationWarnEntity> implements LubricationWarnContract.View {
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -135,13 +137,25 @@ public class RunTimeFragment extends BaseRefreshRecyclerFragment<LubricationWarn
     @Override
     protected void initData() {
         super.initData();
-        mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.WORK, new OnSuccessListener<Long>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyAndPermission(Constant.EntityCode.WORK, null, new OnAPIResultListener<Object>() {
             @Override
-            public void onSuccess(Long result) {
-                deploymentId = result;
+            public void onFail(String errorMsg) {
+
             }
-        }, null);
+
+            @Override
+            public void onSuccess(Object result) {
+                deploymentId = (Long) result;
+            }
+        });
+
+//        mModulePermissonCheckController = new ModulePermissonCheckController();
+//        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.WORK, new OnSuccessListener<Long>() {
+//            @Override
+//            public void onSuccess(Long result) {
+//                deploymentId = result;
+//            }
+//        }, null);
     }
 
     /**

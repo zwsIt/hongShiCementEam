@@ -122,8 +122,8 @@ public class ProcessedFragment extends BaseRefreshRecyclerFragment<ProcessedEnti
     }
 
 
-    public void doFilter(String processKey) {
-        queryParam.put(Constant.BAPQuery.PROCESS_KEY, processKey);
+    public void doFilter(String entityCode) {
+        queryParam.put(Constant.BAPQuery.TARGET_ENTITY_CODE, entityCode);
         refreshListController.refreshBegin();
     }
 }

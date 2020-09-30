@@ -310,7 +310,7 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
         protected void update(ScoreStaffPerformanceEntity data) {
             mScoreCameraController.addGalleryView(getAdapterPosition(), itemPics, ScoreStaffPerformanceAdapter.this);
 
-            if (TextUtils.isEmpty(data.getAttachFileMultiFileIds()) && TextUtils.isEmpty(data.getAttachFileFileAddPaths())){ // 服务器及本地均未有附件
+            if (data.getAttachFileMultiFileIds() == null && data.getAttachFileFileAddPaths() == null){ // 服务器及本地均未有附件
                 itemPics.clear();
             }else {
                 initAttachFiles(data, mAttachmentDownloadController, itemPics);
@@ -403,21 +403,21 @@ public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapte
         }else {
             AttachmentEntity attachmentEntity;
             attachmentEntities = new ArrayList<>();
-            if (!TextUtils.isEmpty(data.getAttachFileMultiFileIds())) { // 服务器
-                List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
-                List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
-                for (String id : attachFileIdList) {
+            if (data.getAttachFileMultiFileIds() != null) { // 服务器
+//                List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
+//                List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
+                for (Long id : data.getAttachFileMultiFileIds()) {
                     attachmentEntity = new AttachmentEntity();
-                    attachmentEntity.id = Long.parseLong(id);
-                    attachmentEntity.name = attachFileNameList.get(attachFileIdList.indexOf(id));
+                    attachmentEntity.id = id;
+                    attachmentEntity.name = data.getAttachFileMultiFileNames().get(data.getAttachFileMultiFileIds().indexOf(id));
                     attachmentEntity.deploymentId = attachmentEntity.id; // 赋值附件id,防止下载过滤
                     attachmentEntities.add(attachmentEntity);
                 }
                 data.setAttachmentEntityList(attachmentEntities);
             }
-            if (!TextUtils.isEmpty(data.getAttachFileFileAddPaths())) { // 本地添加
-                List<String> attachFileAddPathsList = Arrays.asList(data.getAttachFileFileAddPaths().split(","));
-                for (String path : attachFileAddPathsList) {
+            if (data.getAttachFileFileAddPaths() != null) { // 本地添加
+//                List<String> attachFileAddPathsList = Arrays.asList(data.getAttachFileFileAddPaths().split(","));
+                for (String path : data.getAttachFileFileAddPaths()) {
                     attachmentEntity = new AttachmentEntity();
                     attachmentEntity.id = -1L;
                     attachmentEntity.name = path.substring(path.lastIndexOf("\\")+1);

@@ -42,7 +42,9 @@ public class WXGDFaultInfoPicHelper {
             @Override
             public void onSuccess(Object result) {
                 WXGDEntity wxgdEntity = GsonUtil.gsonToBean(GsonUtil.gsonString(result),WXGDEntity.class);
-                downloadAttachment(wxgdEntity.faultInfo.tableInfoId,yhGalleryView);
+                if (wxgdEntity.faultInfo != null){
+                    downloadAttachment(wxgdEntity.faultInfo.tableInfoId,yhGalleryView);
+                }
             }
         });
 

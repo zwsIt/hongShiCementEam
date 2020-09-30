@@ -12,5 +12,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = {BapResultEntity.class})
 public interface YHSubmitAPI {
-    void doSubmit(Map<String, Object> map, Map<String, Object> attachmentMap, boolean isEdit);
+    void doSubmit(Map<String, Object> map, Map<String, Object> attachmentMap, String __pc__,  boolean isEdit);
 }

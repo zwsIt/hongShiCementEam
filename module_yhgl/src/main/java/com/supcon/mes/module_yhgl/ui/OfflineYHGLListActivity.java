@@ -264,9 +264,9 @@ public class OfflineYHGLListActivity extends BaseRefreshRecyclerActivity<YHEntit
     @Override
     protected void initData() {
         super.initData();
-        ModulePermissonCheckController modulePermissonCheckController = new ModulePermissonCheckController();
-        modulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.FAULT_INFO, result -> {
-        }, null);
+//        ModulePermissonCheckController modulePermissonCheckController = new ModulePermissonCheckController();
+//        modulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.FAULT_INFO, result -> {
+//        }, null);
     }
 
     private void createYH() {

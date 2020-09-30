@@ -55,6 +55,8 @@ import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
+import com.supcon.mes.middleware.controller.PcController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.AcceptanceCheckEntity;
 import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.AreaDao;
@@ -133,7 +135,7 @@ import static com.supcon.mes.middleware.constant.Constant.IntentKey.DEPLOYMENT_I
 @Router(Constant.Router.YH_EDIT)
 @Presenter(value = {YHSubmitPresenter.class, YHListPresenter.class})
 @Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class, MaintenanceController.class, OnlineCameraController.class,
-        AttachmentController.class})
+        AttachmentController.class, WorkFlowKeyController.class, PcController.class})
 public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContract.View, YHListContract.View {
 
     @BindByTag("leftBtn")
@@ -269,6 +271,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     private CustomVerticalDateView mDelayDate;
 
     private ImageView customCameraIv;
+    private String __pc__;
 
     @Subscribe
     public void onReceiveImageDeleteEvent(ImageDeleteEvent imageDeleteEvent) {
@@ -407,6 +410,28 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
         initCheckView();
         // 加载图片
         initPic();
+
+        getSubmitPc(mYHEntity.pending.activityName);
+    }
+
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.FAULT_INFO, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
+            }
+        });
     }
 
     /**
@@ -454,9 +479,6 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
     @Override
     protected void initData() {
         super.initData();
-
-//        wxTypeEntities = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.YH_WX_TYPE);
-//        wxTypes = initEntities(wxTypeEntities);
 
         yhTypeEntities = SystemCodeManager.getInstance().getSystemCodeListByCode(Constant.SystemCode.QX_TYPE);
         yhTypes = initEntities(yhTypeEntities);
@@ -1094,9 +1116,19 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
 
     private void iniTransition() {
-
         if (mYHEntity.pending == null) {
-            mLinkController.initStartTransition(null, ProcessKeyUtil.FAULT_INFO);
+            getController(WorkFlowKeyController.class).queryWorkFlowKeyOnly(Constant.EntityCode.FAULT_INFO, null, new OnAPIResultListener<Object>() {
+                @Override
+                public void onFail(String errorMsg) {
+                    ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+                }
+
+                @Override
+                public void onSuccess(Object result) {
+                    mLinkController.initStartTransition(null, String.valueOf(result));
+                }
+            });
+
         } else {
             mLinkController.initPendingTransition(null, mYHEntity.pending.id);
         }
@@ -1394,7 +1426,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
 
         LogUtil.d(GsonUtil.gsonString(map));
         onLoading("单据处理中...");
-        presenterRouter.create(YHSubmitAPI.class).doSubmit(map, attachmentMap, true);
+        presenterRouter.create(YHSubmitAPI.class).doSubmit(map, attachmentMap,__pc__, true);
 
     }
 

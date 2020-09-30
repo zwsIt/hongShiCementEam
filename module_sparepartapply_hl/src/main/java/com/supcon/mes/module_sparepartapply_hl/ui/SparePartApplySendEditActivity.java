@@ -37,6 +37,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveEntity;
@@ -75,7 +76,8 @@ import java.util.Map;
  * @author zws 2019/9/27
  */
 @Router(value = Constant.Router.SPARE_PART_APPLY_SEND_EDIT)
-@Controller(value = {LinkController.class, PcController.class,TableInfoController.class, SparePartApplyDetailController.class,OnlineCameraController.class})
+@Controller(value = {LinkController.class, PcController.class,TableInfoController.class, SparePartApplyDetailController.class,OnlineCameraController.class,
+        WorkFlowKeyController.class})
 @Presenter(value = {SparePartApplyPresenter.class})
 public class SparePartApplySendEditActivity extends BaseRefreshActivity implements SparePartApplyContract.View {
     @BindByTag("leftBtn")
@@ -126,7 +128,7 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
     private SparePartApplyDetailController sparePartApplyDetailController;
 
     //dataGrid删除数据id
-    private List<Long> dgDeletedIds_sparePartApplyDetail = new ArrayList<>();
+//    private List<Long> dgDeletedIds_sparePartApplyDetail = new ArrayList<>();
 
     @Override
     protected int getLayoutID() {
@@ -166,16 +168,15 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
         remark.setEditable(false);
         getController(LinkController.class).setOnSuccessListener(result -> {
             //获取__pc__
-            getController(PcController.class).queryPc(result.toString(), ProcessKeyUtil.SPARE_PART_APPLY, new OnAPIResultListener<String>() {
+            getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(result.toString(),Constant.EntityCode.SPARE_PART_APPLY, null, new OnAPIResultListener<Object>() {
                 @Override
                 public void onFail(String errorMsg) {
-                    ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
-                    LogUtil.e(errorMsg);
+                    ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
                 }
 
                 @Override
-                public void onSuccess(String result) {
-                    __pc__ = result;
+                public void onSuccess(Object result) {
+                    __pc__ = String.valueOf(result);
                 }
             });
         });
@@ -434,7 +435,7 @@ public class SparePartApplySendEditActivity extends BaseRefreshActivity implemen
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshSparePartApplyDetail(SparePartApplyDetailEvent event){
         sparePartApplyDetailController.updateSparePartEntities(event.getList());
-        dgDeletedIds_sparePartApplyDetail = event.getDgDeletedIds();
+//        dgDeletedIds_sparePartApplyDetail = event.getDgDeletedIds();
 
         // 计算表头总价
         BigDecimal total = new BigDecimal(0);

@@ -27,10 +27,13 @@ import com.supcon.mes.mbap.view.NoScrollViewPager;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
+import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.ProcessKeyUtil;
 import com.supcon.mes.module_wxgd.IntentRouter;
@@ -83,6 +86,7 @@ public class WXGDListNewActivity extends BaseFragmentActivity {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         searchTitleBar.setTitleText(context.getResources().getString(R.string.workName));
+        searchTitleBar.disableRightBtn();
         customSearchView.setHint(getString(R.string.middleware_input_eam_code));
         initTab();
         initViewPager();
@@ -110,13 +114,30 @@ public class WXGDListNewActivity extends BaseFragmentActivity {
     @Override
     protected void initData() {
         super.initData();
-        ModulePermissonCheckController mModulePermissionCheckController = new ModulePermissonCheckController();
-        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.WORK, result -> {
-            if (result == null){
-                searchTitleBar.disableRightBtn();
+
+        WorkFlowKeyController workFlowKeyController = new WorkFlowKeyController();
+        workFlowKeyController.queryWorkFlowKeyAndPermission(Constant.EntityCode.WORK, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
-            deploymentId = result;
-        },null);
+
+            @Override
+            public void onSuccess(Object result) {
+                if (result != null){
+                    searchTitleBar.enableRightBtn();
+                }
+                deploymentId = (Long) result;
+            }
+        });
+
+//        ModulePermissonCheckController mModulePermissionCheckController = new ModulePermissonCheckController();
+//        mModulePermissionCheckController.checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.WORK, result -> {
+//            if (result == null){
+//                searchTitleBar.disableRightBtn();
+//            }
+//            deploymentId = result;
+//        },null);
     }
 
     @SuppressLint("CheckResult")

@@ -136,7 +136,9 @@ public class ScoreMapManager {
         map.put("workerScoreHead.patrolWorker.id", Util.strFormat2(scoreStaffEntity.getPatrolWorker().id));
         map.put("workerScoreHead.scoreData", format.format(scoreStaffEntity.scoreData));
         map.put("workerScoreHead.score", Util.big(scoreStaffEntity.score));
-//        map.put("workerScoreHead.siteScore", "30");
+        map.put("workerScoreHead.beforeScore", Util.big(scoreStaffEntity.beforeScore));
+        map.put("workerScoreHead.departmentId.id", scoreStaffEntity.departmentId == null ? "" : scoreStaffEntity.departmentId.id);
+        map.put("workerScoreHead.soringId.id", scoreStaffEntity.soringId.id); // 评分模板
         map.put("bap_validate_user_id", EamApplication.getAccountInfo().userId);
         return map;
     }
@@ -182,10 +184,10 @@ public class ScoreMapManager {
                     scoreEamDto.noItemValue = scorePerformanceEntity.noItemValue;
                     scoreEamDto.defaultNumVal = scorePerformanceEntity.defaultNumVal > 0 ? Util.strFormat2(scorePerformanceEntity.defaultNumVal) : "";
 //                    scoreEamDto.defaultValueType = scorePerformanceEntity.defaultValueType;
-                    scoreEamDto.attachFileFileAddPaths = Util.strFormat2(scorePerformanceEntity.getAttachFileFileAddPaths());
-                    scoreEamDto.attachFileMultiFileIds = Util.strFormat2(scorePerformanceEntity.getAttachFileMultiFileIds());
-                    scoreEamDto.attachFileFileDeleteIds = Util.strFormat2(scorePerformanceEntity.getAttachFileFileDeleteIds());
-                    scoreEamDto.resultValue = scorePerformanceEntity.resultValue;
+                    scoreEamDto.attachFileFileAddPaths = scorePerformanceEntity.getAttachFileFileAddPaths();
+                    scoreEamDto.attachFileMultiFileIds = scorePerformanceEntity.getAttachFileMultiFileIds();
+                    scoreEamDto.attachFileFileDeleteIds = scorePerformanceEntity.getAttachFileFileDeleteIds();
+                    scoreEamDto.subScore = scorePerformanceEntity.subScore;
                     scorePerformanceDto.add(scoreEamDto);
                 });
         return scorePerformanceDto;

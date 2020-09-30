@@ -37,6 +37,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveEntity;
@@ -75,7 +76,8 @@ import java.util.Map;
  * @author zws 2019/10/29
  */
 @Router(value = Constant.Router.SPARE_PART_APPLY_SUBMIT_EDIT)
-@Controller(value = {LinkController.class, PcController.class, TableInfoController.class, SparePartApplyDetailController.class,OnlineCameraController.class})
+@Controller(value = {LinkController.class, PcController.class, TableInfoController.class,
+        SparePartApplyDetailController.class,OnlineCameraController.class,WorkFlowKeyController.class})
 @Presenter(value = {SparePartApplyPresenter.class})
 public class SparePartApplySubmitViewActivity extends BaseRefreshActivity implements SparePartApplyContract.View {
     @BindByTag("leftBtn")
@@ -166,15 +168,15 @@ public class SparePartApplySubmitViewActivity extends BaseRefreshActivity implem
         remark.setEditable(false);
         getController(LinkController.class).setOnSuccessListener(result -> {
             //获取__pc__
-            getController(PcController.class).queryPc(result.toString(), ProcessKeyUtil.SPARE_PART_APPLY, new OnAPIResultListener<String>() {
+            getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(result.toString(),Constant.EntityCode.SPARE_PART_APPLY, null, new OnAPIResultListener<Object>() {
                 @Override
                 public void onFail(String errorMsg) {
-                    ToastUtils.show(context,ErrorMsgHelper.msgParse(errorMsg));
+                    ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
                 }
 
                 @Override
-                public void onSuccess(String result) {
-                    __pc__ = result;
+                public void onSuccess(Object result) {
+                    __pc__ = String.valueOf(result);
                 }
             });
         });

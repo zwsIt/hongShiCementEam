@@ -26,6 +26,7 @@ import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
@@ -49,6 +50,7 @@ import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
@@ -103,7 +105,7 @@ import io.reactivex.functions.Consumer;
  */
 @Router(value = Constant.Router.OVERHAUL_WORKTICKET_EDIT)
 @Presenter(value = {WorkTicketSubmitPresenter.class})
-@Controller(value = {SafetyMeasuresController.class, LinkController.class, PcController.class, TableInfoController.class, WorkTicketCameraController.class})
+@Controller(value = {SafetyMeasuresController.class, LinkController.class, PcController.class, TableInfoController.class, WorkTicketCameraController.class, WorkFlowKeyController.class})
 public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkTicketSubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -202,7 +204,18 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         getController(LinkController.class).setCancelShow(true);
         if (pendingId.equals(-1L)) {
             // 制定单据工作流
-            getController(LinkController.class).initStartTransition(workFlowView, ProcessKeyUtil.WORK_TICKET);
+            getController(WorkFlowKeyController.class).queryWorkFlowKeyOnly(Constant.EntityCode.WORK_TICKET, null, new OnAPIResultListener<Object>() {
+                @Override
+                public void onFail(String errorMsg) {
+                    ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+                }
+
+                @Override
+                public void onSuccess(Object result) {
+                    getController(LinkController.class).initStartTransition(workFlowView, String.valueOf(result));
+                }
+            });
+
             getSubmitPc("start_op3wj2a"); // 通过pc端菜单管理中相应菜单获取制定 操作编码
         } else {
             getController(LinkController.class).setOnSuccessListener(result -> {
@@ -228,17 +241,28 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK_TICKET, new OnAPIResultListener<String>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.WORK_TICKET, null, new OnAPIResultListener<Object>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
 
             @Override
-            public void onSuccess(String result) {
-                __pc__ = result;
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
             }
         });
+//        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK_TICKET, new OnAPIResultListener<String>() {
+//            @Override
+//            public void onFail(String errorMsg) {
+//                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                __pc__ = result;
+//            }
+//        });
     }
 
     @Override

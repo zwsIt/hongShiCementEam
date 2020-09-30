@@ -37,7 +37,7 @@ public interface Constant {
     /**
      * fir.im相关信息
      */
-    interface Fir{
+    interface Fir {
         String API_TOKEN = "1ce8d7b6ac5ecef81e3a6c0dfaafb7e3"; // https://fir.im/apps提供，切勿在网站点击重新生成，否则已有app 不能检查更新
         String HONG_SHI_APP_ID = "5ddb877423389f4559ae8303";
     }
@@ -205,6 +205,7 @@ public interface Constant {
 
         String ACCEPTANCE_LIST = "ACCEPTANCE_LIST";//验收列表
         String ACCEPTANCE_EDIT = "ACCEPTANCE_EDIT";//验收编辑
+        String ACCEPTANCE_VIEW = "ACCEPTANCE_VIEW";//验收查看
 
 
         String TXL_LIST = "TXL_LIST";
@@ -249,6 +250,7 @@ public interface Constant {
         String WARN_PENDING_LIST = "WARN_PENDING_LIST"; // 预警工作待办
         String ALL_MENU_LIST = "ALL_MENU_LIST"; // 所有应用
         String SCORE_STAFF_PERFORMANCE = "SCORE_STAFF_PERFORMANCE"; // 绩效评分
+        String SCORE_MODIFY_LIST = "SCORE_MODIFY_LIST"; // 评分修改记录列表
     }
 
 
@@ -650,7 +652,7 @@ public interface Constant {
         String EAM_EXACT_CODE = "EAM_EXACT_CODE";//精确设备编码
         String EAM_CODE = "EAM_CODE";//设备编码
         String EAMCODE = "EAMCODE";//设备编码
-//        String EAM_ASSETCODE = "EAM_ASSETCODE"; // 设备编码
+        //        String EAM_ASSETCODE = "EAM_ASSETCODE"; // 设备编码
         String EAM_STATE = "EAM_STATE";//设备状态
         String EAM_AREA = "EAM_AREA";//区域类型
         String EAM_AREANAME = "EAM_AREANAME";//区域类型主设备
@@ -734,6 +736,7 @@ public interface Constant {
         String SUBORDINATE_POSITION = "SUBORDINATE_POSITION"; // 我的下属岗位
         String RISK_ASSESSMENT = "RISK_ASSESSMENT"; // 风险评估
         String LUB_TYPE = "LUB_TYPE"; // 润滑类型：电气、机械
+        String TARGET_ENTITY_CODE = "TARGET_ENTITY_CODE"; // 实体编码
     }
 
 
@@ -857,7 +860,7 @@ public interface Constant {
         String DISPATCH_OPEN_URL = "/BEAM2/workList/workRecord/workEdit.action";//派单
         String RECEIVE_OPEN_URL = "/BEAM2/workList/workRecord/workReceiptEdit.action";//接单
         String EXECUTE_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";//执行
-//        String STOP_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";
+        //        String STOP_OPEN_URL = "/BEAM2/workList/workRecord/workExecuteEdit.action";
         String ACCEPTANCE_OPEN_URL = "/BEAM2/workList/workRecord/workCheckEdit.action";//验收
         String VIEW_OPEN_URL = "/BEAM2/workList/workRecord/workView.action";//通知
     }
@@ -979,6 +982,40 @@ public interface Constant {
 //        String WORK_TICKET = /*EamApplication.getCid() == 1002 ? "workTicketFW" : EamApplication.getCompanyCode() + */"workTicketFW"; // 检修作业票
     }
 
+
+    /**
+     * 实体编码
+     */
+    interface EntityCode {
+        String WORK = "BEAM2_1.0.0_workList"; // 工单
+        String FAULT_INFO = "BEAM2_1.0.0_faultInfo"; // 隐患登记
+        //        String EAM_INFO_EDIT = EamApplication.getCid() == 1002 ? "eaminfoEdit" : EamApplication.getCompanyCode() + "eaminfoEdit"; // 设备档案新增申请
+//        String EAM_INFO = EamApplication.getCid() == 1002 ? "eaminfo" : EamApplication.getCompanyCode() + "eaminfo"; // 设备档案申请修改
+//        String CHANGE_WF = EamApplication.getCid() == 1002 ? "changeWF" : EamApplication.getCompanyCode() + "changeWF"; // 设备状态变更
+        String CHECK_APPLY_FW = "BEAM2_1.0.0_checkApply"; // 验收申请
+        //        String ENTRUST_REPAIR = EamApplication.getCid() == 1002 ? "entrustRepair" : EamApplication.getCompanyCode() + "entrustRepair"; // 委外维修单
+//        String INSTALL_NEW_WF = EamApplication.getCid() == 1002 ? "installNewWF" : EamApplication.getCompanyCode() + "installNewWF"; // 安装验收移交
+        String RUN_STATE_WF = "BEAM2_1.0.0_runningState"; // 运行记录处理
+        String SPARE_PART_APPLY = "BEAM2_1.0.0_sparePart"; // 备件领用申请
+        //        String WORK_ALLOT_NEW_WF = EamApplication.getCid() == 1002 ? "workAllotNewWF" : EamApplication.getCompanyCode() + "workAllotNewWF"; // 设备调拨
+//        String TEMP_WF = EamApplication.getCid() == 1002 ? "tempWF" : EamApplication.getCompanyCode() + "tempWF"; // 临时任务
+        String POTROL_TASK_WF = "mobileEAM_1.0.0_potrolTaskNew"; // 点巡检任务
+        //        String ELE_OFF = EamApplication.getCid() == 1002 ? "EleOnWorkFlow" : EamApplication.getCompanyCode() + "EleOnWorkFlow"; // 停电
+//        String ELE_ON = EamApplication.getCid() == 1002 ? "EleOn" : EamApplication.getCompanyCode() + "EleOn"; // 送电
+        String ELE_ON_OFF = "BEAMEle_1.0.0_onOrOff"; // 停送电
+        String WORK_TICKET = "WorkTicket_8.20.3.03_workTicket"; // 检修作业票
+    }
+
+    /**
+     * 同实体编码，不同工作流类型
+     */
+    interface EntityCodeType {
+        String ELE_OFF = "BEAMEle001/01"; // （停电）
+        String ELE_ON = "BEAMEle001/02"; // （送电）
+        String TEMP_XJ = "mobileEAM_1.0.0_potrolTaskNew_tempList"; // （临时巡检）
+        String PLAN_XJ = "mobileEAM_1.0.0_potrolTaskNew_potrolTaskList"; // （计划巡检）
+    }
+
     interface WarnType {
         String LUBRICATION_WARN = "润滑提醒";
         String SPARE_PART_WARN = "零部件提醒";
@@ -1044,6 +1081,7 @@ public interface Constant {
         String PREVIEW_URL = "";// 审核
         String VIEW_URL = "/BEAMEle/onOrOff/onoroff/eleOffMainView.action";// 查看
     }
+
     /**
      * 送电票单据视图(注：红狮)
      */
@@ -1052,6 +1090,7 @@ public interface Constant {
         String PREVIEW_URL = "";// 审核
         String VIEW_URL = "/BEAMEle/onOrOff/onoroff/eleOnWorkFlow.action"; // 查看
     }
+
     /**
      * 隐患单据视图
      */
@@ -1060,6 +1099,15 @@ public interface Constant {
         String PREVIEW_URL = "/BEAM2/faultInfo/faultInfo/faultInfoApproval.action";// 审核
         String VIEW_URL = "/BEAM2/faultInfo/faultInfo/faultInfoView.action"; // 查看
     }
+
+    /**
+     * 设备验收单
+     */
+    interface CheckApply {
+        String EDIT_URL = "/BEAM2/checkApply/checkApply/checkApplyEdit.action"; // 编辑
+        String VIEW_URL = "/BEAM2/checkApply/checkApply/checkApplyView.action"; // 查看
+    }
+
 
     /**
      * 巡检任务状态
@@ -1076,6 +1124,11 @@ public interface Constant {
     interface CARD_TYPE {
         String cardType1 = "cardType/01"; // 刷卡
         String cardType2 = "cardType/02"; // 手动
+    }
+
+    interface EleOffOn{
+        String ELE_OFF = "BEAMEle001/01";
+        String ELE_ON = "BEAMEle001/02";
     }
 
 }

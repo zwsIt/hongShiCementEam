@@ -41,6 +41,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
@@ -83,7 +84,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Router(value = Constant.Router.HS_ELE_ON_VIEW)
 @Presenter(value = {ElectricityOffSubmitPresenter.class})
-@Controller(value = {OperateItemOnController.class, LinkController.class, PcController.class, TableInfoController.class, OnlineCameraController.class, AttachmentController.class})
+@Controller(value = {OperateItemOnController.class, LinkController.class, PcController.class,
+        TableInfoController.class, OnlineCameraController.class, AttachmentController.class, WorkFlowKeyController.class})
 public class ElectricityOnViewActivity extends BaseRefreshActivity implements ElectricitySubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -206,17 +208,28 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
      * @author user 2019/12/27
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.ELE_ON, new OnAPIResultListener<String>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.ELE_ON_OFF, Constant.EntityCodeType.ELE_ON, new OnAPIResultListener<Object>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
 
             @Override
-            public void onSuccess(String result) {
-                __pc__ = result;
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
             }
         });
+//        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.ELE_ON, new OnAPIResultListener<String>() {
+//            @Override
+//            public void onFail(String errorMsg) {
+//                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                __pc__ = result;
+//            }
+//        });
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -33,11 +34,13 @@ import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.Area;
 import com.supcon.mes.middleware.model.bean.AreaDao;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -78,6 +81,7 @@ import static com.supcon.mes.middleware.constant.Constant.IntentKey.YHGL_ENTITY;
  */
 @Router(Constant.Router.YH_LIST)
 @Presenter(YHListPresenter.class)
+@Controller(value = {WorkFlowKeyController.class})
 public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> implements YHListContract.View {
     @BindByTag("leftBtn")
     AppCompatImageButton leftBtn;
@@ -115,14 +119,14 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
     @BindByTag("listYHPriorityFilter")
     CustomFilterView<FilterBean> listYHPriorityFilter;
 
-    private Boolean hasAddForumPermission;
+//    private Boolean hasAddForumPermission;
 
     Map<String, Object> queryParam = new HashMap<>();
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     YHListAdapter mAdapter;
-    private ModulePermissonCheckController mModulePermissonCheckController;
+//    private ModulePermissonCheckController mModulePermissonCheckController;
     private Long deploymentId;
 
     private boolean isShow;
@@ -170,7 +174,7 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
 
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
         customSearchView.setHint("搜索");
-        searchTitleBar.enableRightBtn();
+        searchTitleBar.disableRightBtn();
         searchTitleBar.setTitleText("隐患单列表");
 
         listDateFilter.setData(YHFilterHelper.createDateFilter());
@@ -196,11 +200,11 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        if (null != hasAddForumPermission && hasAddForumPermission) {
+//                        if (null != hasAddForumPermission && hasAddForumPermission) {
                             YHGLListActivity.this.createYH();
-                        } else {
-                            ToastUtils.show(context, "当前用户并未拥有创建单据权限！");
-                        }
+//                        } else {
+//                            ToastUtils.show(context, "当前用户并未拥有创建单据权限！");
+//                        }
                     }
                 });
 
@@ -377,14 +381,31 @@ public class YHGLListActivity extends BaseRefreshRecyclerActivity<YHEntity> impl
     @Override
     protected void initData() {
         super.initData();
-        mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.FAULT_INFO, new OnSuccessListener<Long>() {
+
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyAndPermission(Constant.EntityCode.FAULT_INFO, null, new OnAPIResultListener<Object>() {
             @Override
-            public void onSuccess(Long result) {
-                deploymentId = result;
-                hasAddForumPermission = true;
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
-        }, null);
+
+            @Override
+            public void onSuccess(Object result) {
+                if (result == null){
+                    searchTitleBar.disableRightBtn();
+                }
+                deploymentId = (Long) result;
+            }
+        });
+
+
+//        mModulePermissonCheckController = new ModulePermissonCheckController();
+//        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.FAULT_INFO, new OnSuccessListener<Long>() {
+//            @Override
+//            public void onSuccess(Long result) {
+//                deploymentId = result;
+//                hasAddForumPermission = true;
+//            }
+//        }, null);
     }
 
     private void createYH() {

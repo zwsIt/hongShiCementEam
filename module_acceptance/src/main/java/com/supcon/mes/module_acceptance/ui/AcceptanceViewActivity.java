@@ -23,7 +23,6 @@ import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.LinkEntity;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
-import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
 import com.supcon.mes.mbap.utils.controllers.SinglePickController;
@@ -82,12 +81,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.Flowable;
 
@@ -97,16 +94,14 @@ import io.reactivex.Flowable;
  * @date 2019/6/27
  * ------------- Description -------------
  */
-@Router(value = Constant.Router.ACCEPTANCE_EDIT)
-@Presenter(value = {AcceptanceEditPresenter.class, AcceptanceSubmitPresenter.class, EamPresenter.class, AcceptanceListPresenter.class})
+@Router(value = Constant.Router.ACCEPTANCE_VIEW)
+@Presenter(value = {AcceptanceEditPresenter.class, AcceptanceSubmitPresenter.class, AcceptanceListPresenter.class})
 @Controller(value = {LinkController.class, PcController.class, WorkFlowKeyController.class})
-public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<AcceptanceEditEntity> implements AcceptanceEditContract.View, AcceptanceSubmitContract.View, EamContract.View, AcceptanceListContract.View {
+public class AcceptanceViewActivity extends BaseRefreshRecyclerActivity<AcceptanceEditEntity> implements AcceptanceEditContract.View, AcceptanceSubmitContract.View, AcceptanceListContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
     @BindByTag("titleText")
     TextView titleText;
-    @BindByTag("rightBtn")
-    ImageButton rightBtn;
 
     @BindByTag("contentView")
     RecyclerView contentView;
@@ -133,12 +128,8 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
     private AcceptanceEntity acceptanceEntity;
     private AcceptanceEditAdapter acceptanceEditAdapter;
     private String eamCodeStr;
-    private NFCHelper nfcHelper;
-    boolean isAdd;
-//    private Long deploymentId;
     private String powerCode;
     private LinkController mLinkController;
-//    private EamEntity mEamEntity;
     private SinglePickController mSinglePickController;
     private List<SystemCodeEntity> mCheckResult;  // 验收结论
     private List<String> mCheckResultStringList = new ArrayList<>();
@@ -160,27 +151,15 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
     protected void onInit() {
         super.onInit();
         EventBus.getDefault().register(this);
+        refreshListController.setAutoPullDownRefresh(true);
+        refreshListController.setPullDownRefreshEnabled(true);
+        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
+        contentView.setLayoutManager(new LinearLayoutManager(context));
+
         acceptanceEntity = (AcceptanceEntity) getIntent().getSerializableExtra(Constant.IntentKey.ACCEPTANCE_ENTITY);
-        isAdd = getIntent().getBooleanExtra(Constant.IntentKey.IS_ADD, false);
         if (acceptanceEntity == null){ // 工作提醒
             acceptanceEntity = new AcceptanceEntity();
             acceptanceEntity.tableNo = getIntent().getStringExtra(Constant.IntentKey.TABLENO);
-        }else { // 验收列表
-            if (!isAdd && acceptanceEntity.getBeamID().id != null){ // 非制定且存在设备
-                eamCode.setEditable(false);
-                eamName.setEditable(false);
-            }
-        }
-        nfcHelper = NFCHelper.getInstance();
-        if (nfcHelper != null) {
-            nfcHelper.setup(this);
-            nfcHelper.setOnNFCListener(new NFCHelper.OnNFCListener() {
-                @Override
-                public void onNFCReceived(String nfc) {
-                    LogUtil.d("NFC Received : " + nfc);
-                    EventBus.getDefault().post(new NFCEvent(nfc));
-                }
-            });
         }
 
         mSinglePickController = new SinglePickController<String>(this);
@@ -191,43 +170,38 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         for (SystemCodeEntity systemCodeEntity : mCheckResult){
             mCheckResultStringList.add(systemCodeEntity.value);
         }
+
+        acceptanceEditAdapter.setEdit(false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (nfcHelper != null)
-            nfcHelper.onResumeNFC(this);
     }
 
     @Override
     protected void initView() {
         super.initView();
         StatusBarUtils.setWindowStatusBarColor(this, R.color.themeColor);
-        refreshListController.setAutoPullDownRefresh(true);
-        refreshListController.setPullDownRefreshEnabled(true);
-        refreshListController.setEmpterAdapter(EmptyAdapterHelper.getRecyclerEmptyAdapter(context, null));
-        contentView.setLayoutManager(new LinearLayoutManager(context));
-
         titleText.setText("设备验收");
 
+        eamCode.setEditable(false);
+        eamName.setEditable(false);
+        acceptanceStaff.setEditable(false);
+        acceptanceResult.setEditable(false);
+        acceptanceItem.setEditable(false);
+
         mLinkController = getController(LinkController.class);
-        if (acceptanceEntity.id == null){ // 制定
-            getController(WorkFlowKeyController.class).queryWorkFlowKeyOnly(Constant.EntityCode.CHECK_APPLY_FW, null, new OnAPIResultListener<Object>() {
-                @Override
-                public void onFail(String errorMsg) {
-
-                }
-
-                @Override
-                public void onSuccess(Object result) {
-                    mLinkController.initStartTransition(transition, String.valueOf(result));
-                }
-            });
-
-            ModulePowerController modulePowerController = new ModulePowerController();
-            modulePowerController.checkModulePermission(acceptanceEntity.deploymentId == null ? -1L: acceptanceEntity.deploymentId, result1 -> powerCode = result1.powerCode);
-        }
+//        if (acceptanceEntity.id == null){ // 制定
+//            mLinkController.initStartTransition(transition, "checkApplyFW"/*ProcessKeyUtil.CHECK_APPLY_FW*/);
+//            ModulePowerController modulePowerController = new ModulePowerController();
+//            modulePowerController.checkModulePermission(acceptanceEntity.deploymentId == null ? -1L: acceptanceEntity.deploymentId, new OnSuccessListener<BapResultEntity>() {
+//                @Override
+//                public void onSuccess(BapResultEntity result1) {
+//                    powerCode = result1.powerCode;
+//                }
+//            });
+//        }
     }
 
     private void updateView(){
@@ -242,6 +216,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
+
         getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode, Constant.EntityCode.CHECK_APPLY_FW, null, new OnAPIResultListener<Object>() {
             @Override
             public void onFail(String errorMsg) {
@@ -278,38 +253,6 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         RxView.clicks(leftBtn)
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> onBackPressed());
-        RxView.clicks(rightBtn)
-                .throttleFirst(2, TimeUnit.SECONDS)
-                .subscribe(o -> new CustomDialog(context)
-                        .twoButtonAlertDialog("确定提交验收吗?")
-                        .bindView(R.id.redBtn, "确定")
-                        .bindView(R.id.grayBtn, "取消")
-                        .bindClickListener(R.id.redBtn, v12 -> {
-                            if (acceptanceEntity.checkStaff == null) {
-                                ToastUtils.show(this, "请选择验收人!");
-                                return;
-                            }
-                            if (acceptanceEntity.beamID == null && TextUtils.isEmpty(acceptanceEntity.beamID.name)) {
-                                ToastUtils.show(this, "请选择验收设备!");
-                                return;
-                            }
-                            if (acceptanceEntity.checkResult == null) {
-                                ToastUtils.show(this, "请填写验收结论!");
-                                return;
-                            }
-                            if (acceptanceEditAdapter.getList() == null) {
-                                ToastUtils.show(this, "当前设备没有验收项!");
-                                return;
-                            }
-                            List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
-                            if (linkEntities!= null && linkEntities.size() > 0) {
-                                doSubmit(createWorkFlowVar(linkEntities.get(0)));
-                            } else {
-                                ToastUtils.show(this, "未获取当前工作流信息，请重新加载页面！");
-                            }
-                        }, true)
-                        .bindClickListener(R.id.grayBtn, null, true)
-                        .show());
         transition.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
@@ -330,16 +273,10 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             }
         });
         refreshListController.setOnRefreshListener(() -> {
-            // 制定单据
-            if (isAdd){
-                loadPt(acceptanceEntity.getBeamID().id,null);
-            }else {
-                if (!TextUtils.isEmpty(acceptanceEntity.tableNo)){
-                    queryParam.put(Constant.BAPQuery.TABLE_NO, acceptanceEntity.tableNo);
-                    presenterRouter.create(AcceptanceListAPI.class).getAcceptanceList(queryParam, 1,false);
-                }
+            if (!TextUtils.isEmpty(acceptanceEntity.tableNo)){
+                queryParam.put(Constant.BAPQuery.TABLE_NO, acceptanceEntity.tableNo);
+                presenterRouter.create(AcceptanceListAPI.class).getAcceptanceList(queryParam, 1,true);
             }
-
         });
 
         eamCode.setOnChildViewClickListener((childView, action, obj) -> {
@@ -378,7 +315,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             Bundle bundle = new Bundle();
             bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
             bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
-            IntentRouter.go(AcceptanceEditActivity.this, Constant.Router.CONTACT_SELECT, bundle);
+            IntentRouter.go(AcceptanceViewActivity.this, Constant.Router.CONTACT_SELECT, bundle);
         });
         acceptanceResult.setOnChildViewClickListener((childView, action, obj) -> {
             if (action == -1){
@@ -413,7 +350,7 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             ToastUtils.show(this, "当前设备没有验收项!");
             return false;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -481,88 +418,33 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         }
     }
 
-    /**
-     * @param
-     * @description NFC事件
-     * @author zhangwenshuai1
-     * @date 2018/6/28
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getNFC(NFCEvent nfcEvent) {
-//        if (isEdit) {
-            LogUtil.d("NFC_TAG", nfcEvent.getNfc());
-            Map<String, Object> nfcJson = Util.gsonToMaps(nfcEvent.getNfc());
-            if (nfcJson.get("textRecord") == null) {
-                ToastUtils.show(context, "标签内容空！");
-                return;
-            }
-            eamCodeStr = (String) nfcJson.get("textRecord");
-//            refreshListController.refreshBegin();
-        loadEam();
-
-//        }
-    }
-
-    @Override
-    public void getEamSuccess(CommonListEntity entity) {
-        if (entity.result.size() > 0) {
-            EamEntity eamEntity = (EamEntity) entity.result.get(0);
-            eamCode.setContent(Util.strFormat(eamEntity.eamAssetCode));
-            eamName.setContent(Util.strFormat(eamEntity.name));
-            acceptanceDept.setContent(Util.strFormat(eamEntity.getUseDept().name));
-            acceptanceArea.setContent(eamEntity.installPlace == null ? "--" : eamEntity.installPlace.name);
-            acceptanceEntity.beamID = eamEntity;
-            acceptanceEntity.dept = eamEntity.getUseDept();
-            acceptanceEntity.area = eamEntity.installPlace;
-            presenterRouter.create(AcceptanceEditAPI.class).getAcceptanceEdit(acceptanceEntity.getBeamID().id,null);
-            return;
-        }
-        SnackbarHelper.showError(rootView, "未查询到设备：" + eamCodeStr);
-    }
-
-    @Override
-    public void getEamFailed(String errorMsg) {
-        SnackbarHelper.showError(rootView, errorMsg);
-        refreshListController.refreshComplete(null);
-    }
-
     @SuppressLint("CheckResult")
     @Override
     public void getAcceptanceEditSuccess(CommonBAPListEntity entity) {
-//        Map<String, AcceptanceEditEntity> acceptanceEditEntities = new LinkedHashMap<>();
-        Set<String> set = new HashSet<>();
+        Map<String, AcceptanceEditEntity> acceptanceEditEntities = new LinkedHashMap<>();
         if (entity == null) {
             refreshListController.refreshComplete(null);
             return;
         }
-//        refreshListController.refreshComplete(entity.result);
-
-        List<AcceptanceEditEntity> list = new ArrayList<>();
-        AtomicInteger position = new AtomicInteger();
-
-        Flowable.fromIterable((List<AcceptanceEditEntity>)entity.result)
-                .subscribe(acceptanceEditEntity -> {
-
-                    if (!set.contains(acceptanceEditEntity.item) && acceptanceEditEntity.valueType() == AcceptanceEditEntity.EDITMULT){
-                        AcceptanceEditEntity acceptanceTitle = new AcceptanceEditEntity();
-                        acceptanceTitle.viewType = ListType.TITLE.value();
-                        acceptanceTitle.item = acceptanceEditEntity.item;
-                        acceptanceTitle.defaultValueType = acceptanceEditEntity.defaultValueType;
-
-                        list.add(acceptanceTitle);
-                        set.add(acceptanceEditEntity.item);
-
-                        acceptanceTitle.position = position.getAndIncrement();
-
-                    }
-                    list.add(acceptanceEditEntity);
-
-                    if (acceptanceEditEntity.valueType() != AcceptanceEditEntity.EDITMULT){
-                        acceptanceEditEntity.position = position.getAndIncrement();
-                    }
-
-                }, throwable -> {
-                }, () -> refreshListController.refreshComplete(list));
+        refreshListController.refreshComplete(entity.result);
+//        Flowable.fromIterable((List<AcceptanceEditEntity>) entity)
+//                .subscribe(acceptanceEditEntity -> {
+//
+//                    AcceptanceEditEntity acceptanceEditEntityOld;
+//                    if (acceptanceEditEntities.containsKey(acceptanceEditEntity.item)) {
+//                        acceptanceEditEntityOld = acceptanceEditEntities.get(acceptanceEditEntity.item);
+//
+//                    } else {
+//                        acceptanceEditEntityOld = acceptanceEditEntity;
+//                    }
+//                    if (!TextUtils.isEmpty(acceptanceEditEntity.category)) {
+//                        acceptanceEditEntityOld.categorys.add(acceptanceEditEntity);
+//                    }
+//
+//                    acceptanceEditEntities.put(acceptanceEditEntity.item, acceptanceEditEntityOld);
+//
+//                }, throwable -> {
+//                }, () -> refreshListController.refreshComplete(new ArrayList<>(acceptanceEditEntities.values())));
 
     }
 
@@ -603,23 +485,6 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
         presenterRouter.create(AcceptanceSubmitAPI.class).doSubmit(map, powerCode);
     }
 
-
-    private WorkFlowVar createWorkFlowVar(LinkEntity linkEntity) {
-        WorkFlowVar workFlowVar = new WorkFlowVar();
-        List<WorkFlowEntity> workFlowEntities = new ArrayList<>();
-        WorkFlowEntity workFlowEntity = new WorkFlowEntity();
-        workFlowEntity.dec = linkEntity.description;
-        workFlowEntity.outcome = linkEntity.name;
-
-        workFlowEntity.type = "normal";
-        workFlowEntities.add(workFlowEntity);
-        workFlowVar.operateType = "submit";
-        workFlowVar.dec = linkEntity.description;
-        workFlowVar.outCome = linkEntity.name;
-        workFlowVar.outcomeMapJson = workFlowEntities;
-        return workFlowVar;
-    }
-
     @Override
     public void doSubmitSuccess(BapResultEntity entity) {
         onLoadSuccessAndExit("验收成功", () -> {
@@ -638,18 +503,8 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        //获取到Tag对象
-        if (nfcHelper != null)
-            nfcHelper.dealNFCTag(intent);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
-        if (nfcHelper != null)
-            nfcHelper.onPauseNFC(this);
     }
 
     @Override
@@ -662,9 +517,6 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (nfcHelper != null) {
-            nfcHelper.release();
-        }
     }
 
     @Override
@@ -674,14 +526,6 @@ public class AcceptanceEditActivity extends BaseRefreshRecyclerActivity<Acceptan
             acceptanceEntity = entity.result.get(0);
             updateView();
             updateData();
-            if (acceptanceEntity.beamID != null && acceptanceEntity.beamID.id != null ){
-                eamCode.setEditable(false);
-                eamName.setEditable(false);
-            }else {
-                eamCode.setEditable(true);
-                eamName.setEditable(true);
-            }
-
             loadPt(null,acceptanceEntity.id);
         }else {
             ToastUtils.show(context,"未查询到验收单信息");

@@ -28,7 +28,7 @@ public interface ScoreConstant {
      * 绩效项目评分类型
      */
     interface ScoreItemType {
-        String T1 = "BEAM_077/02"; // 自动
+        String T1 = "BEAM_077/01"; // 自动
         String T2 = "BEAM_077/02"; // 手动
     }
 

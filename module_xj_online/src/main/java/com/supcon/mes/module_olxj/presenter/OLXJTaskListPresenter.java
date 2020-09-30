@@ -90,6 +90,7 @@ public class OLXJTaskListPresenter extends OLXJTaskContract.Presenter {
 
         Map<String, Object> paramsName = new HashMap<>();
         paramsName.put(Constant.BAPQuery.NAME, EamApplication.getAccountInfo().staffName);
+        paramsName.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().staffId);
         JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(paramsName, "base_staff,ID,MOBILEEAM_POTROL_TASKWFS,RESSTAFFID");
         fastQueryCondEntity.subconds.add(joinSubcondEntity);
 

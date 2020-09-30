@@ -41,6 +41,11 @@ public class ProcessedEntity extends BaseEntity {
     @SerializedName(value = "dataId")
     public Long tableId;
 
+    @SerializedName(value = "targetentitycode")
+    public String targetEntityCode; // 实体编码
+
+    public SystemCodeEntity peroidType; // 周期类型
+
     public EamEntity getEamId() {
         if (eamId == null) {
             eamId = new EamEntity();

@@ -1,6 +1,7 @@
 package com.supcon.mes.module_acceptance.presenter;
 
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
+import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_acceptance.model.bean.AcceptanceEditEntity;
 import com.supcon.mes.module_acceptance.model.contract.AcceptanceEditContract;
 import com.supcon.mes.module_acceptance.model.network.AcceptanceHttpClient;
@@ -16,24 +17,48 @@ import io.reactivex.functions.Function;
  */
 public class AcceptanceEditPresenter extends AcceptanceEditContract.Presenter {
     @Override
-    public void getAcceptanceEdit(long eamId) {
-        mCompositeSubscription.add(AcceptanceHttpClient.getAcceptanceEdit(eamId)
-                .onErrorReturn(new Function<Throwable, CommonBAPListEntity<AcceptanceEditEntity>>() {
-                    @Override
-                    public CommonBAPListEntity<AcceptanceEditEntity> apply(Throwable throwable) throws Exception {
-                        CommonBAPListEntity<AcceptanceEditEntity> acceptanceEditEntity = new CommonBAPListEntity<>();
+    public void getAcceptanceEdit(Long eamId, Long tableId) {
 
-                        return acceptanceEditEntity;
-                    }
-                }).subscribe(new Consumer<CommonBAPListEntity<AcceptanceEditEntity>>() {
-                    @Override
-                    public void accept(CommonBAPListEntity<AcceptanceEditEntity> acceptanceEditEntity) throws Exception {
-                        if (acceptanceEditEntity.success) {
-                            getView().getAcceptanceEditSuccess(acceptanceEditEntity.result);
-                        } else {
-                            getView().getAcceptanceEditFailed(acceptanceEditEntity.errMsg);
+        if (tableId == null){
+            mCompositeSubscription.add(AcceptanceHttpClient.getAcceptanceEditByEam(eamId)
+                    .onErrorReturn(new Function<Throwable, CommonBAPListEntity<AcceptanceEditEntity>>() {
+                        @Override
+                        public CommonBAPListEntity<AcceptanceEditEntity> apply(Throwable throwable) throws Exception {
+                            CommonBAPListEntity<AcceptanceEditEntity> acceptanceEditEntity = new CommonBAPListEntity<>();
+                            acceptanceEditEntity.errMsg = HttpErrorReturnUtil.getErrorInfo(throwable);
+                            return acceptanceEditEntity;
                         }
-                    }
-                }));
+                    }).subscribe(new Consumer<CommonBAPListEntity<AcceptanceEditEntity>>() {
+                        @Override
+                        public void accept(CommonBAPListEntity<AcceptanceEditEntity> acceptanceEditEntity) throws Exception {
+                            if (acceptanceEditEntity.success) {
+                                getView().getAcceptanceEditSuccess(acceptanceEditEntity);
+                            } else {
+                                getView().getAcceptanceEditFailed(acceptanceEditEntity.errMsg);
+                            }
+                        }
+                    }));
+        }else {
+            mCompositeSubscription.add(AcceptanceHttpClient.getAcceptanceEditByDg(tableId)
+                    .onErrorReturn(new Function<Throwable, CommonBAPListEntity<AcceptanceEditEntity>>() {
+                        @Override
+                        public CommonBAPListEntity<AcceptanceEditEntity> apply(Throwable throwable) throws Exception {
+                            CommonBAPListEntity<AcceptanceEditEntity> acceptanceEditEntity = new CommonBAPListEntity<>();
+                            acceptanceEditEntity.errMsg = HttpErrorReturnUtil.getErrorInfo(throwable);
+                            return acceptanceEditEntity;
+                        }
+                    }).subscribe(new Consumer<CommonBAPListEntity<AcceptanceEditEntity>>() {
+                        @Override
+                        public void accept(CommonBAPListEntity<AcceptanceEditEntity> acceptanceEditEntity) throws Exception {
+                            if (acceptanceEditEntity.result != null) {
+                                getView().getAcceptanceEditSuccess(acceptanceEditEntity);
+                            } else {
+                                getView().getAcceptanceEditFailed(acceptanceEditEntity.errMsg);
+                            }
+                        }
+                    }));
+        }
+
+
     }
 }

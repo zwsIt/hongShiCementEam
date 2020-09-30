@@ -187,12 +187,7 @@ public class WorkStartActivity extends BaseControllerActivity implements WorkSta
         titleText.setText(getResources().getString(R.string.fault_work_start_edit));
         workStartStaff.setContent(EamApplication.getAccountInfo().staffName);
 
-        getController(UserPowerCheckController.class).checkModulePermission(EamApplication.getCid(), YhConstant.OperateCode.CUSTOM_ADD, new OnSuccessListener<Map<String, Boolean>>() {
-            @Override
-            public void onSuccess(Map<String, Boolean> result) {
-                addPermission = result.get(YhConstant.OperateCode.CUSTOM_ADD);
-            }
-        });
+        getController(UserPowerCheckController.class).checkModulePermission(EamApplication.getCid(), YhConstant.OperateCode.CUSTOM_ADD, result -> addPermission = result.get(YhConstant.OperateCode.CUSTOM_ADD));
     }
 
     @Override

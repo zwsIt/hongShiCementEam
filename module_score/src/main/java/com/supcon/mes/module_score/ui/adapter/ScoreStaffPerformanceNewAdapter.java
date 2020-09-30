@@ -265,13 +265,14 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
             });
             RxTextView.textChanges(handleScore.editText())
                     .skipInitialValue()
+                    .skip(1)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .filter(charSequence -> {
 //                        if (!isEdit)return false;
                         handleScore.editText().setSelection(charSequence.length());
                         ScoreStaffPerformanceEntity item = getItem(getAdapterPosition());
-                        if (item == null || charSequence.toString().equals(item.resultValue))
+                        if (item == null || charSequence.toString().equals(item.subScore))
                             return false;
                         if (Util.strToFloat(charSequence.toString()) > item.score) {
                             ToastUtils.show(context, "当前项目最高" + item.score + "分");
@@ -283,7 +284,7 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                     })
                     .subscribe(charSequence -> {
                         ScoreStaffPerformanceEntity item = getItem(getAdapterPosition());
-                        item.resultValue = charSequence.toString();
+                        item.subScore = charSequence.toString();
                         float otherTotalScore = total - item.scoreEamPerformanceEntity.fraction; // 除当前标题的总分数
 
                         // 标题更新分数
@@ -331,9 +332,9 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
         protected void update(ScoreStaffPerformanceEntity data) {
             mScoreCameraController.addGalleryView(getAdapterPosition(), itemPics, ScoreStaffPerformanceNewAdapter.this);
 
-            if (TextUtils.isEmpty(data.getAttachFileMultiFileIds()) && TextUtils.isEmpty(data.getAttachFileFileAddPaths())) { // 服务器及本地均未有附件
+            if (data.getAttachFileMultiFileIds() == null && data.getAttachFileFileAddPaths() == null){ // 服务器及本地均未有附件
                 itemPics.clear();
-            } else {
+            }else {
                 initAttachFiles(data, mAttachmentDownloadController, itemPics);
             }
 
@@ -342,15 +343,13 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
             scoreItem.setText(item);
 
             sum.setNum(data.defaultNumVal);
-            data.lastSubScore = Util.strToFloat(data.resultValue); // 赋值上一次扣分数
-            handleScore.setContent(data.resultValue);
+            data.lastSubScore = Util.strToFloat(data.subScore); // 赋值上一次扣分数
+            handleScore.setContent(data.subScore);
 
             if (data.scoreType != null && data.scoreType.id.equals(ScoreConstant.ScoreItemType.T1)){ // 自动
                 handleScore.setVisibility(View.GONE);
                 scoreRadioGroup.setVisibility(View.GONE);
                 sum.setVisibility(View.GONE);
-
-
 
             }else { // 手动
                 if (data.defaultValueType != null && ScoreConstant.ValueType.T1.equals(data.defaultValueType.id)) {
@@ -367,7 +366,7 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                     handleScore.setVisibility(View.VISIBLE);
                     scoreRadioGroup.setVisibility(View.GONE);
                     sum.setVisibility(View.GONE);
-                    data.theoreticalScore = TextUtils.isEmpty(data.resultValue) ? 0 : Float.parseFloat(data.resultValue);
+                    data.theoreticalScore = TextUtils.isEmpty(data.subScore) ? 0 : Float.parseFloat(data.subScore);
                 } else {
                     handleScore.setVisibility(View.GONE);
                     scoreRadioGroup.setVisibility(View.GONE);
@@ -389,7 +388,7 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                     scoreRadioBtn2.setButtonDrawable(R.drawable.ic_check_box_true_small_gray);
                 }
             }
-            if (isEdit && (data.result || data.defaultNumVal > 0 || !TextUtils.isEmpty(data.resultValue))) {
+            if (isEdit && (data.result || data.defaultNumVal > 0 || !TextUtils.isEmpty(data.subScore))) {
                 ufItemPhotoIv.setVisibility(View.VISIBLE);
             } else {
                 ufItemPhotoIv.setVisibility(View.GONE);
@@ -435,27 +434,27 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
         }
         if (data.getAttachmentEntityList() != null) {
             attachmentEntities = data.getAttachmentEntityList();
-        } else {
+        }else {
             AttachmentEntity attachmentEntity;
             attachmentEntities = new ArrayList<>();
-            if (!TextUtils.isEmpty(data.getAttachFileMultiFileIds())) { // 服务器
-                List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
-                List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
-                for (String id : attachFileIdList) {
+            if (data.getAttachFileMultiFileIds() != null) { // 服务器
+//                List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
+//                List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
+                for (Long id : data.getAttachFileMultiFileIds()) {
                     attachmentEntity = new AttachmentEntity();
-                    attachmentEntity.id = Long.parseLong(id);
-                    attachmentEntity.name = attachFileNameList.get(attachFileIdList.indexOf(id));
+                    attachmentEntity.id = id;
+                    attachmentEntity.name = data.getAttachFileMultiFileNames().get(data.getAttachFileMultiFileIds().indexOf(id));
                     attachmentEntity.deploymentId = attachmentEntity.id; // 赋值附件id,防止下载过滤
                     attachmentEntities.add(attachmentEntity);
                 }
                 data.setAttachmentEntityList(attachmentEntities);
             }
-            if (!TextUtils.isEmpty(data.getAttachFileFileAddPaths())) { // 本地添加
-                List<String> attachFileAddPathsList = Arrays.asList(data.getAttachFileFileAddPaths().split(","));
-                for (String path : attachFileAddPathsList) {
+            if (data.getAttachFileFileAddPaths() != null) { // 本地添加
+//                List<String> attachFileAddPathsList = Arrays.asList(data.getAttachFileFileAddPaths().split(","));
+                for (String path : data.getAttachFileFileAddPaths()) {
                     attachmentEntity = new AttachmentEntity();
                     attachmentEntity.id = -1L;
-                    attachmentEntity.name = path.substring(path.lastIndexOf("\\") + 1);
+                    attachmentEntity.name = path.substring(path.lastIndexOf("\\")+1);
                     attachmentEntity.deploymentId = attachmentEntity.id; // 赋值附件id,防止下载过滤
                     attachmentEntities.add(attachmentEntity);
                 }

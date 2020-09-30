@@ -135,7 +135,7 @@ public class AnomalyActivity extends BaseRefreshRecyclerActivity<AnomalyEntity> 
         });
         tableFilter.setFilterSelectChangedListener(filterBean -> {
             CustomFilterBean customFilterBean = (CustomFilterBean)filterBean;
-            queryParam.put(Constant.BAPQuery.PROCESSKEY,customFilterBean.id);
+            queryParam.put(Constant.BAPQuery.TARGET_ENTITY_CODE,customFilterBean.id);
             refreshListController.refreshBegin();
         });
     }

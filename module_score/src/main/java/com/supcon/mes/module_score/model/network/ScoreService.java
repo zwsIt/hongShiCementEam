@@ -9,6 +9,7 @@ import com.supcon.mes.module_score.model.bean.ScoreDeviceCheckResultEntity;
 import com.supcon.mes.module_score.model.bean.ScoreDutyEamEntity;
 import com.supcon.mes.module_score.model.bean.ScoreEamListEntity;
 import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceListEntity;
+import com.supcon.mes.module_score.model.bean.ScoreRecordEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffDailyPerformanceEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceListEntity;
@@ -82,5 +83,9 @@ public interface ScoreService {
 
     @POST("/BEAM/scorePerformance/scoreHead/getSocreTemplate.action?sourceType=BEAM_065/02")
     Flowable<ScoreStaffPerformanceListEntity> getScoreTemplate(@Query("sourceId") Long staffId);
+
+    //评分修改记录列表
+    @POST("/BEAM/scoreModRecord/scoreRecord/modifyRecord-query.action?1=1&permissionCode=BEAM_1.0.0_scoreModRecord_modifyRecord")
+    Flowable<CommonBAPListEntity<ScoreRecordEntity>> queryModifyRecord(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 }

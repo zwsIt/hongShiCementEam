@@ -2,6 +2,7 @@ package com.supcon.mes.module_acceptance.ui.util;
 
 import android.annotation.SuppressLint;
 
+import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_acceptance.model.bean.AcceptanceEditEntity;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 public class AcceptanceMapManager {
     @SuppressLint("SimpleDateFormat")
@@ -29,8 +31,9 @@ public class AcceptanceMapManager {
         map.put("datagridKey", "BEAM2_checkApply_checkApply_checkApplyEdit_datagrids");
         map.put("viewCode", "BEAM2_1.0.0_checkApply_checkApplyEdit");
         map.put("modelName", "CheckApply");
-        map.put("id", acceptanceEntity.id);
-        map.put("checkApply.createStaffId", Util.strFormat2(acceptanceEntity.getCheckStaff().id));
+        map.put("activityName",acceptanceEntity.pending == null ? "" : acceptanceEntity.pending.activityName);
+        if (acceptanceEntity.id != null) map.put("id", acceptanceEntity.id);
+        map.put("checkApply.createStaffId", acceptanceEntity.createStaff.getId());
         map.put("checkApply.createTime", format.format(acceptanceEntity.createTime != null ? acceptanceEntity.createTime : System.currentTimeMillis()));
         map.put("checkApply.createPositionId", EamApplication.getAccountInfo().positionId);
         map.put("checkApply.dept.id", Util.strFormat2(acceptanceEntity.getDept().id));
@@ -41,6 +44,7 @@ public class AcceptanceMapManager {
         map.put("checkApply.area.id", Util.strFormat2(acceptanceEntity.getArea().id));
         map.put("checkApply.applyDate", format.format(acceptanceEntity.applyDate != null ? acceptanceEntity.applyDate : System.currentTimeMillis()));
         map.put("checkApply.checkItem", Util.strFormat2(acceptanceEntity.checkItem));
+        map.put("checkApply.checkResult.id",acceptanceEntity.checkResult == null ? "" : acceptanceEntity.checkResult.id);
 
         map.put("pendingId", acceptanceEntity.pending != null ? Util.strFormat2(acceptanceEntity.pending.id) : "");
 
@@ -54,14 +58,20 @@ public class AcceptanceMapManager {
     public static List<AcceptanceDto> dataChange(List<AcceptanceEditEntity> acceptanceEditEntities) {
         List<AcceptanceDto> acceptanceDtos = new ArrayList<>();
         Flowable.fromIterable(acceptanceEditEntities)
-                .flatMap(new Function<AcceptanceEditEntity, Publisher<AcceptanceEditEntity>>() {
+//                .flatMap(new Function<AcceptanceEditEntity, Publisher<AcceptanceEditEntity>>() {
+//                    @Override
+//                    public Publisher<AcceptanceEditEntity> apply(AcceptanceEditEntity acceptanceEditEntity) throws Exception {
+//                        if (acceptanceEditEntity.categorys.size() > 0) {
+//                            return Flowable.fromIterable(acceptanceEditEntity.categorys);
+//                        } else {
+//                            return Flowable.just(acceptanceEditEntity);
+//                        }
+//                    }
+//                })
+                .filter(new Predicate<AcceptanceEditEntity>() {
                     @Override
-                    public Publisher<AcceptanceEditEntity> apply(AcceptanceEditEntity acceptanceEditEntity) throws Exception {
-                        if (acceptanceEditEntity.categorys.size() > 0) {
-                            return Flowable.fromIterable(acceptanceEditEntity.categorys);
-                        } else {
-                            return Flowable.just(acceptanceEditEntity);
-                        }
+                    public boolean test(AcceptanceEditEntity acceptanceEditEntity) throws Exception {
+                        return acceptanceEditEntity.viewType == ListType.CONTENT.value();
                     }
                 })
                 .subscribe(acceptanceEditEntity -> {

@@ -17,6 +17,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * @author yangfei.cao
@@ -27,18 +28,24 @@ import retrofit2.http.QueryMap;
 @ApiFactory(name = "AcceptanceHttpClient")
 public interface AcceptanceService {
 
-    //临时验收
-    @GET("/BEAM2/checkApply/checkApply/checkApplyList-pending.action")
-    Flowable<AcceptanceListEntity> getAcceptanceList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
+    //验收list
+    @POST
+    Flowable<AcceptanceListEntity> getAcceptanceList(@Url String url,@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
 
-    //临时验收编辑
+    //验收编辑
     @GET("/BEAM2/checkApply/checkApply/getCheckApplyDT.action")
-    Flowable<CommonBAPListEntity<AcceptanceEditEntity>> getAcceptanceEdit(@Query("eamId") long eamId);
+    Flowable<CommonBAPListEntity<AcceptanceEditEntity>> getAcceptanceEditByEam(@Query("eamId") long eamId);
 
 
     //提交
     @POST("/BEAM2/checkApply/checkApply/checkApplyEdit/submit.action?_bapFieldPermissonModelCode_=BEAM2_1.0.0_checkApply_CheckApply&_bapFieldPermissonModelName_=CheckApply&superEdit=false")
     @Multipart
     Flowable<BapResultEntity> doSubmit(@PartMap Map<String, RequestBody> map, @Query("__pc__") String powerCode);
+
+    // 验收pt
+    @GET("/BEAM2/checkApply/checkApply/data-dg1561532342588.action?datagridCode=BEAM2_1.0.0_checkApply_checkApplyEditdg1561532342588&rt=json")
+    Flowable<CommonBAPListEntity<AcceptanceEditEntity>> getAcceptanceEditByDg(@Query("checkApply.id") Long tableId);
+
+
 }

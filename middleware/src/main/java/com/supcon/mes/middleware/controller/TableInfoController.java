@@ -37,7 +37,7 @@ public class TableInfoController extends BasePresenterController implements Tabl
         if (onAPIResultListener != null){
             onAPIResultListener.onFail(errorMsg);
         }
-        LogUtil.e(errorMsg);
+        LogUtil.e(errorMsg + "");
     }
 
 }

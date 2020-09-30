@@ -464,8 +464,8 @@ public class CurrentWorkFragment extends BaseRefreshRecyclerFragment<WaitDealtEn
         }
     }
 
-    public void doFilter(String processKey) {
-        queryParam.put(Constant.BAPQuery.PROCESSKEY, processKey);
+    public void doFilter(String entityCode) {
+        queryParam.put(Constant.BAPQuery.TARGET_ENTITY_CODE, entityCode);
         refreshListController.refreshBegin();
     }
 }

@@ -2,6 +2,7 @@ package com.supcon.mes.module_score.presenter;
 
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.util.FormDataHelper;
+import com.supcon.mes.middleware.util.HttpErrorReturnUtil;
 import com.supcon.mes.module_score.model.contract.ScoreStaffSubmitContract;
 import com.supcon.mes.module_score.model.contract.ScoreSubmitContract;
 import com.supcon.mes.module_score.model.network.ScoreHttpClient;
@@ -23,7 +24,7 @@ public class ScoreInspectorStaffSubmitPresenter extends ScoreStaffSubmitContract
                             public BapResultEntity apply(Throwable throwable) throws Exception {
                                 BapResultEntity bapResultEntity = new BapResultEntity();
                                 bapResultEntity.dealSuccessFlag = false;
-                                bapResultEntity.errMsg = throwable.toString();
+                                bapResultEntity.errMsg = HttpErrorReturnUtil.getErrorInfo(throwable);
                                 return bapResultEntity;
                             }
                         })

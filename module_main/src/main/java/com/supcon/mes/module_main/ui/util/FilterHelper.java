@@ -27,32 +27,37 @@ public class FilterHelper {
 
         filterBean = new CustomFilterBean();
         filterBean.name = "隐患单";
-        filterBean.id = ProcessKeyUtil.FAULT_INFO;
+        filterBean.id = Constant.EntityCode.FAULT_INFO;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
         filterBean.name = "维修工单";
-        filterBean.id = ProcessKeyUtil.WORK;
+        filterBean.id = Constant.EntityCode.WORK;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
         filterBean.name = "检修票";
-        filterBean.id = ProcessKeyUtil.WORK_TICKET;
+        filterBean.id = Constant.EntityCode.WORK_TICKET;
+        filterBeanList.add(filterBean);
+
+//        filterBean = new CustomFilterBean();
+//        filterBean.name = "停电票";
+//        filterBean.id = Constant.EntityCode.ELE_OFF;
+//        filterBeanList.add(filterBean);
+
+        filterBean = new CustomFilterBean();
+        filterBean.name = "停送电票";
+        filterBean.id = Constant.EntityCode.ELE_ON_OFF;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
-        filterBean.name = "停电票";
-        filterBean.id = ProcessKeyUtil.ELE_OFF;
-        filterBeanList.add(filterBean);
-
-        filterBean = new CustomFilterBean();
-        filterBean.name = "送电票";
-        filterBean.id = ProcessKeyUtil.ELE_ON;
+        filterBean.name = "设备验收";
+        filterBean.id = Constant.EntityCode.CHECK_APPLY_FW;
         filterBeanList.add(filterBean);
 
         filterBean = new CustomFilterBean();
         filterBean.name = "巡检";
-        filterBean.id = ProcessKeyUtil.POTROL_TASK_WF;
+        filterBean.id = Constant.EntityCode.POTROL_TASK_WF;
         filterBeanList.add(filterBean);
 
         return filterBeanList;

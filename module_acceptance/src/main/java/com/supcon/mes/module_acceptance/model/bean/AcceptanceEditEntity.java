@@ -19,6 +19,7 @@ public class AcceptanceEditEntity extends BaseEntity {
     public final static int EDITNUM = 0x01;
     public final static int EDITBOL = 0x02;
     public final static int EDITTEXT = 0x03;
+    public final static int EDITMULT = 0x04;
 
     public Long id;
     public ValueEntity defaultValueType;// 默认值类型
@@ -36,6 +37,8 @@ public class AcceptanceEditEntity extends BaseEntity {
 
     @Expose
     public int viewType = 0;
+    public String itemDetail; // 明细
+    public int position;
 
     public int valueType() {
         if (defaultValueType != null && !TextUtils.isEmpty(defaultValueType.id)) {
@@ -48,8 +51,10 @@ public class AcceptanceEditEntity extends BaseEntity {
             if (defaultValueType.id.equals("BEAM_066/03")) {
                 return EDITTEXT;
             }
+            if (defaultValueType.id.equals("BEAM_066/04")) {
+                return EDITMULT;
+            }
         }
-
         return EDITBOL;
     }
 }

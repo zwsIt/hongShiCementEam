@@ -45,6 +45,8 @@ import com.supcon.mes.middleware.controller.AttachmentController;
 import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
+import com.supcon.mes.middleware.controller.PcController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
@@ -93,7 +95,7 @@ import java.util.concurrent.TimeUnit;
 @Router(Constant.Router.YH_LOOK)
 @Presenter({YHSubmitPresenter.class, YHListPresenter.class})
 @Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class,
-        MaintenanceController.class, OnlineCameraController.class, AttachmentController.class})
+        MaintenanceController.class, OnlineCameraController.class, AttachmentController.class, PcController.class})
 public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContract.View, YHListContract.View {
 
     @BindByTag("leftBtn")
@@ -163,6 +165,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     private YHEntity mYHEntity, mOriginalEntity;
     private AttachmentController mAttachmentController;
     private DealInfoController mDealInfoController;
+    private String __pc__;
 
     @Override
     protected int getLayoutID() {
@@ -243,6 +246,27 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
             yhViewMemo.setInput(mYHEntity.remark);
         }
         initPic();
+        getSubmitPc(mYHEntity.pending.activityName);
+    }
+
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.FAULT_INFO, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
+            }
+        });
     }
 
     /**
@@ -562,7 +586,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
 
         LogUtil.d(GsonUtil.gsonString(map));
         onLoading("正在提交...");
-        presenterRouter.create(YHSubmitAPI.class).doSubmit(map, null, false);
+        presenterRouter.create(YHSubmitAPI.class).doSubmit(map, null, __pc__,false);
 
     }
 

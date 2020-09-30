@@ -39,8 +39,10 @@ public class ScoreStaffPerformancePresenter extends ScoreStaffPerformanceContrac
         }
 
         if (tableId == -1){
+            // 加载人员评分模板
             flowable = ScoreHttpClient.getScoreTemplate(staffId);
         }else {
+            // 加载pt列表
             String url = "/BEAM/patrolWorkerScore/workerScoreHead/data-dg1560224145331.action?datagridCode=BEAM_1.0.0_patrolWorkerScore_patrolScoreEditdg1560224145331&rt=json";
             flowable = ScoreHttpClient.getInspectorStaffScore(url,tableId);
         }
@@ -66,6 +68,7 @@ public class ScoreStaffPerformancePresenter extends ScoreStaffPerformanceContrac
                                 scorePerformanceTitleEntity.category = scoreStaffPerformanceEntity.category;
 //                                scorePerformanceTitleEntity.categoryScore = scoreStaffPerformanceEntity.categoryScore;
                                 scorePerformanceTitleEntity.fraction = scoreStaffPerformanceEntity.fraction;
+                                scorePerformanceTitleEntity.scoringId = scoreStaffPerformanceEntity.scoringId;
                                 scorePerformanceTitleEntity.viewType = ListType.TITLE.value();
 //                                scoreMap.put(scorePerformanceTitleEntity.project, scorePerformanceTitleEntity);
 

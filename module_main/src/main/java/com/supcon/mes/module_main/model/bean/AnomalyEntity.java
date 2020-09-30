@@ -43,8 +43,9 @@ public class AnomalyEntity extends BaseEntity {
     public Long pendingId; // 待办ID
     @SerializedName(value = "processkey")
     public String processKey; // 单据流程关键字
-    @SerializedName("peroidtype")
+//    @SerializedName("peroidtype")
     public SystemCodeEntity peroidType; // 周期类型
 
     public String summary; //摘要
+    public String targetEntityCode; // 实体编码
 }

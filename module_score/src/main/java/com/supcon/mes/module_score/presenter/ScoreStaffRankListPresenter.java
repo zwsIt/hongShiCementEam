@@ -2,6 +2,7 @@ package com.supcon.mes.module_score.presenter;
 
 import android.text.TextUtils;
 
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.BaseSubcondEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
@@ -31,28 +32,35 @@ import io.reactivex.functions.Function;
 public class ScoreStaffRankListPresenter extends CommonListContract.Presenter {
     @Override
     public void listCommonObj(int pageNo, Map<String, Object> queryMap, boolean OffOn) {
-        Map<String, Object> pageQueryParam = PageParamUtil.pageQueryParam(pageNo,1000);
+        Map<String, Object> pageQueryParam = PageParamUtil.pageQueryParam(pageNo, 1000);
         FastQueryCondEntity fastQueryCondEntity = BAPQueryParamsHelper.createSingleFastQueryCond(queryMap);
+        // 默认当前登录人部门
+        Map<String, Object> queryParam = new HashMap<>();
+        queryParam.put(Constant.BAPQuery.ID, EamApplication.getAccountInfo().getDepartmentId());
+        JoinSubcondEntity joinSubcondEntity = BAPQueryParamsHelper.createJoinSubcondEntity(queryParam, "BASE_DEPARTMENT,ID,BEAM_WORKER_SCORE_HEADS,DEPARTMENT_ID");
+
+        fastQueryCondEntity.subconds.add(joinSubcondEntity);
+        fastQueryCondEntity.modelAlias = "workerScoreHead";
         mCompositeSubscription.add(
-                ScoreHttpClient.scoreQuery(fastQueryCondEntity,pageQueryParam)
-                .onErrorReturn(new Function<Throwable, CommonBAPListEntity<ScoreStaffEntity>>() {
-                    @Override
-                    public CommonBAPListEntity<ScoreStaffEntity> apply(Throwable throwable) throws Exception {
-                        CommonBAPListEntity<ScoreStaffEntity> commonBAPListEntity = new CommonBAPListEntity<>();
-                        commonBAPListEntity.errMsg = HttpErrorReturnUtil.getErrorInfo(throwable);
-                        return commonBAPListEntity;
-                    }
-                })
-                .subscribe(new Consumer<CommonBAPListEntity<ScoreStaffEntity>>() {
-                    @Override
-                    public void accept(CommonBAPListEntity<ScoreStaffEntity> scoreStaffEntityCommonBAPListEntity) throws Exception {
-                        if (TextUtils.isEmpty(scoreStaffEntityCommonBAPListEntity.errMsg) && scoreStaffEntityCommonBAPListEntity.result != null) {
-                            getView().listCommonObjSuccess(scoreStaffEntityCommonBAPListEntity);
-                        }else {
-                            getView().listCommonObjFailed(scoreStaffEntityCommonBAPListEntity.errMsg);
-                        }
-                    }
-                })
+                ScoreHttpClient.scoreQuery(fastQueryCondEntity, pageQueryParam)
+                        .onErrorReturn(new Function<Throwable, CommonBAPListEntity<ScoreStaffEntity>>() {
+                            @Override
+                            public CommonBAPListEntity<ScoreStaffEntity> apply(Throwable throwable) throws Exception {
+                                CommonBAPListEntity<ScoreStaffEntity> commonBAPListEntity = new CommonBAPListEntity<>();
+                                commonBAPListEntity.errMsg = HttpErrorReturnUtil.getErrorInfo(throwable);
+                                return commonBAPListEntity;
+                            }
+                        })
+                        .subscribe(new Consumer<CommonBAPListEntity<ScoreStaffEntity>>() {
+                            @Override
+                            public void accept(CommonBAPListEntity<ScoreStaffEntity> scoreStaffEntityCommonBAPListEntity) throws Exception {
+                                if (TextUtils.isEmpty(scoreStaffEntityCommonBAPListEntity.errMsg) && scoreStaffEntityCommonBAPListEntity.result != null) {
+                                    getView().listCommonObjSuccess(scoreStaffEntityCommonBAPListEntity);
+                                } else {
+                                    getView().listCommonObjFailed(scoreStaffEntityCommonBAPListEntity.errMsg);
+                                }
+                            }
+                        })
         );
     }
     /*@Override

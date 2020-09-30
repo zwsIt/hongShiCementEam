@@ -151,6 +151,7 @@ public class BAPQueryParamsHelper {
                 break;
             case Constant.BAPQuery.PROCESSKEY:
             case Constant.BAPQuery.PROCESS_KEY:
+            case Constant.BAPQuery.TARGET_ENTITY_CODE:
                 subcondEntity = new SubcondEntity();
                 subcondEntity.type = TYPE_NORMAL;
                 subcondEntity.columnName = key;

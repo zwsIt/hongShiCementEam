@@ -18,6 +18,7 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.beans.GalleryBean;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
 import com.supcon.mes.mbap.beans.WorkFlowVar;
@@ -39,6 +40,8 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.Module;
 import com.supcon.mes.middleware.controller.AttachmentDownloadController;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.PcController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonDeviceEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
@@ -49,6 +52,7 @@ import com.supcon.mes.middleware.model.bean.YHEntity;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.DeviceAddEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -75,7 +79,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Router(Constant.Router.YH_VIEW)
 @Presenter(YHSubmitPresenter.class)
-@Controller(value = {LinkController.class})
+@Controller(value = {LinkController.class, PcController.class})
 public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -136,6 +140,7 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
     CustomTextView eleOff;
 
     private YHEntity mYHEntity, mOriginalEntity;
+    private String __pc__;
 
 
     @Override
@@ -213,6 +218,28 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
         if (!TextUtils.isEmpty(mYHEntity.remark)) {
             yhViewMemo.setInput(mYHEntity.remark);
         }
+
+        getSubmitPc(mYHEntity.pending.activityName);
+    }
+
+    /**
+     * @param
+     * @return 获取单据提交pc
+     * @description
+     * @author user 2019/10/31
+     */
+    private void getSubmitPc(String operateCode) {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.FAULT_INFO, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
+            }
+        });
     }
 
     @SuppressLint("CheckResult")
@@ -533,7 +560,7 @@ public class YHViewActivity extends BaseRefreshActivity implements YHSubmitContr
 
         LogUtil.d(GsonUtil.gsonString(map));
         onLoading("正在提交...");
-        presenterRouter.create(YHSubmitAPI.class).doSubmit(map, null, false);
+        presenterRouter.create(YHSubmitAPI.class).doSubmit(map, null, __pc__,false);
 
     }
 

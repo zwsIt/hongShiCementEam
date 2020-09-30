@@ -33,7 +33,7 @@ public class YHListPresenter extends YHListContract.Presenter {
         if (all){
             url = "/BEAM2/faultInfo/faultInfo/faultInfoList-query.action?1=1&permissionCode=BEAM2_1.0.0_faultInfo_faultInfoList";
         }else {
-            url = "/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?processKey=faultInfoFW";
+            url = "/BEAM2/faultInfo/faultInfo/faultInfoList-pending.action?1=1&permissionCode=BEAM2_1.0.0_faultInfo_faultInfoList";
         }
         mCompositeSubscription.add(
                 YHGLHttpClient.faultInfoList(url,pageQueryParams, fastQueryCondEntity)

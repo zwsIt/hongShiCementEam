@@ -17,11 +17,11 @@ import okhttp3.MultipartBody;
 public class YHSubmitPresenter extends YHSubmitContract.Presenter {
 
     @Override
-    public void doSubmit(Map<String, Object> map, Map<String, Object> attachmentMap, boolean isEdit) {
+    public void doSubmit(Map<String, Object> map, Map<String, Object> attachmentMap, String __pc__, boolean isEdit) {
         if(isEdit) {
             List<MultipartBody.Part> parts = FormDataHelper.createFileForm(attachmentMap);
             mCompositeSubscription.add(
-                    YHGLHttpClient.editSubmit(map, parts)
+                    YHGLHttpClient.editSubmit(map, parts,__pc__)
                             .onErrorReturn(throwable -> {
                                 BapResultEntity resultEntity = new BapResultEntity();
                                 resultEntity.dealSuccessFlag = false;
@@ -40,7 +40,7 @@ public class YHSubmitPresenter extends YHSubmitContract.Presenter {
         }
         else
             mCompositeSubscription.add(
-                    YHGLHttpClient.viewSubmit(map)
+                    YHGLHttpClient.viewSubmit(map,__pc__)
                             .onErrorReturn(throwable -> {
                                 BapResultEntity resultEntity = new BapResultEntity();
                                 resultEntity.dealSuccessFlag = false;

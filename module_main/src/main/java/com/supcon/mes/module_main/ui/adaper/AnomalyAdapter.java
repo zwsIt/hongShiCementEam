@@ -91,48 +91,36 @@ public class AnomalyAdapter extends BaseListDataRecyclerViewAdapter<AnomalyEntit
                         public void accept(Object o) throws Exception {
                             AnomalyEntity anomalyEntity = getItem(getAdapterPosition());
                             Bundle bundle = new Bundle();
-                            if (TextUtils.isEmpty(anomalyEntity.processKey)){
-                                ToastUtils.show(context,"数据异常processKey：" + anomalyEntity.processKey );
+                            if (TextUtils.isEmpty(anomalyEntity.targetEntityCode)){
+                                ToastUtils.show(context,"数据异常targetEntityCode：" + anomalyEntity.targetEntityCode );
                                 return;
                             }
 
-                            if (anomalyEntity.processKey.equals(ProcessKeyUtil.WORK_TICKET)){
-                                goWorkTicket(anomalyEntity, bundle);
-                            }else if (anomalyEntity.processKey.equals(ProcessKeyUtil.ELE_ON)){
-                                bundle.putLong(Constant.IntentKey.TABLE_ID, anomalyEntity.dataId);
-                                IntentRouter.go(context, Constant.Router.HS_ELE_ON_VIEW, bundle);
-                            }else if (anomalyEntity.processKey.equals(ProcessKeyUtil.ELE_OFF)){
-                                bundle.putLong(Constant.IntentKey.TABLE_ID, anomalyEntity.dataId);
-                                IntentRouter.go(context, Constant.Router.HS_ELE_OFF_VIEW, bundle);
-                            }else if (anomalyEntity.processKey.equals(ProcessKeyUtil.FAULT_INFO)){
-                                goFaultInfo(anomalyEntity,bundle);
-                            }else if (anomalyEntity.processKey.equals(ProcessKeyUtil.WORK)){
-                                goWork(anomalyEntity, bundle);
-                            }else {
-                                ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
-                            }
-
-                            /*switch (anomalyEntity.processKey){
-                                case ProcessKeyUtil.WORK:
+                            switch (anomalyEntity.targetEntityCode){
+                                case Constant.EntityCode.WORK:
                                     goWork(anomalyEntity, bundle);
                                     break;
-                                case ProcessKeyUtil.FAULT_INFO:
+                                case Constant.EntityCode.FAULT_INFO:
                                     goFaultInfo(anomalyEntity,bundle);
                                     break;
-                                case ProcessKeyUtil.ELE_OFF:
+                                case Constant.EntityCode.ELE_ON_OFF:
                                     bundle.putLong(Constant.IntentKey.TABLE_ID, anomalyEntity.dataId);
-                                    IntentRouter.go(context, Constant.Router.HS_ELE_OFF_VIEW, bundle);
+                                    if (Constant.EleOffOn.ELE_ON.equals(anomalyEntity.peroidType.id)){
+                                        IntentRouter.go(context, Constant.Router.HS_ELE_OFF_VIEW, bundle);
+                                    }else {
+                                        IntentRouter.go(context, Constant.Router.HS_ELE_ON_VIEW, bundle);
+                                    }
                                     break;
-                                case ProcessKeyUtil.ELE_ON:
-                                    bundle.putLong(Constant.IntentKey.TABLE_ID, anomalyEntity.dataId);
-                                    IntentRouter.go(context, Constant.Router.HS_ELE_ON_VIEW, bundle);
-                                    break;
-                                case ProcessKeyUtil.WORK_TICKET:
+                                case Constant.EntityCode.WORK_TICKET:
                                     goWorkTicket(anomalyEntity,bundle);
+                                    break;
+                                case Constant.EntityCode.CHECK_APPLY_FW:
+                                    bundle.putString(Constant.IntentKey.TABLENO, anomalyEntity.workTableNo);
+                                    IntentRouter.go(context, Constant.Router.ACCEPTANCE_VIEW, bundle);
                                     break;
                                     default:
                                         ToastUtils.show(context,"暂不支持打开页面查看");
-                            }*/
+                            }
                         }
                     });
         }
@@ -140,25 +128,6 @@ public class AnomalyAdapter extends BaseListDataRecyclerViewAdapter<AnomalyEntit
         @SuppressLint("CheckResult")
         @Override
         protected void update(AnomalyEntity data) {
-//            if (ProcessKeyUtil.WORK.equals(data.processKey) || ProcessKeyUtil.FAULT_INFO.equals(data.processKey)){
-//                Api.getInstance().retrofit.create(MainService.class).getPendingId(EamApplication.getAccountInfo().userId,data.workTableNo)
-//                        .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .onErrorReturn(throwable -> {
-//                    CommonEntity commonEntity = new CommonEntity();
-//                    commonEntity.errMsg = throwable.toString();
-//                    return commonEntity;
-//                }).subscribe(commonEntity -> {
-//                    if (commonEntity.result != null){
-//                        data.pendingId = ((Double)commonEntity.result).longValue();
-//                        anomalyState.setCompoundDrawablesWithIntrinsicBounds(null,null,context.getResources().getDrawable(R.drawable.ic_statistic_pending),null);
-//                    }else {
-//                        data.pendingId = null;
-//                        anomalyState.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
-//                    }
-//                });
-//            }else {
-//                anomalyState.setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
-//            }
             anomalyTableNo.setText(data.workTableNo);
             anomalyState.setText(Util.strFormat2(data.state));
             anomalySoucretype.setText(data.sourceType);

@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -28,11 +29,13 @@ import com.supcon.mes.mbap.utils.SpaceItemDecoration;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.LinkController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
 import com.supcon.mes.middleware.model.bean.IDEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.ProcessKeyUtil;
@@ -73,6 +76,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 @Router(Constant.Router.XJLX_LIST)
 @Presenter(value = {OLXJGroupPresenter.class, OLXJTaskCreatePresenter.class, OLXJTaskStatusPresenter.class})
+@Controller(value = {WorkFlowKeyController.class})
 public class OLXJGroupListActivity extends BaseRefreshRecyclerActivity<OLXJGroupEntity> implements
         OLXJGroupContract.View, OLXJTaskCreateContract.View, OLXJTaskStatusContract.View {
 
@@ -116,7 +120,18 @@ public class OLXJGroupListActivity extends BaseRefreshRecyclerActivity<OLXJGroup
             deploymentId = getIntent().getLongExtra(Constant.IntentKey.DEPLOYMENT_ID, 0);
 
             mLinkController = new LinkController();
-            mLinkController.initStartTransition(null, ProcessKeyUtil.TEMP_WF);
+
+            getController(WorkFlowKeyController.class).queryWorkFlowKeyOnly(Constant.EntityCode.POTROL_TASK_WF, Constant.EntityCodeType.TEMP_XJ, new OnAPIResultListener<Object>() {
+                @Override
+                public void onFail(String errorMsg) {
+
+                }
+
+                @Override
+                public void onSuccess(Object result) {
+                    mLinkController.initStartTransition(null, String.valueOf(result));
+                }
+            });
         }
     }
 

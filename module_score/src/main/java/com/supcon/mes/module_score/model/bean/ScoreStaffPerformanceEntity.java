@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 个人绩效
+ * 个人绩效:评分项目
  */
 public class ScoreStaffPerformanceEntity extends BaseEntity {
 
@@ -41,15 +41,18 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
     public String subScore; // 文本扣分数
     public SystemCodeEntity scoreType; // 评分类型:BEAM_077/02:手动评分;  BEAM_077/01:自动评分
 
+    public Long scoringId; // 评分模板id(单据新增使用)
+
     @Expose
     public float lastSubScore; // 上次文本扣分数
 
     //附件
-    private String attachFileMultiFileIds;
-    private String attachFileMultiFileNames;
-    private String attachFileFileAddPaths; // 存储路径
-    private String attachFileFileDeleteIds; // 附件删除ids
-    private List<String> attachFileFileAddLocalPaths = new ArrayList<>(); // 本地存储路径
+    private List<Long> attachFileMultiFileIds;
+    private List<String> attachFileMultiFileNames;
+    private List<String> attachFileFileAddPaths; // 存储路径
+    private List<Long> attachFileFileDeleteIds; // 附件删除ids
+
+//    private List<String> attachFileFileAddLocalPaths = new ArrayList<>(); // 本地存储路径
     //照片/视频附件
     private List<AttachmentEntity> attachmentEntityList;
 
@@ -90,41 +93,41 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
 //        return false;
 //    }
 
-    public String getAttachFileMultiFileIds() {
+    public List<Long> getAttachFileMultiFileIds() {
         return attachFileMultiFileIds;
     }
 
-    public void setAttachFileMultiFileIds(String attachFileMultiFileIds) {
+    public void setAttachFileMultiFileIds(List<Long> attachFileMultiFileIds) {
         this.attachFileMultiFileIds = attachFileMultiFileIds;
     }
 
-    public String getAttachFileMultiFileNames() {
+    public List<String> getAttachFileMultiFileNames() {
         return attachFileMultiFileNames;
     }
 
-    public void setAttachFileMultiFileNames(String attachFileMultiFileNames) {
+    public void setAttachFileMultiFileNames(List<String> attachFileMultiFileNames) {
         this.attachFileMultiFileNames = attachFileMultiFileNames;
     }
 
-    public String getAttachFileFileAddPaths() {
+    public List<String> getAttachFileFileAddPaths() {
         return attachFileFileAddPaths;
     }
 
-    public void setAttachFileFileAddPaths(String attachFileFileAddPaths) {
+    public void setAttachFileFileAddPaths(List<String> attachFileFileAddPaths) {
         this.attachFileFileAddPaths = attachFileFileAddPaths;
     }
-    public List<String> getAttachFileFileAddLocalPaths() {
-        return attachFileFileAddLocalPaths;
-    }
-
-    public void setAttachFileFileAddLocalPaths(List<String> attachFileFileAddLocalPaths) {
-        this.attachFileFileAddLocalPaths = attachFileFileAddLocalPaths;
-    }
-    public String getAttachFileFileDeleteIds() {
+//    public List<String> getAttachFileFileAddLocalPaths() {
+//        return attachFileFileAddLocalPaths;
+//    }
+//
+//    public void setAttachFileFileAddLocalPaths(List<String> attachFileFileAddLocalPaths) {
+//        this.attachFileFileAddLocalPaths = attachFileFileAddLocalPaths;
+//    }
+    public List<Long> getAttachFileFileDeleteIds() {
         return attachFileFileDeleteIds;
     }
 
-    public void setAttachFileFileDeleteIds(String attachFileFileDeleteIds) {
+    public void setAttachFileFileDeleteIds(List<Long> attachFileFileDeleteIds) {
         this.attachFileFileDeleteIds = attachFileFileDeleteIds;
     }
 

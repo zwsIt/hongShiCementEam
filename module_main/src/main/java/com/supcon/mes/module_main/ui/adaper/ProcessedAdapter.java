@@ -82,8 +82,8 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
             RxView.clicks(itemView)
                     .subscribe(o -> {
                         ProcessedEntity processedEntity = getItem(getAdapterPosition());
-                        if (TextUtils.isEmpty(processedEntity.processKey)){
-                            ToastUtils.show(context,context.getString(R.string.main_data_exception) + processedEntity.processKey);
+                        if (TextUtils.isEmpty(processedEntity.processKey)) {
+                            ToastUtils.show(context, context.getString(R.string.main_data_exception) + processedEntity.processKey);
                             return;
                         }
                         goTable(processedEntity);
@@ -124,17 +124,17 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
         protected void update(ProcessedEntity data) {
             if (!"MainActivity".equals(context.getClass().getSimpleName())) {
                 // 只处理工单、隐患单、设备验收单、运行记录、备件领用申请、停送电、检修作业票
-                if((ProcessKeyUtil.WORK.equals(data.processKey) || ProcessKeyUtil.FAULT_INFO.equals(data.processKey)
-                        || ProcessKeyUtil.CHECK_APPLY_FW.equals(data.processKey) || ProcessKeyUtil.RUN_STATE_WF.equals(data.processKey)
-                        || ProcessKeyUtil.SPARE_PART_APPLY.equals(data.processKey) || ProcessKeyUtil.ELE_OFF.equals(data.processKey)
-                        || ProcessKeyUtil.ELE_ON.equals(data.processKey) || ProcessKeyUtil.WORK_TICKET.equals(data.processKey)) && !TextUtils.isEmpty(data.openUrl)){
-                    dealInfoController = new DealInfoController(context,flowProcessView,data);
+                if ((Constant.EntityCode.WORK.equals(data.targetEntityCode) || Constant.EntityCode.FAULT_INFO.equals(data.targetEntityCode)
+                        || Constant.EntityCode.CHECK_APPLY_FW.equals(data.targetEntityCode) || Constant.EntityCode.RUN_STATE_WF.equals(data.targetEntityCode)
+                        || Constant.EntityCode.SPARE_PART_APPLY.equals(data.targetEntityCode) || Constant.EntityCode.ELE_ON_OFF.equals(data.targetEntityCode)
+                        || Constant.EntityCode.WORK_TICKET.equals(data.targetEntityCode)) && !TextUtils.isEmpty(data.openUrl)) {
+                    dealInfoController = new DealInfoController(context, flowProcessView, data);
                     dealInfoController.getDealInfoList();
                     flowProcessView.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     flowProcessView.setVisibility(View.GONE);
                 }
-            }else {
+            } else {
                 if (getAdapterPosition() == getItemCount() - 1)
                     moreTvLl.setVisibility(View.VISIBLE);
             }
@@ -147,12 +147,12 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
                 String eam = String.format(context.getString(R.string.device_style10), data.getEamId().name
                         , data.getEamId().eamAssetCode);
                 processEam.setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()).toString());
-            }else {
+            } else {
                 processEam.setText("");
             }
-            if (TextUtils.isEmpty(data.staffName)){
+            if (TextUtils.isEmpty(data.staffName)) {
                 processStaff.setVisibility(View.GONE);
-            }else {
+            } else {
                 processStaff.setVisibility(View.VISIBLE);
                 processStaff.setText(String.format("%s：%s", context.getResources().getString(R.string.main_pending_staff), data.staffName));
             }
@@ -186,80 +186,61 @@ public class ProcessedAdapter extends BaseListDataRecyclerViewAdapter<ProcessedE
     private void goTable(ProcessedEntity processedEntity) {
         Bundle bundle = new Bundle();
         processedEntity.tableId = processedEntity.tableId == null ? -1L : processedEntity.tableId;
-
-        if (processedEntity.processKey.equals(ProcessKeyUtil.WORK_TICKET)){
-            goWorkTicket(processedEntity, bundle);
-        }else if (processedEntity.processKey.equals(ProcessKeyUtil.ELE_ON)){
-            bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);
-            IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
-        }else if (processedEntity.processKey.equals(ProcessKeyUtil.ELE_OFF)){
-            bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);
-            IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
-        }else if (processedEntity.processKey.equals(ProcessKeyUtil.FAULT_INFO)){
-            YHEntity yhEntity = new YHEntity();
-            yhEntity.tableNo = processedEntity.workTableNo;
-            bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY,yhEntity);
-            IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
-        }else if (processedEntity.processKey.equals(ProcessKeyUtil.WORK)){
-            WXGDEntity wxgdEntity = new WXGDEntity();
-            wxgdEntity.tableNo = processedEntity.workTableNo;
-            bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
-            IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
-        }else {
-            ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
-        }
-        /*switch (processedEntity.processKey){
-            case ProcessKeyUtil.WORK_TICKET:
+        switch (processedEntity.targetEntityCode) {
+            case Constant.EntityCode.WORK_TICKET:
                 goWorkTicket(processedEntity, bundle);
                 break;
-            case ProcessKeyUtil.ELE_ON:
+            case Constant.EntityCode.ELE_ON_OFF:
                 bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);
-                IntentRouter.go(context,Constant.Router.HS_ELE_ON_VIEW,bundle);
+                if (Constant.EleOffOn.ELE_ON.equals(processedEntity.peroidType.id)){
+                    IntentRouter.go(context, Constant.Router.HS_ELE_ON_VIEW, bundle);
+                }else {
+                    IntentRouter.go(context, Constant.Router.HS_ELE_OFF_VIEW, bundle);
+                }
                 break;
-            case ProcessKeyUtil.ELE_OFF:
-                bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);
-                IntentRouter.go(context,Constant.Router.HS_ELE_OFF_VIEW,bundle);
-                break;
-//                case ProcessKeyUtil.RUN_STATE_WF:
-//                    break;
-//                case ProcessKeyUtil.CHECK_APPLY_FW:
-//                    break;
-            case ProcessKeyUtil.FAULT_INFO:
+            case Constant.EntityCode.FAULT_INFO:
                 YHEntity yhEntity = new YHEntity();
                 yhEntity.tableNo = processedEntity.workTableNo;
-                bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY,yhEntity);
+                bundle.putSerializable(Constant.IntentKey.YHGL_ENTITY, yhEntity);
                 IntentRouter.go(context, Constant.Router.YH_LOOK, bundle);
                 break;
-            case ProcessKeyUtil.WORK:
+            case Constant.EntityCode.WORK:
                 WXGDEntity wxgdEntity = new WXGDEntity();
                 wxgdEntity.tableNo = processedEntity.workTableNo;
-                bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY,wxgdEntity);
+                bundle.putSerializable(Constant.IntentKey.WXGD_ENTITY, wxgdEntity);
                 IntentRouter.go(context, Constant.Router.WXGD_COMPLETE, bundle);
+                break;
+            case Constant.EntityCode.CHECK_APPLY_FW:
+                bundle.putSerializable(Constant.IntentKey.TABLENO, processedEntity.workTableNo);
+                IntentRouter.go(context, Constant.Router.ACCEPTANCE_VIEW, bundle);
                 break;
             default:
                 ToastUtils.show(context, context.getResources().getString(R.string.main_processed_table_no_view));
-        }*/
+
+        }
+
+
     }
 
     /**
+     * @param * @param null
+     * @return
      * @method
      * @description 跳转检修作业票
      * @author: zhangwenshuai
      * @date: 2020/5/30 15:13
-     * @param  * @param null
-     * @return
      */
     private void goWorkTicket(ProcessedEntity processedEntity, Bundle bundle) {
         if (!TextUtils.isEmpty(processedEntity.summary) && processedEntity.summary.contains("offApplyTableinfoid")) {
             try {
-                String json = processedEntity.summary.substring(processedEntity.summary.indexOf("*") +1);
+                String json = processedEntity.summary.substring(processedEntity.summary.indexOf("*") + 1);
                 if (GsonUtil.gsonToMaps(json).get("offApplyTableinfoid") != null) {
                     Double offApplyTableInfoId = (Double) GsonUtil.gsonToMaps(json).get("offApplyTableinfoid");
                     bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, Objects.requireNonNull(offApplyTableInfoId).longValue()); // 停电作业票tableInfoId
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID,-1);
+                bundle.putLong(Constant.IntentKey.ElE_OFF_TABLE_INFO_ID, -1);
             }
         }
         bundle.putLong(Constant.IntentKey.TABLE_ID, processedEntity.tableId);

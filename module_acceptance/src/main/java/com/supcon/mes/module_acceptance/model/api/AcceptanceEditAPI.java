@@ -1,6 +1,7 @@
 package com.supcon.mes.module_acceptance.model.api;
 
 import com.app.annotation.apt.ContractFactory;
+import com.supcon.mes.middleware.model.bean.CommonBAPListEntity;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @date 2019/6/27
  * ------------- Description -------------
  */
-@ContractFactory(entites = List.class)
+@ContractFactory(entites = CommonBAPListEntity.class)
 public interface AcceptanceEditAPI {
-    void getAcceptanceEdit(long eamId);
+    void getAcceptanceEdit(Long eamId, Long tableId);
 }

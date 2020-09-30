@@ -43,6 +43,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonEntity;
@@ -91,7 +92,7 @@ import java.util.function.Function;
 @Router(value = Constant.Router.OVERHAUL_WORKTICKET_VIEW)
 @Presenter(value = {WorkTicketSubmitPresenter.class})
 @Controller(value = {SafetyMeasuresController.class, LinkController.class, PcController.class, TableInfoController.class
-        , WorkTicketCameraController.class, OnlineCameraController.class, AttachmentController.class})
+        , WorkTicketCameraController.class, OnlineCameraController.class, AttachmentController.class, WorkFlowKeyController.class})
 public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkTicketSubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -232,17 +233,28 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK_TICKET, new OnAPIResultListener<String>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.WORK_TICKET, null, new OnAPIResultListener<Object>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
 
             @Override
-            public void onSuccess(String result) {
-                __pc__ = result;
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
             }
         });
+//        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK_TICKET, new OnAPIResultListener<String>() {
+//            @Override
+//            public void onFail(String errorMsg) {
+//                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                __pc__ = result;
+//            }
+//        });
     }
 
     @Override

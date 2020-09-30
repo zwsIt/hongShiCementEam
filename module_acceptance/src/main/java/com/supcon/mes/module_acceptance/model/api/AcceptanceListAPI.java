@@ -13,5 +13,5 @@ import java.util.Map;
  */
 @ContractFactory(entites = AcceptanceListEntity.class)
 public interface AcceptanceListAPI {
-    void getAcceptanceList(Map<String, Object> param, int page);
+    void getAcceptanceList(Map<String, Object> param, int page, boolean isAll);
 }

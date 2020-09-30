@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.app.annotation.Controller;
 import com.app.annotation.Presenter;
 import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -34,12 +35,14 @@ import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.controller.ModulePowerController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.Good;
 import com.supcon.mes.middleware.model.bean.SparePartId;
 import com.supcon.mes.middleware.model.bean.SparePartReceiveEntity;
 import com.supcon.mes.middleware.model.bean.SparePartRefEntity;
 import com.supcon.mes.middleware.model.event.SparePartAddEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.ProcessKeyUtil;
@@ -68,6 +71,7 @@ import io.reactivex.functions.Consumer;
  */
 @Router(Constant.Router.SPARE_PART_RECEIVE)
 @Presenter(value = {SparePartReceiveSubmitPresenter.class})
+@Controller(value = {WorkFlowKeyController.class})
 public class SparePartReceiveActivity extends BaseRefreshRecyclerActivity<SparePartReceiveEntity> implements SparePartReceiveSubmitContract.View {
     @BindByTag("leftBtn")
     ImageButton leftBtn;
@@ -130,15 +134,39 @@ public class SparePartReceiveActivity extends BaseRefreshRecyclerActivity<SpareP
         applicationTime.setContent(DateUtil.dateFormat(System.currentTimeMillis(), "yyyy-MM-dd"));
         refreshListController.refreshComplete(null);
 
-        ModulePermissonCheckController mModulePermissonCheckController = new ModulePermissonCheckController();
-        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.SPARE_PART_APPLY,
-                result -> {
-                    deploymentId = result;
-                    ModulePowerController modulePowerController = new ModulePowerController();
-                    modulePowerController.checkModulePermission(deploymentId, result1 -> powerCode = result1.powerCode);
-                }, null);
+//        ModulePermissonCheckController mModulePermissonCheckController = new ModulePermissonCheckController();
+//        mModulePermissonCheckController.checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.SPARE_PART_APPLY,
+//                result -> {
+//                    deploymentId = result;
+//                    ModulePowerController modulePowerController = new ModulePowerController();
+//                    modulePowerController.checkModulePermission(deploymentId, result1 -> powerCode = result1.powerCode);
+//                }, null);
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyAndPermission(Constant.EntityCode.SPARE_PART_APPLY, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                deploymentId = (Long) result;
+            }
+        });
+
+
+
         mLinkController = new LinkController();
-        mLinkController.initStartTransition(null, ProcessKeyUtil.SPARE_PART_APPLY);
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyOnly(Constant.EntityCode.SPARE_PART_APPLY, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                mLinkController.initStartTransition(null, String.valueOf(result));
+            }
+        });
     }
 
     @SuppressLint("CheckResult")
@@ -253,7 +281,7 @@ public class SparePartReceiveActivity extends BaseRefreshRecyclerActivity<SpareP
         map.put("workFlowVar.outcome", workFlowEntity.outcome);
         map.put("operateType", Constant.Transition.SUBMIT);
 
-        if (TextUtils.isEmpty(powerCode)) {
+        if (deploymentId == null) {
             ToastUtils.show(this, "当前用户并未拥有创建单据权限！");
             return;
         }

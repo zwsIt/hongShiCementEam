@@ -30,9 +30,11 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.QueryBtnType;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.CustomFilterBean;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
@@ -65,7 +67,7 @@ import io.reactivex.functions.Consumer;
  * Desc 检修票列表
  */
 @Router(value = Constant.Router.OVERHAUL_WORKTICKET_LIST)
-@Controller(value = {ModulePermissonCheckController.class})
+@Controller(value = {ModulePermissonCheckController.class, WorkFlowKeyController.class})
 @Presenter(value = {WorkTicketListPresenter.class})
 public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTicketEntity> implements WorkTicketListContract.View {
 
@@ -115,16 +117,33 @@ public class WorkTicketListActivity extends BaseRefreshRecyclerActivity<WorkTick
     @Override
     protected void initView() {
         super.initView();
-        searchTitleBar.searchView().setHint("请输入设备编码");
         searchTitleBar.searchView().setHint(getString(R.string.middleware_input_eam_code));
+        searchTitleBar.disableRightBtn();
         searchTitleBar.searchView().setInputTextColor(R.color.black);
         FilterHelper.addView(this,radioGroupFilter,FilterHelper.queryBtn());
-        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.WORK_TICKET, result -> {
-            if (result == null){
-                searchTitleBar.disableRightBtn();
+
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyAndPermission(Constant.EntityCode.WORK_TICKET, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context,errorMsg);
             }
-            deploymentId = result;
-        },null);
+
+            @Override
+            public void onSuccess(Object result) {
+                if (result != null){
+                    searchTitleBar.enableRightBtn();
+                }
+                deploymentId = (Long) result;
+            }
+        });
+
+
+//        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.WORK_TICKET, result -> {
+//            if (result == null){
+//                searchTitleBar.disableRightBtn();
+//            }
+//            deploymentId = result;
+//        },null);
     }
 
     @Override

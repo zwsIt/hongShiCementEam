@@ -8,6 +8,7 @@ import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.FaultInfo;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.bean.Staff;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 
 /**
@@ -31,8 +32,11 @@ public class AcceptanceEntity extends BaseEntity {
     public String tableNo;
     public Long applyDate; // 申请日期
     public Long createTime;
+    public Staff createStaff;
     public FaultInfo faultID; // 隐患单
     public WXGDEntity workID; // 工单
+    public SystemCodeEntity checkResult; // 验收结论
+    public Long deploymentId;
 
     public Staff getCheckStaff() {
         if (checkStaff == null) {

@@ -25,8 +25,10 @@ import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
 import com.supcon.mes.middleware.util.ProcessKeyUtil;
@@ -58,7 +60,7 @@ import io.reactivex.functions.Consumer;
  * ------------- Description -------------
  */
 @Router(value = Constant.Router.ACCEPTANCE_LIST)
-@Controller(value = {ModulePermissonCheckController.class})
+@Controller(value = {ModulePermissonCheckController.class, WorkFlowKeyController.class})
 @Presenter(value = AcceptanceListPresenter.class)
 public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<AcceptanceEntity> implements AcceptanceListContract.View {
 
@@ -122,13 +124,34 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
         customSearchView.setHint("请输入设备");
         customSearchView.setInput(selecStr);
 
-        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.CHECK_APPLY_FW, result -> {
-            if (result == null){
-                searchTitleBar.disableRightBtn();
-            }
-            deploymentId = result;
-        },null);
+        checkAddPermission();
 
+    }
+
+    private void checkAddPermission() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyAndPermission(Constant.EntityCode.CHECK_APPLY_FW, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                if (result == null){
+                    searchTitleBar.disableRightBtn();
+                }
+                deploymentId = (Long) result;
+            }
+        });
+
+
+
+//        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), "checkApplyFW"/*ProcessKeyUtil.CHECK_APPLY_FW*/, result -> {
+//            if (result == null){
+//                searchTitleBar.disableRightBtn();
+//            }
+//            deploymentId = result;
+//        },null);
     }
 
     @SuppressLint("CheckResult")
@@ -148,13 +171,19 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constant.IntentKey.isEdit, true);
-                    bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
-                    bundle.putLong(Constant.IntentKey.DEPLOYMENT_ID,deploymentId);
+
+                    AcceptanceEntity acceptanceEntity = new AcceptanceEntity();
+                    acceptanceEntity.deploymentId = deploymentId;
+                    acceptanceEntity.beamID = mEamEntity;
+                    bundle.putSerializable(Constant.IntentKey.ACCEPTANCE_ENTITY, acceptanceEntity);
+                    bundle.putBoolean(Constant.IntentKey.IS_ADD, true);
+//                    bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
+//                    bundle.putLong(Constant.IntentKey.DEPLOYMENT_ID,deploymentId);
                     IntentRouter.go(AcceptanceListActivity.this, Constant.Router.ACCEPTANCE_EDIT, bundle);
                 });
 
         refreshListController.setOnRefreshPageListener(pageIndex -> {
+            checkAddPermission();
             if (queryParam.containsKey(Constant.BAPQuery.EAM_NAME)) {
                 queryParam.remove(Constant.BAPQuery.EAM_NAME);
             }
@@ -165,7 +194,7 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
                 if (Util.isContainChinese(selecStr)) {
                     queryParam.put(Constant.BAPQuery.EAM_NAME, selecStr);
                 } else {
-                    queryParam.put(Constant.BAPQuery.EAM_CODE, selecStr);
+                    queryParam.put(Constant.BAPQuery.EAM_CODE, mEamEntity == null ? selecStr : (!mEamEntity.eamAssetCode.equals(selecStr) ? selecStr : mEamEntity.eamAssetCode));
                 }
             }
             if (queryParam.containsKey(Constant.BAPQuery.TABLE_NO)) {
@@ -174,7 +203,7 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
             if (!TextUtils.isEmpty(tableNo)) {
                 queryParam.put(Constant.BAPQuery.TABLE_NO, tableNo);
             }
-            presenterRouter.create(AcceptanceListAPI.class).getAcceptanceList(queryParam, pageIndex);
+            presenterRouter.create(AcceptanceListAPI.class).getAcceptanceList(queryParam, pageIndex,false);
         });
 
         RxTextView.textChanges(customSearchView.editText())
@@ -211,7 +240,6 @@ public class AcceptanceListActivity extends BaseRefreshRecyclerActivity<Acceptan
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLogin(LoginEvent loginEvent) {
-
         refreshListController.refreshBegin();
     }
 

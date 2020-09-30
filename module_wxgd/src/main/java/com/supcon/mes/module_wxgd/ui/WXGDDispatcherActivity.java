@@ -59,6 +59,7 @@ import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.controller.YHCloseController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
@@ -133,7 +134,8 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 @Router(value = Constant.Router.WXGD_DISPATCHER)
 @Presenter(value = {WXGDDispatcherPresenter.class, WXGDListPresenter.class})
-@Controller(value = {PcController.class, SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class, OnlineCameraController.class})
+@Controller(value = {PcController.class, SparePartController.class, RepairStaffController.class, MaintenanceController.class,
+        LubricateOilsController.class, OnlineCameraController.class, WorkFlowKeyController.class})
 public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDDispatcherContract.View, WXGDListContract.View, WXGDSubmitController.OnSubmitResultListener {
 
     @BindByTag("leftBtn")
@@ -350,14 +352,27 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             mLinkController.setCancelShow(false);
         }
         if (mWXGDEntity.id == null || mWXGDEntity.id == -1) { // 制定
-            mLinkController.initStartTransition(transition, ProcessKeyUtil.WORK);
+
+            getController(WorkFlowKeyController.class).queryWorkFlowKeyOnly(Constant.EntityCode.WORK, null, new OnAPIResultListener<Object>() {
+                @Override
+                public void onFail(String errorMsg) {
+                    ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+                }
+
+                @Override
+                public void onSuccess(Object result) {
+                    mLinkController.initStartTransition(transition, String.valueOf(result));
+                }
+            });
+
             getSubmitPc("start310work"); // 通过pc端菜单管理中相应菜单获取制定 操作编码
         } else {
-            mLinkController.setOnSuccessListener(result -> {
-                //获取__pc__
-                getSubmitPc(result.toString());
-            });
+//            mLinkController.setOnSuccessListener(result -> {
+//                //获取__pc__
+//                getSubmitPc(result.toString());
+//            });
             mLinkController.initPendingTransition(transition, mWXGDEntity.pending.id);
+            getSubmitPc(mWXGDEntity.pending.activityName);
         }
     }
 
@@ -368,17 +383,31 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK, new OnAPIResultListener<String>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.WORK, null, new OnAPIResultListener<Object>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
 
             @Override
-            public void onSuccess(String result) {
-                __pc__ = result;
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
             }
         });
+
+
+
+//        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK, new OnAPIResultListener<String>() {
+//            @Override
+//            public void onFail(String errorMsg) {
+//                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                __pc__ = result;
+//            }
+//        });
     }
 
     /**

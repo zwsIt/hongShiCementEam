@@ -471,4 +471,14 @@ public interface NetworkAPI {
     @GET("{url}/dealInfo-list.action")
     Flowable<List> getDealInfoList(@Path(value = "url",encoded = true) String url, @Query("tableInfoId") Long tableInfoId);
 
+    /**
+     * 获取工作流key
+     *
+     * @param entityCode
+     * @param type
+     * @return
+     */
+    @POST("/BEAM2/faultInfo/faultInfo/getDeploymentProcesskey.action")
+    Flowable<CommonEntity> getProcessKey(@Query("entityCode") String entityCode, @Query("type") String type);
+
 }

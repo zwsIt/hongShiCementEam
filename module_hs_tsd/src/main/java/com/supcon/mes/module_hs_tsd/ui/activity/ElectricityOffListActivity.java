@@ -21,6 +21,7 @@ import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.listener.OnRefreshPageListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
 import com.supcon.common.view.util.DisplayUtil;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
@@ -31,10 +32,12 @@ import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.constant.QueryBtnType;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.PendingEntity;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
 import com.supcon.mes.middleware.util.FilterHelper;
@@ -69,7 +72,7 @@ import io.reactivex.functions.Consumer;
  * Desc 停电列表
  */
 @Router(value = Constant.Router.HS_TD_LIST)
-@Controller(value = {ModulePermissonCheckController.class})
+@Controller(value = {ModulePermissonCheckController.class, WorkFlowKeyController.class})
 @Presenter(value = {ElectricityOffListPresenter.class})
 public class ElectricityOffListActivity extends BaseRefreshRecyclerActivity<ElectricityOffOnEntity> implements ElectricityOffOnListContract.View {
 
@@ -134,12 +137,27 @@ public class ElectricityOffListActivity extends BaseRefreshRecyclerActivity<Elec
         searchTitleBar.searchView().setHint("请输入设备名称");
         searchTitleBar.searchView().setInputTextColor(R.color.black);
         FilterHelper.addView(this, radioGroupFilter, FilterHelper.queryBtn());
-        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.ELE_OFF, result -> {
-            if (result == null) {
-                searchTitleBar.disableRightBtn();
+
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyAndPermission(Constant.EntityCode.ELE_ON_OFF, Constant.EntityCodeType.ELE_OFF, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
-            deploymentId = result;
-        }, null);
+
+            @Override
+            public void onSuccess(Object result) {
+                if (result == null) {
+                    searchTitleBar.disableRightBtn();
+                }
+                deploymentId = (Long) result;
+            }
+        });
+//        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.ELE_OFF, result -> {
+//            if (result == null) {
+//                searchTitleBar.disableRightBtn();
+//            }
+//            deploymentId = result;
+//        }, null);
     }
 
     @Override

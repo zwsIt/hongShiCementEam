@@ -21,6 +21,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
@@ -46,6 +47,7 @@ import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
@@ -96,7 +98,8 @@ import static com.supcon.mes.mbap.view.CustomGalleryView.ACTION_TAKE_VIDEO_FROM_
  */
 @Router(value = Constant.Router.HS_ELE_OFF_EDIT)
 @Presenter(value = {ElectricityOffSubmitPresenter.class})
-@Controller(value = {OperateItemOffController.class, LinkController.class, PcController.class, TableInfoController.class, OnlineCameraController.class, AttachmentController.class})
+@Controller(value = {OperateItemOffController.class, LinkController.class, PcController.class,
+        TableInfoController.class, OnlineCameraController.class, AttachmentController.class, WorkFlowKeyController.class})
 public class ElectricityOffEditActivity extends BaseRefreshActivity implements ElectricitySubmitContract.View {
 
     @BindByTag("leftBtn")
@@ -192,7 +195,19 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
         getController(LinkController.class).setCancelShow(true);
         if (pendingId.equals(-1L)) {
             // 制定单据工作流
-            getController(LinkController.class).initStartTransition(workFlowView, ProcessKeyUtil.ELE_OFF);
+
+            getController(WorkFlowKeyController.class).queryWorkFlowKeyOnly(Constant.EntityCode.ELE_ON_OFF, Constant.EntityCodeType.ELE_OFF, new OnAPIResultListener<Object>() {
+                @Override
+                public void onFail(String errorMsg) {
+                    ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+                }
+
+                @Override
+                public void onSuccess(Object result) {
+                    getController(LinkController.class).initStartTransition(workFlowView, String.valueOf(result));
+                }
+            });
+
             getSubmitPc("start362"); // 通过pc端菜单管理中相应菜单获取制定 操作编码
         } else {
             getController(LinkController.class).setOnSuccessListener(result -> {
@@ -217,17 +232,28 @@ public class ElectricityOffEditActivity extends BaseRefreshActivity implements E
      * @author user 2019/12/27
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.ELE_OFF, new OnAPIResultListener<String>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.ELE_ON_OFF, Constant.EntityCodeType.ELE_OFF, new OnAPIResultListener<Object>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
 
             @Override
-            public void onSuccess(String result) {
-                __pc__ = result;
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
             }
         });
+//        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.ELE_OFF, new OnAPIResultListener<String>() {
+//            @Override
+//            public void onFail(String errorMsg) {
+//                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                __pc__ = result;
+//            }
+//        });
     }
 
     @Override

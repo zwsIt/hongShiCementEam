@@ -1,7 +1,10 @@
 package com.supcon.mes.module_score.model.dto;
 
 import com.supcon.common.com_http.BaseEntity;
+import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.ValueEntity;
+
+import java.util.List;
 
 public class ScoreStaffDto extends BaseEntity {
 
@@ -20,12 +23,13 @@ public class ScoreStaffDto extends BaseEntity {
 
     public String defaultNumVal;
     public ValueEntity defaultValueType;
+    public ValueEntity scoreType;
 
     //附件
-    public String attachFileMultiFileIds;
-    public String attachFileMultiFileNames;
-    public String attachFileFileAddPaths; // 存储路径
-    public String attachFileFileDeleteIds; // 附件删除ids
+    public List<Long> attachFileMultiFileIds;
+    public List<String> attachFileMultiFileNames;
+    public List<String> attachFileFileAddPaths; // 存储路径
+    public List<Long> attachFileFileDeleteIds; // 附件删除ids
 
     public String subScore; // 扣分
 

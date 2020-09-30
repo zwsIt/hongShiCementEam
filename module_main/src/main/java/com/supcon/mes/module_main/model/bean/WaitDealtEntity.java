@@ -82,6 +82,8 @@ public class WaitDealtEntity extends BaseEntity {
 
     public String activityName; // 活动名称 ：TaskEvent_0u3o22s
 
+    public String targetEntityCode; // 实体编码
+
     public DepartmentInfo departmentId;  // 人员所属部门
     public PositionEntity positionId;  // 所属岗位
 

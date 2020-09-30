@@ -7,13 +7,20 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.listener.OnTextListener;
 import com.supcon.mes.mbap.view.CustomEditText;
 import com.supcon.mes.mbap.view.CustomTextView;
@@ -27,25 +34,39 @@ import java.util.List;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 
-public class AcceptanceEditceAdapter extends BaseListDataRecyclerViewAdapter<AcceptanceEditEntity> {
-
+public class AcceptanceEditAdapter extends BaseListDataRecyclerViewAdapter<AcceptanceEditEntity> {
 
     private float total;
+    private boolean edit;
 
-    public AcceptanceEditceAdapter(Context context) {
+    public AcceptanceEditAdapter(Context context) {
         super(context);
     }
 
 
     @Override
     protected BaseRecyclerViewHolder<AcceptanceEditEntity> getViewHolder(int viewType) {
-        return new ViewHolder(context);
+        if (viewType == 0){
+            return new MultViewHolder(context);
+        }else {
+            return new ViewHolder(context);
+        }
+
     }
 
     @Override
     public int getItemViewType(int position, AcceptanceEditEntity scoreEamPerformanceEntity) {
-        return scoreEamPerformanceEntity.viewType;
+        if (scoreEamPerformanceEntity.valueType() == AcceptanceEditEntity.EDITMULT){
+            return 0;
+        }else {
+            return 1;
+        }
+    }
+
+    public void setEdit(boolean b) {
+        edit = b;
     }
 
 
@@ -87,6 +108,7 @@ public class AcceptanceEditceAdapter extends BaseListDataRecyclerViewAdapter<Acc
 
         }
 
+        @SuppressLint("CheckResult")
         @Override
         protected void initListener() {
             super.initListener();
@@ -104,70 +126,81 @@ public class AcceptanceEditceAdapter extends BaseListDataRecyclerViewAdapter<Acc
                     }
                 }
             });
-            acceptanceConclusion.setTextListener(new OnTextListener() {
-                @Override
-                public void onText(String text) {
-                    AcceptanceEditEntity item = getItem(getLayoutPosition());
-                    if (!TextUtils.isEmpty(text) && text.equals(item.conclusion)) {
-                        return;
-                    }
-                    item.conclusion = Util.strFormat2(text);
-                }
-            });
-            acceptanceConclusion.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    //可以根据需求获取下一个焦点还是上一个
-                    View nextView = v.focusSearch(View.FOCUS_DOWN);
-                    if (nextView != null) {
-                        nextView.requestFocus(View.FOCUS_DOWN);
-                    }
-                    //这里一定要返回true
-                    return true;
-                }
-            });
+//            acceptanceConclusion.setTextListener(new OnTextListener() {
+//                @Override
+//                public void onText(String text) {
+//                    AcceptanceEditEntity item = getItem(getAdapterPosition());
+//                    if (!TextUtils.isEmpty(text) && text.equals(item.conclusion)) {
+//                        return;
+//                    }
+//                    item.conclusion = Util.strFormat2(text);
+//                }
+//            });
+            RxTextView.textChanges(acceptanceConclusion.editText())
+                    .skipInitialValue()
+                    .skip(2)
+                    .subscribe(new Consumer<CharSequence>() {
+                        @Override
+                        public void accept(CharSequence charSequence) throws Exception {
+                            AcceptanceEditEntity item = getItem(getAdapterPosition());
+                            if (!TextUtils.isEmpty(charSequence) && charSequence.equals(item.conclusion)) {
+                                return;
+                            }
+                            item.conclusion = Util.strFormat2(charSequence);
+                        }
+                    });
+//            acceptanceConclusion.editText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                    //可以根据需求获取下一个焦点还是上一个
+//                    View nextView = v.focusSearch(View.FOCUS_DOWN);
+//                    if (nextView != null) {
+//                        nextView.requestFocus(View.FOCUS_DOWN);
+//                    }
+//                    //这里一定要返回true
+//                    return true;
+//                }
+//            });
         }
 
         @SuppressLint({"StringFormatMatches", "SetTextI18n"})
         @Override
         protected void update(AcceptanceEditEntity data) {
-            itemIndex.setText(getLayoutPosition() + 1 + ".");
+            itemIndex.setText(data.position + ".");
             acceptanceConclusion.setVisibility(View.VISIBLE);
             acceptanceRadioGroup.setVisibility(View.VISIBLE);
             acceptanceCategory.setVisibility(View.VISIBLE);
-            acceptanceTotal.setVisibility(View.VISIBLE);
 
             acceptanceItem.setText(Util.strFormat2(data.item));
 
             if (data.valueType() == AcceptanceEditEntity.EDITBOL) {
                 acceptanceConclusion.setVisibility(View.GONE);
                 acceptanceCategory.setVisibility(View.GONE);
-                acceptanceTotal.setVisibility(View.GONE);
                 acceptanceRadioBtn1.setText(data.isItemValue);
                 acceptanceRadioBtn2.setText(data.noItemValue);
                 acceptanceRadioBtn1.setChecked(data.result);
                 acceptanceRadioBtn2.setChecked(!data.result);
-            } else {
+            } else if (data.valueType() == AcceptanceEditEntity.EDITMULT){
+                acceptanceConclusion.setVisibility(View.GONE);
                 acceptanceRadioGroup.setVisibility(View.GONE);
                 if (data.categorys.size() > 0) {
                     acceptanceCategory.removeAllViews();
                     acceptanceConclusion.setVisibility(View.GONE);
                     addview(context, acceptanceCategory, data.categorys);
-                } else {
-                    acceptanceCategory.setVisibility(View.GONE);
-                    acceptanceTotal.setVisibility(View.GONE);
-                    if (data.valueType() == AcceptanceEditEntity.EDITNUM) {
-                        acceptanceConclusion.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    } else if (data.valueType() == AcceptanceEditEntity.EDITTEXT) {
-                        acceptanceConclusion.setInputType(InputType.TYPE_CLASS_TEXT);
-                    }
-                    acceptanceConclusion.setHint("请输入" + Util.strFormat2(data.item));
-                    acceptanceConclusion.setContent(Util.strFormat2(data.conclusion));
                 }
+            }else {
+                acceptanceRadioGroup.setVisibility(View.GONE);
+                acceptanceCategory.setVisibility(View.GONE);
 
+                acceptanceConclusion.setHint("请输入" + Util.strFormat2(data.item));
+                acceptanceConclusion.setContent(Util.strFormat2(data.conclusion));
+                if (data.valueType() == AcceptanceEditEntity.EDITNUM) {
+                    acceptanceConclusion.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                } else if (data.valueType() == AcceptanceEditEntity.EDITTEXT) {
+                    acceptanceConclusion.setInputType(InputType.TYPE_CLASS_TEXT);
+                }
             }
         }
-
 
         //动态添加视图
         public void addview(Context context, FlowLayout layout, List<AcceptanceEditEntity> categorys) {
@@ -228,6 +261,68 @@ public class AcceptanceEditceAdapter extends BaseListDataRecyclerViewAdapter<Acc
             customEditText.textView().setVisibility(View.VISIBLE);
             ViewGroup.MarginLayoutParams rlp = new ViewGroup.MarginLayoutParams(Util.dpToPx(context, 160), Util.dpToPx(context, 30));
             customEditText.setLayoutParams(rlp);
+        }
+
+    }
+    class MultViewHolder extends BaseRecyclerViewHolder<AcceptanceEditEntity> {
+
+        @BindByTag("itemIndex")
+        TextView itemIndex;
+        @BindByTag("acceptanceItem")
+        TextView acceptanceItem;
+        @BindByTag("titleItemLl")
+        LinearLayout titleItemLl;
+        @BindByTag("chkBox")
+        CheckBox chkBox;
+        @BindByTag("itemDetails")
+        TextView itemDetails;
+        @BindByTag("itemDetailsLl")
+        LinearLayout itemDetailsLl;
+
+
+        public MultViewHolder(Context context) {
+            super(context, parent);
+        }
+
+        @Override
+        protected int layoutId() {
+            return R.layout.item_acceptance_edit_mult;
+        }
+
+        @Override
+        protected void initView() {
+            super.initView();
+        }
+
+        @SuppressLint("CheckResult")
+        @Override
+        protected void initListener() {
+            super.initListener();
+            chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    getItem(getAdapterPosition()).result = isChecked;
+                }
+            });
+        }
+
+        @SuppressLint({"StringFormatMatches", "SetTextI18n"})
+        @Override
+        protected void update(AcceptanceEditEntity data) {
+            if (data.viewType == ListType.TITLE.value()){
+                titleItemLl.setVisibility(View.VISIBLE);
+                itemDetailsLl.setVisibility(View.GONE);
+
+                itemIndex.setText(data.position + ".");
+                acceptanceItem.setText(data.item);
+
+            }else {
+                titleItemLl.setVisibility(View.GONE);
+                itemDetailsLl.setVisibility(View.VISIBLE);
+
+                itemDetails.setText(data.itemDetail);
+                chkBox.setChecked(data.result);
+            }
         }
 
     }

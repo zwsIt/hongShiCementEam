@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -26,7 +27,8 @@ import io.reactivex.functions.Function;
  */
 public class AcceptanceListPresenter extends AcceptanceListContract.Presenter {
     @Override
-    public void getAcceptanceList(Map<String, Object> param, int page) {
+    public void getAcceptanceList(Map<String, Object> param, int page, boolean isAll) {
+        BAPQueryParamsHelper.setNfcCard(false);
         FastQueryCondEntity fastQuery = BAPQueryParamsHelper.createSingleFastQueryCond(new HashMap<>());
         fastQuery.modelAlias = "checkApply";
         if (param.containsKey(Constant.BAPQuery.EAM_CODE) || param.containsKey(Constant.BAPQuery.EAM_NAME)) {
@@ -48,8 +50,15 @@ public class AcceptanceListPresenter extends AcceptanceListContract.Presenter {
         pageQueryParams.put("page.pageNo", page);
         pageQueryParams.put("page.pageSize", 20);
         pageQueryParams.put("page.maxPageSize", 500);
-        mCompositeSubscription.add(AcceptanceHttpClient.getAcceptanceList(fastQuery, pageQueryParams)
-                .onErrorReturn(new Function<Throwable, AcceptanceListEntity>() {
+
+        Flowable<AcceptanceListEntity> flowable;
+        if (isAll){
+            flowable = AcceptanceHttpClient.getAcceptanceList("/BEAM2/checkApply/checkApply/checkApplyList-query.action",fastQuery, pageQueryParams);
+        }else {
+            flowable = AcceptanceHttpClient.getAcceptanceList("/BEAM2/checkApply/checkApply/checkApplyList-pending.action",fastQuery, pageQueryParams);
+        }
+        mCompositeSubscription.add(
+                flowable.onErrorReturn(new Function<Throwable, AcceptanceListEntity>() {
                     @Override
                     public AcceptanceListEntity apply(Throwable throwable) throws Exception {
                         AcceptanceListEntity acceptanceListEntity = new AcceptanceListEntity();

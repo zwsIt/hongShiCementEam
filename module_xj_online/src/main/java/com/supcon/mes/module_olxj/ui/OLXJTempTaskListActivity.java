@@ -36,9 +36,11 @@ import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.event.NFCEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
+import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.ErrorMsgHelper;
@@ -93,7 +95,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 
 @Router(Constant.Router.LSXJ_LIST)
-@Controller({ModulePermissonCheckController.class, MapController.class})
+@Controller({ModulePermissonCheckController.class, MapController.class, WorkFlowKeyController.class})
 @Presenter(value = {OLXJTempTaskListPresenter.class, OLXJTaskStatusPresenter.class})
 public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEntity>
         implements
@@ -202,13 +204,26 @@ public class OLXJTempTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTa
 
         initEmptyView();
 
-        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.TEMP_WF, new OnSuccessListener<Long>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyAndPermission(Constant.EntityCode.POTROL_TASK_WF, Constant.EntityCodeType.TEMP_XJ, new OnAPIResultListener<Object>() {
             @Override
-            public void onSuccess(Long result) {
-                deploymentId = result;
+            public void onFail(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSuccess(Object result) {
+                deploymentId = (Long) result;
                 hasAddForumPermission = true;
             }
-        }, null);
+        });
+
+//        getController(ModulePermissonCheckController.class).checkModulePermission(EamApplication.getUserName(), ProcessKeyUtil.TEMP_WF, new OnSuccessListener<Long>() {
+//            @Override
+//            public void onSuccess(Long result) {
+//                deploymentId = result;
+//                hasAddForumPermission = true;
+//            }
+//        }, null);
 
     }
 

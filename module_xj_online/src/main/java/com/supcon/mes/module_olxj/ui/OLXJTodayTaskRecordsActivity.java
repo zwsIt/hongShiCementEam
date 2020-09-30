@@ -104,7 +104,7 @@ public class OLXJTodayTaskRecordsActivity extends BaseRefreshRecyclerActivity<OL
         leftBtn.setOnClickListener(v -> onBackPressed());
         refreshListController.setOnRefreshPageListener(pageIndex -> {
             Map<String, Object> queryParam = new HashMap<>();
-            queryParam.put(Constant.BAPQuery.STAR_TIME1,getTodayDate()/*"2020-06-06"*/ + Constant.TimeString.START_TIME); // 测试数据改动
+            queryParam.put(Constant.BAPQuery.STAR_TIME1,getTodayDate() + Constant.TimeString.START_TIME);
             queryParam.put(Constant.BAPQuery.STAR_TIME2,getTodayDate() + Constant.TimeString.END_TIME);
             presenterRouter.create(OLXJTaskRecordsAPI.class).getOJXJTaskList(pageIndex,queryParam);
         });

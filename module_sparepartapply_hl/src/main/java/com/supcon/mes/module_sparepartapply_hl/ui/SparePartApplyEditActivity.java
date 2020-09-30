@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.supcon.common.view.base.activity.BaseRefreshActivity;
 import com.supcon.common.view.listener.OnChildViewClickListener;
 import com.supcon.common.view.ptr.PtrFrameLayout;
+import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.loader.base.OnLoaderFinishListener;
 import com.supcon.mes.mbap.beans.WorkFlowEntity;
@@ -39,6 +40,7 @@ import com.supcon.mes.middleware.controller.ModulePermissonCheckController;
 import com.supcon.mes.middleware.controller.OnlineCameraController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.TableInfoController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.EamEntity;
@@ -88,7 +90,8 @@ import io.reactivex.schedulers.Schedulers;
  * @author zws 2019/9/27
  */
 @Router(value = Constant.Router.SPARE_PART_APPLY_EDIT)
-@Controller(value = {LinkController.class, PcController.class,TableInfoController.class, SparePartApplyDetailController.class, ModulePermissonCheckController.class,OnlineCameraController.class})
+@Controller(value = {LinkController.class, PcController.class,TableInfoController.class, SparePartApplyDetailController.class,
+        ModulePermissonCheckController.class,OnlineCameraController.class, WorkFlowKeyController.class})
 @Presenter(value = {SparePartApplyPresenter.class})
 public class SparePartApplyEditActivity extends BaseRefreshActivity implements SparePartApplyContract.View {
     @BindByTag("leftBtn")
@@ -182,7 +185,18 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
         titleText.setText("备件领用申请编辑");
         if (pendingId.equals(-1L)){
             // 制定单据工作流
-            getController(LinkController.class).initStartTransition(workFlowView, ProcessKeyUtil.SPARE_PART_APPLY);
+            getController(WorkFlowKeyController.class).queryWorkFlowKeyOnly(Constant.EntityCode.SPARE_PART_APPLY, null, new OnAPIResultListener<Object>() {
+                @Override
+                public void onFail(String errorMsg) {
+                    ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+                }
+
+                @Override
+                public void onSuccess(Object result) {
+                    getController(LinkController.class).initStartTransition(workFlowView, String.valueOf(result));
+                }
+            });
+
             getSubmitPc("start310sparePartApply"); // 通过pc端菜单管理中备件领用申请菜单获取制定 操作编码
         }else {
             getController(LinkController.class).setOnSuccessListener(result -> {
@@ -200,17 +214,28 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.SPARE_PART_APPLY, new OnAPIResultListener<String>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode,Constant.EntityCode.SPARE_PART_APPLY, null, new OnAPIResultListener<Object>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
 
             @Override
-            public void onSuccess(String result) {
-                __pc__ = result;
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
             }
         });
+//        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.SPARE_PART_APPLY, new OnAPIResultListener<String>() {
+//            @Override
+//            public void onFail(String errorMsg) {
+//                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                __pc__ = result;
+//            }
+//        });
     }
 
     @Override
@@ -240,15 +265,28 @@ public class SparePartApplyEditActivity extends BaseRefreshActivity implements S
 
     private void initCtrl() {
         // 获取deploymentId
-        modulePermissonCheckController = getController(ModulePermissonCheckController.class);
-        modulePermissonCheckController.checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.SPARE_PART_APPLY, new OnSuccessListener<Long>() {
-            @Override
-            public void onSuccess(Long result) {
-//                deploymentId = result;
-                sparePartApplyHeaderInfoEntity.setDeploymentId(result);
 
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyAndPermission(Constant.EntityCode.SPARE_PART_APPLY, null, new OnAPIResultListener<Object>() {
+            @Override
+            public void onFail(String errorMsg) {
+                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
-        },null);
+
+            @Override
+            public void onSuccess(Object result) {
+                sparePartApplyHeaderInfoEntity.setDeploymentId((Long) result);
+            }
+        });
+
+//        modulePermissonCheckController = getController(ModulePermissonCheckController.class);
+//        modulePermissonCheckController.checkModulePermission(EamApplication.getUserName().toLowerCase(), ProcessKeyUtil.SPARE_PART_APPLY, new OnSuccessListener<Long>() {
+//            @Override
+//            public void onSuccess(Long result) {
+////                deploymentId = result;
+//                sparePartApplyHeaderInfoEntity.setDeploymentId(result);
+//
+//            }
+//        },null);
     }
 
     protected void initTableInfoData() {

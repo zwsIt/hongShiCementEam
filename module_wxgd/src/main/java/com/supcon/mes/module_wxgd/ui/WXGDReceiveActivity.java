@@ -42,6 +42,7 @@ import com.supcon.mes.middleware.controller.EamPicController;
 import com.supcon.mes.middleware.controller.LinkController;
 import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
+import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
@@ -89,7 +90,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Router(value = Constant.Router.WXGD_RECEIVE)
 @Presenter(value = {WXGDListPresenter.class})
-@Controller(value = {PcController.class,SparePartController.class, RepairStaffController.class, MaintenanceController.class, LubricateOilsController.class})
+@Controller(value = {PcController.class,SparePartController.class, RepairStaffController.class,
+        MaintenanceController.class, LubricateOilsController.class, WorkFlowKeyController.class})
 public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubmitController.OnSubmitResultListener, WXGDListContract.View {
 
     @BindByTag("leftBtn")
@@ -232,17 +234,30 @@ public class WXGDReceiveActivity extends BaseRefreshActivity implements WXGDSubm
      * @author user 2019/10/31
      */
     private void getSubmitPc(String operateCode) {
-        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK, new OnAPIResultListener<String>() {
+        getController(WorkFlowKeyController.class).queryWorkFlowKeyToPc(operateCode, Constant.EntityCode.WORK, null, new OnAPIResultListener<Object>() {
             @Override
             public void onFail(String errorMsg) {
                 ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
             }
 
             @Override
-            public void onSuccess(String result) {
-                __pc__ = result;
+            public void onSuccess(Object result) {
+                __pc__ = String.valueOf(result);
             }
         });
+
+
+//        getController(PcController.class).queryPc(operateCode, ProcessKeyUtil.WORK, new OnAPIResultListener<String>() {
+//            @Override
+//            public void onFail(String errorMsg) {
+//                ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//            }
+//
+//            @Override
+//            public void onSuccess(String result) {
+//                __pc__ = result;
+//            }
+//        });
     }
 
     @Override

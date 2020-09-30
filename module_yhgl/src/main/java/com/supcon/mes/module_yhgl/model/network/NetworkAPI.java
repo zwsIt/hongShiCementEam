@@ -57,8 +57,8 @@ public interface NetworkAPI {
      * @param map
      * @return
      */
-    @POST("/BEAM2/faultInfo/faultInfo/faultInfoView/submit.action?__pc__=dGFzazUyMHxmYXVsdEluZm9GVw__")
-    Flowable<BapResultEntity> viewSubmit(@QueryMap Map<String, Object> map);
+    @POST("/BEAM2/faultInfo/faultInfo/faultInfoView/submit.action")
+    Flowable<BapResultEntity> viewSubmit(@QueryMap Map<String, Object> map, @Query("__pc__") String __pc__);
 
     /**
      * 编辑提交隐患单
@@ -66,9 +66,9 @@ public interface NetworkAPI {
      * @param map
      * @return
      */
-    @POST("/BEAM2/faultInfo/faultInfo/faultInfoEdit/submit.action?__pc__=dGFzazM0MnxmYXVsdEluZm9GVw__")
+    @POST("/BEAM2/faultInfo/faultInfo/faultInfoEdit/submit.action")
     @Multipart
-    Flowable<BapResultEntity> editSubmit(@QueryMap Map<String, Object> map, @Part List<MultipartBody.Part> partList);
+    Flowable<BapResultEntity> editSubmit(@QueryMap Map<String, Object> map, @Part List<MultipartBody.Part> partList, @Query("__pc__") String __pc__);
 
 
     /**

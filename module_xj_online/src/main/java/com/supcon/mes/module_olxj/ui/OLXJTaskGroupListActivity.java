@@ -107,7 +107,6 @@ public class OLXJTaskGroupListActivity extends BaseRefreshRecyclerActivity<OLXJT
         refreshListController.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 presenterRouter.create(OLXJTaskAPI.class).getOJXJTaskList(queryParam);
             }
         });
