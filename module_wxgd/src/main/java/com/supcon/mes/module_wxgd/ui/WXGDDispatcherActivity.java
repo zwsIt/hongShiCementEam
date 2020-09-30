@@ -692,28 +692,31 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
             }
 
         });
-        transition.setOnChildViewClickListener(new OnChildViewClickListener() {
-
-            @Override
-            public void onChildViewClick(View childView, int action, Object obj) {
-                WorkFlowVar workFlowVar = (WorkFlowVar) obj;
-                isCancel = false;
-                switch (action) {
-                    case 0:
-                        doSave("");
-                        break;
-                    case 1:
-                        isCancel = true;
-                        // 填写关闭原因
-                        showCancelDialog(workFlowVar);
+        transition.setOnChildViewClickListener((childView, action, obj) -> {
+            WorkFlowVar workFlowVar = (WorkFlowVar) obj;
+            isCancel = false;
+            switch (action) {
+                case 0:
+                    doSave("");
+                    break;
+                case 1:
+                    isCancel = true;
+                    // 填写关闭原因
+                    showCancelDialog(workFlowVar);
 //                        doSubmit(workFlowVar);
-                        break;
-                    case 2:
-                        doSubmit(workFlowVar);
-                        break;
-                    default:
-                        break;
-                }
+                    break;
+                case 2:
+                    doSubmit(workFlowVar);
+                    break;
+                case 4:
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, true);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "selectPeopleInput");
+                    IntentRouter.go(context,Constant.Router.STAFF,bundle);
+                    break;
+                default:
+                    break;
             }
         });
 
@@ -876,12 +879,12 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
         List<WorkFlowEntity> workFlowEntities = generateWorkFlowMigrationLine(workFlowVar);
 
         WorkFlowEntity workFlowEntity = workFlowEntities.get(0);
-        if (workFlowVar != null){
-            List<WorkFlowEntity> outcomeMapJson = workFlowVar.outcomeMapJson;
-            if (!TextUtils.isEmpty(outcomeMapJson.get(0).assignUser)){
-                outcomeMapJson.get(0).assignUser = ("\"\"".equals(outcomeMapJson.get(0).assignUser)) ? null : outcomeMapJson.get(0).assignUser.replace("\"","");
-            }
-        }
+//        if (workFlowVar != null){
+//            List<WorkFlowEntity> outcomeMapJson = workFlowVar.outcomeMapJson;
+//            if (!TextUtils.isEmpty(outcomeMapJson.get(0).assignUser)){
+//                outcomeMapJson.get(0).assignUser = ("\"\"".equals(outcomeMapJson.get(0).assignUser)) ? null : outcomeMapJson.get(0).assignUser.replace("\"","");
+//            }
+//        }
         map.put("workFlowVar.outcomeMapJson", workFlowEntities.toString());
         map.put("workFlowVar.outcome", workFlowEntity.outcome);
         map.put("workFlowVarStatus", "");
@@ -968,25 +971,31 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
      * @author zhangwenshuai1 2018/9/4
      */
     private List<WorkFlowEntity> generateWorkFlowMigrationLine(WorkFlowVar workFlowVar) {
-        WorkFlowEntity workFlowEntity = new WorkFlowEntity();
-        List<WorkFlowEntity> workFlowEntities = new ArrayList<>();
+
         if (workFlowVar == null) {  //转为大修或检修直接作废单据工作流
+            WorkFlowEntity workFlowEntity = new WorkFlowEntity();
+            List<WorkFlowEntity> workFlowEntities = new ArrayList<>();
             List<LinkEntity> linkEntities = mLinkController.getLinkEntities();
             for (LinkEntity linkEntity : linkEntities) {
                 if (linkEntity.destination.contains("cancel")) {
                     workFlowEntity.dec = linkEntity.description;
                     workFlowEntity.outcome = linkEntity.name;
+                    workFlowEntity.type = "normal";
                     break;
                 }
             }
+            workFlowEntities.add(workFlowEntity);
+            return workFlowEntities;
+
         } else {  //正常流程工作流
-            workFlowEntity.dec = workFlowVar.dec;
-            workFlowEntity.outcome = workFlowVar.outCome;
+            return workFlowVar.outcomeMapJson;
+//            workFlowEntity.dec = workFlowVar.dec;
+//            workFlowEntity.outcome = workFlowVar.outCome;
         }
 
-        workFlowEntity.type = "normal";
-        workFlowEntities.add(workFlowEntity);
-        return workFlowEntities;
+//        workFlowEntity.type = "normal";
+
+//        return workFlowEntities;
     }
 
 
@@ -1066,10 +1075,21 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getStaffInfo(CommonSearchEvent commonSearchEvent) {
         if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
+            CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
             if (commonSearchEvent.flag.equals(chargeStaff.getTag().toString())){
-                CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
                 chargeStaff.setValue(searchStaff.name);
                 mWXGDEntity.getChargeStaff().id = searchStaff.id;
+            }else if ("selectPeopleInput".equals(commonSearchEvent.flag)){
+                transition.addStaff(searchStaff.name,searchStaff.userId);
+            }
+        }else if (commonSearchEvent.mCommonSearchEntityList != null){ // 多选
+            if ("selectPeopleInput".equals(commonSearchEvent.flag)){
+                List<CommonSearchEntity> mCommonSearchEntityList = commonSearchEvent.mCommonSearchEntityList;
+                CommonSearchStaff staff;
+                for (CommonSearchEntity commonSearchEntity : mCommonSearchEntityList){
+                    staff = (CommonSearchStaff) commonSearchEntity;
+                    transition.addStaff(staff.name, staff.userId);
+                }
             }
         }
     }

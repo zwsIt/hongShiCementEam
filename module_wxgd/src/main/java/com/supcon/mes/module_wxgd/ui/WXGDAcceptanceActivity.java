@@ -60,6 +60,7 @@ import com.supcon.mes.middleware.model.bean.AccountInfo;
 import com.supcon.mes.middleware.model.bean.AttachmentEntity;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.Staff;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
@@ -475,6 +476,7 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                     bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,acceptChkStaff.getTag().toString());
                     IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }
             }
@@ -529,6 +531,13 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
                 case 2:
                     WorkFlowVar workFlowVar = (WorkFlowVar) obj;
                     doSubmit(workFlowVar);
+                    break;
+                case 4:
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, true);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "selectPeopleInput");
+                    IntentRouter.go(context,Constant.Router.STAFF,bundle);
                     break;
                 default:
                     break;
@@ -794,12 +803,25 @@ public class WXGDAcceptanceActivity extends BaseRefreshActivity implements WXGDS
     public void getAcceptChkStaff(CommonSearchEvent event) {
         if (event.commonSearchEntity instanceof CommonSearchStaff) {
             CommonSearchStaff searchStaff = (CommonSearchStaff) event.commonSearchEntity;
-            acceptChkStaff.setValue(searchStaff.name);
-            acceptChkStaffCode.setValue(searchStaff.code);
-            currentAcceptChkEntity.checkStaff = new Staff();
-            currentAcceptChkEntity.checkStaff.id = searchStaff.id;
-            currentAcceptChkEntity.checkStaff.code = searchStaff.code;
-            currentAcceptChkEntity.checkStaff.name = searchStaff.name;
+            if (event.flag.equals(acceptChkStaff.getTag().toString())){
+                acceptChkStaff.setValue(searchStaff.name);
+                acceptChkStaffCode.setValue(searchStaff.code);
+                currentAcceptChkEntity.checkStaff = new Staff();
+                currentAcceptChkEntity.checkStaff.id = searchStaff.id;
+                currentAcceptChkEntity.checkStaff.code = searchStaff.code;
+                currentAcceptChkEntity.checkStaff.name = searchStaff.name;
+            }else if ("selectPeopleInput".equals(event.flag)){
+                transition.addStaff(searchStaff.name,searchStaff.userId);
+            }
+        }else if (event.mCommonSearchEntityList != null){ // 多选
+            if ("selectPeopleInput".equals(event.flag)){
+                List<CommonSearchEntity> mCommonSearchEntityList = event.mCommonSearchEntityList;
+                CommonSearchStaff staff;
+                for (CommonSearchEntity commonSearchEntity : mCommonSearchEntityList){
+                    staff = (CommonSearchStaff) commonSearchEntity;
+                    transition.addStaff(staff.name, staff.userId);
+                }
+            }
         }
     }
 

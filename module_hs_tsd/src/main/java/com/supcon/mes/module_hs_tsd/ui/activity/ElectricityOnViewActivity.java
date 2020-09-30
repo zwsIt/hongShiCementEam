@@ -44,6 +44,7 @@ import com.supcon.mes.middleware.controller.TableInfoController;
 import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.AttachmentListEntity;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.ImageDeleteEvent;
@@ -306,14 +307,6 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         workFlowView.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
-                if ("selectPeopleInput".equals(childView.getTag())) {//选人
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
-                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
-                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "selectPeopleInput");
-                    IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
-                    return;
-                }
                 WorkFlowVar workFlowVar = (WorkFlowVar) obj;
                 switch (action) {
                     case 0:
@@ -322,6 +315,13 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
                     case 1:
                     case 2:
                         doSubmit(workFlowVar);
+                        break;
+                    case 4:
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(Constant.IntentKey.IS_MULTI, true);
+                        bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                        bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "selectPeopleInput");
+                        IntentRouter.go(context,Constant.Router.STAFF,bundle);
                         break;
                     default:
                         break;
@@ -345,14 +345,14 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
         if (!Constant.Transition.CANCEL_CN.equals(workFlowVar.dec) && checkTableBlank()) {
             return;
         }
-        List<WorkFlowEntity> workFlowEntityList = new ArrayList<>();
-        WorkFlowEntity workFlowEntity = new WorkFlowEntity();
-        workFlowEntity.dec = workFlowVar.dec;
-        workFlowEntity.type = workFlowVar.outcomeMapJson.get(0).type;
-        workFlowEntity.outcome = workFlowVar.outCome;
-        workFlowEntityList.add(workFlowEntity);
+//        List<WorkFlowEntity> workFlowEntityList = new ArrayList<>();
+//        WorkFlowEntity workFlowEntity = new WorkFlowEntity();
+//        workFlowEntity.dec = workFlowVar.dec;
+//        workFlowEntity.type = workFlowVar.outcomeMapJson.get(0).type;
+//        workFlowEntity.outcome = workFlowVar.outCome;
+//        workFlowEntityList.add(workFlowEntity);
 
-        submit(workFlowEntityList);
+        submit(workFlowVar.outcomeMapJson);
     }
 
     /**
@@ -548,6 +548,15 @@ public class ElectricityOnViewActivity extends BaseRefreshActivity implements El
                 mElectricityOffOnEntity.getOperateStaff().code = staff.code;
             } else if ("selectPeopleInput".equals(commonSearchEvent.flag)) {
                 workFlowView.addStaff(staff.name, staff.userId);
+            }
+        }else if (commonSearchEvent.mCommonSearchEntityList != null){ // 多选
+            if ("selectPeopleInput".equals(commonSearchEvent.flag)){
+                List<CommonSearchEntity> mCommonSearchEntityList = commonSearchEvent.mCommonSearchEntityList;
+                CommonSearchStaff staff;
+                for (CommonSearchEntity commonSearchEntity : mCommonSearchEntityList){
+                    staff = (CommonSearchStaff) commonSearchEntity;
+                    workFlowView.addStaff(staff.name, staff.userId);
+                }
             }
         }
     }

@@ -54,10 +54,13 @@ import com.supcon.mes.middleware.controller.PcController;
 import com.supcon.mes.middleware.controller.RoleController;
 import com.supcon.mes.middleware.controller.WorkFlowKeyController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchEntity;
+import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
 import com.supcon.mes.middleware.model.bean.LubricatingPartEntity;
 import com.supcon.mes.middleware.model.bean.SparePartEntity;
 import com.supcon.mes.middleware.model.bean.SystemCodeEntity;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
+import com.supcon.mes.middleware.model.event.CommonSearchEvent;
 import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
@@ -520,7 +523,25 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
             mLubricateOilsController.getLubricateOilsEntities().get(positionEvent.getPosition()).lubricatingPart = ((LubricatingPartEntity) positionEvent.getObj()).getLubPart();
             mLubricateOilsController.getLubricateOilsAdapter().notifyItemChanged(positionEvent.getPosition());
         }
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getStaffInfo(CommonSearchEvent commonSearchEvent) {
+        if (commonSearchEvent.commonSearchEntity instanceof CommonSearchStaff) {
+            CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
+            if ("selectPeopleInput".equals(commonSearchEvent.flag)){
+                transition.addStaff(searchStaff.name,searchStaff.userId);
+            }
+        }else if (commonSearchEvent.mCommonSearchEntityList != null){ // 多选
+            if ("selectPeopleInput".equals(commonSearchEvent.flag)){
+                List<CommonSearchEntity> mCommonSearchEntityList = commonSearchEvent.mCommonSearchEntityList;
+                CommonSearchStaff staff;
+                for (CommonSearchEntity commonSearchEntity : mCommonSearchEntityList){
+                    staff = (CommonSearchStaff) commonSearchEntity;
+                    transition.addStaff(staff.name, staff.userId);
+                }
+            }
+        }
     }
 
     @Override
@@ -592,6 +613,15 @@ public class WXGDExecuteActivity extends BaseRefreshActivity implements WXGDSubm
                     onLoading("正在保存中...");
                     tip = "保存成功";
                     doSave();
+                    break;
+                case 4:
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Constant.IntentKey.IS_MULTI, true);
+                    bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, "selectPeopleInput");
+                    IntentRouter.go(context,Constant.Router.STAFF,bundle);
+                    break;
+                default:
                     break;
 
             }
