@@ -95,7 +95,7 @@ import java.util.concurrent.TimeUnit;
 @Router(Constant.Router.YH_LOOK)
 @Presenter({YHSubmitPresenter.class, YHListPresenter.class})
 @Controller(value = {SparePartController.class, LubricateOilsController.class, RepairStaffController.class,
-        MaintenanceController.class, OnlineCameraController.class, AttachmentController.class, PcController.class})
+        MaintenanceController.class, OnlineCameraController.class, AttachmentController.class, PcController.class,WorkFlowKeyController.class})
 public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContract.View, YHListContract.View {
 
     @BindByTag("leftBtn")
