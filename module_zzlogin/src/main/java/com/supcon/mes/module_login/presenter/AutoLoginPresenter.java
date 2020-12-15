@@ -24,7 +24,7 @@ public class AutoLoginPresenter extends HeartBeatContract.Presenter {
 
     @Override
     public void heartBeat() {
-        Log.i("AutoLoginPresenter","heartBeat:"+ DateUtil.dateFormat(System.currentTimeMillis()));
+        Log.d("-AutoLoginPresenter-","heartBeat:"+ DateUtil.dateFormat(System.currentTimeMillis()));
         mCompositeSubscription.add(
                 LoginHttpClient.heartbeat()
                         .onErrorReturn(new Function<Throwable, JSONObject>() {

@@ -60,7 +60,7 @@
             android:tag="todayXjRecordsTv"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:text="@string/today_xj"/>
+            android:text="@string/xj_situation"/>
     </RelativeLayout>
 
 </RelativeLayout>

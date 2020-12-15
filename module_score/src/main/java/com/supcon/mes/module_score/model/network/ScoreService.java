@@ -33,9 +33,9 @@ public interface ScoreService {
     @GET("/BEAM/scorePerformance/scoreHead/beamScoreList-query.action")
     Flowable<ScoreEamListEntity> getScoreList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
-    //评分
+    //设备评分
     @GET
-    Flowable<ScoreEamPerformanceListEntity> getScore(@Url String url, @Query("scoreHead.id") int scoreId);
+    Flowable<ScoreEamPerformanceListEntity> getScore(@Url String url, @Query("scoreHead.id") Long scoreId);
 
 
     //提交
@@ -81,8 +81,14 @@ public interface ScoreService {
     @POST("/BEAM/patrolWorkerScore/workerScoreHead/patrolScore-query.action?1=1&permissionCode=BEAM_1.0.0_patrolWorkerScore_patrolScore")
     Flowable<CommonBAPListEntity<ScoreStaffEntity>> scoreQuery(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity, @QueryMap Map<String, Object> pageQueryMap);
 
-    @POST("/BEAM/scorePerformance/scoreHead/getSocreTemplate.action?sourceType=BEAM_065/02")
-    Flowable<ScoreStaffPerformanceListEntity> getScoreTemplate(@Query("sourceId") Long staffId);
+    /**
+     * 加载绩效评分模板
+     * @param sourceId
+     * @param sourceType
+     * @return
+     */
+    @POST("/BEAM/scorePerformance/scoreHead/getSocreTemplate.action")
+    Flowable<CommonBAPListEntity> getScoreTemplate(@Query("sourceId") Long sourceId, @Query("sourceType") String sourceType);
 
     //评分修改记录列表
     @POST("/BEAM/scoreModRecord/scoreRecord/modifyRecord-query.action?1=1&permissionCode=BEAM_1.0.0_scoreModRecord_modifyRecord")

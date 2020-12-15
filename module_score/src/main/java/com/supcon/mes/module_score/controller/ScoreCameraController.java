@@ -25,6 +25,7 @@ import com.supcon.mes.middleware.model.listener.OnAPIResultListener;
 import com.supcon.mes.middleware.model.listener.OnSuccessListener;
 import com.supcon.mes.middleware.util.PicUtil;
 import com.supcon.mes.middleware.util.WatermarkUtil;
+import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceEntity;
 import com.supcon.mes.module_score.model.bean.ScoreStaffPerformanceEntity;
 import com.supcon.mes.module_score.ui.adapter.ScoreStaffPerformanceAdapter;
 import com.supcon.mes.module_score.ui.adapter.ScoreStaffPerformanceNewAdapter;
@@ -160,6 +161,8 @@ public class ScoreCameraController extends BaseCameraController {
     public void deleteGalleryBean(GalleryBean galleryBean, int position) {
         super.deleteGalleryBean(galleryBean, position);
         actionGalleryView.deletePic(position);
+        galleryView = actionGalleryView;
+        currAdapterPosition = actionPosition;
 //        galleryViewHashMap.get(String.valueOf(currAdapterPosition)).deletePic(position);
         delete(galleryBean);
         updateScoreItem(new File(galleryBean.localPath));
@@ -198,7 +201,8 @@ public class ScoreCameraController extends BaseCameraController {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void deleteImage(ImageDeleteEvent imageDeleteEvent) {
         actionGalleryView.deletePic(imageDeleteEvent.getPos());
-
+        galleryView = actionGalleryView;
+        currAdapterPosition = actionPosition;
         updateScoreItem(new File(imageDeleteEvent.getPicName()));
         // 附件删除监听
 //        if(onSuccessListenerHashMap.get(String.valueOf(actionPosition))!= null){
@@ -278,28 +282,30 @@ public class ScoreCameraController extends BaseCameraController {
       * @return
       */
     private void updateScoreItem(File file) {
-        ScoreStaffPerformanceEntity data = (ScoreStaffPerformanceEntity) mScoreStaffPerformanceAdapter.getItem(currAdapterPosition);
-        StringBuilder picPath = new StringBuilder();
-        List<String> picPathList = new ArrayList<>();
-        StringBuilder picLocalPaths = new StringBuilder();
-        for (GalleryBean galleryBean : galleryView.getGalleryAdapter().getList()) { // 控件展示附件
-            if (!TextUtils.isEmpty(galleryBean.url)) {
-                picPath.append(galleryBean.url).append(",");
-                picPathList.add(galleryBean.url);
-            }
-            picLocalPaths.append(galleryBean.localPath).append(",");
-        }
-        if (!picLocalPaths.toString().contains(file.getName())) {
-            // 删除
-            if (picLocalPaths.length() == 0) {
-                data.setAttachFileFileAddPaths(null);
-                if (data.getAttachFileMultiFileIds().size() > 0) {
-                    data.setAttachFileFileDeleteIds(data.getAttachFileMultiFileIds());
+
+        if (mScoreStaffPerformanceAdapter.getItem(currAdapterPosition) instanceof ScoreStaffPerformanceEntity){
+            ScoreStaffPerformanceEntity data = (ScoreStaffPerformanceEntity) mScoreStaffPerformanceAdapter.getItem(currAdapterPosition);
+            StringBuilder picPath = new StringBuilder();
+            List<String> picPathList = new ArrayList<>();
+            StringBuilder picLocalPaths = new StringBuilder();
+            for (GalleryBean galleryBean : galleryView.getGalleryAdapter().getList()) { // 控件展示附件
+                if (!TextUtils.isEmpty(galleryBean.url)) {
+                    picPath.append(galleryBean.url).append(",");
+                    picPathList.add(galleryBean.url);
                 }
-            } else {
-                // 删除已保存
-                if (data.getAttachFileMultiFileIds() != null && data.getAttachFileMultiFileNames().contains(file.getName())){
-                    data.getAttachFileFileDeleteIds().add(data.getAttachFileMultiFileIds().get(data.getAttachFileMultiFileNames().indexOf(file.getName())));
+                picLocalPaths.append(galleryBean.localPath).append(",");
+            }
+            if (!picLocalPaths.toString().contains(file.getName())) {
+                // 删除
+                if (picLocalPaths.length() == 0) {
+                    data.setAttachFileFileAddPaths(null);
+                    if (data.getAttachFileMultiFileIds().size() > 0) {
+                        data.setAttachFileFileDeleteIds(data.getAttachFileMultiFileIds());
+                    }
+                } else {
+                    // 删除已保存
+                    if (data.getAttachFileMultiFileIds() != null && data.getAttachFileMultiFileNames().contains(file.getName())){
+                        data.getAttachFileFileDeleteIds().add(data.getAttachFileMultiFileIds().get(data.getAttachFileMultiFileNames().indexOf(file.getName())));
 //                    List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
 //                    List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
 //                    for (String name : attachFileNameList){
@@ -310,21 +316,71 @@ public class ScoreCameraController extends BaseCameraController {
 //                            break;
 //                        }
 //                    }
-                }else { // 本地删除
+                    }else { // 本地删除
 //                    ArrayList<String> attachFileFileAddPathsList = new ArrayList<>(Arrays.asList(data.getAttachFileFileAddPaths().split(",")));
-                    for (String path : data.getAttachFileFileAddPaths()){
-                        if (path.contains(file.getName())){
+                        for (String path : data.getAttachFileFileAddPaths()){
+                            if (path.contains(file.getName())){
 //                            attachFileFileAddPathsList.remove(path);
-                            data.getAttachFileFileAddPaths().remove(path);
-                            break;
+                                data.getAttachFileFileAddPaths().remove(path);
+                                break;
+                            }
                         }
                     }
                 }
-            }
-        } else {
-            //添加
+            } else {
+                //添加
 //            data.setAttachFileFileAddPaths(picPath.substring(0, picPath.length() - 1));
-            data.setAttachFileFileAddPaths(picPathList);
+                data.setAttachFileFileAddPaths(picPathList);
+            }
+        }else if (mScoreStaffPerformanceAdapter.getItem(currAdapterPosition) instanceof ScoreEamPerformanceEntity){
+            ScoreEamPerformanceEntity data = (ScoreEamPerformanceEntity) mScoreStaffPerformanceAdapter.getItem(currAdapterPosition);
+            StringBuilder picPath = new StringBuilder();
+            List<String> picPathList = new ArrayList<>();
+            StringBuilder picLocalPaths = new StringBuilder();
+            for (GalleryBean galleryBean : galleryView.getGalleryAdapter().getList()) { // 控件展示附件
+                if (!TextUtils.isEmpty(galleryBean.url)) {
+                    picPath.append(galleryBean.url).append(",");
+                    picPathList.add(galleryBean.url);
+                }
+                picLocalPaths.append(galleryBean.localPath).append(",");
+            }
+            if (!picLocalPaths.toString().contains(file.getName())) {
+                // 删除
+                if (picLocalPaths.length() == 0) {
+                    data.setAttachFileFileAddPaths(null);
+                    if (data.getAttachFileMultiFileIds().size() > 0) {
+                        data.setAttachFileFileDeleteIds(data.getAttachFileMultiFileIds());
+                    }
+                } else {
+                    // 删除已保存
+                    if (data.getAttachFileMultiFileIds() != null && data.getAttachFileMultiFileNames().contains(file.getName())){
+                        data.getAttachFileFileDeleteIds().add(data.getAttachFileMultiFileIds().get(data.getAttachFileMultiFileNames().indexOf(file.getName())));
+//                    List<String> attachFileIdList = Arrays.asList(data.getAttachFileMultiFileIds().split(","));
+//                    List<String> attachFileNameList = Arrays.asList(data.getAttachFileMultiFileNames().split(","));
+//                    for (String name : attachFileNameList){
+//                        if (name.contains(file.getName())){
+////                          String fileFileDeleteIds = data.getAttachFileFileDeleteIds() == null ? "" : data.getAttachFileFileDeleteIds();
+//                            data.setAttachFileFileDeleteIds(TextUtils.isEmpty(data.getAttachFileFileDeleteIds()) ?
+//                            attachFileIdList.get(attachFileNameList.indexOf(name)) : data.getAttachFileFileDeleteIds() + ","+ attachFileIdList.get(attachFileNameList.indexOf(name)));
+//                            break;
+//                        }
+//                    }
+                    }else { // 本地删除
+//                    ArrayList<String> attachFileFileAddPathsList = new ArrayList<>(Arrays.asList(data.getAttachFileFileAddPaths().split(",")));
+                        for (String path : data.getAttachFileFileAddPaths()){
+                            if (path.contains(file.getName())){
+//                            attachFileFileAddPathsList.remove(path);
+                                data.getAttachFileFileAddPaths().remove(path);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else {
+                //添加
+//            data.setAttachFileFileAddPaths(picPath.substring(0, picPath.length() - 1));
+                data.setAttachFileFileAddPaths(picPathList);
+            }
         }
     }
 

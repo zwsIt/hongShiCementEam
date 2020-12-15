@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import com.app.annotation.BindByTag;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
+import com.supcon.common.view.util.LogUtil;
+import com.supcon.common.view.util.LogUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.SnackbarHelper;
@@ -57,18 +60,13 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         this.expandPosition = 0;
         notifyItemChanged(expandPosition);
     }
-//    public void setLisenter(RecyclerView contentView) {
-//        contentView.setOnTouchListener(new RecyclerViewOnTouchListener());
-//
-//    }
 
     public boolean isAllFinished() {
-//        boolean result = true;
         if (mOLXJAreaEntities == null) {
             return true;
         }
         for (OLXJAreaEntity areaEntity : mOLXJAreaEntities) {
-            if ("0".equals(areaEntity.finishType)) {
+            if ("0".equals(areaEntity.finishType) || (TextUtils.isEmpty(areaEntity.finishType) && areaEntity.workItemEntities.get(0).getTaskSignID().cardTime == null)) {
                 return false;
             }
         }
@@ -87,11 +85,6 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
     }
 
     class ViewHolder extends BaseRecyclerViewHolder<OLXJTaskEntity> implements View.OnClickListener {
-
-//        @BindByTag("listLayout")
-//        LinearLayout listLayout;
-//        @BindByTag("mapLayout")
-//        LinearLayout mapLayout;
 
         @BindByTag("itemXJPathIndex")
         TextView itemXJPathIndex;  //序号
@@ -114,16 +107,10 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         @BindByTag("taskAreaListView")
         RecyclerView taskAreaListView;
 
-//        @BindByTag("progressBar")
-//        ProgressBar progressBar;
-//        @BindByTag("webView")
-//        BridgeWebView webView;
 
         OLXJAreaListAdapter mOLXJAreaListAdapter;
 
         private long currentId;
-
-        private boolean isFold = true;
 
         public ViewHolder(Context context, ViewGroup parent) {
             super(context, parent);
@@ -140,27 +127,6 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             taskAreaListView.setLayoutManager(new LinearLayoutManager(context));  //线性布局
             mOLXJAreaListAdapter = new OLXJAreaListAdapter(context);
             taskAreaListView.setAdapter(mOLXJAreaListAdapter);
-
-//            webView.setFocusableInTouchMode(true);
-//            webView.setWebViewClient(new MapWebViewClient(webView));
-//            webView.setWebChromeClient(new MyWebChromeClient());
-//            WebSettings settings = webView.getSettings();
-////            settings.setAppCacheEnabled(true);
-//            settings.setJavaScriptEnabled(true);
-//            settings.setAllowFileAccess(true);
-//            settings.setDatabaseEnabled(true);
-//            settings.setDomStorageEnabled(true);
-//            settings.setGeolocationEnabled(true);
-//            settings.setUseWideViewPort(true);
-//
-//            settings.setBuiltInZoomControls(true); // 显示放大缩小
-//            settings.setSupportZoom(true); // 可以缩放
-//            settings.setDisplayZoomControls(true);
-//            settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-//            settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-//
-//            settings.setLoadWithOverviewMode(true);
-
         }
 
         @Override
@@ -186,32 +152,6 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
             mOLXJAreaListAdapter.setOnItemChildViewClickListener((childView, position, action, obj) -> {
                 onItemChildViewClick(taskAreaListView, action, obj);
             });
-//            if(webView!=null){
-//                webView.registerHandler("areaClick", new BridgeHandler() {
-//
-//                    @Override
-//                    public void handler(String data, CallBackFunction function) {
-//                        LogUtil.e("areaClick" + data);
-//                        try {
-//                            JSONObject jsonObject = new JSONObject(data);
-//                            String code = jsonObject.getString("id");
-//                            if(mOLXJAreaEntities == null){
-//                                onItemChildViewClick(taskExpandBtn, 0, getItem(0));
-//                            }
-//                            else if (!TextUtils.isEmpty(code))
-//                                for (OLXJAreaEntity areaEntity : mOLXJAreaEntities) {
-//                                    if (code.equals(areaEntity._code)) {
-//                                        onItemChildViewClick(taskAreaListView, 0, areaEntity);
-//                                        return;
-//                                    }
-//                                }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                });
-//            }
         }
 
         private void shrink(int position) {
@@ -221,10 +161,8 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         }
 
         private void expand(int position) {
-//            int oldPosition = expandPosition;
             expandPosition = position;
             notifyItemChanged(expandPosition);
-//            notifyItemChanged(oldPosition);
         }
 
         private void doShrink() {
@@ -245,13 +183,11 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
                 return;
             }
 
-            mOLXJAreaListAdapter.clear();
-
             if (mOLXJAreaEntities == null || mOLXJAreaEntities.size() == 0) {
 //                ToastUtils.show(context,"无巡检区域数据，请检查系统或联系相关人员咨询 ");
                 return;
             }
-
+            mOLXJAreaListAdapter.clear();
             mOLXJAreaListAdapter.addList(mOLXJAreaEntities);
             mOLXJAreaListAdapter.notifyDataSetChanged();
 
@@ -272,28 +208,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
         @Override
         protected void update(OLXJTaskEntity data) {
             int position = getAdapterPosition();
-//            if (map) {
-//                listLayout.setVisibility(View.GONE);
-//                taskExpandBtn.setVisibility(View.GONE);
-//                mapLayout.setVisibility(View.VISIBLE);
-//
-//                //当页面正在加载时，禁止链接的点击事件
-//                Map<String, String> header = new HashMap<>();
-//                String url = "http://" + EamApplication.getIp() + ":" + EamApplication.getPort()
-//                        + Constant.WebUrl.XJ + data.id + "&WorkGroupID=" + data.workGroupID.id;
-//                if (!TextUtils.isEmpty(EamApplication.getCooki())) {
-//                    header.put("Cookie", EamApplication.getCooki());
-//                }
-//                if (!TextUtils.isEmpty(EamApplication.getAuthorization())) {
-//                    header.put("Authorization", EamApplication.getAuthorization());
-//                }
-//
-//                webView.loadUrl(url, header);
-//            } else {
-//                mapLayout.setVisibility(View.GONE);
-//            listLayout.setVisibility(View.VISIBLE);
             taskExpandBtn.setVisibility(View.VISIBLE);
-//            }
 
             if (data.isStart) {
                 taskStatus.setBackgroundResource(R.drawable.sh_task_status_going);

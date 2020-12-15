@@ -26,7 +26,8 @@
             app:gravity ="right"
             app:key="参数名称:值范围"
             app:key_width="@dimen/dp_120"
-            app:max_lines="1" />
+            app:max_lines="1"
+            tools:layout_height="@dimen/dp_50"/>
 
         <com.supcon.mes.mbap.view.CustomTextView
             android:id="@+id/paramValue"

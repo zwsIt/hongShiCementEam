@@ -27,7 +27,6 @@ import com.supcon.mes.middleware.model.bean.WorkInfo;
 import com.supcon.mes.middleware.util.ChannelUtil;
 import com.supcon.mes.middleware.util.CrashHandler;
 import com.supcon.mes.middleware.util.CustomDevOpenHelper;
-import com.supcon.mes.middleware.util.DatabaseContext;
 import com.supcon.mes.middleware.util.WorkHelper;
 
 import java.util.List;

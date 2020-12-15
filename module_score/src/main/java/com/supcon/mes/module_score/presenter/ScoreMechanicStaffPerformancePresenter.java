@@ -20,7 +20,7 @@ import io.reactivex.Flowable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-
+@Deprecated
 public class ScoreMechanicStaffPerformancePresenter extends ScoreMechanicStaffPerformanceContract.Presenter {
 
     private int position = 0;

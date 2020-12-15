@@ -594,6 +594,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                     bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,yhEditWXChargeStaff.getTag().toString());
                     IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }
             }
@@ -798,6 +799,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                 bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,yhEditFindStaff.getTag().toString());
                 IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
@@ -849,6 +851,7 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
                     bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                    bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG,acceptChkStaff.getTag().toString());
                     IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
                 }
             }
@@ -1019,19 +1022,19 @@ public class YHEditActivity extends BaseRefreshActivity implements YHSubmitContr
             return;
         }
         CommonSearchStaff searchStaff = (CommonSearchStaff) commonSearchEvent.commonSearchEntity;
-        if (staffType.equals(FINDSTAFF)) {
+        if (yhEditFindStaff.getTag().toString().equals(commonSearchEvent.flag)) {
             yhEditFindStaff.setValue(searchStaff.name);
             mYHEntity.findStaffID = new Staff();
             mYHEntity.findStaffID.id = searchStaff.id;
             mYHEntity.findStaffID.code = searchStaff.code;
             mYHEntity.findStaffID.name = searchStaff.name;
-        } else if (staffType.equals(CHARGESTAFF)) {
+        } else if (yhEditWXChargeStaff.getTag().toString().equals(commonSearchEvent.flag)) {
             yhEditWXChargeStaff.setValue(searchStaff.name);
             mYHEntity.chargeStaff = new Staff();
             mYHEntity.chargeStaff.id = searchStaff.id;
             mYHEntity.chargeStaff.code = searchStaff.code;
             mYHEntity.chargeStaff.name = searchStaff.name;
-        } else if (CHECK_STAFF.equals(staffType)) {
+        } else if (acceptChkStaff.getTag().toString().equals(commonSearchEvent.flag)) {
             acceptChkStaff.setValue(searchStaff.name);
             acceptChkStaffCode.setValue(searchStaff.code);
             currentAcceptChkEntity.checkStaff = new Staff();

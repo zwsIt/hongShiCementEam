@@ -64,11 +64,6 @@
                     app:key="设备编码"
                     app:text_size="16" />
                 <include layout="@layout/ly_line_light_light"/>
-                <include layout="@layout/ly_ele_off_apply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_10"/>
-                <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/yhViewEamName"
                     android:layout_width="match_parent"
@@ -80,6 +75,11 @@
                     android:tag="yhViewEamName"
                     app:key="设备名称"
                     app:text_size="16" />
+                <include layout="@layout/ly_line_light_light"/>
+                <include layout="@layout/ly_ele_off_apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_10"/>
                 <include layout="@layout/ly_line_light_light"/>
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:layout_width="match_parent"

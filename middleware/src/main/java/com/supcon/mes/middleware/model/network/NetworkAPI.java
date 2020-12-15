@@ -276,8 +276,8 @@ public interface NetworkAPI {
      *
      * @return
      */
-    @POST("/foundation/department/queryList.action?page.pageSize=500&page.maxPageSize=500")
-    Flowable<DepartmentInfoListEntity> listDepartment(@Query("page.pageNo") int pageNo);
+    @POST("/foundation/department/queryList.action?page.pageSize=5000&page.maxPageSize=5000")
+    Flowable<DepartmentInfoListEntity> listDepartment(@Query("page.pageNo") int pageNo, @Query("companyId") Long companyId);
 
     @POST("/foundation/position/queryList.action?page.pageSize=500&page.maxPageSize=500")
     Flowable<PositionEntityListEntity> listPosition(@Query("page.pageNo") int pageNo);

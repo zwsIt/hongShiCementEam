@@ -22,6 +22,7 @@ public interface ScoreConstant {
         String T1 = "BEAM_066/01"; // 数值
         String T2 = "BEAM_066/02"; // 布尔
         String T3 = "BEAM_066/03"; // 文本
+        String T4 = "BEAM_066/04"; // 多选
     }
 
     /**

@@ -161,7 +161,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         });
         eamLayout.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putString(Constant.IntentKey.EAM_CODE, mEamEntity.code);
+            bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
             IntentRouter.go(EamDetailActivity.this, Constant.Router.SCORE_EAM_LIST, bundle);
         });
     }

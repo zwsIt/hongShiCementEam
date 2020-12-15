@@ -162,7 +162,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     @BindByTag("recyclerView")
     RecyclerView recyclerView;
 
-    private YHEntity mYHEntity, mOriginalEntity;
+    private YHEntity mYHEntity;
     private AttachmentController mAttachmentController;
     private DealInfoController mDealInfoController;
     private String __pc__;
@@ -213,7 +213,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
         yhViewArea.setSpinner(mYHEntity.areaInstall != null ? mYHEntity.areaInstall.name : "");
 
         if (mYHEntity.eamID != null) {
-            yhViewEamCode.setValue(mYHEntity.eamID.code);
+            yhViewEamCode.setValue(mYHEntity.eamID.eamAssetCode);
             yhViewEamName.setValue(mYHEntity.eamID.name);
             yhViewEamModel.setValue(mYHEntity.eamID.model);
         }
@@ -287,7 +287,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
                         getController(OnlineCameraController.class).setPicData(mYHEntity.attachmentEntities,"BEAM2_1.0.0_faultInfo");
                     }
                 }
-            }, mYHEntity.tableInfoId);
+            }, mYHEntity.tableInfoId == null ? -1 : mYHEntity.tableInfoId);
         }
     }
 
@@ -612,7 +612,7 @@ public class YHLookActivity extends BaseRefreshActivity implements YHSubmitContr
     public void queryYHListSuccess(YHListEntity entity) {
         if (entity.result.size() > 0){
             mYHEntity = entity.result.get(0);
-            mOriginalEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
+//            mOriginalEntity = GsonUtil.gsonToBean(mYHEntity.toString(), YHEntity.class);
             setView();
             getController(SparePartController.class).refreshData(mYHEntity);
             getController(LubricateOilsController.class).refreshData(mYHEntity);

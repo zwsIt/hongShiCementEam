@@ -1,10 +1,11 @@
 package com.supcon.mes.module_score.model.api;
 
 import com.app.annotation.apt.ContractFactory;
+import com.supcon.mes.module_score.model.bean.ScoreEamPerformanceListEntity;
 
 import java.util.List;
 
-@ContractFactory(entites = {List.class})
+@ContractFactory(entites = {ScoreEamPerformanceListEntity.class})
 public interface ScoreEamPerformanceAPI {
-    void getScorPerformance(int scoreId);
+    void getScorPerformance(Long eamId, Long scoreId);
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgGray"
+    android:orientation="vertical">
+
+    <!--<include layout="@layout/ly_titlebar" />-->
+    <com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar
+        android:id="@+id/searchTitleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="searchTitleBar"
+        app:title_background_color="@color/themeColor"
+        app:title_text="title"
+        app:title_length="@dimen/dp_80"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/dp_1"
+        android:padding="@dimen/dp_10">
+        <TextView
+            android:id="@+id/depotTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:tag="depotTv"
+            android:text="部门"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/fontSize_16sp"
+            android:drawableEnd="@drawable/ic_expand_less_black_24dp"/>
+        <include layout="@layout/ly_vertical_line"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="end">
+            <TextView
+                android:id="@+id/startTimeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:tag="startTimeTv"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/fontSize_16sp"
+                android:text="2018-09-16"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:text="-" />
+            <TextView
+                android:id="@+id/endTimeTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:tag="endTimeTv"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/fontSize_16sp"
+                android:text="2018-09-16" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <include layout="@layout/ly_recyclerview" />
+</LinearLayout>

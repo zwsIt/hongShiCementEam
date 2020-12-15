@@ -84,6 +84,7 @@ import io.reactivex.functions.Predicate;
  * ------------- Description -------------
  * 巡检工评分
  */
+@Deprecated
 @Router(value = Constant.Router.SCORE_INSPECTOR_STAFF_PERFORMANCE)
 @Presenter(value = {ScoreInspectorStaffPerformancePresenter.class, ScoreInspectorStaffSubmitPresenter.class})
 @Controller(value = {ScoreCameraController.class})

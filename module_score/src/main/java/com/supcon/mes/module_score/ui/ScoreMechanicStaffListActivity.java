@@ -58,6 +58,7 @@ import java.util.concurrent.TimeUnit;
  * ------------- Description -------------
  * 机修工 评分
  */
+@Deprecated
 @Router(value = Constant.Router.SCORE_MECHANIC_STAFF_LIST)
 @Presenter(value = ScoreStaffListPresenter.class)
 public class ScoreMechanicStaffListActivity extends BaseRefreshRecyclerActivity implements ScoreStaffListContract.View {

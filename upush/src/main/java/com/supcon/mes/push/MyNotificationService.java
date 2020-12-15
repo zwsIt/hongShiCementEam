@@ -15,7 +15,6 @@ import android.os.IBinder;
 
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.mes.mbap.MBapApp;
-import com.supcon.mes.middleware.util.BadgeUtil;
 import com.supcon.mes.push.event.PushRefreshEvent;
 import com.supcon.mes.push.util.NotificationUtil;
 import com.umeng.message.UTrack;

@@ -36,7 +36,7 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
     public float score;//分数
 
     public float defaultTotalScore; // 单类总分
-    public SystemCodeEntity defaultValueType;//类型
+    public SystemCodeEntity defaultValueType;//值类型
     public int defaultNumVal;//默认数量
     public String subScore; // 文本扣分数
     public SystemCodeEntity scoreType; // 评分类型:BEAM_077/02:手动评分;  BEAM_077/01:自动评分
@@ -45,6 +45,7 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
 
     @Expose
     public float lastSubScore; // 上次文本扣分数
+    public String itemDetail;
 
     //附件
     private List<Long> attachFileMultiFileIds;
@@ -94,6 +95,9 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
 //    }
 
     public List<Long> getAttachFileMultiFileIds() {
+        if (attachFileMultiFileIds == null){
+            attachFileMultiFileIds = new ArrayList<>();
+        }
         return attachFileMultiFileIds;
     }
 
@@ -102,6 +106,9 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
     }
 
     public List<String> getAttachFileMultiFileNames() {
+        if (attachFileMultiFileNames == null){
+            attachFileMultiFileNames = new ArrayList<>();
+        }
         return attachFileMultiFileNames;
     }
 
@@ -110,13 +117,16 @@ public class ScoreStaffPerformanceEntity extends BaseEntity {
     }
 
     public List<String> getAttachFileFileAddPaths() {
+        if (attachFileFileAddPaths == null){
+            attachFileFileAddPaths = new ArrayList<>();
+        }
         return attachFileFileAddPaths;
     }
 
     public void setAttachFileFileAddPaths(List<String> attachFileFileAddPaths) {
         this.attachFileFileAddPaths = attachFileFileAddPaths;
     }
-//    public List<String> getAttachFileFileAddLocalPaths() {
+    //    public List<String> getAttachFileFileAddLocalPaths() {
 //        return attachFileFileAddLocalPaths;
 //    }
 //

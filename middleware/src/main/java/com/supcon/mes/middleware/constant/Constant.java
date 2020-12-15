@@ -38,7 +38,7 @@ public interface Constant {
      * fir.im相关信息
      */
     interface Fir {
-        String API_TOKEN = "1ce8d7b6ac5ecef81e3a6c0dfaafb7e3"; // https://fir.im/apps提供，切勿在网站点击重新生成，否则已有app 不能检查更新
+        String API_TOKEN = "84644378657ee08d38ab6ffaf247b539"; // https://fir.im/apps提供，切勿在网站点击重新生成，否则已有app 不能检查更新
         String HONG_SHI_APP_ID = "5ddb877423389f4559ae8303";
     }
 
@@ -193,7 +193,7 @@ public interface Constant {
 
 
         String SCORE_EAM_LIST = "SCORE_EAM_LIST";//设备评分绩效列表
-        String SCORE_EAM_PERFORMANCE = "SCORE_EAM_PERFORMANCE";//评分绩效
+        String SCORE_EAM_PERFORMANCE = "SCORE_EAM_PERFORMANCE";//设备评分绩效
         String SCORE_INSPECTOR_STAFF_LIST = "SCORE_INSPECTOR_STAFF_LIST";//巡检人员列表
         String SCORE_MECHANIC_STAFF_LIST = "SCORE_MECHANIC_STAFF_LIST";//机修工列表
         String SCORE_INSPECTOR_STAFF_PERFORMANCE = "SCORE_INSPECTOR_STAFF_PERFORMANCE";//人员评分绩效
@@ -737,6 +737,7 @@ public interface Constant {
         String RISK_ASSESSMENT = "RISK_ASSESSMENT"; // 风险评估
         String LUB_TYPE = "LUB_TYPE"; // 润滑类型：电气、机械
         String TARGET_ENTITY_CODE = "TARGET_ENTITY_CODE"; // 实体编码
+        String DEPARTMENT_ID = "DEPARTMENT_ID"; // 部门id
     }
 
 

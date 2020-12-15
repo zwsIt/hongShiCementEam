@@ -1,5 +1,6 @@
 package com.supcon.mes.middleware.presenter;
 
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.model.bean.DepartmentInfoListEntity;
 import com.supcon.mes.middleware.model.contract.DepartmentQueryContract;
 import com.supcon.mes.middleware.model.network.MiddlewareHttpClient;
@@ -16,7 +17,7 @@ public class DepartmentPresenter extends DepartmentQueryContract.Presenter {
     @Override
     public void listDepartment() {
         mCompositeSubscription.add(
-                MiddlewareHttpClient.listDepartment(1)//暂时500个部门够用了
+                MiddlewareHttpClient.listDepartment(1, EamApplication.getAccountInfo().cid)//暂时500个部门够用了
                         .onErrorReturn(new Function<Throwable, DepartmentInfoListEntity>() {
                             @Override
                             public DepartmentInfoListEntity apply(Throwable throwable) throws Exception {

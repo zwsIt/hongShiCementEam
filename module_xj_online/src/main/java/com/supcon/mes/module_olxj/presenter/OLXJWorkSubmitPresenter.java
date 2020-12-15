@@ -78,10 +78,15 @@ public class OLXJWorkSubmitPresenter extends OLXJWorkSubmitContract.Presenter{
 
             for(int i = 0;i<jsonArray.length();i++){
                 JSONObject item = jsonArray.getJSONObject(i);
-                JSONObject workItem = item.getJSONObject("linkState");
-                String linkStateStr = workItem.getString("id");
-                item.remove("linkState");
-                item.put("linkState",linkStateStr);
+                if (item.has("linkState")){
+                    JSONObject workItem =  item.getJSONObject("linkState");
+                    String linkStateStr = workItem.getString("id");
+                    item.remove("linkState");
+                    item.put("linkState",linkStateStr);
+                }else {
+                    item.put("linkState","wiLinkState/04");
+                }
+
             }
             result = jsonObject.toString();
         } catch (JSONException e) {

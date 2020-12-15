@@ -26,6 +26,7 @@ import com.supcon.mes.mbap.view.CustomHorizontalSearchTitleBar;
 import com.supcon.mes.mbap.view.CustomSearchView;
 import com.supcon.mes.mbap.view.CustomVerticalDateView;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.util.EmptyAdapterHelper;
 import com.supcon.mes.middleware.util.KeyExpandHelper;
@@ -55,7 +56,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.functions.Consumer;
 
 /**
- * 设备评分绩效
+ * 设备评分绩效list
  */
 @Router(value = Constant.Router.SCORE_EAM_LIST)
 @Presenter(value = ScoreEamListPresenter.class)
@@ -86,6 +87,7 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
 
     private final Map<String, Object> queryParam = new HashMap<>();
     private String eamCode; // 设备编码
+    private EamEntity mEamEntity; // 设备
     private ScoreEamListAdapter scoreEamListAdapter;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -107,7 +109,8 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
         super.onInit();
         EventBus.getDefault().register(this);
         scoreTableNo = getIntent().getStringExtra(Constant.IntentKey.SCORETABLENO);
-        eamCode = getIntent().getStringExtra(Constant.IntentKey.EAM_CODE);
+        mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        eamCode = mEamEntity.code;
     }
 
 
@@ -156,7 +159,7 @@ public class ScoreEamListActivity extends BaseRefreshRecyclerActivity implements
                 .subscribe(o -> {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constant.IntentKey.isEdit, true);
-                    bundle.putString(Constant.IntentKey.EAM_CODE,eamCode); // 默认带入当前设备
+                    bundle.putSerializable(Constant.IntentKey.EAM,mEamEntity); // 默认带入当前设备
                     IntentRouter.go(ScoreEamListActivity.this, Constant.Router.SCORE_EAM_PERFORMANCE, bundle);
                 });
         refreshListController.setOnRefreshPageListener(pageIndex -> {

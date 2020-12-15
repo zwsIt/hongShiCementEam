@@ -43,12 +43,12 @@ ext{
 
     minSdkVersion = 21
     targetSdkVersion = 22
-    versionCode = 55
-    versionName = "8.20.10.06"
+    versionCode = 57
+    versionName = "8.20.10.08"
 
     ProductCode = "8.20.10"
     EamCode = "01"
-    MobileCode = "06"  //测试版本，不足一位加“0”补足
+    MobileCode = "08"  //测试版本，不足一位加“0”补足
 
     isAlone  = false
 

@@ -61,6 +61,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
+@Deprecated
 public class ScoreStaffPerformanceAdapter extends BaseListDataRecyclerViewAdapter<ScoreStaffPerformanceEntity> {
 
     private boolean isEdit = false;

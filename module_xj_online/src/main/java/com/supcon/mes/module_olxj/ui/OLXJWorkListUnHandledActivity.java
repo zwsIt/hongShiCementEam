@@ -49,6 +49,7 @@ import com.supcon.mes.middleware.model.bean.WXGDEam;
 import com.supcon.mes.middleware.model.bean.XJHistoryEntity;
 import com.supcon.mes.middleware.model.bean.XJHistoryEntityDao;
 import com.supcon.mes.middleware.model.contract.DeviceDCSParamQueryContract;
+import com.supcon.mes.middleware.model.event.PositionEvent;
 import com.supcon.mes.middleware.model.event.RefreshEvent;
 import com.supcon.mes.middleware.presenter.DeviceDCSParamQueryPresenter;
 import com.supcon.mes.middleware.ui.view.CustomRadioSheetDialog;
@@ -165,6 +166,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
     public Map<String, Boolean> isColse = new LinkedHashMap<>();
     private OLXJTitleController titleController;
     private boolean isOneSubmit; // 单条巡检项提交标示
+    private boolean face;
 
     private HashSet hashSet = new HashSet();//判断dcs是否请求过，防止刷新不断请求
 
@@ -201,6 +203,7 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
         super.onResume();
 //        deviceName = null; //清空,已完成页面返回后，因为刷新会重新初始化设备过滤条件
         getWindow().setWindowAnimations(R.style.activityAnimation);
+        face = true;
     }
 
     @Override
@@ -560,11 +563,12 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                         } else {
                             ToastUtils.show(OLXJWorkListUnHandledActivity.this, "当前设备已巡检完毕!");
                         }
-                        back();
+
                         Flowable.timer(300, TimeUnit.MILLISECONDS)
                                 .subscribe(v -> {
                                     EventBus.getDefault().post(mXJAreaEntity);
-                                    EventBus.getDefault().post(new AreaRefreshEvent());
+//                                    EventBus.getDefault().post(new AreaRefreshEvent());
+                                    back();
                                 });
                     }
                 });
@@ -1104,8 +1108,8 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 //                        onLoading("正在打包并上传巡检数据，请稍后...");
 //                        presenterRouter.create(OLXJWorkSubmitAPI.class).uploadOLXJAreaData(mXJAreaEntity);
                         back();
-                        EventBus.getDefault().post(mXJAreaEntity);
-                        EventBus.getDefault().post(new AreaRefreshEvent());
+                        EventBus.getDefault().post(new PositionEvent(-1,mXJAreaEntity));
+//                        EventBus.getDefault().post(new AreaRefreshEvent());
                     }, true)
                     .bindClickListener(R.id.redBtn, v3 -> back(), true)
                     .show();
@@ -1188,8 +1192,14 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAreaUpdate(OLXJAreaEntity areaEntity) {
+        LogUtil.d("-----2-----",mXJAreaEntity.toString());
         mXJAreaEntity = areaEntity;
         refreshListController.refreshBegin();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -1203,13 +1213,16 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                     refreshListController.refreshBegin();
                     isOneSubmit = false;
                 } else {
+                    mXJAreaEntity.finishType = "1"; // 全部提交 区域完成
+                    LogUtil.d("-----1-----",mXJAreaEntity.toString());
+                    EventBus.getDefault().post(new PositionEvent(-1,mXJAreaEntity));
                     back();
                 }
-                Flowable.timer(300, TimeUnit.MILLISECONDS)
-                        .subscribe(v -> {
-                            EventBus.getDefault().post(mXJAreaEntity);
-                            EventBus.getDefault().post(new AreaRefreshEvent());
-                        });
+//                Flowable.timer(300, TimeUnit.MILLISECONDS)
+//                        .subscribe(v -> {
+//                            EventBus.getDefault().post(mXJAreaEntity);
+//                            EventBus.getDefault().post(new AreaRefreshEvent());
+//                        });
             }
         });
     }

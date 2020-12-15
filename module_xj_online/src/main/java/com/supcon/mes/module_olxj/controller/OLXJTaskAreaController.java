@@ -73,8 +73,8 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
     public void initData() {
         super.initData();
 
-        getWorkData();
-        getAreaData();
+//        getWorkData();
+//        getAreaData();
     }
 
     public void getData(OLXJTaskEntity taskEntity, OnSuccessListener<Boolean> listener) {
@@ -145,7 +145,8 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
         if (entity.hasNext) {
             currentPage++;
             getWorkData();
-        } else {
+        } else if (entity.pageNo == 1 || (entity.result != null && entity.pageNo > 1 && entity.result.size() > 0)) { // 防止分页加载，最后一页重复添加数据
+
             updateArea();
         }
     }
@@ -165,11 +166,8 @@ public class OLXJTaskAreaController extends BaseDataController implements OLXJWo
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<OLXJWorkItemEntity>() {
-                    @Override
-                    public void accept(OLXJWorkItemEntity olxjWorkItemEntity) throws Exception {
+                .subscribe(olxjWorkItemEntity -> {
 
-                    }
                 }, throwable -> {
 
                 }, () -> {

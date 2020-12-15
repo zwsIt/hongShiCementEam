@@ -110,7 +110,7 @@ public class YHGLStatisticsAdapter extends BaseListDataRecyclerViewAdapter<YHEnt
             }
 
             String eam = String.format(context.getString(R.string.device_style10), Util.strFormat(data.getEamID().name)
-                    , Util.strFormat(data.getEamID().code));
+                    , Util.strFormat(data.getEamID().eamAssetCode));
             statisticsEam.setText(HtmlParser.buildSpannedText(eam, new HtmlTagHandler()));
             statisticsContent.setText(Util.strFormat2(data.describe));
             statisticsStaff.setText(data.findStaffID != null ? data.findStaffID.name : "");

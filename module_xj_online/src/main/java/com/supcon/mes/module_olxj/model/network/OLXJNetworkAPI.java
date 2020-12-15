@@ -45,7 +45,6 @@ public interface OLXJNetworkAPI {
     @GET("/mobileEAM/workGroup/workGroup/workGroupList-query.action?page.pageSize=500&page.maxPageSize=500&page.pageNo=1")
     Flowable<CommonBAPListEntity<OLXJGroupEntity>> queryWorkGroupList(@Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
-
     /**
      * 获取已下发任务列表
      *
@@ -57,7 +56,7 @@ public interface OLXJNetworkAPI {
     Flowable<CommonBAPListEntity<OLXJTaskEntity>> queryPotrolTaskList(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
     /**
-     * 获取统计分析/巡检记录任务列表 2020/06/12 张文帅
+     * 获取统计分析/巡检记录 列表 2020/06/12 张文帅
      * @param queryParam          页数相关key
      * @param fastQueryCondEntity 已下发快速查询条件
      * @return
@@ -83,7 +82,6 @@ public interface OLXJNetworkAPI {
     @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/tempList-query.action?1=1&permissionCode=mobileEAM_1.0.0_potrolTaskNew_tempList&page.pageSize=500&page.maxPageSize=500&page.pageNo=1")
     Flowable<CommonBAPListEntity<OLXJTaskEntity>> queryPotrolTempTaskList(@QueryMap Map<String, Object> queryParam, @Query("fastQueryCond") FastQueryCondEntity fastQueryCondEntity);
 
-
     /**
      * 获取任务包含的作业项
      *
@@ -102,7 +100,6 @@ public interface OLXJNetworkAPI {
      */
     @POST("/mobileEAM/potrolTaskNew/potrolTPartWF/taskGatherList-query.action?1=1&permissionCode=mobileEAM_1.0.0_potrolTaskNew_taskGatherList")
     Flowable<CommonBAPListEntity<OLXJWorkItemEntity>> taskGatherList(@QueryMap Map<String, Object> queryParam);
-
 
     /**
      * 1、添加临时巡检任务作业项参照列表
@@ -199,11 +196,9 @@ public interface OLXJNetworkAPI {
     @GET("/BEAM2/patrolWorkerScore/workerScoreHead/getInspectStaticsInfo.action")
     Flowable<CommonListEntity<OLXJStatisticsEntity>> getInspectStaticsInfo(@QueryMap Map<String, Object> queryParam);
 
-
     //设备创建巡检任务
     @GET("/mobileEAM/MobileInterfaceForAndroidAction/createTempPotrolTaskByEam.action")
     Flowable<CommonEntity<EamXJEntity>> createTempPotrolTaskByEam(@QueryMap Map<String, Object> paramMap);
-
 
     //修改任务状态
     @GET("/mobileEAM/potrolTaskNew/potrolTaskWF/updateTaskById.action")

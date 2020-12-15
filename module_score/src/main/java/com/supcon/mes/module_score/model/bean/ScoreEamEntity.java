@@ -5,6 +5,9 @@ import com.supcon.mes.middleware.model.bean.EamEntity;
 import com.supcon.mes.middleware.model.bean.EamType;
 import com.supcon.mes.middleware.model.bean.Staff;
 
+/**
+ * 设备评分表头
+ */
 public class ScoreEamEntity extends BaseEntity {
 
     public EamEntity beamId;

@@ -230,16 +230,13 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
     private void initFilterView() {
         List<FilterBean> filterBeans = new ArrayList<>();
         Flowable.fromIterable(mOLXJWorkListAdapter.getList())
-                .subscribe(new Consumer<OLXJWorkItemEntity>() {
-                    @Override
-                    public void accept(OLXJWorkItemEntity workItemEntity) throws Exception {
-                        if (mFilterDeviceName == null && !TextUtils.isEmpty(workItemEntity.title) || mFilterDeviceName != null && !TextUtils.isEmpty(workItemEntity.title) && !mFilterDeviceName.equals(workItemEntity.title)) {
-                            mFilterDeviceName = workItemEntity.title;
-                            FilterBean filterBean = new FilterBean();
-                            filterBean.name = workItemEntity.title;
-                            filterBeans.add(filterBean);
-                            devicePositions.put(workItemEntity.title, mOLXJWorkListAdapter.getList().indexOf(workItemEntity));
-                        }
+                .subscribe(workItemEntity -> {
+                    if (mFilterDeviceName == null && !TextUtils.isEmpty(workItemEntity.title) || mFilterDeviceName != null && !TextUtils.isEmpty(workItemEntity.title) && !mFilterDeviceName.equals(workItemEntity.title)) {
+                        mFilterDeviceName = workItemEntity.title;
+                        FilterBean filterBean = new FilterBean();
+                        filterBean.name = workItemEntity.title;
+                        filterBeans.add(filterBean);
+                        devicePositions.put(workItemEntity.title, mOLXJWorkListAdapter.getList().indexOf(workItemEntity));
                     }
                 }, throwable -> {
                 }, () -> {
@@ -1272,20 +1269,20 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
 
     @Override
     public void onBackPressed() {
-        if (mXJAreaEntity != null && mModifyController.isModifyed(mXJAreaEntity)) {
-            new CustomDialog(context)
-                    .twoButtonAlertDialog("是否保存当前设备巡检任务?")
-                    .bindView(R.id.grayBtn, "保存")
-                    .bindView(R.id.redBtn, "取消")
-                    .bindClickListener(R.id.grayBtn, v -> {
-                        onLoading("正在打包并上传巡检数据，请稍后...");
-                        presenterRouter.create(OLXJEamTaskAPI.class).updateTaskById(Long.parseLong(eamXJEntity.taskId));
-                    }, true)
-                    .bindClickListener(R.id.redBtn, v3 -> back(), true)
-                    .show();
-        } else {
+//        if (mXJAreaEntity != null && mModifyController.isModifyed(mXJAreaEntity)) {
+//            new CustomDialog(context)
+//                    .twoButtonAlertDialog("是否保存当前设备巡检任务?")
+//                    .bindView(R.id.grayBtn, "保存")
+//                    .bindView(R.id.redBtn, "取消")
+//                    .bindClickListener(R.id.grayBtn, v -> {
+//                        onLoading("正在打包并上传巡检数据，请稍后...");
+//                        presenterRouter.create(OLXJEamTaskAPI.class).updateTaskById(Long.parseLong(eamXJEntity.taskId));
+//                    }, true)
+//                    .bindClickListener(R.id.redBtn, v3 -> back(), true)
+//                    .show();
+//        } else {
             back();
-        }
+//        }
     }
 
     @Override

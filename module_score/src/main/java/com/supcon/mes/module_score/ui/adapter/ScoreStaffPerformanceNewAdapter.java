@@ -6,9 +6,12 @@ import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
@@ -70,12 +73,17 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
     protected BaseRecyclerViewHolder<ScoreStaffPerformanceEntity> getViewHolder(int viewType) {
         if (viewType == ListType.TITLE.value()) {
             return new TitleViewHolder(context);
+        }else if (viewType == ListType.HEADER.value()) {
+            return new MuiltViewHolder(context);
         }
         return new ViewHolder(context);
     }
 
     @Override
     public int getItemViewType(int position, ScoreStaffPerformanceEntity scoreEamPerformanceEntity) {
+        if (scoreEamPerformanceEntity.defaultValueType != null && ScoreConstant.ValueType.T4.equals(scoreEamPerformanceEntity.defaultValueType.id)){
+            return ListType.HEADER.value();
+        }
         return scoreEamPerformanceEntity.viewType;
     }
 
@@ -308,31 +316,12 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
                     });
         }
 
-        /**
-         * @author zhangwenshuai1 2020/8/15
-         * @param
-         * @return
-         * @description 判断是否当前类别中的项已经全部扣完类别总分数，否则+
-         *
-         */
-        private void itemAddScore(ScoreStaffPerformanceEntity item) {
-            float categoryTotalScore = 0;
-            for (ScoreStaffPerformanceEntity entity : getList()){
-                if (entity.category.equals(item.category)){
-                    categoryTotalScore += entity.theoreticalScore;
-                }
-            }
-            if (categoryTotalScore < item.defaultTotalScore){
-                item.scoreEamPerformanceEntity.fraction = item.defaultTotalScore - categoryTotalScore;
-            }
-        }
-
         @SuppressLint({"StringFormatMatches", "SetTextI18n", "CheckResult"})
         @Override
         protected void update(ScoreStaffPerformanceEntity data) {
             mScoreCameraController.addGalleryView(getAdapterPosition(), itemPics, ScoreStaffPerformanceNewAdapter.this);
 
-            if (data.getAttachFileMultiFileIds() == null && data.getAttachFileFileAddPaths() == null){ // 服务器及本地均未有附件
+            if (data.getAttachFileMultiFileIds().size() == 0 && data.getAttachFileFileAddPaths().size() == 0){ // 服务器及本地均未有附件
                 itemPics.clear();
             }else {
                 initAttachFiles(data, mAttachmentDownloadController, itemPics);
@@ -426,6 +415,150 @@ public class ScoreStaffPerformanceNewAdapter extends BaseListDataRecyclerViewAda
 
     }
 
+    class MuiltViewHolder extends BaseRecyclerViewHolder<ScoreStaffPerformanceEntity> {
+        private AttachmentDownloadController mAttachmentDownloadController;
+        @BindByTag("itemIndex")
+        TextView itemIndex;
+        @BindByTag("acceptanceItem")
+        TextView acceptanceItem;
+        @BindByTag("titleItemLl")
+        LinearLayout titleItemLl;
+        @BindByTag("chkBox")
+        CheckBox chkBox;
+        @BindByTag("itemDetails")
+        TextView itemDetails;
+        @BindByTag("itemDetailsLl")
+        RelativeLayout itemDetailsLl;
+        @BindByTag("itemPics")
+        CustomGalleryView itemPics;
+        @BindByTag("ufItemPhotoIv")
+        ImageView ufItemPhotoIv;
+
+
+        public MuiltViewHolder(Context context) {
+            super(context, parent);
+        }
+
+        @Override
+        protected int layoutId() {
+            return R.layout.item_eam_score_mult;
+        }
+
+        @Override
+        protected void initView() {
+            super.initView();
+            chkBox.setEnabled(isEdit);
+            if (mScoreCameraController == null) {
+                if (context instanceof ScoreStaffPerformanceActivity) {
+                    mScoreCameraController = ((ScoreStaffPerformanceActivity) context).getController(ScoreCameraController.class);
+                }
+                mScoreCameraController.init(Constant.IMAGE_SAVE_SCORE_PATH, Constant.PicType.SCORE_PIC);
+            }
+        }
+
+        @SuppressLint("CheckResult")
+        @Override
+        protected void initListener() {
+            super.initListener();
+            chkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ScoreStaffPerformanceEntity item = getItem(getAdapterPosition());
+                    item.result = ((CheckBox)v).isChecked();
+                    float otherTotalScore = total - item.scoreEamPerformanceEntity.fraction; // 除当前标题的总分数
+                    if (((CheckBox)v).isChecked()) { // 是
+                        // 标题分数 -
+                        item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.fraction - item.score < 0 ? 0 : item.scoreEamPerformanceEntity.fraction - item.score;
+                        item.theoreticalScore = item.score; // 当前理论项扣分数
+                    } else { // 否
+                        item.theoreticalScore = 0; // 当前理论项扣分数
+                        // 标题分数 +
+                        // 判断是否当前类别中的某项已经全部扣完分数
+                        itemAddScore(item);
+//                            item.scoreEamPerformanceEntity.fraction = item.scoreEamPerformanceEntity.fraction + item.score > item.defaultTotalScore ? item.defaultTotalScore : item.scoreEamPerformanceEntity.fraction + item.score;
+                    }
+                    // 更新标题分数
+                    List<ScoreStaffPerformanceEntity> list = getList();
+                    int position = list.indexOf(item.scoreEamPerformanceEntity);
+                    notifyItemChanged(position);
+
+                    notifyItemChanged(getAdapterPosition()); // 是否显示拍照
+
+                    //更新总分数
+                    item.scoreNum = otherTotalScore + item.scoreEamPerformanceEntity.fraction;
+                    onItemChildViewClick(chkBox, 0, item);
+                }
+            });
+            RxView.clicks(ufItemPhotoIv).throttleFirst(500, TimeUnit.MILLISECONDS)
+                    .subscribe(o -> {
+                        mScoreCameraController.setCurrAdapterPosition(getAdapterPosition(), itemPics);
+                        itemPics.findViewById(R.id.customCameraIv).performClick();  //调用CustomGalleryView的拍照按钮
+//                        mScoreCameraController.showCustomDialog();
+                    });
+        }
+
+        @SuppressLint({"StringFormatMatches", "SetTextI18n"})
+        @Override
+        protected void update(ScoreStaffPerformanceEntity data) {
+            mScoreCameraController.addGalleryView(getAdapterPosition(), itemPics, ScoreStaffPerformanceNewAdapter.this);
+
+            if (data.getAttachFileMultiFileIds().size() == 0 && data.getAttachFileFileAddPaths() .size() == 0){ // 服务器及本地均未有附件
+                itemPics.clear();
+            }else {
+                initAttachFiles(data, mAttachmentDownloadController, itemPics);
+            }
+
+            if (data.viewType == ListType.HEADER.value()){
+                titleItemLl.setVisibility(View.VISIBLE);
+                itemDetailsLl.setVisibility(View.GONE);
+
+                itemIndex.setText(data.index + ".");
+                acceptanceItem.setText(data.item);
+
+            }else {
+                titleItemLl.setVisibility(View.GONE);
+                itemDetailsLl.setVisibility(View.VISIBLE);
+
+                Spanned item = HtmlParser.buildSpannedText(String.format(context.getString(R.string.device_style12), data.itemDetail, Util.big0(data.score == 0 ? data.score : data.score)), new HtmlTagHandler());
+                itemDetails.setText(item);
+//                itemDetails.setText(data.itemDetail);
+                chkBox.setChecked(data.result);
+                if (!isEdit) {
+                    if (data.result) {
+                        chkBox.setButtonDrawable(R.drawable.ic_check_box_true_small_gray);
+                    } else {
+                        chkBox.setButtonDrawable(R.drawable.sl_checkbox_selector_small);
+                    }
+                }
+
+                if (isEdit && (data.result || data.defaultNumVal > 0 || !TextUtils.isEmpty(data.subScore))) {
+                    ufItemPhotoIv.setVisibility(View.VISIBLE);
+                } else {
+                    ufItemPhotoIv.setVisibility(View.GONE);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * @author zhangwenshuai1 2020/8/15
+     * @param
+     * @return
+     * @description 判断是否当前类别中的项已经全部扣完类别总分数，否则+
+     *
+     */
+    private void itemAddScore(ScoreStaffPerformanceEntity item) {
+        float categoryTotalScore = 0;
+        for (ScoreStaffPerformanceEntity entity : getList()){
+            if (entity.category.equals(item.category)){
+                categoryTotalScore += entity.theoreticalScore;
+            }
+        }
+        if (categoryTotalScore < item.defaultTotalScore){
+            item.scoreEamPerformanceEntity.fraction = item.defaultTotalScore - categoryTotalScore;
+        }
+    }
 
     private void initAttachFiles(ScoreStaffPerformanceEntity data, AttachmentDownloadController downloadController, CustomGalleryView galleryView) {
         List<AttachmentEntity> attachmentEntities;

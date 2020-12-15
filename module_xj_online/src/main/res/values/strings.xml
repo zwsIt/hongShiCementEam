@@ -14,4 +14,6 @@
     <string name="onLoading">加载中…</string>
     <string name="xj_rate">巡检效率</string>
     <string name="xj_start_end_time">起止时间</string>
+    <string name="xj_situation">巡检情况</string>
+    <string name="xj_please_input_charge_staff">请输入负责人</string>
 </resources>

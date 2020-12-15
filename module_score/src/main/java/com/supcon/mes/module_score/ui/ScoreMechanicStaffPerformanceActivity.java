@@ -80,6 +80,7 @@ import java.util.concurrent.TimeUnit;
  * ------------- Description -------------
  * 机修工评分
  */
+@Deprecated
 @Router(value = Constant.Router.SCORE_MECHANIC_STAFF_PERFORMANCE)
 @Presenter(value = {ScoreMechanicStaffPerformancePresenter.class, ScoreInspectorStaffSubmitPresenter.class})
 @Controller(value = {ScoreCameraController.class})

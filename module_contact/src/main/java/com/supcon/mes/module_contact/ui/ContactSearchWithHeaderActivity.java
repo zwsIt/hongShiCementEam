@@ -40,8 +40,6 @@ public class ContactSearchWithHeaderActivity extends BaseMultiFragmentActivity {
     TextView titleText;
     @BindByTag("searchView")
     CustomSearchView searchView;
-    @BindByTag("rightBtn")
-    ImageButton rightBtn;
 
     ContactSearchFragment mContactSearchFragment;
 
@@ -93,15 +91,12 @@ public class ContactSearchWithHeaderActivity extends BaseMultiFragmentActivity {
         RxTextView.textChanges(searchView.editText())
                 .skipInitialValue()
                 .debounce(500, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<CharSequence>() {
-                    @Override
-                    public void accept(CharSequence charSequence) throws Exception {
+                .subscribe(charSequence -> {
 
-                        if (TextUtils.isEmpty(charSequence)) {
-                            showFragment(0);
-                        } else {
-                            doSearch(charSequence.toString());
-                        }
+                    if (TextUtils.isEmpty(charSequence)) {
+                        showFragment(0);
+                    } else {
+                        doSearch(charSequence.toString());
                     }
                 });
 
@@ -116,24 +111,16 @@ public class ContactSearchWithHeaderActivity extends BaseMultiFragmentActivity {
 
         RxView.clicks(leftBtn)
                 .throttleFirst(200, TimeUnit.MILLISECONDS)
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        back();
-                    }
-                });
+                .subscribe(o -> back());
     }
 
     @SuppressLint("CheckResult")
     private void doSearch(String searchContent) {
         Flowable.timer(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        showFragment(1);
-                        mContactSearchFragment.doSearch(searchContent);
-                    }
+                .subscribe(aLong -> {
+                    showFragment(1);
+                    mContactSearchFragment.doSearch(searchContent);
                 });
 
     }

@@ -69,6 +69,7 @@ import java.util.concurrent.TimeUnit;
  * ------------- Description -------------
  * 巡检工每日评分
  */
+@Deprecated
 @Router(value = Constant.Router.SCORE_INSPECTOR_STAFF_DAILY_PERFORMANCE)
 @Presenter(value = {ScoreInspectorStaffDailyPerformancePresenter.class, ScoreInspectorStaffSubmitPresenter.class})
 public class ScoreInspectorStaffDailyPerformanceActivity extends BaseRefreshRecyclerActivity implements ScoreInspectorStaffDailyPerformanceContract.View, ScoreStaffSubmitContract.View {
