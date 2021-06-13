@@ -1,6 +1,7 @@
 package com.supcon.mes.module_main.ui.adaper;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +15,14 @@ import android.widget.TextView;
 
 import com.app.annotation.BindByTag;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.supcon.common.view.App;
 import com.supcon.common.view.base.adapter.BaseListDataRecyclerViewAdapter;
 import com.supcon.common.view.base.adapter.viewholder.BaseRecyclerViewHolder;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.view.CustomTextView;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.model.bean.WXGDEntity;
 import com.supcon.mes.middleware.model.bean.YHEntity;
@@ -30,7 +33,10 @@ import com.supcon.mes.module_main.R;
 import com.supcon.mes.middleware.controller.DealInfoController;
 import com.supcon.mes.middleware.model.bean.ProcessedEntity;
 import com.supcon.mes.module_main.model.bean.WaitDealtEntity;
+import com.umeng.analytics.MobclickAgent;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -125,6 +131,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                         @Override
                         public boolean test(Object o) throws Exception {
                             if (isSubordinate) {  // 我的下属  进查看视图
+                                Map<String,Object> pending = new HashMap();
+                                pending.put("staffName", EamApplication.getAccountInfo().staffName);
+                                pending.put("table", getItem(getAdapterPosition()).processKey);
+                                MobclickAgent.onEventObject(App.getAppContext(),"subordinate_pending_click",pending);
                                 onItemChildViewClick(itemView, getAdapterPosition(), getItem(getAdapterPosition()));
                                 return false;
                             }
@@ -133,6 +143,10 @@ public class WaitDealtAdapter extends BaseListDataRecyclerViewAdapter<WaitDealtE
                     })
                     .subscribe(o -> {
                         WaitDealtEntity item = getItem(getAdapterPosition());
+                        Map<String,Object> pending = new HashMap(5);
+                        pending.put("staffName", EamApplication.getAccountInfo().staffName);
+                        pending.put("table", item.processKey);
+                        MobclickAgent.onEventObject(App.getAppContext(),"mine_pending_click",pending);
                         if (isEdit) {
                             if (!TextUtils.isEmpty(item.state) && (item.state.equals("派工"))) {
                                 chkBox.performClick();

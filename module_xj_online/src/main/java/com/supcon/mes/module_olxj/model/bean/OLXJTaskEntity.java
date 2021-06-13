@@ -93,4 +93,8 @@ public class OLXJTaskEntity extends BaseEntity {
     public boolean isStart = false; //是否开始标识
 
     public BigDecimal xjRate; // 巡检效率
+
+    public CompletedPeopleActual completedPeopleActual; // 记录是否是第一次/表示是否显示弹出
+
+    public boolean isSelect = false;
 }

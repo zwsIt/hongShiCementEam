@@ -1220,7 +1220,7 @@ public class WXGDDispatcherActivity extends BaseRefreshActivity implements WXGDD
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void reSubmit(LoginEvent loginEvent) {
-        SnackbarHelper.showMessage(rootView, "登陆成功，请重新操作!");
+        ToastUtils.show(context, "登陆成功，请重新操作!");
     }
 
     /**

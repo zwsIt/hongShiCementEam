@@ -22,6 +22,8 @@ public class ScoreStaffEntity extends BaseEntity {
     public Department departmentId;
     public IdEntity soringId; // 评分模板
 
+    public Staff scoreStaff;//评分人
+
     public Staff getPatrolWorker() {
         if (patrolWorker == null) {
             patrolWorker = new Staff();

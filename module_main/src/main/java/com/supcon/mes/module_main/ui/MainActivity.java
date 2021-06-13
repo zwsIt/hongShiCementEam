@@ -77,11 +77,15 @@ public class MainActivity extends BaseMultiFragmentActivity {
     @BindByTag("logo")
     ImageView logo;
 
-    private String initIp = ""; // 记录原超时IP
+    private String initIp = ""; // 记录原环境IP
 
     private NFCHelper nfcHelper;
     private HomeFragment workFragment;
     private EamFragment mEamFragment; // 我的设备
+    /**
+     * 时间周期，防止造成重复登陆请求
+     */
+    private long intervalTime;
 
     @Override
     protected int getLayoutID() {
@@ -143,8 +147,12 @@ public class MainActivity extends BaseMultiFragmentActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginValid(LoginValidEvent event) {
         LogUtil.w("MainActivity", String.valueOf(event.isLoginValid()));
-        if (event.isLoginValid()) {
-            getController(SilentLoginController.class).silentLogin(this);
+
+        if (intervalTime == 0 || (System.currentTimeMillis() - intervalTime) / 1000 > 10){
+            intervalTime = System.currentTimeMillis();
+            if (event.isLoginValid()) {
+                getController(SilentLoginController.class).silentLogin(this);
+            }
         }
     }
 

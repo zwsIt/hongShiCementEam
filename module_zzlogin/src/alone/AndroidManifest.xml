@@ -48,6 +48,6 @@
             android:theme="@style/Transparent"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
-        <service android:name=".service.HeartBeatService" />
+        <!--<service android:name=".service.HeartBeatService" />-->
     </application>
 </manifest>

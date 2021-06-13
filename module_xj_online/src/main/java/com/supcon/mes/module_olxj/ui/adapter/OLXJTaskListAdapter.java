@@ -2,6 +2,7 @@ package com.supcon.mes.module_olxj.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -19,12 +20,18 @@ import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.middleware.constant.Constant;
 import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.module_olxj.R;
+import com.supcon.mes.module_olxj.constant.OLXJConstant;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
+import com.supcon.mes.module_olxj.model.bean.OLXJWorkItemEntity;
 import com.supcon.mes.module_olxj.ui.OLXJTodayTaskRecordsActivity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
 
 
 /**
@@ -188,6 +195,7 @@ public class OLXJTaskListAdapter extends BaseListDataRecyclerViewAdapter<OLXJTas
                 return;
             }
             mOLXJAreaListAdapter.clear();
+
             mOLXJAreaListAdapter.addList(mOLXJAreaEntities);
             mOLXJAreaListAdapter.notifyDataSetChanged();
 

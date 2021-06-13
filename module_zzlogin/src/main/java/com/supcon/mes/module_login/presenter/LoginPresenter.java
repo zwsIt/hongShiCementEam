@@ -39,8 +39,9 @@ public class LoginPresenter extends LoginContract.Presenter {
         Map<String, Object> defaultMap = new HashMap<>();
         defaultMap.put("machineId",11111111);
         defaultMap.put("clientType","android");
+        defaultMap.put("clientId",EamApplication.getAccountInfo() == null ? "" : EamApplication.getAccountInfo().userName);
         defaultMap.put("clientVersion","2.1");
-        defaultMap.put("timestamp",new Date().getTime());
+        defaultMap.put("timestamp",System.currentTimeMillis());
         defaultMap.put("company",cid);
 
         mCompositeSubscription.add(
@@ -73,7 +74,7 @@ public class LoginPresenter extends LoginContract.Presenter {
         defaultMap.put("clientType","android");
         defaultMap.put("clientVersion","2.1");
         defaultMap.put("suposToken",token1);
-        defaultMap.put("timestamp",new Date().getTime());
+        defaultMap.put("timestamp",System.currentTimeMillis());
 
         mCompositeSubscription.add(
                 LoginHttpClient.login(username, pwd, defaultMap)
@@ -105,7 +106,7 @@ public class LoginPresenter extends LoginContract.Presenter {
         defaultMap.put("machineId",11111111);
         defaultMap.put("clientType","android");
         defaultMap.put("clientVersion","2.1");
-        defaultMap.put("timestamp",new Date().getTime());
+        defaultMap.put("timestamp",System.currentTimeMillis());
 
         defaultMap.put("username", username);
         defaultMap.put("suposPassword", supospwd);

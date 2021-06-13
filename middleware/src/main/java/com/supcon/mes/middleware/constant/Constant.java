@@ -348,6 +348,7 @@ public interface Constant {
         String WARN_SOURCE_URL = "WARN_SOURCE_URL";//URL
 
         String EAM = "EAM";//EAM设备
+        String IS_NFC_SIGN = "IS_NFC_SIGN";//是否是NFC刷卡签到
         String EAM_CODE = "EAM_CODE";//EAM_CODE
         String AREA_NAME = "AREA_NAME";//AREA_NAME
         String isEdit = "isEdit";//是否能编辑

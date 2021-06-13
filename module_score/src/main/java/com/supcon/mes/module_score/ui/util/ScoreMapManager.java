@@ -134,6 +134,7 @@ public class ScoreMapManager {
             map.put("id", scoreStaffEntity.id);
         }
         map.put("workerScoreHead.patrolWorker.id", Util.strFormat2(scoreStaffEntity.getPatrolWorker().id));
+        map.put("workerScoreHead.scoreStaff.id", Util.strFormat2(scoreStaffEntity.scoreStaff.id));
         map.put("workerScoreHead.scoreData", format.format(scoreStaffEntity.scoreData));
         map.put("workerScoreHead.score", Util.big(scoreStaffEntity.score));
         map.put("workerScoreHead.beforeScore", Util.big(scoreStaffEntity.beforeScore));

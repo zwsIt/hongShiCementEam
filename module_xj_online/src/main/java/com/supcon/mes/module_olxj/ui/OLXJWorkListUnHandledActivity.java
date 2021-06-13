@@ -1214,7 +1214,6 @@ public class OLXJWorkListUnHandledActivity extends BaseRefreshRecyclerActivity<O
                     isOneSubmit = false;
                 } else {
                     mXJAreaEntity.finishType = "1"; // 全部提交 区域完成
-                    LogUtil.d("-----1-----",mXJAreaEntity.toString());
                     EventBus.getDefault().post(new PositionEvent(-1,mXJAreaEntity));
                     back();
                 }

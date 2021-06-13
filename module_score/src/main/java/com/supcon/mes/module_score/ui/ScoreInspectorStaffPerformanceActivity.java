@@ -28,11 +28,13 @@ import com.supcon.mes.mbap.constant.ListType;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.StatusBarUtils;
+import com.supcon.mes.mbap.view.CustomDateView;
 import com.supcon.mes.mbap.view.CustomDialog;
 import com.supcon.mes.mbap.view.CustomTextView;
 import com.supcon.mes.mbap.view.CustomVerticalTextView;
 import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.middleware.constant.Constant;
+import com.supcon.mes.middleware.controller.MyPickerController;
 import com.supcon.mes.middleware.model.bean.BapResultEntity;
 import com.supcon.mes.middleware.model.bean.CommonListEntity;
 import com.supcon.mes.middleware.model.bean.CommonSearchStaff;
@@ -107,8 +109,13 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshRecyclerA
     @BindByTag("staffScore")
     CustomVerticalTextView staffScore;
     @BindByTag("scoreTime")
-    CustomTextView scoreTime;
+    CustomDateView scoreTime;
 
+    /**
+     * 日期控制器
+     */
+    private MyPickerController mDatePickController;
+    private long longScoreTime;
     private ScoreStaffPerformanceAdapter scoreStaffPerformanceAdapter;
     private ScoreStaffEntity scoreStaffEntity;
     private ScoreStaffEntity oriScoreStaffEntity;
@@ -154,6 +161,8 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshRecyclerA
 //        scoreStaffEamAdapter = new ScoreStaffEamAdapter(this);
 //        recyclerViewEam.setAdapter(scoreStaffEamAdapter);
 
+        initDatePickController();
+
         rightBtn.setImageResource(R.drawable.sl_top_submit);
         scoreStaff.setEditable(isEdit);
         if (isEdit) {
@@ -176,7 +185,10 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshRecyclerA
         staffScore.setContent(Util.big0(scoreStaffEntity.score));
         scoreStaffPerformanceAdapter.updateTotal(scoreStaffEntity.score);
         scoreStaffEntity.scoreData = (scoreStaffEntity.scoreData != null) ? scoreStaffEntity.scoreData : System.currentTimeMillis();
-        scoreTime.setContent(DateUtil.dateFormat(scoreStaffEntity.scoreData));
+//        scoreTime.setContent(DateUtil.dateFormat(scoreStaffEntity.scoreData));
+        Calendar calendar = Calendar.getInstance();
+        scoreTime.setDate(DateUtil.dateFormat(DateUtil.dateFormat(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH),
+                "yyyy-MM-dd"), "yyyy-MM-dd"));
         oriScoreStaffEntity = GsonUtil.gsonToBean(GsonUtil.gsonString(scoreStaffEntity),ScoreStaffEntity.class);
     }
 
@@ -239,6 +251,26 @@ public class ScoreInspectorStaffPerformanceActivity extends BaseRefreshRecyclerA
                 updateTotalScore((ScoreStaffPerformanceEntity) obj);
             }
         });
+        scoreTime.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+            } else {
+                mDatePickController
+                        .listener((year, month, day, hour, minute, second) -> {
+                            String dateStr = year + "-" + month + "-" + day;
+                            longScoreTime = DateUtil.dateFormat(dateStr, "yyyy-MM-dd");
+                            scoreTime.setDate(DateUtil.dateFormat(longScoreTime, "yyyy-MM-dd"));
+                            scoreStaffEntity.scoreData = longScoreTime;
+                        })
+                        .show(longScoreTime);
+            }
+        });
+    }
+    private void initDatePickController() {
+        mDatePickController = new MyPickerController((ScoreInspectorStaffPerformanceActivity) context);
+        mDatePickController.textSize(18);
+        mDatePickController.setCycleDisable(false);
+        mDatePickController.setSecondVisible(true);
+        mDatePickController.setCanceledOnTouchOutside(true);
     }
 
     public void updateTotalScore(ScoreStaffPerformanceEntity scoreStaffPerformanceEntity) {

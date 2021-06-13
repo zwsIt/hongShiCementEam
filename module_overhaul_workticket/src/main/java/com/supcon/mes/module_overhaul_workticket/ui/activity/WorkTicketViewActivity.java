@@ -128,12 +128,6 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     CustomWorkFlowView workFlowView;
     @BindByTag("riskAssessmentRadioGroup")
     RadioGroup riskAssessmentRadioGroup;
-    @BindByTag("centralControlRoom")
-    CustomTextView centralControlRoom;
-    @BindByTag("securityStaff")
-    CustomTextView securityStaff;
-    @BindByTag("securityChiefStaff")
-    CustomTextView securityChiefStaff;
     @BindByTag("controlDirectorStaff")
     CustomTextView controlDirectorStaff;
 
@@ -144,6 +138,16 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
     @BindByTag("recyclerView")
     RecyclerView recyclerView;
 
+    @BindByTag("centContRoom")
+    CustomTextView centContRoom;
+    @BindByTag("contrDirectorStaff")
+    CustomTextView contrDirectorStaff;
+    @BindByTag("quailtySafetyLeader")
+    CustomTextView quailtySafetyLeader;
+    @BindByTag("securityChiefStaff")
+    CustomTextView securityChiefStaff;
+    @BindByTag("securityStaff")
+    CustomTextView securityStaff;
 
     private String __pc__;
     private Long tableId; // 单据ID
@@ -195,6 +199,11 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         titleText.setText("检修工作票");
 
         chargeStaff.setEditable(false);
+        centContRoom.setEditable(false);
+        contrDirectorStaff.setEditable(false);
+        quailtySafetyLeader.setEditable(false);
+        securityChiefStaff.setEditable(false);
+        securityStaff.setEditable(false);
         eamName.setEditable(false);
         hazardCtrlPoint.setEditable(false);
         riskAssessmentLl.setVisibility(View.GONE);
@@ -419,6 +428,11 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         map.put("ohworkticket.workShop.id", Util.strFormat2(mWorkTicketEntity.getChargeStaff().getMainPosition().getDepartment().id));
         map.put("ohworkticket.riskAssessment.id", mWorkTicketEntity.getRiskAssessment().id);
         map.put("ohworkticket.content", content.getContent());
+        map.put("ohworkticket.centContRoom.id", Util.strFormat2(mWorkTicketEntity.getCentContRoom().id));
+        map.put("ohworkticket.contrDirectorStaff.id", Util.strFormat2(mWorkTicketEntity.getContrDirectorStaff().id));
+        map.put("ohworkticket.quailtySafetyLeader.id", Util.strFormat2(mWorkTicketEntity.getQuailtySafetyLeader().id));
+        map.put("ohworkticket.securityChiefStaff.id", Util.strFormat2(mWorkTicketEntity.getSecurityChiefStaff().id));
+        map.put("ohworkticket.securityStaff.id", Util.strFormat2(mWorkTicketEntity.getSecurityStaff().id));
         map.put("ohworkticket.hazardsourContrpoint", mWorkTicketEntity.getHazardsourContrpoint());
         map.put("ohworkticket.value", mWorkTicketEntity.getHazardsourContrpointForDisplay());
         map.put("ohworkticket.offApplyId", mWorkTicketEntity.getOffApplyId() == null ? "" : mWorkTicketEntity.getOffApplyId());
@@ -488,19 +502,19 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
 //            }
 //        }).orElse("");
         String flowStatus = entity.getFlowStatus() == null ? "" : entity.getFlowStatus().id;
-        if (flowStatus.equals("WorkTicket_003/03")) { // 安全员审核
-            centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
-        } else if (flowStatus.equals("WorkTicket_003/04")) { // 领导审批
-            centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
-            securityStaff.setVisibility(View.VISIBLE); // 显示安全员
-        } else if (flowStatus.equals("WorkTicket_003/05")) { // 生效
-            centralControlRoom.setVisibility(View.VISIBLE); // 显示中控室
-            securityStaff.setVisibility(View.VISIBLE); // 显示安全员
-            securityChiefStaff.setVisibility(View.VISIBLE); // 显示安保科科长
-            controlDirectorStaff.setVisibility(View.VISIBLE); // 显示调度室主任
-        } else {
-
-        }
+//        if (flowStatus.equals("WorkTicket_003/03")) { // 安全员审核
+//            centContRoom.setVisibility(View.VISIBLE); // 显示中控室
+//        } else if (flowStatus.equals("WorkTicket_003/04")) { // 领导审批
+//            centContRoom.setVisibility(View.VISIBLE); // 显示中控室
+//            securityStaff.setVisibility(View.VISIBLE); // 显示安全员
+//        } else if (flowStatus.equals("WorkTicket_003/05")) { // 生效
+//            centContRoom.setVisibility(View.VISIBLE); // 显示中控室
+//            securityStaff.setVisibility(View.VISIBLE); // 显示安全员
+//            securityChiefStaff.setVisibility(View.VISIBLE); // 显示安保科科长
+//            controlDirectorStaff.setVisibility(View.VISIBLE); // 显示调度室主任
+//        } else {
+//
+//        }
 
         //回填单据表头信息
         workListTableNo.setContent(entity.getWorkList().tableNo);
@@ -510,7 +524,31 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
         eamName.setContent(entity.getEamId().name);
         eamCode.setContent(entity.getEamId().eamAssetCode);
         content.setContent(entity.getContent());
+        centContRoom.setContent(entity.getCentContRoom().name);//中控室人员
+        contrDirectorStaff.setContent(entity.getContrDirectorStaff().name);//调度室主任
+        quailtySafetyLeader.setContent(entity.getQuailtySafetyLeader().name);//质量安全大班长
+        securityChiefStaff.setContent(entity.getSecurityChiefStaff().name);//安保科科长
+        securityStaff.setContent(entity.getSecurityStaff().name);//安全员
         riskAssessmentView.setContent(entity.getRiskAssessment().value);
+        centContRoom.setNecessary(true);
+        contrDirectorStaff.setNecessary(true);
+        quailtySafetyLeader.setNecessary(true);
+        securityChiefStaff.setNecessary(true);
+        securityStaff.setNecessary(true);
+        if (entity.getRiskAssessment().value.equals("低")){
+            quailtySafetyLeader.setVisibility(View.VISIBLE);
+        } else if (entity.getRiskAssessment().value.equals("中")){
+            centContRoom.setVisibility(View.VISIBLE);
+            quailtySafetyLeader.setVisibility(View.VISIBLE);
+            securityChiefStaff.setVisibility(View.VISIBLE);
+            securityStaff.setVisibility(View.VISIBLE);
+        } else if (entity.getRiskAssessment().value.equals("高") || entity.getRiskAssessment().value.equals("特高")){
+            centContRoom.setVisibility(View.VISIBLE);
+            contrDirectorStaff.setVisibility(View.VISIBLE);
+            quailtySafetyLeader.setVisibility(View.VISIBLE);
+            securityChiefStaff.setVisibility(View.VISIBLE);
+            securityStaff.setVisibility(View.VISIBLE);
+        }
         hazardContrlPointValue = "";
         for (SystemCodeEntity systemCodeEntity : mHazardList) {
             if (!TextUtils.isEmpty(entity.getHazardsourContrpoint()) && entity.getHazardsourContrpoint().contains(systemCodeEntity.id)) {
@@ -518,10 +556,10 @@ public class WorkTicketViewActivity extends BaseRefreshActivity implements WorkT
             }
         }
         hazardCtrlPoint.setSpinner(hazardContrlPointValue.length() > 0 ? hazardContrlPointValue.substring(0, hazardContrlPointValue.length() - 1) : "");
-        centralControlRoom.setContent(entity.getCentContRoom().name);
+//        centralControlRoom.setContent(entity.getCentContRoom().name);
         securityStaff.setContent(entity.getSecurityStaff().name);
         securityChiefStaff.setContent(entity.getSecurityChiefStaff().name);
-        controlDirectorStaff.setContent(entity.getContrDirectorStaff().name);
+//        controlDirectorStaff.setContent(entity.getContrDirectorStaff().name);
 
         initPic();
     }

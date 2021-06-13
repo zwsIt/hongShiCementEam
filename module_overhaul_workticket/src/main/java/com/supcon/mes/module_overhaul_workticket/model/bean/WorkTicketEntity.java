@@ -39,6 +39,7 @@ public class WorkTicketEntity extends BaseEntity {
     private Staff contrDirectorStaff; // 调度室主任
     private Staff securityChiefStaff; // 安保科科长
     private Staff securityStaff; // 安全员
+    private Staff quailtySafetyLeader;//质量安全大班长
     private SystemCodeEntity flowStatus; // 工作流状态：WorkTicket_003/01：编辑；WorkTicket_003/02：中控室确认；WorkTicket_003/03：安全员审核；WorkTicket_003/04：领导审批；WorkTicket_003/05：生效；WorkTicket_003/06：作废；
     private String content; // 内容
 
@@ -56,6 +57,17 @@ public class WorkTicketEntity extends BaseEntity {
     private int version;
 
     private Long deploymentId;
+
+    public Staff getQuailtySafetyLeader() {
+        if (quailtySafetyLeader == null){
+            quailtySafetyLeader = new Staff();
+        }
+        return quailtySafetyLeader;
+    }
+
+    public void setQuailtySafetyLeader(Staff quailtySafetyLeader) {
+        this.quailtySafetyLeader = quailtySafetyLeader;
+    }
 
     public Long getCreatePositionId() {
         return createPositionId;

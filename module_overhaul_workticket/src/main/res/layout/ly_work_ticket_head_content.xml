@@ -69,6 +69,7 @@
                     app:key_size="14"
                     app:necessary="true" />
 
+
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/workShop"
                     android:layout_width="match_parent"
@@ -217,7 +218,100 @@
                     android:padding="@dimen/dp_10"
                     app:key="内容"
                     app:edit_hint="请输入内容"
-                    app:necessary="true"/>
+                    app:necessary="true"
+                    />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/centContRoom"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="centContRoom"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="中控室人员"
+                    app:key_size="14"
+                    app:necessary="true"
+                    app:text_width="@dimen/dp_120"
+                    android:visibility="gone"
+                    />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/contrDirectorStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="contrDirectorStaff"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="调度室主任"
+                    app:key_size="14"
+                    app:text_width="@dimen/dp_120"
+                    app:necessary="true"
+                    android:visibility="gone"
+                    />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/quailtySafetyLeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="quailtySafetyLeader"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="质量安全大班长"
+                    app:key_size="14"
+                    app:text_width="@dimen/dp_120"
+                    app:necessary="true"
+                    android:visibility="gone"
+                    />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/securityChiefStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="securityChiefStaff"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="安保科科长"
+                    app:key_size="14"
+                    app:text_width="@dimen/dp_120"
+                    app:necessary="true"
+                    android:visibility="gone"
+                    />
+                <com.supcon.mes.mbap.view.CustomTextView
+                    android:id="@+id/securityStaff"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_1"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:tag="securityStaff"
+                    app:bold="true"
+                    app:content_size="13"
+                    app:editable="true"
+                    app:key="安全员"
+                    app:key_size="14"
+                    app:text_width="@dimen/dp_120"
+                    app:necessary="true"
+                    android:visibility="gone"
+                    />
+
+
 
                 <com.supcon.mes.mbap.view.CustomTextView
                     android:id="@+id/centralControlRoom"
@@ -235,48 +329,7 @@
                     app:key_size="14"
                     android:visibility="gone"/>
 
-                <com.supcon.mes.mbap.view.CustomTextView
-                    android:id="@+id/securityStaff"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_40"
-                    android:layout_marginBottom="@dimen/dp_1"
-                    android:background="@color/white"
-                    android:paddingStart="@dimen/dp_10"
-                    android:paddingEnd="@dimen/dp_10"
-                    android:tag="securityStaff"
-                    app:bold="true"
-                    app:content_size="13"
-                    app:key="安全员"
-                    app:key_size="14"
-                    android:visibility="gone"/>
-                <com.supcon.mes.mbap.view.CustomTextView
-                    android:id="@+id/securityChiefStaff"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_40"
-                    android:layout_marginBottom="@dimen/dp_1"
-                    android:background="@color/white"
-                    android:paddingStart="@dimen/dp_10"
-                    android:paddingEnd="@dimen/dp_10"
-                    android:tag="securityChiefStaff"
-                    app:bold="true"
-                    app:content_size="13"
-                    app:key="安保科科长"
-                    app:key_size="14"
-                    android:visibility="gone"/>
-                <com.supcon.mes.mbap.view.CustomTextView
-                    android:id="@+id/controlDirectorStaff"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_40"
-                    android:layout_marginBottom="@dimen/dp_1"
-                    android:background="@color/white"
-                    android:paddingStart="@dimen/dp_10"
-                    android:paddingEnd="@dimen/dp_10"
-                    android:tag="controlDirectorStaff"
-                    app:bold="true"
-                    app:content_size="13"
-                    app:key="调度室主任"
-                    app:key_size="14"
-                    android:visibility="gone"/>
+
                 <com.supcon.mes.mbap.view.CustomGalleryView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

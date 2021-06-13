@@ -115,11 +115,11 @@ public class OLXJTaskListPresenter extends OLXJTaskContract.Presenter {
                             @Override
                             public void accept(CommonBAPListEntity<OLXJTaskEntity> olxjTaskEntityCommonBAPListEntity) throws Exception {
                                 if (olxjTaskEntityCommonBAPListEntity.result != null) {
-                                    List<OLXJTaskEntity> taskEntities = new ArrayList<>();
-                                    if (olxjTaskEntityCommonBAPListEntity.result.size() != 0) {
-                                        taskEntities.add(olxjTaskEntityCommonBAPListEntity.result.get(0));
-                                    }
-                                    Objects.requireNonNull(getView()).getOJXJLastTaskListSuccess(taskEntities);
+//                                    List<OLXJTaskEntity> taskEntities = new ArrayList<>();
+//                                    if (olxjTaskEntityCommonBAPListEntity.result.size() != 0) {
+//                                        taskEntities.add(olxjTaskEntityCommonBAPListEntity.result.get(0));
+//                                    }
+                                    Objects.requireNonNull(getView()).getOJXJLastTaskListSuccess(olxjTaskEntityCommonBAPListEntity.result);
                                 } else {
                                     Objects.requireNonNull(getView()).getOJXJLastTaskListFailed(olxjTaskEntityCommonBAPListEntity.errMsg);
                                 }

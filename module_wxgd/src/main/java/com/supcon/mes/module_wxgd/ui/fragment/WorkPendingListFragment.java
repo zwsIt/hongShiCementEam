@@ -335,7 +335,7 @@ public class WorkPendingListFragment extends BaseRefreshRecyclerFragment<WXGDEnt
 
     @Override
     public void listWxgdsFailed(String errorMsg) {
-        ToastUtils.show(context, errorMsg);
+        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete();
     }
 

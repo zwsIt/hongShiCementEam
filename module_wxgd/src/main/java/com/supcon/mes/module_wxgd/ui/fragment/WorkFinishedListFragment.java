@@ -180,7 +180,7 @@ public class WorkFinishedListFragment extends BaseRefreshRecyclerFragment<WXGDEn
 
     @Override
     public void listWxgdsFailed(String errorMsg) {
-        ToastUtils.show(context, errorMsg);
+        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
         refreshListController.refreshComplete();
     }
 }

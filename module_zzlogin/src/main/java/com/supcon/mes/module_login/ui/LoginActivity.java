@@ -206,6 +206,9 @@ public class LoginActivity extends BaseControllerActivity implements LoginContra
 
 
                     boolean hasSupOS = SharedPreferencesUtils.getParam(context, Constant.SPKey.HAS_SUPOS, BuildConfig.HAS_SUPOS);
+                    if (TextUtils.isEmpty(EamApplication.getAccountInfo().userName)){
+                        EamApplication.getAccountInfo().userName = usernameInput.getContent().trim();
+                    }
 
                     if (hasSupOS) {
                         presenterRouter.create(LoginAPI.class).dologinWithSuposPW(usernameInput.getContent().trim(), pwdInput.getContent().trim());

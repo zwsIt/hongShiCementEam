@@ -127,7 +127,7 @@ public class EamApplication extends MBapApp {
         if(TextUtils.isEmpty(ip)){
 
             if (channel.equals("hongshi")) {
-                ip = "218.75.97.170";
+                ip = "115.239.205.14";
                 port = "8183";
             }
             else if(channel.equals("hailuo")){

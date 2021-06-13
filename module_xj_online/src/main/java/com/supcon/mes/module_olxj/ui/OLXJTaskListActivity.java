@@ -22,14 +22,13 @@ import com.app.annotation.apt.Router;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.supcon.common.view.base.activity.BaseRefreshRecyclerActivity;
 import com.supcon.common.view.base.adapter.IListAdapter;
+import com.supcon.common.view.listener.OnItemChildViewClickListener;
 import com.supcon.common.view.util.DisplayUtil;
 import com.supcon.common.view.util.LogUtil;
 import com.supcon.common.view.util.SharedPreferencesUtils;
 import com.supcon.common.view.util.ToastUtils;
 import com.supcon.common.view.view.CustomSwipeLayout;
-import com.supcon.common.view.view.picker.SinglePicker;
 import com.supcon.mes.mbap.beans.LoginEvent;
-import com.supcon.mes.mbap.listener.OnTextListener;
 import com.supcon.mes.mbap.utils.DateUtil;
 import com.supcon.mes.mbap.utils.GsonUtil;
 import com.supcon.mes.mbap.utils.SpaceItemDecoration;
@@ -49,16 +48,19 @@ import com.supcon.mes.middleware.util.SystemCodeManager;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.module_olxj.IntentRouter;
 import com.supcon.mes.module_olxj.R;
+import com.supcon.mes.module_olxj.constant.OLXJConstant;
 import com.supcon.mes.module_olxj.controller.MapController;
 import com.supcon.mes.module_olxj.controller.OLXJTaskAreaController;
 import com.supcon.mes.module_olxj.model.api.OLXJTaskAPI;
 import com.supcon.mes.module_olxj.model.api.OLXJTaskStatusAPI;
 import com.supcon.mes.module_olxj.model.bean.OLXJAreaEntity;
 import com.supcon.mes.module_olxj.model.bean.OLXJTaskEntity;
+import com.supcon.mes.module_olxj.model.bean.OLXJWorkItemEntity;
 import com.supcon.mes.module_olxj.model.contract.OLXJTaskContract;
 import com.supcon.mes.module_olxj.model.contract.OLXJTaskStatusContract;
 import com.supcon.mes.module_olxj.presenter.OLXJTaskListPresenter;
 import com.supcon.mes.module_olxj.presenter.OLXJTaskStatusPresenter;
+import com.supcon.mes.module_olxj.ui.adapter.OLXJSelectPathAdapter;
 import com.supcon.mes.module_olxj.ui.adapter.OLXJTaskListAdapter;
 import com.supcon.mes.sb2.model.event.BarcodeEvent;
 import com.supcon.mes.sb2.model.event.SB2AttachEvent;
@@ -68,14 +70,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -142,6 +145,14 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     private CustomDialog customDialog;
     private CustomDialog mCustomDialog; // 结束任务dialog对象
 
+    private List<OLXJTaskEntity> taskEntityList = new ArrayList<>();
+    private List<OLXJTaskEntity> selectTaskEntityList = new ArrayList<>();
+    private CustomDialog pathDialog, confirmDialog;
+    private OLXJSelectPathAdapter olxjSelectPathAdapter;
+    private LinearLayoutManager layoutManager;
+    private int num = 0;
+    List<OLXJAreaEntity> mAreaEntities01 = new ArrayList<>();  //01代表未检
+    List<OLXJAreaEntity> mAreaEntities04 = new ArrayList<>();  //04代表已检
     @Override
     protected IListAdapter<OLXJTaskEntity> createAdapter() {
         mOLXJTaskListAdapter = new OLXJTaskListAdapter(this);
@@ -188,14 +199,55 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         xjTitleAdd.setVisibility(View.GONE);
         xjTitleMap.setVisibility(View.GONE);
 //        todayXjRecordsTv.setVisibility(View.GONE);
+
+        //这个是初始化选择路线的弹框
+        if (pathDialog == null) {
+            pathDialog = new CustomDialog(context).layout(R.layout.v_dialog_path, DisplayUtil.dip2px(312, context), DisplayUtil.dip2px(282, context));
+            Objects.requireNonNull(pathDialog.getDialog().getWindow()).setBackgroundDrawableResource(R.color.transparent);
+        }
+        pathDialog.getDialog().setCancelable(false);
+        pathDialog.getDialog().setCanceledOnTouchOutside(false);
+        RecyclerView rlv_method = pathDialog.getDialog().findViewById(R.id.rlv_method);
+        if (layoutManager == null) {
+            layoutManager = new LinearLayoutManager(context);
+        }
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rlv_method.addItemDecoration(new SpaceItemDecoration(DisplayUtil.dip2px(1, context)));
+        rlv_method.setLayoutManager(layoutManager);
+        if (olxjSelectPathAdapter == null) {
+            olxjSelectPathAdapter = new OLXJSelectPathAdapter(context);
+        }
+        rlv_method.setAdapter(olxjSelectPathAdapter);
+
         initEmptyView();
+
     }
 
     @SuppressLint("CheckResult")
     @Override
     protected void initListener() {
         super.initListener();
+        if (olxjSelectPathAdapter != null) {
+            olxjSelectPathAdapter.setOnItemChildViewClickListener(new OnItemChildViewClickListener() {
+                @Override
+                public void onItemChildViewClick(View childView, int position, int action, Object obj) {
+                    if (action == -1) {
 
+                    } else {
+                        OLXJTaskEntity olxjTaskEntity = (OLXJTaskEntity) obj;
+                        for (int i = 0; i < olxjSelectPathAdapter.getList().size(); i++) {
+                            olxjSelectPathAdapter.getList().get(i).isSelect = false;
+                        }
+                        if (olxjTaskEntity.isSelect) {
+                            olxjTaskEntity.isSelect = false;
+                        } else {
+                            olxjTaskEntity.isSelect = true;
+                        }
+                        olxjSelectPathAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        }
         //返回键
         leftBtn.setOnClickListener(v -> onBackPressed());
         todayXjRecordsTv.setOnClickListener(v -> IntentRouter.go(context, Constant.Router.JHXJ_TODAY_RECORDS_LIST));
@@ -323,6 +375,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                     String cache = SharedPreferencesUtils.getParam(context, Constant.SPKey.JHXJ_TASK_CONTENT, "");
                     if (!TextUtils.isEmpty(cache)) {
                         mAreaEntities = GsonUtil.jsonToList(cache, OLXJAreaEntity.class);
+                        upAreaData();
                     }
                     return mAreaEntities;
                 })
@@ -333,13 +386,19 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                         }
                         , () -> {
                             if (mAreaEntities != null && mAreaEntities.size() != 0) {
-                                mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
+                                if (mOLXJTaskAreaController != null){
+                                    if (mOLXJTaskAreaController.getAreaEntities() != null){
+                                        mAreaEntities = mOLXJTaskAreaController.getAreaEntities();
+                                        upAreaData();
+                                        mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
 //                                getController(MapController.class).setOLXJAreaEntities(mAreaEntities);
-                                onLoadSuccess();
-                                if (mOLXJTaskListAdapter.isAllFinished()) {
-                                    showFinishDialog(mOLXJTaskListAdapter.getList().get(0));
+                                        onLoadSuccess();
+                                        if (mOLXJTaskListAdapter.isAllFinished()) {
+                                            showFinishDialog(mOLXJTaskListAdapter.getList().get(0));
+                                        }
+                                        return;
+                                    }
                                 }
-                                return;
                             }
                             // 无缓存，在线获取巡检区域数据
                             if (mOLXJTaskAreaController == null) {
@@ -351,8 +410,8 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                                 if (result) {
                                     mAreaEntities = mOLXJTaskAreaController.getAreaEntities();
                                     new Handler(getMainLooper()).post(() -> {
+                                        upAreaData();
                                         mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-                                        saveAreaCache(mAreaEntities.toString());
                                         onLoadSuccess();
                                         if (mOLXJTaskListAdapter.isAllFinished()) {
                                             showFinishDialog(mOLXJTaskListAdapter.getList().get(0));
@@ -404,6 +463,9 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                 .bindClickListener(R.id.redBtn, v -> {
 
                     onLoading("正在提交任务...");
+                    mOLXJTaskListAdapter.clear();
+                    mAreaEntities.clear();
+                    mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
                     presenterRouter.create(OLXJTaskStatusAPI.class).endTasks(String.valueOf(olxjTaskEntity.id), "结束任务", true);
                 }, true);
         mCustomDialog.getDialog().findViewById(R.id.grayBtn).setVisibility(View.GONE);
@@ -553,9 +615,9 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         if (enterPosition != -1) {
             OLXJAreaEntity areaEntity = (OLXJAreaEntity) positionEvent.getObj();
             mAreaEntities.set(enterPosition, areaEntity);
+            upAreaData();
             mOLXJTaskListAdapter.setAreaEntities(mAreaEntities);
-            saveAreaCache(mAreaEntities.toString());
-            saveTask(mOLXJTaskEntity.toString());
+//            saveTask(mOLXJTaskEntity.toString());
             // 当前巡检任务下全部完成巡检区域，自动结束任务
             if (mOLXJTaskListAdapter.isAllFinished()) {
                 showFinishDialog(mOLXJTaskListAdapter.getList().get(0));
@@ -681,41 +743,104 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
     @Override
     public void getOJXJLastTaskListSuccess(List entities) {
         mOLXJTaskListAdapter.resetExpandPosition();
+        OLXJTaskEntity olxjTaskEntity = (OLXJTaskEntity) entities.get(0);
 
-        if (entities.size() != 0 && isCurrentTask((OLXJTaskEntity) entities.get(0))) {
-            entities.set(0, mOLXJTaskEntity);
+        taskEntityList.clear();
+        taskEntityList.addAll(entities);
+        if (entities.size() > 0) {
+            olxjSelectPathAdapter.clear();
+            olxjSelectPathAdapter.setList(entities);
+            olxjSelectPathAdapter.notifyDataSetChanged();
+            pathDialog.bindClickListener(R.id.tv_true, v -> {
+                pathDialog.dismiss();
+                for (int i = 0; i < olxjSelectPathAdapter.getList().size(); i++) {
+                    OLXJTaskEntity olxjTaskEntity1 = olxjSelectPathAdapter.getList().get(i);
+                    if (olxjTaskEntity1.isSelect) {
+                        showConfirm(olxjTaskEntity1);
+                    }
+                }
+            }, false)
+                    .bindClickListener(R.id.tv_cancel, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    }, true);
+                if (taskEntityList.size() == 1){
+                    resultShow(olxjSelectPathAdapter.getList());
+                } else {
+                    pathDialog.show();
+                }
+
+//            String taskCache = SharedPreferencesUtils.getParam(context, Constant.SPKey.JHXJ_TASK_ENTITY, "");
+//
+//            if (olxjTaskEntity.completedPeopleActual == null){
+//                pathDialog.show();
+//            } else {
+//                if (TextUtils.isEmpty(taskCache)){
+//                    pathDialog.show();
+//                }
+//            }
+
+        } else {
+            refreshListController.refreshComplete();
         }
+
+//        refreshListController.refreshComplete(entities);
+
+
+    }
+
+//    @Override
+//    public void getOJXJLastTaskListSuccess(List entities) {
+//        mOLXJTaskListAdapter.resetExpandPosition();
+//
+//        if (entities.size() != 0 && isCurrentTask((OLXJTaskEntity) entities.get(0))) {
+//            entities.set(0, mOLXJTaskEntity);
+//        }
+//        refreshListController.refreshComplete(entities);
+//        if (entities.size() > 0) {
+//            doLoadArea(mOLXJTaskListAdapter.getItem(0));
+//            mOLXJTaskListAdapter.expand();
+//        }
+//    }
+
+
+    private void resultShow(List entities) {
         refreshListController.refreshComplete(entities);
         if (entities.size() > 0) {
             doLoadArea(mOLXJTaskListAdapter.getItem(0));
             mOLXJTaskListAdapter.expand();
         }
-//        if (entities.size() == 0) {
-//
-//            ToastUtils.show(context, "没有巡检任务!");
-//            initEmptyView();
-//            if (isFirstIn) {
-//                goXL();
-//                isFirstIn = false;
-//            }
-//        }
-//        if (mOLXJTaskListAdapter.getItemCount() > 0 && xjTitleMap.isSelected())
-//            getController(MapController.class).show(mOLXJTaskListAdapter.getItem(0));
-//        else if (mOLXJTaskListAdapter.getItemCount() <= 0)
-//            getController(MapController.class).show(null);
-//        else
-//            getController(MapController.class).hide();
-//        else {
-//            getAreaCache();
-//
-//        }
+    }
 
+    private void showConfirm(OLXJTaskEntity taskEntity) {
+        confirmDialog = new CustomDialog(context)
+                .twoButtonAlertDialog("您确定选择这条巡检路线嘛？")
+                .bindView(R.id.grayBtn, "取消")
+                .bindView(R.id.redBtn, "确定")
+                .bindClickListener(R.id.grayBtn, v -> {
+                    pathDialog.show();
+                }, true)
+                .bindClickListener(R.id.redBtn, v3 -> {
+                    //关闭页面
+                    confirmDialog.dismiss();
+                    selectTaskEntityList.clear();
+                    selectTaskEntityList.add(taskEntity);
+                    saveTask(taskEntity.toString());
+                    saveAreaCache("");
+                    mAreaEntities.clear();
+                    resultShow(selectTaskEntityList);
+                }, true);
+        confirmDialog.getDialog().setCancelable(false);
+        confirmDialog.getDialog().setCanceledOnTouchOutside(false);
+        confirmDialog.show();
     }
 
     @Override
     public void getOJXJLastTaskListFailed(String errorMsg) {
         refreshListController.refreshComplete(null);
-        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
+//        ToastUtils.show(context, ErrorMsgHelper.msgParse(errorMsg));
     }
 
     private void goXL() {
@@ -860,7 +985,8 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
-                        refreshListController.refreshBegin();
+//                        refreshListController.refreshBegin();
+                        presenterRouter.create(OLXJTaskAPI.class).getOJXJLastTaskList(queryParam);
 //                        Flowable.timer(300, TimeUnit.MILLISECONDS)
 //                                .subscribe(aLong -> refreshListController.refreshBegin());
                     }
@@ -876,7 +1002,7 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
 
     @Override
     public void onBackPressed() {
-        if (mCustomDialog != null && mCustomDialog.getDialog().isShowing()){
+        if (mCustomDialog != null && mCustomDialog.getDialog().isShowing()) {
             return;
         }
         super.onBackPressed();
@@ -890,25 +1016,34 @@ public class OLXJTaskListActivity extends BaseRefreshRecyclerActivity<OLXJTaskEn
         SharedPreferencesUtils.setParam(context, Constant.SPKey.JHXJ_TASK_ENTITY, task);
     }
 
-    private boolean isCurrentTask(OLXJTaskEntity taskEntity) {
 
-        if (taskEntity == null) {
-            return false;
+    private void upAreaData(){
+        if (mAreaEntities != null && mAreaEntities.size() > 0){
+            for (int i = 0; i < mAreaEntities.size(); i++) {
+                AtomicInteger finishedNum = new AtomicInteger();
+                num = 0;
+                for (int j = 0; j < mAreaEntities.get(i).workItemEntities.size(); j++) {
+                    if (mAreaEntities.get(i).workItemEntities.get(j).getLinkState() != null){
+                        String id = mAreaEntities.get(i).workItemEntities.get(j).getLinkState().id;
+                        if (OLXJConstant.MobileWiLinkState.FINISHED_STATE.equals(
+                                mAreaEntities.get(i).workItemEntities.get(j).getLinkState().id)){
+                            num ++;
+                        }
+                    }
+                }
+
+                if (num == mAreaEntities.get(i).workItemEntities.size()) {
+                    mAreaEntities04.add(mAreaEntities.get(i));
+                } else {
+                    mAreaEntities01.add(mAreaEntities.get(i));
+                }
+            }
         }
-
-        String taskCache = SharedPreferencesUtils.getParam(context, Constant.SPKey.JHXJ_TASK_ENTITY, "");
-
-        OLXJTaskEntity cacheTask = GsonUtil.gsonToBean(taskCache, OLXJTaskEntity.class);
-
-        if (cacheTask != null && taskEntity.id == cacheTask.id) {
-            mOLXJTaskEntity = cacheTask;
-            return true;
-        }
-        mOLXJTaskEntity = taskEntity;
-
-        saveTask(taskEntity.toString());
-        saveAreaCache("");
         mAreaEntities.clear();
-        return false;
+        mAreaEntities.addAll(mAreaEntities01);
+        mAreaEntities.addAll(mAreaEntities04);
+        mAreaEntities01.clear();
+        mAreaEntities04.clear();
+        saveAreaCache(mAreaEntities.toString());
     }
 }

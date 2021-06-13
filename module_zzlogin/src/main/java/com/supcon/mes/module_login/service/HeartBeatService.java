@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.mes.mbap.utils.DateUtil;
+import com.supcon.mes.middleware.model.bean.DataUtil;
 import com.supcon.mes.module_login.controller.SilentLoginController;
 import com.supcon.mes.module_login.model.contract.HeartBeatContract;
 import com.supcon.mes.module_login.presenter.AutoLoginPresenter;
@@ -20,7 +22,7 @@ import io.reactivex.disposables.Disposable;
  * Email:wangshizhan@supcon.com
  */
 
-public class HeartBeatService extends IntentService implements HeartBeatContract.View{
+public class HeartBeatService extends IntentService implements HeartBeatContract.View {
 
     private static final String LOGIN_LOOP_START = "LOGIN_LOOP_START";
     private static final String LOGIN_LOOP_STOP = "LOGIN_LOOP_STOP";
@@ -29,10 +31,10 @@ public class HeartBeatService extends IntentService implements HeartBeatContract
     private AutoLoginPresenter mAutoLoginPresenter;
     Disposable timer;
     private SilentLoginController mSilentLoginController;
+    private long intervalTime;
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
      */
     public HeartBeatService() {
         super("HeartBeatService");
@@ -40,21 +42,21 @@ public class HeartBeatService extends IntentService implements HeartBeatContract
         mAutoLoginPresenter.attachView(this);
     }
 
-    public static void startLoginLoop(Context context){
+    public static void startLoginLoop(Context context) {
         LogUtil.i("startLoginLoop");
         Intent intent = new Intent(context, HeartBeatService.class);
         intent.setAction(LOGIN_LOOP_START);
         context.startService(intent);
     }
 
-    public static void stopLoginLoop(Context context){
+    public static void stopLoginLoop(Context context) {
         LogUtil.i("stopLoginLoop");
         Intent intent = new Intent(context, HeartBeatService.class);
         intent.setAction(LOGIN_LOOP_STOP);
         context.startService(intent);
     }
 
-    public static void resetLoginLoop(Context context){
+    public static void resetLoginLoop(Context context) {
         Intent intent = new Intent(context, HeartBeatService.class);
         intent.setAction(LOGIN_LOOP_RESET);
         context.startService(intent);
@@ -68,7 +70,7 @@ public class HeartBeatService extends IntentService implements HeartBeatContract
 
     private void handleAction(String action) {
 
-        switch (action){
+        switch (action) {
 
             case LOGIN_LOOP_START:
                 startTimer();
@@ -82,43 +84,48 @@ public class HeartBeatService extends IntentService implements HeartBeatContract
             case LOGIN_LOOP_STOP:
                 stopTimer();
                 break;
-
+            default:
 
         }
 
     }
 
-    public void startLoginLoop(){
+    public void startLoginLoop() {
 
         startTimer();
     }
 
-    public void stopLoginLoop(){
+    public void stopLoginLoop() {
         stopTimer();
     }
 
-    public void resetLoginLoop(){
+    public void resetLoginLoop() {
 
         resetTimer();
     }
 
 
-    private void startTimer() {
+    private synchronized void startTimer() {
 //        LogUtil.i("HeartBeatService startTimer");
-        timer = Flowable.timer(30, TimeUnit.SECONDS)
-                .subscribe(aLong ->
-                    mAutoLoginPresenter.heartBeat());
+LogUtil.d("-----startTimer------", DateUtil.dateTimeFormat(intervalTime));
+        if (intervalTime == 0 || ((System.currentTimeMillis() - intervalTime) / 1000) >= 10){
+            intervalTime = System.currentTimeMillis();
+
+            timer = Flowable.timer(30, TimeUnit.SECONDS)
+                    .subscribe(aLong ->
+                            mAutoLoginPresenter.heartBeat());
+        }
     }
 
     private void stopTimer() {
 //        LogUtil.i("HeartBeatService stopTimer");
-        if(timer!=null){
+        if (timer != null) {
             timer.dispose();
             timer = null;
         }
     }
 
-    private void resetTimer(){
+    private void resetTimer() {
 //        LogUtil.i("HeartBeatService resetTimer");
         stopTimer();
         startTimer();
@@ -127,19 +134,19 @@ public class HeartBeatService extends IntentService implements HeartBeatContract
 
     @Override
     public void heartBeatSuccess() {
-        LogUtil.w("heartBeatSuccess");
+        LogUtil.d("heartBeatSuccess");
         resetTimer();
     }
 
     @Override
     public void heartBeatFailed(String error) {
         LogUtil.w(error);
-        if(error.contains("401")){
-            if(mSilentLoginController == null){
-                mSilentLoginController = new SilentLoginController();
-            }
-            mSilentLoginController.silentLogin(this);
-        }
+//        if (error.contains("401")) {
+//            if (mSilentLoginController == null) {
+//                mSilentLoginController = new SilentLoginController();
+//            }
+//            mSilentLoginController.silentLogin(this);
+//        }
         resetTimer();
     }
 }

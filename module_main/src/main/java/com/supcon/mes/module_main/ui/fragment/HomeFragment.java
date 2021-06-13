@@ -59,6 +59,7 @@ import com.supcon.mes.middleware.util.SnackbarHelper;
 import com.supcon.mes.middleware.util.Util;
 import com.supcon.mes.middleware.model.bean.WorkInfo;
 import com.supcon.mes.middleware.util.WorkHelper;
+import com.supcon.mes.module_login.controller.SilentLoginController;
 import com.supcon.mes.module_main.model.api.MainMenuAPI;
 import com.supcon.mes.module_main.model.contract.MainMenuContract;
 import com.supcon.mes.module_main.presenter.MainMenuPresenter;
@@ -91,6 +92,8 @@ import com.supcon.mes.module_main.ui.util.MenuHelper;
 import com.supcon.mes.module_main.ui.view.MenuPopwindow;
 import com.supcon.mes.module_main.ui.view.MenuPopwindowBean;
 import com.supcon.mes.push.event.PushRefreshEvent;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.internal.crash.UMCrashManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -220,6 +223,9 @@ public class HomeFragment extends BaseRefreshFragment implements WaitDealtContra
 //        if (atomicBoolean.compareAndSet(true, true)) {
             getWorkData();
 //        }
+
+//        MobclickAgent.onPageStart("HomeFragment");
+
     }
 
     @SuppressLint("CheckResult")
@@ -581,6 +587,7 @@ public class HomeFragment extends BaseRefreshFragment implements WaitDealtContra
             EamEntity eamEntity = (EamEntity) entity.result.get(0);
             Bundle bundle = new Bundle();
             bundle.putSerializable(Constant.IntentKey.EAM, eamEntity);
+            bundle.putBoolean(Constant.IntentKey.IS_NFC_SIGN, true);
             IntentRouter.go(getActivity(), Constant.Router.EAM_DETAIL, bundle);
             return;
         }
@@ -624,7 +631,7 @@ public class HomeFragment extends BaseRefreshFragment implements WaitDealtContra
 //            menuPopwindow.dismiss();
 //            menuPopwindow.changeWindowAlfa(1f);
 //        }
-
+//        MobclickAgent.onPageEnd("HomeFragment");
     }
 
     @Override

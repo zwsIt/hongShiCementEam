@@ -1,6 +1,7 @@
 package com.supcon.mes.module_login.presenter;
 
 import com.supcon.common.view.util.LogUtil;
+import com.supcon.mes.middleware.EamApplication;
 import com.supcon.mes.module_login.model.bean.LoginEntity;
 import com.supcon.mes.module_login.model.contract.SilentLoginContract;
 import com.supcon.mes.module_login.model.network.LoginHttpClient;
@@ -20,9 +21,10 @@ public class SilentLoginPresenter extends SilentLoginContract.Presenter {
 
         Map<String, Object> defaultMap = new HashMap<>();
         defaultMap.put("machineId", 11111111);
-        defaultMap.put("clientType", "android");
+        defaultMap.put("clientType", "mobile");
+        defaultMap.put("clientId", EamApplication.getAccountInfo() == null ? "" : EamApplication.getAccountInfo().userName);
         defaultMap.put("clientVersion", "2.1");
-        defaultMap.put("timestamp", new Date().getTime());
+        defaultMap.put("timestamp", System.currentTimeMillis());
         defaultMap.put("company",cid);
 
 //        String token1 = SharedPreferencesUtils.getParam(EamApplication.getAppContext(), Constant.ZZ.ZZ_SUPOS_TOKEN, "");
@@ -66,7 +68,7 @@ public class SilentLoginPresenter extends SilentLoginContract.Presenter {
         defaultMap.put("machineId", 11111111);
         defaultMap.put("clientType", "android");
         defaultMap.put("clientVersion", "2.1");
-        defaultMap.put("timestamp", new Date().getTime());
+        defaultMap.put("timestamp", System.currentTimeMillis());
         defaultMap.put("username", username);
         defaultMap.put("suposPassword", supospwd);
 

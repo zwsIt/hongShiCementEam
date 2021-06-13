@@ -152,6 +152,16 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
     @BindByTag("recyclerView")
     RecyclerView recyclerView;
 
+    @BindByTag("centContRoom")
+    CustomTextView centContRoom;
+    @BindByTag("contrDirectorStaff")
+    CustomTextView contrDirectorStaff;
+    @BindByTag("quailtySafetyLeader")
+    CustomTextView quailtySafetyLeader;
+    @BindByTag("securityChiefStaff")
+    CustomTextView securityChiefStaff;
+    @BindByTag("securityStaff")
+    CustomTextView securityStaff;
 
     private String __pc__;
     private Long tableId; // 单据ID
@@ -320,6 +330,71 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                 IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
             }
         });
+        //中控室人员
+        centContRoom.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWorkTicketEntity.getCentContRoom().id = null;
+                centContRoom.setContent(null);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, centContRoom.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+            }
+        });
+        //调度室主任
+        contrDirectorStaff.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWorkTicketEntity.getContrDirectorStaff().id = null;
+                contrDirectorStaff.setContent(null);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, contrDirectorStaff.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+            }
+        });
+        //质量安全大班长
+        quailtySafetyLeader.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWorkTicketEntity.getQuailtySafetyLeader().id = null;
+                quailtySafetyLeader.setContent(null);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, quailtySafetyLeader.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+            }
+        });
+        //安保科科长
+        securityChiefStaff.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWorkTicketEntity.getSecurityChiefStaff().id = null;
+                securityChiefStaff.setContent(null);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, securityChiefStaff.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+            }
+        });
+        //安全员
+        securityStaff.setOnChildViewClickListener((childView, action, obj) -> {
+            if (action == -1) {
+                mWorkTicketEntity.getSecurityStaff().id = null;
+                securityStaff.setContent(null);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(Constant.IntentKey.IS_MULTI, false);
+                bundle.putBoolean(Constant.IntentKey.IS_SELECT_STAFF, true);
+                bundle.putString(Constant.IntentKey.COMMON_SEARCH_TAG, securityStaff.getTag().toString());
+                IntentRouter.go(context, Constant.Router.CONTACT_SELECT, bundle);
+            }
+        });
         eamName.setOnChildViewClickListener(new OnChildViewClickListener() {
             @Override
             public void onChildViewClick(View childView, int action, Object obj) {
@@ -340,8 +415,27 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         riskAssessmentRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
+                centContRoom.setVisibility(View.GONE);
+                contrDirectorStaff.setVisibility(View.GONE);
+                quailtySafetyLeader.setVisibility(View.GONE);
+                securityChiefStaff.setVisibility(View.GONE);
+                securityStaff.setVisibility(View.GONE);
                 mWorkTicketEntity.setRiskAssessment(mRiskAssessmentList.get(checkedId % 1000));
+                if (mWorkTicketEntity.getRiskAssessment().value.equals("低")){
+                    quailtySafetyLeader.setVisibility(View.VISIBLE);
+                } else if (mWorkTicketEntity.getRiskAssessment().value.equals("中")){
+                    centContRoom.setVisibility(View.VISIBLE);
+                    quailtySafetyLeader.setVisibility(View.VISIBLE);
+                    securityChiefStaff.setVisibility(View.VISIBLE);
+                    securityStaff.setVisibility(View.VISIBLE);
+                } else if (mWorkTicketEntity.getRiskAssessment().value.equals("高") || mWorkTicketEntity.getRiskAssessment().value.equals("特高")){
+                    centContRoom.setVisibility(View.VISIBLE);
+                    contrDirectorStaff.setVisibility(View.VISIBLE);
+                    quailtySafetyLeader.setVisibility(View.VISIBLE);
+                    securityChiefStaff.setVisibility(View.VISIBLE);
+                    securityStaff.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
@@ -504,6 +598,11 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         map.put("ohworkticket.workShop.id", Util.strFormat2(mWorkTicketEntity.getChargeStaff().getMainPosition().getDepartment().id));
         map.put("ohworkticket.riskAssessment.id", mWorkTicketEntity.getRiskAssessment().id);
         map.put("ohworkticket.content", content.getContent());
+        map.put("ohworkticket.centContRoom.id", Util.strFormat2(mWorkTicketEntity.getCentContRoom().id));
+        map.put("ohworkticket.contrDirectorStaff.id", Util.strFormat2(mWorkTicketEntity.getContrDirectorStaff().id));
+        map.put("ohworkticket.quailtySafetyLeader.id", Util.strFormat2(mWorkTicketEntity.getQuailtySafetyLeader().id));
+        map.put("ohworkticket.securityChiefStaff.id", Util.strFormat2(mWorkTicketEntity.getSecurityChiefStaff().id));
+        map.put("ohworkticket.securityStaff.id", Util.strFormat2(mWorkTicketEntity.getSecurityStaff().id));
         map.put("ohworkticket.hazardsourContrpoint", mWorkTicketEntity.getHazardsourContrpoint());
         map.put("ohworkticket.value", mWorkTicketEntity.getHazardsourContrpointForDisplay());
         map.put("ohworkticket.offApplyId", mWorkTicketEntity.getOffApplyId() == null ? "" : mWorkTicketEntity.getOffApplyId());
@@ -547,6 +646,53 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         if (TextUtils.isEmpty(mWorkTicketEntity.getContent())) {
             ToastUtils.show(context, "内容不允许为空！");
             return true;
+        }
+        if (mWorkTicketEntity.getRiskAssessment().value.equals("低")){
+            if (TextUtils.isEmpty(quailtySafetyLeader.getValue())) {
+                ToastUtils.show(context, "质量安全大班长不允许为空！");
+                return true;
+            }
+        }
+        if (mWorkTicketEntity.getRiskAssessment().value.equals("中")){
+            if (TextUtils.isEmpty(centContRoom.getValue())) {
+                ToastUtils.show(context, "中控室人员不允许为空！");
+                return true;
+            }
+            if (TextUtils.isEmpty(quailtySafetyLeader.getValue())) {
+                ToastUtils.show(context, "质量安全大班长不允许为空！");
+                return true;
+            }
+            if (TextUtils.isEmpty(securityChiefStaff.getValue())) {
+                ToastUtils.show(context, "安保科科长不允许为空！");
+                return true;
+            }
+            if (TextUtils.isEmpty(securityStaff.getValue())) {
+                ToastUtils.show(context, "安全员不允许为空！");
+                return true;
+            }
+
+        }
+        if (mWorkTicketEntity.getRiskAssessment().value.equals("高") || mWorkTicketEntity.getRiskAssessment().value.equals("特高")){
+            if (TextUtils.isEmpty(centContRoom.getValue())) {
+                ToastUtils.show(context, "中控室人员不允许为空！");
+                return true;
+            }
+            if (TextUtils.isEmpty(contrDirectorStaff.getValue())) {
+                ToastUtils.show(context, "调度室主任不允许为空！");
+                return true;
+            }
+            if (TextUtils.isEmpty(quailtySafetyLeader.getValue())) {
+                ToastUtils.show(context, "质量安全大班长不允许为空！");
+                return true;
+            }
+            if (TextUtils.isEmpty(securityChiefStaff.getValue())) {
+                ToastUtils.show(context, "安保科科长不允许为空！");
+                return true;
+            }
+            if (TextUtils.isEmpty(securityStaff.getValue())) {
+                ToastUtils.show(context, "安全员不允许为空！");
+                return true;
+            }
         }
         return false;
     }
@@ -597,6 +743,11 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
         eamName.setContent(entity.getEamId().name);
         eamCode.setContent(entity.getEamId().eamAssetCode);
         content.setContent(entity.getContent());
+        centContRoom.setContent(entity.getCentContRoom().name);//中控室人员
+        contrDirectorStaff.setContent(entity.getContrDirectorStaff().name);//调度室主任
+        quailtySafetyLeader.setContent(entity.getQuailtySafetyLeader().name);//质量安全大班长
+        securityChiefStaff.setContent(entity.getSecurityChiefStaff().name);//安保科科长
+        securityStaff.setContent(entity.getSecurityStaff().name);//安全员
 
         //初始化风险评估
 //        if (riskAssessmentRadioGroup.getChildCount() <= 0){
@@ -688,7 +839,37 @@ public class WorkTicketEditActivity extends BaseRefreshActivity implements WorkT
                 mWorkTicketEntity.getChargeStaff().id = staff.id;
                 mWorkTicketEntity.getChargeStaff().name = staff.name;
                 mWorkTicketEntity.getChargeStaff().code = staff.code;
-            } else if ("selectPeopleInput".equals(commonSearchEvent.flag)) {
+            } else if (centContRoom.getTag().toString().equals(commonSearchEvent.flag)){
+                centContRoom.setContent(staff.name);
+
+                mWorkTicketEntity.getCentContRoom().id = staff.id;
+                mWorkTicketEntity.getCentContRoom().name = staff.name;
+                mWorkTicketEntity.getCentContRoom().code = staff.code;
+            } else if (contrDirectorStaff.getTag().toString().equals(commonSearchEvent.flag)){
+                contrDirectorStaff.setContent(staff.name);
+
+                mWorkTicketEntity.getContrDirectorStaff().id = staff.id;
+                mWorkTicketEntity.getContrDirectorStaff().name = staff.name;
+                mWorkTicketEntity.getContrDirectorStaff().code = staff.code;
+            } else if (quailtySafetyLeader.getTag().toString().equals(commonSearchEvent.flag)){
+                quailtySafetyLeader.setContent(staff.name);
+
+                mWorkTicketEntity.getQuailtySafetyLeader().id = staff.id;
+                mWorkTicketEntity.getQuailtySafetyLeader().name = staff.name;
+                mWorkTicketEntity.getQuailtySafetyLeader().code = staff.code;
+            } else if (securityChiefStaff.getTag().toString().equals(commonSearchEvent.flag)){
+                securityChiefStaff.setContent(staff.name);
+
+                mWorkTicketEntity.getSecurityChiefStaff().id = staff.id;
+                mWorkTicketEntity.getSecurityChiefStaff().name = staff.name;
+                mWorkTicketEntity.getSecurityChiefStaff().code = staff.code;
+            } else if (securityStaff.getTag().toString().equals(commonSearchEvent.flag)){
+                securityStaff.setContent(staff.name);
+
+                mWorkTicketEntity.getSecurityStaff().id = staff.id;
+                mWorkTicketEntity.getSecurityStaff().name = staff.name;
+                mWorkTicketEntity.getSecurityStaff().code = staff.code;
+            }else if ("selectPeopleInput".equals(commonSearchEvent.flag)) {
                 workFlowView.addStaff(staff.name, staff.userId);
             }
         }else if (commonSearchEvent.mCommonSearchEntityList != null){ // 多选

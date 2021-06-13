@@ -15,7 +15,7 @@ public interface WorkTicketConstant {
                 "workShop.id,workShop.name,workShop.code,workList.id,workList.tableNo,workList.content,workList.eamID.name,workList.eamID.code,eamId.id,eamId.code,eamId.name,eamId.eamAssetcode," +
                 "hazardsourContrpoint,riskAssessment.id,riskAssessment.value,offApplyId,offApplyTableinfoid,offApplyTableno,flowStatus.id,flowStatus.value," +
                 "centContRoom.id,centContRoom.code,centContRoom.name,securityStaff.id,securityStaff.code,securityStaff.name,securityChiefStaff.id,securityChiefStaff.code,securityChiefStaff.name," +
-                "contrDirectorStaff.id,contrDirectorStaff.code,contrDirectorStaff.name,content";
+                "contrDirectorStaff.id,contrDirectorStaff.code,contrDirectorStaff.name,content,quailtySafetyLeader.id,quailtySafetyLeader.code,quailtySafetyLeader.name,";
     }
 
     interface URL{

@@ -73,6 +73,8 @@
 -keep public class * extends com.supcon.common.view.base.presenter.**{ *; }
 -keep public class * extends com.supcon.common.view.base.controller.**{ *; }
 
+-keep public class * extends java.util.funtion.**{ *; }
+
 -keep interface com.supcon.common.com_router.api.** { *; }
 -keep class * implements com.supcon.common.com_router.api.IRouter
 #-keep class **IntentRouter { *; }

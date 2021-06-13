@@ -65,12 +65,18 @@ public class SilentLoginController extends BasePresenterController implements Si
     public void dologinWithSuposPWFailed(String errorMsg) {
 
     }
-
+    private long intervalTime;
 
     @Override
-    public void dologin(String username, String pwd, Long cid) {
-        presenterRouter.create(SilentLoginAPI.class).dologin(username, pwd, cid);
-        isLogining = true;
+    public synchronized void dologin(String username, String pwd, Long cid) {
+
+        if (intervalTime == 0 || ((System.currentTimeMillis() - intervalTime) / 1000) >= 10){
+            intervalTime = System.currentTimeMillis();
+
+            presenterRouter.create(SilentLoginAPI.class).dologin(username, pwd, cid);
+            isLogining = true;
+
+        }
     }
 
     @Override
@@ -79,7 +85,7 @@ public class SilentLoginController extends BasePresenterController implements Si
         isLogining = true;
     }
 
-    public void silentLogin(Context context) {
+    public synchronized void silentLogin(Context context) {
         if (isLogining) {
             return;
         }

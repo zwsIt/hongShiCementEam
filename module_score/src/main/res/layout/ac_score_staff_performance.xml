@@ -44,16 +44,26 @@
         </LinearLayout>
         <include layout="@layout/ly_line_light" />
 
-        <com.supcon.mes.mbap.view.CustomTextView
+<!--        <com.supcon.mes.mbap.view.CustomTextView-->
+<!--            android:id="@+id/scoreTime"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/dp_50"-->
+<!--            android:background="@color/white"-->
+<!--            android:paddingLeft="@dimen/dp_10"-->
+<!--            android:paddingRight="@dimen/dp_15"-->
+<!--            android:tag="scoreTime"-->
+<!--            app:gravity="center"-->
+<!--            app:text="评分日期:" />-->
+        <com.supcon.mes.mbap.view.CustomDateView
             android:id="@+id/scoreTime"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
-            android:background="@color/white"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_15"
+            style="@style/yh_edit_date_horizontal_style_text_view"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
             android:tag="scoreTime"
-            app:gravity="center"
-            app:text="评分日期:" />
+            android:translationZ="1dp"
+            app:key="评分日期"
+            app:necessary="true" />
 
         <include layout="@layout/ly_line_light" />
     </LinearLayout>

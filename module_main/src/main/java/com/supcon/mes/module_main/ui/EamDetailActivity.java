@@ -97,6 +97,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
     private AnomalyAdapter anomalyAdapter;
     private WorkAdapter workAdapter;
     private TextView waitMore;
+    private boolean isNFCSign = false;
 
     @Override
     protected int getLayoutID() {
@@ -108,6 +109,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
         super.onInit();
         EventBus.getDefault().register(this);
         mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        isNFCSign = getIntent().getBooleanExtra(Constant.IntentKey.IS_NFC_SIGN, false);
     }
 
     @Override
@@ -154,6 +156,7 @@ public class EamDetailActivity extends BaseControllerActivity implements Anomaly
             WorkInfo workInfo = (WorkInfo) obj;
             Bundle bundle = new Bundle();
             bundle.putSerializable(Constant.IntentKey.EAM, mEamEntity);
+            bundle.putBoolean(Constant.IntentKey.IS_NFC_SIGN, isNFCSign);
             if (TextUtils.isEmpty(workInfo.router)){
                 return;
             }

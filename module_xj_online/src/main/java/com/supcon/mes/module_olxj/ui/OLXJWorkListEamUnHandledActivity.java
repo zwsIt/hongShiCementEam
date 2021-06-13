@@ -183,6 +183,8 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
 
     private HashSet hashSet = new HashSet();//判断dcs是否请求过，防止刷新不断请求
 
+    private boolean isNFCSign = false;
+
     @Override
     protected IListAdapter<OLXJWorkItemEntity> createAdapter() {
         mOLXJWorkListAdapter = new OLXJWorkListEamAdapterNew(context);
@@ -198,6 +200,7 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
     protected void onInit() {
         super.onInit();
         mEamEntity = (EamEntity) getIntent().getSerializableExtra(Constant.IntentKey.EAM);
+        isNFCSign = getIntent().getBooleanExtra(Constant.IntentKey.IS_NFC_SIGN, false);
         EventBus.getDefault().register(this);
         mSinglePickController = new SinglePickController<>(this);
         mSinglePickController.textSize(18);
@@ -1233,7 +1236,11 @@ public class OLXJWorkListEamUnHandledActivity extends BaseRefreshRecyclerActivit
         mXJAreaEntity = olxjAreaEntity;
         mXJAreaEntity.signReason = "其它原因";
         mXJAreaEntity.isSign = true;
-        mXJAreaEntity.signType = "cardType/02";
+        if (isNFCSign){
+            mXJAreaEntity.signType = Constant.CARD_TYPE.cardType1;//刷卡签到
+        } else {
+            mXJAreaEntity.signType = Constant.CARD_TYPE.cardType2;//手动签到
+        }
         mXJAreaEntity.signedTime = DateUtil.DateToString(new Date(), "yyyy-MM-dd HH:mm:ss");
         doRefresh(false);
         Collections.sort(mXJAreaEntity.workItemEntities);
